@@ -83,18 +83,18 @@
         "previous_summary": {
           "type": "string",
           "description": "Summary of previous 3 chapters (empty for chapter 1)",
-          "maxLength": 1500
+          "maxLength": 5000
         },
         "current_plot": {
           "type": "string",
-          "description": "Detailed plot summary for current chapter (1500 chars)",
+          "description": "상세한 회차 줄거리 (최소 2000자, 권장 4000~6000자)",
           "minLength": 100,
-          "maxLength": 2000
+          "maxLength": 8000
         },
         "next_plot": {
           "type": "string",
           "description": "Brief plot summary for next chapter (500 chars)",
-          "maxLength": 700
+          "maxLength": 2000
         }
       }
     },
@@ -142,11 +142,13 @@
         },
         "character_development": {
           "type": "string",
-          "description": "Key character development points"
+          "description": "Key character development points",
+          "maxLength": 2000
         },
         "emotional_goal": {
           "type": "string",
-          "description": "Intended reader emotional response"
+          "description": "Intended reader emotional response",
+          "maxLength": 1000
         }
       }
     },
@@ -170,7 +172,8 @@
           },
           "purpose": {
             "type": "string",
-            "description": "Purpose/function of this scene"
+            "description": "Purpose/function of this scene",
+            "maxLength": 1000
           },
           "characters": {
             "type": "array",
@@ -187,11 +190,13 @@
           },
           "conflict": {
             "type": "string",
-            "description": "Main conflict or tension in scene"
+            "description": "Main conflict or tension in scene",
+            "maxLength": 1000
           },
           "beat": {
             "type": "string",
-            "description": "Story beat or key event in scene"
+            "description": "Story beat or key event in scene",
+            "maxLength": 2000
           },
           "emotional_tone": {
             "type": "string",

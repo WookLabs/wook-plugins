@@ -21,8 +21,8 @@
     },
     "description": {
       "type": "string",
-      "maxLength": 500,
-      "description": "서브아크에 대한 상세 설명"
+      "maxLength": 5000,
+      "description": "서브플롯 전체 스토리 설명 (최소 500자, 권장 2000~3000자)"
     },
     "related_characters": {
       "type": "array",
@@ -34,8 +34,8 @@
     },
     "connection_to_main": {
       "type": "string",
-      "maxLength": 500,
-      "description": "메인 플롯과의 연결점"
+      "maxLength": 3000,
+      "description": "메인 플롯과의 연결점 (최소 200자 권장)"
     },
     "start_chapter": {
       "type": "integer",
@@ -49,8 +49,8 @@
     },
     "thematic_function": {
       "type": "string",
-      "maxLength": 500,
-      "description": "서브아크의 주제적 기능"
+      "maxLength": 2000,
+      "description": "서브아크의 주제적 기능 (최소 150자 권장)"
     },
     "status": {
       "type": "string",
@@ -78,8 +78,8 @@
         },
         "event": {
           "type": "string",
-          "maxLength": 500,
-          "description": "비트 이벤트 설명"
+          "maxLength": 2000,
+          "description": "비트 이벤트 설명 (최소 100자 권장)"
         },
         "impact": {
           "type": "string",

@@ -49,6 +49,7 @@ The plugin implements a multi-agent system with specialized roles:
 | plot-architect | opus | Plot structure design |
 | proofreader | haiku | Grammar and spelling |
 | summarizer | haiku | Chapter summarization |
+| chapter-verifier | sonnet | Automated chapter verification with parallel validators |
 
 ### Command Categories
 
@@ -131,6 +132,25 @@ Choose the appropriate agent based on task:
 - **critic**: Quality evaluation, feedback, scoring (does NOT modify content)
 - **proofreader**: Grammar, spelling, typos, Korean language corrections
 - **summarizer**: Chapter summaries, context building for subsequent chapters
+- **chapter-verifier**: Quality verification before completion claims
+
+### chapter-verifier (sonnet)
+
+Automated chapter verification agent that validates quality before completion claims.
+
+**Role**: Orchestrates parallel validators (critic, beta-reader, genre-validator) and generates pass/fail verdicts.
+
+**When to Use**:
+- After completing chapter writing
+- Before claiming "done" on any chapter
+- During write-all loop for each chapter
+
+**Thresholds**:
+| Validator | Normal | Chapter 1 |
+|-----------|--------|-----------|
+| critic | ≥85 | ≥90 |
+| beta-reader | ≥75 | ≥80 |
+| genre-validator | ≥90 | ≥95 |
 
 ### Common Workflows
 

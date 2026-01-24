@@ -1,0 +1,84 @@
+{
+  "recipe_id": "fantasy-hunter",
+  "recipe_name": "헌터물/던전물",
+  "genre": ["판타지"],
+  "sub_genre": ["헌터", "던전", "시스템"],
+
+  "defaults": {
+    "target_chapters": 150,
+    "target_words_per_chapter": 5500,
+    "rating": "15+"
+  },
+
+  "style_guide": {
+    "narrative_voice": "1인칭",
+    "pov_type": "single",
+    "tone": ["긴장", "성장", "통쾌"],
+    "action_density": "high"
+  },
+
+  "required_tropes": ["각성", "던전", "랭킹", "레이드", "길드"],
+
+  "required_beats": {
+    "파워업": { "frequency": "5-10ch_gap", "description": "등급 상승, 새 스킬 획득" },
+    "보스전": { "frequency": "10-15ch_gap", "description": "던전 보스 또는 레이드" },
+    "레어템": { "frequency": "15-20ch_gap", "description": "희귀 아이템/스킬 획득" },
+    "랭킹상승": { "frequency": "20ch_gap", "description": "공식 등급 상승" }
+  },
+
+  "chapter1_checklist": [
+    "각성 전 평범/약함 묘사",
+    "각성 순간",
+    "시스템 창 첫 등장",
+    "첫 던전 또는 몬스터 조우"
+  ],
+
+  "power_system": {
+    "required": true,
+    "elements": ["등급(E~S)", "스킬", "스탯", "아이템등급"],
+    "progression": "tiered"
+  },
+
+  "world_requirements": {
+    "organizations": ["헌터협회", "길드", "정부기관", "마탑/기업"],
+    "locations": ["던전", "헌터타운", "아이템상점", "훈련시설", "레이드 지역"],
+    "systems": ["게이트", "몬스터 웨이브", "랭킹 시스템"]
+  },
+
+  "plot_milestones": [
+    { "chapter_range": [1, 5], "event": "각성" },
+    { "chapter_range": [10, 20], "event": "첫 던전 클리어" },
+    { "chapter_range": [30, 40], "event": "길드 가입/설립" },
+    { "chapter_range": [50, 60], "event": "첫 레이드" },
+    { "chapter_range": [80, 90], "event": "S급 등극" },
+    { "chapter_range": [120, 130], "event": "세계적 위기" },
+    { "chapter_range": [140, 150], "event": "최종 레이드" }
+  ],
+
+  "character_requirements": {
+    "protagonist": {
+      "traits": ["숨겨진 잠재력", "성장형", "언더독"],
+      "arc": "최약체에서 최강으로"
+    }
+  },
+
+  "recommended_cliches": {
+    "tier1_safe": ["숨겨진 던전", "유니크 스킬", "솔로 플레이"],
+    "tier2_careful": ["시스템", "이중 직업", "몬스터 테이밍"],
+    "tier3_risky": ["무한 성장", "모든 스킬 카피"]
+  },
+
+  "validation_rules": {
+    "critic_threshold": 80,
+    "beta_reader_threshold": 80,
+    "genre_validator_threshold": 90
+  },
+
+  "act_structure": {
+    "act1": { "chapters": [1, 30], "focus": "각성, 적응, 첫 던전들" },
+    "act2": { "chapters": [31, 60], "focus": "길드 활동, 명성 획득" },
+    "act3": { "chapters": [61, 100], "focus": "고위 랭커 진입, 대형 레이드" },
+    "act4": { "chapters": [101, 130], "focus": "세계적 위기, 진실 발견" },
+    "act5": { "chapters": [131, 150], "focus": "최종 결전, 새로운 시대" }
+  }
+}

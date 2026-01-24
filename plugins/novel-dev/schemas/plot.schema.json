@@ -46,13 +46,14 @@
         },
         "summary": {
           "type": "string",
-          "maxLength": 1000
+          "maxLength": 6000,
+          "description": "막 전체의 상세 요약 (최소 1000자, 권장 3000~5000자)"
         },
         "key_events": {
           "type": "array",
           "items": {
             "type": "string",
-            "maxLength": 500
+            "maxLength": 2000
           },
           "maxItems": 10
         },
@@ -60,7 +61,7 @@
           "type": "array",
           "items": {
             "type": "string",
-            "maxLength": 500
+            "maxLength": 2000
           },
           "maxItems": 15
         },

@@ -430,35 +430,17 @@ Write all feedback in Korean using reader perspective language:
 
 ---
 
-## MCP Context Protocol (Optional)
+## 컨텍스트 로딩
 
-평가 시 프로젝트 컨텍스트를 조회할 수 있습니다.
+챕터 평가 전 필요한 컨텍스트를 로드합니다:
 
-### [MCP-OPTIONAL] - 평가 전 호출
+1. **이전 챕터 요약**: `context/summaries/chapter_{N-1}_summary.md` (최근 3개)
+2. **현재 챕터 플롯**: `chapters/chapter_{N}.json`
+3. **캐릭터 정보**: `characters/{char_id}.json`
+4. **세계관 설정**: `world/world.json`
+5. **복선 정보**: `plot/foreshadowing.json`
 
-1. **`get_relevant_context`** - 장르, 스타일, 캐릭터 정보 확인
-   ```
-   get_relevant_context(chapter=평가대상챕터, max_tokens=40000, project_path=프로젝트경로)
-   ```
-   - 장르별 engagement factor 적용 위해 유용
-
-2. **`get_character`** - 캐릭터 매력 평가 시 참고
-   ```
-   get_character(character_id="char_001", project_path=프로젝트경로)
-   ```
-
-### Integration with Evaluation Process
-
-- **Step 1 (Read As Real Reader) 전**: MCP로 장르/타겟 독자층 확인
-- **Step 4 (Identify Issues)**: 캐릭터 설정과 대조하여 매력 평가
-
-### Fallback Protocol
-
-MCP 도구 실패 시:
-1. 경고 출력: `[WARNING] MCP 조회 실패 - 원고만으로 평가 진행`
-2. 제공된 원고만으로 독자 경험 평가
-3. 평가는 중단하지 않음
-4. 장르별 factor는 일반적인 기준 적용
+Read 도구로 필요한 파일을 직접 읽어 컨텍스트를 구성합니다.
 
 ---
 

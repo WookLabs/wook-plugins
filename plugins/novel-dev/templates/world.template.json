@@ -1,0 +1,43 @@
+{
+  "era": "",
+  "year": "",
+  "location": {
+    "country": "",
+    "city": "",
+    "region": "",
+    "district": ""
+  },
+  "technology_level": "현대 기술",
+  "social_context": {
+    "norms": [],
+    "relevant_issues": [],
+    "taboos": []
+  },
+  "magic_system": {
+    "exists": false,
+    "type": "",
+    "rules": [],
+    "costs": ""
+  },
+  "special_rules": [],
+  "species": [],
+  "locations": [
+    {
+      "id": "loc_001",
+      "name": "",
+      "type": "",
+      "description": "",
+      "atmosphere": "",
+      "related_characters": []
+    }
+  ],
+  "terms": [
+    {
+      "term": "",
+      "definition": "",
+      "usage": ""
+    }
+  ],
+  "history": "",
+  "notes": ""
+}

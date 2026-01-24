@@ -1,62 +1,82 @@
 ---
 name: write-all
-description: "[11단계] 전체 집필 - 1화부터 목표화수까지 자동 집필 (Ralph Loop)"
+description: |
+  Triggers when user wants to write all chapters from start to finish using Ralph Loop.
+  <example>전체 집필</example>
+  <example>1화부터 끝까지</example>
+  <example>write all chapters</example>
+  <example>/write-all</example>
+  <example>소설 완성</example>
+  <example>전체 자동 집필</example>
 user-invocable: true
 ---
 
-[NOVEL-SISYPHUS: 전체 자동 집필 - RALPH LOOP]
+# /write-all - Ralph Loop 전체 자동 집필
 
-## 마스터피스 모드
+완성까지 멈추지 않는 자동 집필 시스템입니다.
 
-품질 기준 강화 버전입니다:
-- 품질 기준: 70점 → **85점**
-- 검증 체계: 단일 critic → **다중 검증자 (3 agents)**
-- 실패 처리: Circuit Breaker 패턴
+## Quick Start
+```bash
+/write-all          # 1화부터 끝까지 자동 집필
+/write-all --resume # 중단된 지점부터 재개
+/write-all --restart # 처음부터 다시 시작
+```
 
-### 다중 검증자 시스템
+## Masterpiece Mode
 
-| Validator | 일반 기준 | 1화 기준 | 역할 |
-|-----------|---------|---------|------|
-| critic | ≥85점 | **≥90점** | 품질 평가 (25x4=100) |
-| beta-reader | ≥75점 | **≥80점** | 몰입도/이탈 예측 |
-| genre-validator | ≥90점 | **≥95점** | 장르 요구사항 충족 |
+강화된 품질 보증 시스템:
+- **Multi-Validator**: critic, beta-reader, genre-validator (3개 동시 검증)
+- **Quality Threshold**: 85점 (일반) / 90점 (1화)
+- **Circuit Breaker**: 동일 실패 3회 시 사용자 개입
 
-**모든 validator가 통과해야 품질 게이트 통과**
+### Quality Gates
 
-### 1화 특별 품질 게이트
+| Validator | Regular | Chapter 1 | Role |
+|-----------|---------|-----------|------|
+| critic | ≥85 | ≥90 | Overall quality (100pt scale) |
+| beta-reader | ≥75 | ≥80 | Engagement & retention |
+| genre-validator | ≥90 | ≥95 | Genre compliance |
 
-1화는 독자 유지율에 가장 큰 영향을 미치므로 강화된 기준 적용:
+**All validators must pass** for chapter to proceed.
 
-**1화 품질 체크리스트:**
-- [ ] 첫 문단에 강력한 위기/호기심 요소 존재
-- [ ] 주인공의 특별함을 3문단 내에 제시
-- [ ] 3~5화 내 사이다 제공 계획 수립
-- [ ] 독자 유지율 예측 ≥75%
-- [ ] 장르 핵심 요소가 명확히 드러남
+### Chapter 1 Special Requirements
+- Strong hook in first paragraph
+- Protagonist uniqueness within 3 paragraphs
+- Promise of payoff within 3-5 chapters
+- Predicted retention ≥75%
 
-**동작 방식:**
-- 1화 집필 시 `checkConsensus(results, 1)` 호출
-- 자동으로 CHAPTER_1_THRESHOLDS 적용
-- 실패 시 더 상세한 diagnostic 제공
+## Key Features
 
-$ARGUMENTS
+### Persistence
+- Promise tag system (`<promise>CHAPTER_N_DONE</promise>`)
+- Automatic checkpointing after each chapter
+- Session recovery with full state restoration
 
-## 옵션
+### Quality Assurance
+- Parallel validator execution (3x faster)
+- Diagnostic-driven revision loop
+- Circuit breaker for infinite loop prevention
 
-| 옵션 | 설명 |
-|------|------|
-| `--resume` | 이전 세션에서 중단된 지점부터 이어서 집필 |
-| `--restart` | 이전 진행 상황 무시하고 처음부터 다시 시작 |
-| (없음) | 기본 동작 - 복구 가능 시 확인 후 결정 |
+### Session Management
+- Auto-save every chapter completion
+- 3 most recent backups maintained
+- Resume from any checkpoint
 
-### 세션 복구
+## Documentation
 
-이전 세션이 중단된 경우:
-1. 세션 시작 시 복구 가능 여부 알림
-2. `/write-all --resume` → 중단점에서 이어서 집필
-3. `/write-all --restart` → 처음부터 다시 시작
+**Detailed Guide**: See `references/detailed-guide.md`
+- Ralph loop architecture
+- Multi-validator system details
+- Circuit breaker pattern
+- Session recovery system
+- Promise tag mechanics
 
-복구 정보는 `meta/ralph-state.json`에 저장됩니다.
+**Usage Examples**: See `examples/example-usage.md`
+- Full novel writing workflows
+- Session recovery scenarios
+- Quality gate examples
+- Circuit breaker activation
+- Act completion flow
 
 ## THE NOVEL OATH
 
@@ -233,6 +253,45 @@ const allPassed =
   criticResult.score >= 85 &&
   betaResult.engagement_score >= 75 &&
   genreResult.compliance_score >= 90;
+```
+
+### Using verify-chapter Command
+
+**RECOMMENDED**: Use the new `/verify-chapter` command for streamlined parallel validation:
+
+```bash
+# After writing a chapter
+/write 5
+
+# Run parallel verification
+/verify-chapter 5
+```
+
+The `/verify-chapter` command automatically:
+- Launches all 3 validators in parallel
+- Applies confidence filtering (≥75)
+- Enforces quality thresholds (critic ≥85, beta-reader ≥75, genre-validator ≥90)
+- Returns structured verdict with scores and high-confidence issues
+- Saves results to `reviews/verifications/chapter_${N}_verification.json`
+
+**Integration Pattern**:
+```
+for each chapter:
+  /write {N}
+  verification = /verify-chapter {N}
+
+  if verification.verdict == "PASS":
+    <promise>CHAPTER_{N}_DONE</promise>
+    continue
+
+  if verification.verdict == "FAIL":
+    diagnostic = generate_diagnostic(verification.high_confidence_issues)
+    /revise {N} with diagnostic
+    verification = /verify-chapter {N}  # retry
+
+    if still failing after 3 retries:
+      # Circuit Breaker
+      ask_user(action)
 ```
 
 ## Ralph Loop 특징

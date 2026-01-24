@@ -1,6 +1,13 @@
 ---
 name: design-hook
-description: "[7단계] 훅 설계 - 떡밥(미스터리 요소) 설계"
+description: |
+  Triggers when user wants to design mystery hooks and cliffhangers.
+  <example>훅 설계</example>
+  <example>떡밥 만들기</example>
+  <example>design hooks</example>
+  <example>/design-hook</example>
+  <example>클리프행어 설정</example>
+  <example>궁금증 요소</example>
 user-invocable: true
 ---
 

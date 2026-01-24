@@ -1,0 +1,92 @@
+{
+  "recipe_id": "thriller",
+  "recipe_name": "스릴러/미스터리",
+  "genre": ["스릴러"],
+  "sub_genre": ["미스터리", "서스펜스"],
+
+  "defaults": {
+    "target_chapters": 40,
+    "target_words_per_chapter": 5500,
+    "rating": "15+",
+    "structure_type": "3막"
+  },
+
+  "style_guide": {
+    "narrative_voice": "3인칭 제한 시점",
+    "pov_type": "single",
+    "tone": ["긴장", "불안", "미스터리"],
+    "pacing": "variable",
+    "cliffhanger_ratio": { "min": 0.7, "max": 0.9 }
+  },
+
+  "required_tropes": ["미스터리", "추적", "반전", "위기", "해결"],
+
+  "required_beats": {
+    "단서": { "frequency": "1-2/chapter", "description": "새로운 단서 발견" },
+    "위험": { "frequency": "2-3ch_gap", "description": "주인공 위협" },
+    "반전": { "frequency": "10ch_gap", "description": "예상 뒤집기" },
+    "클리프행어": { "frequency": "every_chapter_end", "description": "챕터 끝 긴장" }
+  },
+
+  "chapter1_checklist": [
+    "훅킹 오프닝 (사건/미스터리)",
+    "주인공의 평범한 일상 파괴",
+    "핵심 미스터리 제시",
+    "첫 번째 단서 또는 위협"
+  ],
+
+  "plot_structure": {
+    "mystery_layers": {
+      "surface": "겉으로 드러난 사건",
+      "hidden": "숨겨진 진실",
+      "twist": "최종 반전"
+    },
+    "red_herrings": { "min": 2, "max": 4 },
+    "reveal_pacing": "gradual"
+  },
+
+  "plot_milestones": [
+    { "chapter_range": [1, 3], "event": "사건 발생" },
+    { "chapter_range": [5, 10], "event": "첫 번째 용의자/단서" },
+    { "chapter_range": [15, 18], "event": "중간 반전" },
+    { "chapter_range": [25, 30], "event": "위기 고조, 레드헤링 폭발" },
+    { "chapter_range": [35, 38], "event": "진실 발견" },
+    { "chapter_range": [39, 40], "event": "해결/결말" }
+  ],
+
+  "character_requirements": {
+    "protagonist": {
+      "traits": ["관찰력", "집요함", "개인적 동기"],
+      "arc": "진실 추적으로 인한 변화"
+    },
+    "antagonist": {
+      "traits": ["지능", "동기", "위장"],
+      "reveal_timing": "late"
+    }
+  },
+
+  "narrative_devices": {
+    "unreliable_narrator": { "optional": true },
+    "foreshadowing": { "frequency": "high", "subtlety": "high" },
+    "misdirection": { "frequency": "medium" }
+  },
+
+  "recommended_cliches": {
+    "tier1_safe": ["잠긴 방", "추적전", "과거의 비밀"],
+    "tier2_careful": ["신뢰할 수 없는 화자", "이중 정체", "시간 제한"],
+    "tier3_risky": ["꿈/환상 반전", "다중 인격"]
+  },
+
+  "validation_rules": {
+    "critic_threshold": 85,
+    "beta_reader_threshold": 80,
+    "genre_validator_threshold": 90,
+    "special_checks": ["플롯홀 검증", "단서 일관성", "반전 타당성"]
+  },
+
+  "act_structure": {
+    "act1": { "chapters": [1, 10], "focus": "사건 발생, 조사 시작, 첫 단서들" },
+    "act2": { "chapters": [11, 30], "focus": "조사 심화, 위험 증가, 레드헤링" },
+    "act3": { "chapters": [31, 40], "focus": "클라이맥스, 진실 폭로, 해결" }
+  }
+}

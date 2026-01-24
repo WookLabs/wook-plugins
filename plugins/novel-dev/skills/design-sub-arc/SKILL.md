@@ -1,6 +1,13 @@
 ---
 name: design-sub-arc
-description: "[5단계] 서브 아크 설계 - 서브플롯 설계"
+description: |
+  Triggers when user wants to design subplot arcs.
+  <example>서브 아크 설계</example>
+  <example>서브플롯 만들기</example>
+  <example>design subplot</example>
+  <example>/design-sub-arc</example>
+  <example>보조 플롯</example>
+  <example>부 이야기 구성</example>
 user-invocable: true
 ---
 

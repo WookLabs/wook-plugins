@@ -1,0 +1,31 @@
+{
+  "narrative_voice": "3인칭 제한 시점",
+  "pov_type": "single",
+  "pov_characters": [],
+  "tense": "과거형",
+  "tone": [],
+  "pacing_default": "medium",
+  "dialogue_style": "자연스러운 구어체",
+  "description_density": "medium",
+  "sentence_rhythm": "mixed",
+  "taboo_words": ["갑자기", "문득", "그런데", "하지만", "그러나"],
+  "filter_words": ["보였다", "느꼈다", "생각했다", "알았다", "깨달았다"],
+  "preferred_expressions": [],
+  "chapter_structure": {
+    "opening_hook": true,
+    "scene_count_range": [2, 4],
+    "ending_hook": true,
+    "cliffhanger_frequency": "every_chapter"
+  },
+  "emotional_beats": {
+    "target_per_chapter": 3,
+    "types": ["심쿵", "긴장", "설렘", "코믹"]
+  },
+  "korean_techniques": {
+    "use_onomatopoeia": true,
+    "use_metaphors": true,
+    "sentence_variation": true
+  },
+  "show_dont_tell": "balanced",
+  "special_instructions": ""
+}

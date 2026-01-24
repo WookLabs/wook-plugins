@@ -1,6 +1,13 @@
 ---
 name: design-world
-description: "[2단계] 세계관 설계 - 세계관 상세 설계"
+description: |
+  Triggers when user wants to design world setting for novel.
+  <example>세계관 설계</example>
+  <example>배경 설정 만들어줘</example>
+  <example>소설 배경 구축</example>
+  <example>design world</example>
+  <example>create worldbuilding</example>
+  <example>/design-world</example>
 user-invocable: true
 ---
 

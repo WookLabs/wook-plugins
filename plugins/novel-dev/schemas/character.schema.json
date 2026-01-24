@@ -100,6 +100,45 @@
             "vocabulary": {
               "type": "string",
               "description": "Typical vocabulary/word choice"
+            },
+            "signature_phrases": {
+              "type": "array",
+              "description": "자주 쓰는 말버릇/표현 (예: '그러니까 말이야', '뭐랄까')",
+              "items": {
+                "type": "string",
+                "maxLength": 100
+              },
+              "minItems": 2,
+              "maxItems": 10
+            },
+            "speech_examples": {
+              "type": "array",
+              "description": "캐릭터 대사 예시 (3-5개)",
+              "items": {
+                "type": "object",
+                "properties": {
+                  "situation": {
+                    "type": "string",
+                    "description": "상황 설명"
+                  },
+                  "dialogue": {
+                    "type": "string",
+                    "description": "실제 대사"
+                  }
+                },
+                "required": ["situation", "dialogue"]
+              },
+              "minItems": 3,
+              "maxItems": 7
+            },
+            "dialect": {
+              "type": "string",
+              "description": "사투리/방언 (예: 표준어, 부산 사투리, 전라도 사투리)"
+            },
+            "formality_level": {
+              "type": "string",
+              "enum": ["very_formal", "formal", "neutral", "casual", "very_casual"],
+              "description": "기본 말투 격식 수준"
             }
           }
         }
@@ -184,6 +223,94 @@
             "maxLength": 100
           },
           "maxItems": 10
+        }
+      }
+    },
+    "personality": {
+      "type": "object",
+      "description": "성격 유형 및 특성",
+      "properties": {
+        "mbti": {
+          "type": "string",
+          "pattern": "^[EI][SN][TF][JP]$",
+          "description": "MBTI 유형 (예: ENFP, ISTJ)"
+        },
+        "temperament": {
+          "type": "string",
+          "enum": ["sanguine", "choleric", "melancholic", "phlegmatic", "mixed"],
+          "description": "기질 유형 (다혈질, 담즙질, 우울질, 점액질)"
+        },
+        "traits": {
+          "type": "array",
+          "description": "핵심 성격 특성 (3-5개)",
+          "items": {
+            "type": "string",
+            "maxLength": 50
+          },
+          "minItems": 3,
+          "maxItems": 7
+        },
+        "introvert_extrovert": {
+          "type": "integer",
+          "minimum": 1,
+          "maximum": 10,
+          "description": "내향-외향 스펙트럼 (1=극내향, 10=극외향)"
+        },
+        "emotional_stability": {
+          "type": "integer",
+          "minimum": 1,
+          "maximum": 10,
+          "description": "정서적 안정성 (1=불안정, 10=매우 안정)"
+        },
+        "openness": {
+          "type": "integer",
+          "minimum": 1,
+          "maximum": 10,
+          "description": "개방성 (1=보수적, 10=매우 개방적)"
+        }
+      }
+    },
+    "intelligence": {
+      "type": "object",
+      "description": "지능 및 인지 특성",
+      "properties": {
+        "iq_level": {
+          "type": "string",
+          "enum": ["below_average", "average", "above_average", "gifted", "genius"],
+          "description": "지능 수준"
+        },
+        "emotional_iq": {
+          "type": "string",
+          "enum": ["low", "average", "high", "exceptional"],
+          "description": "감정 지능 (공감 능력, 타인 이해)"
+        },
+        "street_smart": {
+          "type": "string",
+          "enum": ["low", "average", "high"],
+          "description": "세상 물정, 처세술"
+        },
+        "learning_style": {
+          "type": "string",
+          "enum": ["visual", "auditory", "kinesthetic", "reading"],
+          "description": "학습 스타일"
+        },
+        "strengths": {
+          "type": "array",
+          "description": "인지적 강점 (예: 분석력, 창의력, 기억력)",
+          "items": {
+            "type": "string",
+            "maxLength": 50
+          },
+          "maxItems": 5
+        },
+        "weaknesses": {
+          "type": "array",
+          "description": "인지적 약점",
+          "items": {
+            "type": "string",
+            "maxLength": 50
+          },
+          "maxItems": 5
         }
       }
     },

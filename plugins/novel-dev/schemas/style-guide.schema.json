@@ -51,6 +51,13 @@
       "enum": ["short", "long", "mixed"],
       "description": "Typical sentence length and rhythm"
     },
+    "pov_characters": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      },
+      "description": "POV 캐릭터 ID 목록 (다중 POV인 경우)"
+    },
     "taboo_words": {
       "type": "array",
       "items": {
@@ -59,6 +66,16 @@
       },
       "description": "Words or phrases to avoid (e.g., 갑자기, 문득, 그런데)",
       "maxItems": 50,
+      "uniqueItems": true
+    },
+    "filter_words": {
+      "type": "array",
+      "items": {
+        "type": "string",
+        "maxLength": 50
+      },
+      "description": "필터 단어 (보였다, 느꼈다 등 직접 서술 피하기)",
+      "maxItems": 30,
       "uniqueItems": true
     },
     "preferred_expressions": {
@@ -92,6 +109,43 @@
         "ending_hook": {
           "type": "boolean",
           "description": "Whether chapters should end with a cliffhanger/hook"
+        }
+      }
+    },
+    "emotional_beats": {
+      "type": "object",
+      "description": "감정 비트 설정",
+      "properties": {
+        "target_per_chapter": {
+          "type": "integer",
+          "minimum": 1,
+          "maximum": 10,
+          "description": "회차당 목표 감정 비트 수"
+        },
+        "types": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          },
+          "description": "사용할 감정 비트 유형 (심쿵, 긴장, 설렘 등)"
+        }
+      }
+    },
+    "korean_techniques": {
+      "type": "object",
+      "description": "한국어 문체 기법",
+      "properties": {
+        "use_onomatopoeia": {
+          "type": "boolean",
+          "description": "의성어/의태어 사용 여부"
+        },
+        "use_metaphors": {
+          "type": "boolean",
+          "description": "비유/은유 사용 여부"
+        },
+        "sentence_variation": {
+          "type": "boolean",
+          "description": "문장 길이 변화 사용 여부"
         }
       }
     },

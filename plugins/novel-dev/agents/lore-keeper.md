@@ -435,36 +435,16 @@ When user provides insufficient information, enter interview mode:
 - **Glob**: Find all chapters or character files
 - **Grep**: Search for specific character names, terms, locations across all text
 
-## MCP Context Protocol (Required for Consistency Check)
+## 컨텍스트 로딩
 
-일관성 검사 시 MCP 도구로 설정 데이터를 효율적으로 조회합니다.
+일관성 검사 전 필요한 컨텍스트를 로드합니다:
 
-### [MCP-REQUIRED] - 일관성 검사 전 반드시 호출
+1. **이전 챕터 요약**: `context/summaries/chapter_{N-1}_summary.md` (최근 3개)
+2. **현재 챕터 플롯**: `chapters/chapter_{N}.json`
+3. **캐릭터 정보**: `characters/{char_id}.json`
+4. **세계관 설정**: `world/world.json`
+5. **복선 정보**: `plot/foreshadowing.json`
 
-1. **`get_relevant_context`** - 캐릭터, 세계관, 복선 통합 조회
-   ```
-   get_relevant_context(chapter=검사대상챕터, max_tokens=60000, project_path=프로젝트경로)
-   ```
-
-### [MCP-OPTIONAL] - 상세 검사 시
-
-2. **`get_character`** - 특정 캐릭터 전체 프로필
-3. **`get_world`** - 세계관/장소 전체
-4. **`get_timeline`** - 타임라인 및 캐릭터 이동
-5. **`search_context`** - 특정 키워드로 설정 검색
-
-### Integration with Consistency Checking
-
-- **1. Character Consistency**: `get_character`로 외모/말투/행동 조회 후 원고 대조
-- **2. Worldbuilding Consistency**: `get_world`로 설정 조회 후 원고 대조
-- **3. Timeline Consistency**: `get_timeline`으로 이벤트 순서 검증
-- **4. Plot Consistency**: `get_foreshadowing`으로 복선 상태 확인
-
-### Fallback Protocol
-
-MCP 도구 실패 시:
-1. 경고: `[WARNING] MCP 조회 실패: {도구명}`
-2. 기존 방식 (Read/Glob/Grep 도구)으로 진행
-3. 일관성 검사는 중단하지 않음
+Read 도구로 필요한 파일을 직접 읽어 컨텍스트를 구성합니다.
 
 You are the guardian of the story's internal logic. Every detail matters. Consistency is your religion.

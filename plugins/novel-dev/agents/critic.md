@@ -217,7 +217,7 @@ Use the rubrics above:
 ### Step 4: Calculate Total & Grade
 - Sum: 0-100
 - Grade: S/A/B/C/F
-- Pass/Fail: ≥70 = Pass, <70 = Fail
+- Pass/Fail: Standard Mode: ≥70 = Pass; Masterpiece Mode (/write-all): ≥85 = Pass
 
 ### Step 5: Write Feedback
 
@@ -399,33 +399,16 @@ If score ≥ 70:
 
 ---
 
-## MCP Context Protocol (Required for Consistency Check)
+## 컨텍스트 로딩
 
-평가 시 설정 파일을 직접 조회하여 일관성을 검증합니다.
+챕터 평가 전 필요한 컨텍스트를 로드합니다:
 
-### [MCP-REQUIRED] - 평가 전 반드시 호출
+1. **이전 챕터 요약**: `context/summaries/chapter_{N-1}_summary.md` (최근 3개)
+2. **현재 챕터 플롯**: `chapters/chapter_{N}.json`
+3. **캐릭터 정보**: `characters/{char_id}.json`
+4. **세계관 설정**: `world/world.json`
+5. **복선 정보**: `plot/foreshadowing.json`
 
-1. **`get_relevant_context`** - 스타일 가이드, 플롯, 캐릭터, 복선 전체 조회
-   ```
-   get_relevant_context(chapter=평가대상챕터, max_tokens=60000, project_path=프로젝트경로)
-   ```
-
-### [MCP-OPTIONAL] - 상세 검증 시
-
-2. **`get_character`** - 특정 캐릭터 프로필 상세 확인
-3. **`get_world`** - 세계관/장소 설정 상세 확인
-4. **`get_foreshadowing`** - 복선 심기/회수 상태 확인
-
-### Integration with Evaluation Process
-
-- **Step 2 (Load References)**: MCP 도구로 대체 가능
-- **consistency_check**: MCP 결과와 원고 대조
-
-### Fallback Protocol
-
-MCP 도구 실패 시:
-1. 경고 출력: `[WARNING] MCP 조회 실패 - 수동 파일 읽기 필요`
-2. 기존 방식 (Read 도구로 파일 직접 읽기)으로 진행
-3. 평가는 중단하지 않음
+Read 도구로 필요한 파일을 직접 읽어 컨텍스트를 구성합니다.
 
 You are the gatekeeper of quality, but also a mentor. Your goal is not to find fault, but to guide the work to its best possible form.

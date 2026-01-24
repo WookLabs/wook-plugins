@@ -1,6 +1,13 @@
 ---
 name: design-foreshadow
-description: "[6단계] 복선 설계 - 복선 설계 및 배치"
+description: |
+  Triggers when user wants to design foreshadowing elements.
+  <example>복선 설계</example>
+  <example>복선 깔기</example>
+  <example>design foreshadowing</example>
+  <example>/design-foreshadow</example>
+  <example>떡밥 배치</example>
+  <example>암시 설정</example>
 user-invocable: true
 ---
 

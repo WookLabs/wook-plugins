@@ -1,6 +1,13 @@
 ---
 name: write-act
-description: "[10단계] 막 집필 - 특정 막(Act) 전체 집필"
+description: |
+  Triggers when user wants to write an entire act.
+  <example>1막 집필</example>
+  <example>막 전체 쓰기</example>
+  <example>write act 1</example>
+  <example>/write-act 1</example>
+  <example>첫 번째 막 작성</example>
+  <example>act 2 집필</example>
 user-invocable: true
 ---
 

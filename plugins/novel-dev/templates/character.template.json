@@ -1,5 +1,5 @@
 {
-  "id": "",
+  "id": "char_001",
   "name": "",
   "aliases": [],
   "role": "supporting",
@@ -15,7 +15,24 @@
     "voice": {
       "tone": "",
       "speech_pattern": "",
-      "vocabulary": ""
+      "vocabulary": "",
+      "signature_phrases": [],
+      "speech_examples": [
+        {
+          "situation": "평상시",
+          "dialogue": ""
+        },
+        {
+          "situation": "화났을 때",
+          "dialogue": ""
+        },
+        {
+          "situation": "좋아하는 사람 앞에서",
+          "dialogue": ""
+        }
+      ],
+      "dialect": "표준어",
+      "formality_level": "neutral"
     }
   },
   "background": {
@@ -37,6 +54,22 @@
     "values": [],
     "fears": []
   },
+  "personality": {
+    "mbti": "",
+    "temperament": "mixed",
+    "traits": [],
+    "introvert_extrovert": 5,
+    "emotional_stability": 5,
+    "openness": 5
+  },
+  "intelligence": {
+    "iq_level": "average",
+    "emotional_iq": "average",
+    "street_smart": "average",
+    "learning_style": "visual",
+    "strengths": [],
+    "weaknesses": []
+  },
   "behavior": {
     "habits": [],
     "hobbies": [],
@@ -45,6 +78,7 @@
     "stress_response": "",
     "lying_tell": ""
   },
+  "relationships": [],
   "arc": {
     "start_state": "",
     "catalyst": "",
@@ -52,5 +86,6 @@
     "dark_night": "",
     "transformation": "",
     "end_state": ""
-  }
+  },
+  "notes": ""
 }

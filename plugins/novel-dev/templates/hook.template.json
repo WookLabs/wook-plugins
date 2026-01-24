@@ -1,0 +1,32 @@
+{
+  "mystery_hooks": [
+    {
+      "id": "hook_001",
+      "content": "",
+      "plant_chapter": null,
+      "clues": [],
+      "reveal_chapter": null,
+      "reader_reaction": "",
+      "reveal": "",
+      "status": "not_planted"
+    }
+  ],
+  "chapter_end_hooks": [
+    {
+      "chapter": 1,
+      "hook": "",
+      "hook_type": "cliffhanger",
+      "purpose": "",
+      "tension_level": "medium"
+    }
+  ],
+  "dramatic_questions": [
+    {
+      "question": "",
+      "introduced_chapter": 1,
+      "answered_chapter": null,
+      "importance": "primary"
+    }
+  ],
+  "notes": ""
+}

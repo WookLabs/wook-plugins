@@ -1,0 +1,39 @@
+{
+  "recipe_id": "romance-contract",
+  "recipe_name": "계약 연애물",
+  "extends": "romance",
+  "genre": ["로맨스"],
+  "sub_genre": ["현대 로맨스", "계약 연애"],
+
+  "defaults": {
+    "target_chapters": 60,
+    "target_words_per_chapter": 5000
+  },
+
+  "required_tropes": ["계약", "가짜 연인", "진짜 감정", "비밀 유지", "계약 종료 위기"],
+
+  "required_beats": {
+    "심쿵": { "frequency": "1-2/chapter" },
+    "밀당": { "frequency": "2-3ch_gap" },
+    "위기": { "frequency": "10ch_gap", "description": "계약 들킬 위기" }
+  },
+
+  "plot_milestones": [
+    { "chapter_range": [1, 3], "event": "계약 제안" },
+    { "chapter_range": [4, 8], "event": "첫 공개 연기" },
+    { "chapter_range": [15, 20], "event": "감정 자각 시작" },
+    { "chapter_range": [30, 35], "event": "비밀 위기" },
+    { "chapter_range": [45, 50], "event": "진심 고백" }
+  ],
+
+  "character_requirements": {
+    "protagonist": {
+      "traits": ["자존심 강함", "경제적 필요"],
+      "arc": "가짜에서 진짜 감정으로"
+    },
+    "love_interest": {
+      "traits": ["냉철", "비밀 있음"],
+      "arc": "벽 허물기"
+    }
+  }
+}

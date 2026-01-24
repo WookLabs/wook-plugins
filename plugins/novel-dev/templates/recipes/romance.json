@@ -1,0 +1,59 @@
+{
+  "recipe_id": "romance",
+  "recipe_name": "현대 로맨스",
+  "genre": ["로맨스"],
+  "sub_genre": ["현대 로맨스"],
+
+  "defaults": {
+    "target_chapters": 50,
+    "target_words_per_chapter": 5000,
+    "rating": "15+",
+    "structure_type": "3막"
+  },
+
+  "style_guide": {
+    "narrative_voice": "3인칭 제한 시점",
+    "pov_type": "dual",
+    "tone": ["달달", "설렘"],
+    "dialogue_ratio": { "min": 0.55, "max": 0.65 },
+    "emotional_beats_per_chapter": { "min": 2, "max": 4 }
+  },
+
+  "required_tropes": ["첫만남", "갈등", "화해", "고백"],
+
+  "required_beats": {
+    "심쿵": { "frequency": "1-2/chapter", "description": "두근거림, 설렘 순간" },
+    "밀당": { "frequency": "3-5ch_gap", "description": "밀고 당기기" },
+    "질투": { "frequency": "5-10ch_gap", "description": "삼각관계 긴장" }
+  },
+
+  "chapter1_checklist": [
+    "첫 문장 훅 (호기심 유발)",
+    "주인공 매력 포인트 3문단 내 등장",
+    "상대역 등장 또는 암시",
+    "3-5화 내 사이다 예고"
+  ],
+
+  "recommended_cliches": {
+    "tier1_safe": ["우연한 만남", "오해", "친구에서 연인"],
+    "tier2_careful": ["계약 연애", "가짜 연인", "정략 결혼"],
+    "tier3_risky": ["기억상실", "쌍둥이 바꿔치기"]
+  },
+
+  "validation_rules": {
+    "critic_threshold": 85,
+    "beta_reader_threshold": 75,
+    "genre_validator_threshold": 90,
+    "chapter1_thresholds": {
+      "critic": 90,
+      "beta_reader": 80,
+      "genre_validator": 95
+    }
+  },
+
+  "act_structure": {
+    "act1": { "chapters": [1, 15], "focus": "만남과 설정, 계기 발생" },
+    "act2": { "chapters": [16, 40], "focus": "갈등 심화, 감정 발전" },
+    "act3": { "chapters": [41, 50], "focus": "위기와 해결, 해피엔딩" }
+  }
+}

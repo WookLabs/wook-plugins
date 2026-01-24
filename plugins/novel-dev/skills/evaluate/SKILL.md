@@ -1,53 +1,91 @@
 ---
 name: evaluate
-description: "[13단계] 평가 - 품질 평가"
+description: |
+  Triggers when user wants to evaluate chapter or act quality.
+  <example>5화 평가해줘</example>
+  <example>품질 검사</example>
+  <example>evaluate chapter 5</example>
+  <example>/evaluate 5</example>
+  <example>현재 막 평가</example>
+  <example>5-10화 일괄 평가</example>
 user-invocable: true
 ---
 
-[NOVEL-SISYPHUS: 평가]
+# /evaluate - 품질 평가
 
-$ARGUMENTS
+챕터 또는 막 단위 품질을 다차원적으로 평가합니다.
 
-## 실행 단계
+## Quick Start
+```bash
+/evaluate 5      # 5화 평가
+/evaluate        # 현재 막 전체 평가
+/evaluate 5-10   # 5~10화 일괄 평가
+```
 
-1. **대상 결정**
-   - 회차 지정: 해당 회차
-   - 미지정: 현재 막 전체
+## Evaluation Framework
 
-2. **critic 에이전트 호출**
-   ```
-   Task(subagent_type="critic", prompt="
-   원고: {chapter.md}
-   플롯: {chapter.json}
-   캐릭터 설정: {characters}
-   세계관: {world.json}
+### 4-Dimensional Scoring (100 points total)
 
-   평가 기준 (각 25점):
-   1. 서사/문체 품질
-   2. 플롯 정합성
-   3. 캐릭터 일관성
-   4. 설정 준수
+1. **Narrative/Prose Quality** (25 pts)
+   - Prose style, sentence rhythm
+   - Description quality and balance
+   - Technical execution (grammar, spelling)
 
-   점수와 상세 피드백을 JSON으로 출력해주세요.
-   ")
-   ```
+2. **Plot Consistency** (25 pts)
+   - Coverage of planned plot points
+   - Logical causality and flow
+   - Foreshadowing and payoff
 
-3. **파일 저장**
-   - `reviews/chapter_reviews/chapter_{N}_review.json`
-   - 막 단위: `reviews/act_{M}_review.json`
+3. **Character Consistency** (25 pts)
+   - Voice and speech patterns
+   - Motivation alignment with profile
+   - Natural character development
 
-4. **History 업데이트** (NEW)
-   - `reviews/history/` 디렉토리 없으면 생성
-   - 첫 평가: `reviews/history/chapter_{N}.json` 생성, version=1
-   - 재평가: 기존 history에 새 version 추가
-   - 스키마: `schemas/chapter-history.schema.json` 참조
+4. **Setting Adherence** (25 pts)
+   - World rules consistency
+   - Environment matching established descriptions
+   - Worldbuilding details
 
-## 등급 기준
+### Grading Scale
 
-| 점수 | 등급 | 의미 |
-|------|------|------|
-| 90+ | S | 출판 품질 |
-| 80-89 | A | 우수 |
-| 70-79 | B | 양호 (품질 게이트 통과) |
-| 60-69 | C | 개선 필요 |
-| 60 미만 | F | 재작성 권장 |
+| Score | Grade | Meaning | Recommendation |
+|-------|-------|---------|----------------|
+| 90-100 | S | Publication quality | Publish as-is |
+| 80-89 | A | Excellent | Minor polish optional |
+| 70-79 | B | Good/Acceptable | Light revision |
+| 60-69 | C | Needs improvement | Targeted revision |
+| 0-59 | F | Significant issues | Major rewrite |
+
+## Key Features
+
+### Version History
+- Tracks all evaluations for each chapter
+- Compares scores across revisions
+- Shows improvement trajectory
+
+### Multi-Validator Mode
+For write-all integration:
+- critic (quality)
+- beta-reader (engagement)
+- genre-validator (compliance)
+
+### Act-Level Analysis
+- Cross-chapter consistency checking
+- Pacing analysis across chapters
+- Character arc completeness verification
+
+## Documentation
+
+**Detailed Guide**: See `references/detailed-guide.md`
+- Evaluation criteria breakdown
+- Critic agent integration
+- Multi-validator consensus
+- Version history system
+- Review file formats
+
+**Usage Examples**: See `examples/example-usage.md`
+- Basic evaluation workflows
+- Re-evaluation after revision
+- Multi-validator mode examples
+- Act-level evaluation
+- Error recovery scenarios

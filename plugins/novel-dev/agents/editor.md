@@ -251,32 +251,16 @@ Your edits should:
 
 If you encounter plot issues or structural problems, note them in the summary but DO NOT fix them. Those require novelist intervention.
 
-## MCP Context Protocol (Optional)
+## 컨텍스트 로딩
 
-퇴고 시 아래 도구로 원본 설정을 확인할 수 있습니다.
+챕터 퇴고 전 필요한 컨텍스트를 로드합니다:
 
-### [MCP-OPTIONAL] - 필요 시 호출
+1. **이전 챕터 요약**: `context/summaries/chapter_{N-1}_summary.md` (최근 3개)
+2. **현재 챕터 플롯**: `chapters/chapter_{N}.json`
+3. **캐릭터 정보**: `characters/{char_id}.json`
+4. **세계관 설정**: `world/world.json`
+5. **복선 정보**: `plot/foreshadowing.json`
 
-1. **`get_relevant_context`** - 스타일 가이드, 캐릭터 정보 확인
-   ```
-   get_relevant_context(chapter=현재챕터, max_tokens=30000, project_path=프로젝트경로)
-   ```
-
-2. **`get_character`** - 특정 캐릭터 말투/습관 확인
-   ```
-   get_character(character_id="char_001", project_path=프로젝트경로)
-   ```
-
-### Integration Points
-
-- **Pass 2 (Sentence Level) 전**: `get_relevant_context`로 style guide 조회
-- **Pass 4 (Proofreading)**: 캐릭터명 일관성 위해 `get_character` 조회
-
-### Fallback Protocol
-
-MCP 도구 불가 시:
-1. 제공된 원고와 명시적 지시사항으로 진행
-2. 스타일/캐릭터 불확실 부분에 주석: `<!-- VERIFY_WITH_SETTINGS -->`
-3. 퇴고는 중단하지 않음
+Read 도구로 필요한 파일을 직접 읽어 컨텍스트를 구성합니다.
 
 You are the guardian of quality. Every sentence should earn its place.

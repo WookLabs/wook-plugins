@@ -178,23 +178,16 @@ Before submitting, verify:
 - [ ] 다음 회차로 이어지는 질문/긴장 생성
 - [ ] 미해결 떡밥 최소 1개 유지
 
-### MCP 컨텍스트 로드
+### 감정 아크 컨텍스트 로드
 
-집필 시작 시 이전 회차 감정 상태 확인:
+집필 시작 시 이전 회차 감정 상태를 확인합니다:
 
-```
-get_relevant_context(
-  chapter=현재챕터,
-  include_emotional_arc=true,
-  project_path=프로젝트경로
-)
-```
+1. `emotional-arc/emotional-context.json` - 직전 3회차 감정 상태
+2. `emotional-arc/tension-curve.json` - 텐션 추세
+3. `emotional-arc/beat-counter.json` - 누적 감정 비트
+4. `plot/foreshadowing.json` - 미해결 떡밥
 
-응답에 포함되는 정보:
-- 직전 3회차 텐션 평균
-- 누적 감정 비트 현황
-- 미해결 떡밥 목록
-- 권장 텐션/비트 목표
+Read 도구로 필요한 파일을 직접 읽어 권장 사항을 확인합니다.
 
 ## 회차 완료 체크리스트
 
@@ -217,61 +210,17 @@ get_relevant_context(
 - [ ] 복선 심기/회수 확인
 </Guidelines>
 
-## MCP Context Protocol
+## 컨텍스트 로딩
 
-본 에이전트는 MCP 도구를 통해 컨텍스트를 조회합니다.
+챕터 작성 전 필요한 컨텍스트를 로드합니다:
 
-### [MCP-REQUIRED] - 집필 전 반드시 호출
+1. **이전 챕터 요약**: `context/summaries/chapter_{N-1}_summary.md` (최근 3개)
+2. **현재 챕터 플롯**: `chapters/chapter_{N}.json`
+3. **캐릭터 정보**: `characters/{char_id}.json`
+4. **세계관 설정**: `world/world.json`
+5. **복선 정보**: `plot/foreshadowing.json`
 
-아래 도구를 **반드시** 호출하여 컨텍스트를 확보하세요:
-
-1. **`get_relevant_context`**
-   ```
-   get_relevant_context(chapter=현재챕터, max_tokens=60000, project_path=프로젝트경로)
-   ```
-   - 반환: 스타일 가이드, 플롯, 이전 요약, 캐릭터, 세계관, 복선
-   - 이 결과를 기반으로 집필
-
-### [MCP-OPTIONAL] - 필요 시 호출
-
-2. **`get_character`** - 특정 캐릭터 상세 정보 필요 시
-   ```
-   get_character(character_id="char_001", project_path=프로젝트경로)
-   ```
-
-3. **`get_foreshadowing`** - 복선 상세 확인 시
-   ```
-   get_foreshadowing(chapter=현재챕터, project_path=프로젝트경로)
-   ```
-
-### Fallback Protocol
-
-MCP 도구가 실패하거나 빈 결과 반환 시:
-
-1. 실패를 출력 상단에 기록: `[WARNING] MCP 조회 실패: {도구명}`
-2. 제공된 최소 컨텍스트(플롯)로 진행
-3. 일관성 문제 가능 구간에 주석 표시: `<!-- CONSISTENCY_CHECK_NEEDED -->`
-4. **집필을 중단하지 말 것**
-
-## Expected Input Format
-
-집필 시 두 가지 방식으로 컨텍스트를 받을 수 있습니다:
-
-### 방식 1: MCP 도구 활용 (권장)
-MCP Context Protocol 섹션의 도구를 호출하여 직접 컨텍스트를 조회합니다.
-`get_relevant_context` 결과에 필요한 모든 정보가 포함됩니다.
-
-### 방식 2: 직접 제공 (Fallback)
-MCP 도구가 불가능할 경우 아래 형식으로 컨텍스트가 제공됩니다:
-
-```
-## Instructions
-- chapter_number: N
-- project_path: /path/to/novel
-- Target word count: X
-```
-
-이 경우 MCP 도구를 호출하거나, 불가능하면 Fallback Protocol을 따릅니다.
+Read 도구로 필요한 파일을 직접 읽어 컨텍스트를 구성합니다.
 
 ## Expected Output Format
 

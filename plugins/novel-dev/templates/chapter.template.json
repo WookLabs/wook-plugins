@@ -22,7 +22,18 @@
     "character_development": "",
     "emotional_goal": ""
   },
-  "scenes": [],
+  "scenes": [
+    {
+      "scene_number": 1,
+      "purpose": "",
+      "characters": [],
+      "location": "",
+      "conflict": "",
+      "beat": "",
+      "emotional_tone": "",
+      "estimated_words": 1000
+    }
+  ],
   "style_guide": {
     "tone": "",
     "pacing": "medium",

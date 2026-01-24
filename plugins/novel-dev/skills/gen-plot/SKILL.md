@@ -1,6 +1,13 @@
 ---
 name: gen-plot
-description: "[8단계] 플롯 생성 - 전체 회차별 플롯 JSON 생성"
+description: |
+  Triggers when user wants to generate plot files for all chapters.
+  <example>플롯 생성</example>
+  <example>회차별 플롯 만들기</example>
+  <example>전체 챕터 플롯 생성</example>
+  <example>generate plot</example>
+  <example>create chapter plots</example>
+  <example>/gen-plot</example>
 user-invocable: true
 ---
 

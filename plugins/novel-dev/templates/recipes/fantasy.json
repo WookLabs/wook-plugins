@@ -1,0 +1,69 @@
+{
+  "recipe_id": "fantasy",
+  "recipe_name": "이세계 판타지",
+  "genre": ["판타지"],
+  "sub_genre": ["이세계", "성장"],
+
+  "defaults": {
+    "target_chapters": 100,
+    "target_words_per_chapter": 5500,
+    "rating": "15+",
+    "structure_type": "5막"
+  },
+
+  "style_guide": {
+    "narrative_voice": "1인칭",
+    "pov_type": "single",
+    "tone": ["모험", "성장", "긴장"],
+    "action_density": "medium",
+    "worldbuilding_ratio": { "min": 0.15, "max": 0.25 }
+  },
+
+  "required_tropes": ["이세계 전이", "성장", "동료", "마왕/최종보스", "귀환 선택"],
+
+  "required_beats": {
+    "성장": { "frequency": "5ch_gap", "description": "레벨업, 각성, 새로운 능력" },
+    "전투": { "frequency": "3-5ch_gap", "description": "액션 시퀀스" },
+    "발견": { "frequency": "5-10ch_gap", "description": "세계관 비밀, 새로운 지역" },
+    "위기": { "frequency": "15-20ch_gap", "description": "생사의 위기" }
+  },
+
+  "chapter1_checklist": [
+    "전이 계기 (죽음, 소환, 사고)",
+    "새로운 세계의 첫인상",
+    "능력 각성 또는 암시",
+    "첫 번째 위기 또는 조력자"
+  ],
+
+  "power_system": {
+    "required": true,
+    "types": ["마법", "스킬", "레벨", "클래스"],
+    "progression": "gradual"
+  },
+
+  "world_requirements": {
+    "locations": ["시작 마을", "던전/위험지역", "왕도", "마왕성"],
+    "organizations": ["모험가 길드", "왕국", "마왕군"],
+    "species": ["인간", "엘프", "드워프", "마족"]
+  },
+
+  "recommended_cliches": {
+    "tier1_safe": ["용사 소환", "치트 능력", "동료 수집"],
+    "tier2_careful": ["하렘", "무한 레벨업", "복수극"],
+    "tier3_risky": ["지나친 먼치킨", "설정 충돌"]
+  },
+
+  "validation_rules": {
+    "critic_threshold": 80,
+    "beta_reader_threshold": 75,
+    "genre_validator_threshold": 85
+  },
+
+  "act_structure": {
+    "act1": { "chapters": [1, 20], "focus": "전이, 적응, 첫 목표 설정" },
+    "act2": { "chapters": [21, 40], "focus": "성장, 동료 획득, 첫 시련" },
+    "act3": { "chapters": [41, 60], "focus": "중간 보스, 세계 진실 일부" },
+    "act4": { "chapters": [61, 85], "focus": "최대 위기, 동료 이탈/희생" },
+    "act5": { "chapters": [86, 100], "focus": "최종 결전, 귀환 선택" }
+  }
+}

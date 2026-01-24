@@ -1,6 +1,13 @@
 ---
 name: revise
-description: "[12단계] 퇴고 - 원고 퇴고"
+description: |
+  Triggers when user wants to revise manuscript.
+  <example>퇴고</example>
+  <example>5화 수정해줘</example>
+  <example>원고 다듬기</example>
+  <example>revise chapter 5</example>
+  <example>edit and polish manuscript</example>
+  <example>/revise 5</example>
 user-invocable: true
 ---
 

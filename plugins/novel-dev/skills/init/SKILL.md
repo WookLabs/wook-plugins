@@ -1,123 +1,171 @@
 ---
 name: init
-description: "[1단계] 프로젝트 초기화 - 작품 아이디어로 기본 구조 생성"
+description: |
+  Triggers when user wants to initialize a new novel project from BLUEPRINT.md.
+  <example>소설 시작</example>
+  <example>프로젝트 생성</example>
+  <example>initialize novel</example>
+  <example>/init --from-blueprint</example>
+  <example>새 소설 만들기</example>
+  <example>웹소설 프로젝트 시작</example>
 user-invocable: true
 ---
 
-[NOVEL-SISYPHUS: 프로젝트 초기화]
+# /init - 프로젝트 초기화
 
-$ARGUMENTS
+BLUEPRINT.md 기획서를 완전한 프로젝트 구조로 변환합니다.
 
-## 실행 단계
+## Prerequisites
 
-1. **프로젝트 ID 생성**
-   - 형식: `novel_{YYYYMMDD}_{HHmmss}`
-   - 예: `novel_20250117_143052`
+**REQUIRED**: BLUEPRINT.md 파일이 존재해야 합니다.
 
-2. **디렉토리 구조 생성**
-   ```
-   novels/{novel_id}/
-   ├── meta/
-   ├── world/
-   ├── characters/
-   ├── plot/
-   ├── chapters/
-   ├── context/summaries/
-   ├── reviews/
-   └── exports/
-   ```
+BLUEPRINT.md가 없으면:
+```bash
+/blueprint-gen "작품 아이디어"
+```
+먼저 실행하여 기획서를 생성하세요.
 
-3. **plot-architect 에이전트 호출**
-   ```
-   Task(subagent_type="plot-architect", prompt="
-   다음 아이디어를 바탕으로 소설 기본 구조를 설계해주세요:
+## Quick Start
+```bash
+# Step 1: Generate blueprint (if not exists)
+/blueprint-gen "계약 연애로 시작해 진짜 사랑을 찾는 로맨스"
 
-   아이디어: {사용자 입력}
-
-   생성할 내용:
-   1. 제목 (워킹 타이틀)
-   2. 장르/서브장르
-   3. 톤/분위기
-   4. 목표 화수
-   5. 회차당 목표 글자수
-   6. 플롯 구조 선택 (3막/5막/영웅의여정/Save the Cat)
-   7. 로그라인 (1문장)
-   8. 시놉시스 (200자, 1000자 버전)
-
-   결과를 JSON 형식으로 출력해주세요.
-   ")
-   ```
-
-4. **파일 생성**
-   - `meta/project.json` - 프로젝트 메타데이터
-   - `plot/structure.json` - 플롯 구조
-   - `meta/style-guide.json` - 문체 가이드 (v4 추가)
-
-## 출력 예시
-
-### meta/project.json
-```json
-{
-  "id": "novel_20250117_143052",
-  "title": "계약 연애의 정석",
-  "genre": ["로맨스"],
-  "sub_genre": ["현대 로맨스", "계약 연애"],
-  "tropes": ["계약연애", "가짜연인", "밀당"],
-  "tone": ["달달", "코믹"],
-  "rating": "15+",
-  "target_chapters": 50,
-  "target_words_per_chapter": 5000,
-  "current_chapter": 0,
-  "status": "planning",
-  "created_at": "2025-01-17T14:30:52Z",
-  "updated_at": "2025-01-17T14:30:52Z"
-}
+# Step 2: Initialize project from blueprint
+/init --from-blueprint
 ```
 
-### meta/style-guide.json (v4 추가)
-```json
-{
-  "narrative_voice": "3인칭 제한 시점",
-  "pov_type": "single",
-  "tense": "과거형",
-  "tone": ["달달", "코믹"],
-  "pacing_default": "medium",
-  "dialogue_style": "자연스러운 구어체",
-  "description_density": "medium",
-  "sentence_rhythm": "mixed",
-  "taboo_words": ["갑자기", "문득", "그런데"],
-  "preferred_expressions": [],
-  "chapter_structure": {
-    "opening_hook": true,
-    "scene_count_range": [2, 4],
-    "ending_hook": true
-  }
-}
+## What It Creates
+
+### Complete Project Structure
+```
+novels/{novel_id}/
+├── meta/           # project.json, style-guide.json, ralph-state.json
+├── world/          # world.json (setting, rules, locations)
+├── characters/     # Character profiles
+├── plot/           # structure.json (acts, synopsis)
+├── chapters/       # Plot files (.json) and manuscripts (.md)
+├── context/        # Chapter summaries for context
+├── reviews/        # Quality evaluations and history
+└── exports/        # Publication formats (epub, pdf, txt)
 ```
 
-### plot/structure.json
-```json
-{
-  "structure_type": "3막",
-  "logline": "...",
-  "synopsis_short": "...",
-  "synopsis_long": "...",
-  "acts": [
-    {
-      "act_number": 1,
-      "name": "Setup",
-      "chapters": [1, 15],
-      "purpose": "세계관 소개, 주인공 일상, 계약 제안"
-    },
-    ...
-  ]
-}
+### Generated Files
+
+1. **meta/project.json**
+   - Project ID (novel_YYYYMMDD_HHmmss)
+   - Title, genre, tropes, tone
+   - Target chapters and word count
+   - Progress tracking
+
+2. **plot/structure.json**
+   - Story structure (3-act, 5-act, Hero's Journey, etc.)
+   - Act breakdown with chapter ranges
+   - Logline and synopsis
+   - Character arcs per act
+
+3. **meta/style-guide.json**
+   - Narrative voice and POV
+   - Tone and pacing defaults
+   - Taboo words and preferred expressions
+   - Chapter structure requirements
+
+4. **CLAUDE.md** (신규)
+   - AI 협업 가이드
+   - 프로젝트 개요 및 핵심 설정
+   - 작업 규칙 및 품질 기준
+   - 워크플로우 가이드 및 명령어
+   - 현재 상태 추적 (자동 업데이트)
+
+## Key Features
+
+### BLUEPRINT.md Based
+- Reads existing BLUEPRINT.md from current directory
+- Extracts all metadata (genre, tropes, structure)
+- No redundant questions - everything in blueprint
+
+### Intelligent Conversion
+- plot-architect agent converts blueprint to project structure
+- Genre-appropriate defaults from recipes
+- Character profiles from blueprint
+- Plot structure from 3-act outline
+
+### Customization Options
+```bash
+/init --from-blueprint           # Standard initialization
+/init --from-blueprint --chapters=30  # Override chapter count
+/init --from-blueprint --output=novels/my-novel  # Custom path
 ```
 
-## 에러 처리
+## Genre Recipe System
 
-| 상황 | 처리 |
-|------|------|
-| 동일 ID 존재 | "프로젝트가 이미 존재합니다. 덮어쓰시겠습니까?" 확인 |
-| 입력 불충분 | 인터뷰 모드: 장르, 화수, 톤 등 추가 질문 |
-| 디렉토리 생성 실패 | 에러 메시지 출력, 수동 생성 안내 |
+Recipes are automatically applied based on BLUEPRINT.md metadata.
+
+### Automatic Recipe Selection
+- Blueprint's genre field determines recipe
+- No manual --recipe needed
+- Override only if blueprint genre is incorrect
+
+### Available Recipes
+
+| Recipe | Genre | Description |
+|--------|-------|-------------|
+| `romance` | Romance | Modern romance defaults |
+| `romance-contract` | Romance | Contract relationship stories |
+| `romance-ceo` | Romance | CEO/Chaebol romance |
+| `fantasy` | Fantasy | Isekai fantasy defaults |
+| `fantasy-regression` | Fantasy | Regression/Time-travel |
+| `fantasy-hunter` | Fantasy | Hunter/Dungeon stories |
+| `bl` | BL | BL romance defaults |
+| `thriller` | Thriller | Thriller/Mystery |
+
+### What Recipes Provide
+- **Defaults**: Target chapters, words per chapter, rating, structure type
+- **Style Guide**: Narrative voice, POV, tone, dialogue ratio
+- **Required Tropes**: Must-have genre elements
+- **Required Beats**: Emotional beats with frequency guidelines
+- **Validation Rules**: Critic/Beta/Genre validator thresholds
+- **Plot Milestones**: Key events with chapter ranges
+- **Recommended Cliches**: Safe/careful/risky tiers
+
+### Recipe Documentation
+See `templates/recipes/README.md` for full recipe schema and customization guide.
+
+## Error Handling
+
+### Missing BLUEPRINT.md
+```
+ERROR: BLUEPRINT.md not found in current directory.
+
+Please run:
+  /blueprint-gen "your story idea"
+
+Then retry /init --from-blueprint
+```
+
+### Invalid Blueprint Format
+```
+ERROR: BLUEPRINT.md exists but missing required fields.
+
+Required sections:
+- 로그라인
+- 장르
+- 3막 구조
+- 핵심 캐릭터
+
+Please regenerate with /blueprint-gen
+```
+
+## Documentation
+
+**Detailed Guide**: See `references/detailed-guide.md`
+- Project ID generation
+- Directory structure details
+- plot-architect agent prompts
+- File schemas and formats
+- BLUEPRINT.md parsing
+
+**Usage Examples**: See `examples/example-usage.md`
+- Basic initialization workflows
+- Customization examples
+- Multi-project management
+- Post-initialization steps

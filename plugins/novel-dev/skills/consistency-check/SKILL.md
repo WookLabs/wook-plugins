@@ -1,6 +1,13 @@
 ---
 name: consistency-check
-description: "[14단계] 일관성 검사 - 전체 설정 일관성 검사"
+description: |
+  Triggers when user wants to check consistency across all chapters.
+  <example>일관성 검사</example>
+  <example>설정 모순 확인해줘</example>
+  <example>전체 검증</example>
+  <example>consistency check</example>
+  <example>verify plot consistency</example>
+  <example>/consistency-check</example>
 user-invocable: true
 ---
 

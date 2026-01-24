@@ -1,0 +1,18 @@
+{
+  "id": "",
+  "name": "",
+  "description": "",
+  "related_characters": [],
+  "connection_to_main": "",
+  "start_chapter": null,
+  "resolution_chapter": null,
+  "thematic_function": "",
+  "status": "planned",
+  "beats": [
+    {
+      "chapter": null,
+      "event": "",
+      "impact": "medium"
+    }
+  ]
+}

@@ -1,0 +1,82 @@
+{
+  "recipe_id": "fantasy-regression",
+  "recipe_name": "회귀물",
+  "genre": ["판타지"],
+  "sub_genre": ["회귀", "성장"],
+
+  "defaults": {
+    "target_chapters": 100,
+    "target_words_per_chapter": 5500,
+    "rating": "15+",
+    "structure_type": "5막"
+  },
+
+  "style_guide": {
+    "narrative_voice": "1인칭",
+    "pov_type": "single",
+    "tone": ["긴장", "통쾌", "성장"],
+    "action_density": "high"
+  },
+
+  "required_tropes": ["회귀", "미래지식", "복수/방지", "성장", "반전"],
+
+  "required_beats": {
+    "예지": { "frequency": "2-3/chapter", "description": "미래 지식 활용" },
+    "복수": { "frequency": "5-10ch_gap", "description": "전생의 원수 응징" },
+    "성장": { "frequency": "5ch_gap", "description": "레벨업/각성" },
+    "반전": { "frequency": "15-20ch_gap", "description": "예상 못한 변화" }
+  },
+
+  "chapter1_checklist": [
+    "회귀 전 비참한 결말 묘사",
+    "회귀 순간의 충격",
+    "주인공의 결심",
+    "첫 나비효과 암시"
+  ],
+
+  "power_system": {
+    "required": true,
+    "types": ["레벨", "스킬", "스탯", "아이템"]
+  },
+
+  "plot_milestones": [
+    { "chapter_range": [1, 1], "event": "회귀" },
+    { "chapter_range": [2, 10], "event": "초반 포석" },
+    { "chapter_range": [20, 30], "event": "첫 대형 이벤트 변경" },
+    { "chapter_range": [50, 60], "event": "중간 보스전" },
+    { "chapter_range": [90, 100], "event": "최종 결전" }
+  ],
+
+  "character_requirements": {
+    "protagonist": {
+      "traits": ["전생 경험", "냉철함", "복수심/보호욕"],
+      "arc": "과거의 실패를 극복하고 더 나은 미래 창조"
+    }
+  },
+
+  "narrative_devices": {
+    "flashback": { "frequency": "5-10ch_gap", "description": "전생 회상으로 감정 강화" },
+    "foreshadowing": { "frequency": "high", "description": "미래 지식 기반 복선" },
+    "dramatic_irony": { "frequency": "high", "description": "독자만 아는 정보" }
+  },
+
+  "recommended_cliches": {
+    "tier1_safe": ["숨겨진 던전", "미래 아이템 선점", "동료 미리 영입"],
+    "tier2_careful": ["나비효과", "적을 아군으로", "역사 변경"],
+    "tier3_risky": ["회귀 남발", "전지전능 주인공"]
+  },
+
+  "validation_rules": {
+    "critic_threshold": 85,
+    "beta_reader_threshold": 75,
+    "genre_validator_threshold": 90
+  },
+
+  "act_structure": {
+    "act1": { "chapters": [1, 15], "focus": "회귀, 초반 포석, 첫 나비효과" },
+    "act2": { "chapters": [16, 35], "focus": "본격 성장, 첫 복수, 동료 확보" },
+    "act3": { "chapters": [36, 60], "focus": "중간 위기, 예상 못한 변수" },
+    "act4": { "chapters": [61, 85], "focus": "역사 대변동, 최대 위기" },
+    "act5": { "chapters": [86, 100], "focus": "최종 결전, 새로운 미래" }
+  }
+}

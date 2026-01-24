@@ -5,7 +5,7 @@
 
 ## Purpose
 
-Contains prompt definitions for the 10 specialized agents used in the novel writing workflow. Each agent is defined in a Markdown file with frontmatter specifying the agent name, description, Claude model tier (opus/sonnet/haiku), and a comprehensive prompt that defines their role, constraints, guidelines, and output format.
+Contains prompt definitions for the 18 specialized agents used in the novel writing workflow. Each agent is defined in a Markdown file with frontmatter specifying the agent name, description, Claude model tier (opus/sonnet/haiku), and a comprehensive prompt that defines their role, constraints, guidelines, and output format.
 
 Agents are invoked via the Task tool by commands and orchestration workflows. They operate with specific domain expertise while maintaining consistency with the overall project structure.
 
@@ -23,6 +23,14 @@ Agents are invoked via the Task tool by commands and orchestration workflows. Th
 | `beta-reader.md` | beta-reader | sonnet | Reader simulation - predicts engagement, drop-off risk, emotional beats from reader perspective |
 | `tension-tracker.md` | tension-tracker | sonnet | Emotional arc tracking - tension curves, beat counting, cliffhanger analysis, cross-chapter state |
 | `genre-validator.md` | genre-validator | sonnet | Genre compliance - validates genre-specific requirements, cliches, commercial factors |
+| `chapter-verifier.md` | chapter-verifier | sonnet | Verification orchestrator - coordinates parallel validation before completion claims |
+| `consistency-verifier.md` | consistency-verifier | sonnet | Consistency checker - detects character, timeline, setting, and factual contradictions |
+| `engagement-optimizer.md` | engagement-optimizer | sonnet | Engagement analysis - pacing, tension curves, emotional beats, hook density optimization |
+| `plot-consistency-analyzer.md` | plot-consistency-analyzer | sonnet | Plot hole detection - timeline errors, causality issues, foreshadowing tracking |
+| `character-voice-analyzer.md` | character-voice-analyzer | sonnet | Voice consistency - speech patterns, OOC detection, relationship dynamics |
+| `prose-quality-analyzer.md` | prose-quality-analyzer | sonnet | Prose analysis - show vs tell, sensory detail, filter words, specificity |
+| `pacing-analyzer.md` | pacing-analyzer | sonnet | Pacing analysis - tension curves, scene rhythm, beat timing |
+| `dialogue-analyzer.md` | dialogue-analyzer | sonnet | Dialogue analysis - naturalness, subtext, info dump detection |
 
 ## Agent Characteristics
 

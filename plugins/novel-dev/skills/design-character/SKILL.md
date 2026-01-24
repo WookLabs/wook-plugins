@@ -1,6 +1,13 @@
 ---
 name: design-character
-description: "[3단계] 캐릭터 설계 - 캐릭터 상세 설계"
+description: |
+  Triggers when user wants to design novel characters.
+  <example>캐릭터 설계</example>
+  <example>등장인물 만들기</example>
+  <example>주인공 프로필 작성</example>
+  <example>design character</example>
+  <example>create protagonist profile</example>
+  <example>/design-character</example>
 user-invocable: true
 ---
 
