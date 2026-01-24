@@ -1,0 +1,73 @@
+{
+  "recipe_id": "historical",
+  "recipe_name": "역사물/사극",
+  "genre": ["역사"],
+  "sub_genre": ["궁중물", "시대극", "대체역사", "역사로맨스"],
+
+  "defaults": {
+    "target_chapters": 70,
+    "target_words_per_chapter": 5500,
+    "rating": "15+",
+    "structure_type": "3막"
+  },
+
+  "style_guide": {
+    "narrative_voice": "3인칭 제한 시점",
+    "pov_type": "dual",
+    "tone": ["장중", "비장", "우아"],
+    "period_accuracy": "high",
+    "dialogue_style": "시대에 맞는 어투 (사극체/고어체)"
+  },
+
+  "required_tropes": ["시대적 갈등", "신분/권력", "역사적 사건", "인물의 선택"],
+
+  "required_beats": {
+    "역사_전환점": { "frequency": "15-20ch_gap", "description": "실제 역사적 사건과의 연결" },
+    "권력_암투": { "frequency": "5-10ch_gap", "description": "정치적 갈등과 음모" },
+    "시대_묘사": { "frequency": "3-5ch_gap", "description": "당대 생활상, 문화 묘사" },
+    "운명_결정": { "frequency": "20ch_gap", "description": "역사를 바꾸는 선택" }
+  },
+
+  "chapter1_checklist": [
+    "시대 배경을 보여주는 도입",
+    "주인공의 신분과 처지",
+    "시대적 갈등의 씨앗",
+    "첫 번째 사건 또는 만남"
+  ],
+
+  "world_requirements": {
+    "era": "시대 특정 필수 (조선, 고려, 삼국시대 등)",
+    "historical_accuracy": "주요 사건/인물 고증",
+    "social_structure": "신분제, 관직 체계",
+    "daily_life": "의식주, 풍습, 언어"
+  },
+
+  "research_requirements": {
+    "mandatory": ["시대 배경", "복식", "언어/호칭", "정치 구조"],
+    "recommended": ["음식", "건축", "예술", "종교"]
+  },
+
+  "recommended_cliches": {
+    "tier1_safe": ["신분 상승", "궁중 암투", "비밀 신분", "역사 인물과의 조우"],
+    "tier2_careful": ["왕과의 로맨스", "역사 왜곡", "현대인 빙의"],
+    "tier3_risky": ["과도한 현대적 사고", "고증 무시"]
+  },
+
+  "validation_rules": {
+    "critic_threshold": 85,
+    "beta_reader_threshold": 80,
+    "genre_validator_threshold": 95,
+    "chapter1_thresholds": {
+      "critic": 90,
+      "beta_reader": 85,
+      "genre_validator": 97
+    },
+    "special_checks": ["시대 고증", "언어 적절성", "역사적 일관성"]
+  },
+
+  "act_structure": {
+    "act1": { "chapters": [1, 20], "focus": "시대 소개, 인물 설정, 갈등 씨앗" },
+    "act2": { "chapters": [21, 50], "focus": "갈등 심화, 역사적 사건, 성장" },
+    "act3": { "chapters": [51, 70], "focus": "클라이맥스, 역사적 전환, 결말" }
+  }
+}

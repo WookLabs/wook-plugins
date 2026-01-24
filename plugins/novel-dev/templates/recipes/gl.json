@@ -1,0 +1,80 @@
+{
+  "recipe_id": "gl",
+  "recipe_name": "GL/백합",
+  "genre": ["GL"],
+  "sub_genre": ["현대 GL", "학원 GL", "판타지 GL", "직장 GL"],
+
+  "defaults": {
+    "target_chapters": 45,
+    "target_words_per_chapter": 5000,
+    "rating": "15+",
+    "structure_type": "3막"
+  },
+
+  "style_guide": {
+    "narrative_voice": "3인칭 제한 시점",
+    "pov_type": "dual",
+    "tone": ["달달", "애틋", "설렘"],
+    "dialogue_ratio": { "min": 0.50, "max": 0.60 },
+    "emotional_beats_per_chapter": { "min": 2, "max": 4 }
+  },
+
+  "required_tropes": ["첫만남", "감정 자각", "갈등", "고백", "화해"],
+
+  "required_beats": {
+    "심쿵": { "frequency": "2-3/chapter", "description": "설렘, 두근거림" },
+    "자각": { "frequency": "5-8ch_gap", "description": "자신의 감정 인식" },
+    "밀당": { "frequency": "3-5ch_gap", "description": "밀고 당기기" },
+    "달달": { "frequency": "2-3/chapter", "description": "감미로운 순간" }
+  },
+
+  "chapter1_checklist": [
+    "두 주인공 중 한 명의 매력적 등장",
+    "상대역 등장 또는 강한 암시",
+    "케미 예고",
+    "첫 문장 훅"
+  ],
+
+  "relationship_progression": [
+    { "phase": "만남", "chapters": [1, 6] },
+    { "phase": "친밀감 형성", "chapters": [7, 14] },
+    { "phase": "감정 자각", "chapters": [15, 22] },
+    { "phase": "고민/갈등", "chapters": [23, 32] },
+    { "phase": "고백/수락", "chapters": [33, 38] },
+    { "phase": "연인", "chapters": [39, 45] }
+  ],
+
+  "character_requirements": {
+    "protagonist_a": {
+      "traits": [],
+      "note": "다양한 유형 가능 (쿨/츤/천연 등)"
+    },
+    "protagonist_b": {
+      "traits": [],
+      "note": "다양한 유형 가능, A와 대비되는 매력"
+    }
+  },
+
+  "recommended_cliches": {
+    "tier1_safe": ["선후배", "소꿉친구", "라이벌", "룸메이트"],
+    "tier2_careful": ["연상연하", "선생-학생", "아이돌"],
+    "tier3_risky": ["삼각관계 과다", "과도한 멜로드라마"]
+  },
+
+  "validation_rules": {
+    "critic_threshold": 85,
+    "beta_reader_threshold": 80,
+    "genre_validator_threshold": 95,
+    "chapter1_thresholds": {
+      "critic": 90,
+      "beta_reader": 85,
+      "genre_validator": 97
+    }
+  },
+
+  "act_structure": {
+    "act1": { "chapters": [1, 14], "focus": "만남, 친밀감, 첫 케미" },
+    "act2": { "chapters": [15, 32], "focus": "감정 자각, 갈등, 밀당" },
+    "act3": { "chapters": [33, 45], "focus": "고백, 위기, 해피엔딩" }
+  }
+}

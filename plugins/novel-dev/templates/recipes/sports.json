@@ -1,0 +1,77 @@
+{
+  "recipe_id": "sports",
+  "recipe_name": "스포츠",
+  "genre": ["스포츠"],
+  "sub_genre": ["야구", "축구", "농구", "배구", "격투기", "e스포츠"],
+
+  "defaults": {
+    "target_chapters": 80,
+    "target_words_per_chapter": 5500,
+    "rating": "전체",
+    "structure_type": "시즌"
+  },
+
+  "style_guide": {
+    "narrative_voice": "3인칭 제한 시점",
+    "pov_type": "single",
+    "tone": ["열혈", "긴장", "감동"],
+    "action_density": "high",
+    "match_description": "vivid"
+  },
+
+  "required_tropes": ["성장", "팀워크", "라이벌", "슬럼프 극복", "대회"],
+
+  "required_beats": {
+    "훈련": { "frequency": "3-5ch_gap", "description": "기술 연마, 체력 단련" },
+    "경기": { "frequency": "8-12ch_gap", "description": "공식 시합" },
+    "슬럼프": { "frequency": "20-25ch_gap", "description": "부상, 정체기, 좌절" },
+    "팀갈등": { "frequency": "15-20ch_gap", "description": "팀 내 갈등과 화해" },
+    "명장면": { "frequency": "10ch_gap", "description": "인상적인 플레이" }
+  },
+
+  "chapter1_checklist": [
+    "주인공의 스포츠에 대한 열정 또는 재능",
+    "현재 실력과 목표의 갭",
+    "첫 번째 라이벌 또는 동료",
+    "도전의 시작"
+  ],
+
+  "season_structure": {
+    "training_arc": "기초 훈련, 팀 합류",
+    "preliminary_arc": "예선, 지역 대회",
+    "main_tournament": "본선, 전국 대회",
+    "finals": "결승, 최종 대결"
+  },
+
+  "sports_elements": {
+    "technique": "종목별 기술 묘사",
+    "tactics": "전략과 전술",
+    "physical": "체력, 부상, 컨디션",
+    "mental": "멘탈, 압박감, 집중"
+  },
+
+  "recommended_cliches": {
+    "tier1_safe": ["천재 라이벌", "노력형 주인공", "명감독", "부활"],
+    "tier2_careful": ["부상 극복", "해외 진출", "은퇴 번복"],
+    "tier3_risky": ["비현실적 기술", "과도한 우연"]
+  },
+
+  "validation_rules": {
+    "critic_threshold": 85,
+    "beta_reader_threshold": 80,
+    "genre_validator_threshold": 95,
+    "chapter1_thresholds": {
+      "critic": 90,
+      "beta_reader": 85,
+      "genre_validator": 97
+    },
+    "special_checks": ["경기 묘사 역동성", "성장 곡선", "팀 역학"]
+  },
+
+  "act_structure": {
+    "act1": { "chapters": [1, 20], "focus": "입문, 팀 합류, 기초 훈련" },
+    "act2": { "chapters": [21, 40], "focus": "첫 대회, 라이벌 등장, 성장" },
+    "act3": { "chapters": [41, 60], "focus": "슬럼프, 위기, 팀 결속" },
+    "act4": { "chapters": [61, 80], "focus": "본선, 결승, 클라이맥스" }
+  }
+}

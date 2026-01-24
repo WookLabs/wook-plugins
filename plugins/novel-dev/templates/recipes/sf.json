@@ -1,0 +1,66 @@
+{
+  "recipe_id": "sf",
+  "recipe_name": "SF/과학소설",
+  "genre": ["SF"],
+  "sub_genre": ["하드SF", "소프트SF", "사이버펑크", "포스트아포칼립스", "우주오페라"],
+
+  "defaults": {
+    "target_chapters": 60,
+    "target_words_per_chapter": 5500,
+    "rating": "15+",
+    "structure_type": "3막"
+  },
+
+  "style_guide": {
+    "narrative_voice": "3인칭 제한 시점",
+    "pov_type": "single",
+    "tone": ["사색적", "긴장", "경이"],
+    "tech_description_density": "medium",
+    "worldbuilding_ratio": { "min": 0.15, "max": 0.25 }
+  },
+
+  "required_tropes": ["기술/과학 요소", "사회 변화", "인간성 탐구", "미지와의 조우"],
+
+  "required_beats": {
+    "기술_시연": { "frequency": "5-10ch_gap", "description": "핵심 기술/과학 요소 시연" },
+    "윤리_딜레마": { "frequency": "10-15ch_gap", "description": "기술이 초래한 도덕적 선택" },
+    "경이": { "frequency": "5ch_gap", "description": "센스 오브 원더 순간" },
+    "위기": { "frequency": "15-20ch_gap", "description": "기술 실패 또는 예상치 못한 결과" }
+  },
+
+  "chapter1_checklist": [
+    "세계관의 '다름'을 보여주는 훅",
+    "핵심 기술/과학 요소 자연스러운 소개",
+    "주인공의 일상과 그 세계에서의 위치",
+    "이야기를 촉발할 사건의 암시"
+  ],
+
+  "world_requirements": {
+    "tech_level": "정의 필요 (근미래/원미래/초미래)",
+    "science_rules": "일관된 과학 법칙 설정",
+    "society_impact": "기술이 사회에 미친 영향"
+  },
+
+  "recommended_cliches": {
+    "tier1_safe": ["AI 반란", "우주 탐사", "시간 여행", "외계 문명"],
+    "tier2_careful": ["복제인간", "가상현실", "유전자 조작", "디스토피아"],
+    "tier3_risky": ["과학 만능주의", "기술 설명 과다"]
+  },
+
+  "validation_rules": {
+    "critic_threshold": 85,
+    "beta_reader_threshold": 80,
+    "genre_validator_threshold": 95,
+    "chapter1_thresholds": {
+      "critic": 90,
+      "beta_reader": 85,
+      "genre_validator": 97
+    }
+  },
+
+  "act_structure": {
+    "act1": { "chapters": [1, 15], "focus": "세계관 소개, 일상, 촉발 사건" },
+    "act2": { "chapters": [16, 45], "focus": "갈등 심화, 기술의 이면 발견, 위기" },
+    "act3": { "chapters": [46, 60], "focus": "클라이맥스, 선택, 새로운 균형" }
+  }
+}

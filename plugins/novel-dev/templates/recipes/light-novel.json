@@ -1,0 +1,72 @@
+{
+  "recipe_id": "light-novel",
+  "recipe_name": "라이트노벨",
+  "genre": ["라이트노벨"],
+  "sub_genre": ["학원", "이세계", "일상", "배틀", "코미디"],
+
+  "defaults": {
+    "target_chapters": 80,
+    "target_words_per_chapter": 4500,
+    "rating": "15+",
+    "structure_type": "에피소드"
+  },
+
+  "style_guide": {
+    "narrative_voice": "1인칭",
+    "pov_type": "single",
+    "tone": ["경쾌", "코믹", "열혈"],
+    "dialogue_ratio": { "min": 0.60, "max": 0.75 },
+    "monologue_frequency": "high"
+  },
+
+  "required_tropes": ["매력적 캐릭터", "유머", "우정/연대", "성장"],
+
+  "required_beats": {
+    "개그": { "frequency": "1-3/chapter", "description": "웃음 포인트" },
+    "츤데레": { "frequency": "2-3ch_gap", "description": "캐릭터 반전 매력" },
+    "열혈": { "frequency": "5-8ch_gap", "description": "감동/열정 장면" },
+    "클리프행어": { "frequency": "every_chapter_end", "description": "다음 권 유도" }
+  },
+
+  "chapter1_checklist": [
+    "주인공의 유니크한 독백",
+    "히로인(들) 등장 또는 강한 암시",
+    "코믹 또는 인상적인 첫 만남",
+    "일상이 바뀔 계기"
+  ],
+
+  "character_archetypes": {
+    "common": ["츤데레", "쿨데레", "얀데레", "천연", "오상고절"],
+    "protagonist": ["평범계", "최강계", "성장계", "재능계"]
+  },
+
+  "volume_structure": {
+    "chapters_per_volume": 8,
+    "volume_arc": "각 권 독립 에피소드 + 전체 스토리 진행",
+    "cliffhanger": "권말 필수"
+  },
+
+  "recommended_cliches": {
+    "tier1_safe": ["학교", "부활동", "축제", "여행", "이벤트"],
+    "tier2_careful": ["하렘", "먼치킨", "여동생"],
+    "tier3_risky": ["과도한 팬서비스", "플롯 없는 일상"]
+  },
+
+  "validation_rules": {
+    "critic_threshold": 85,
+    "beta_reader_threshold": 80,
+    "genre_validator_threshold": 95,
+    "chapter1_thresholds": {
+      "critic": 90,
+      "beta_reader": 85,
+      "genre_validator": 97
+    }
+  },
+
+  "act_structure": {
+    "act1": { "chapters": [1, 20], "focus": "설정, 캐릭터 소개, 일상 확립" },
+    "act2": { "chapters": [21, 50], "focus": "에피소드 전개, 관계 발전" },
+    "act3": { "chapters": [51, 70], "focus": "메인 갈등 심화, 캐릭터 성장" },
+    "act4": { "chapters": [71, 80], "focus": "클라이맥스, 결말" }
+  }
+}

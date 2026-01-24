@@ -1,0 +1,64 @@
+{
+  "recipe_id": "literary",
+  "recipe_name": "순문학/문예",
+  "genre": ["문학"],
+  "sub_genre": ["순문학", "성장소설", "가족소설", "사회소설"],
+  "defaults": {
+    "target_chapters": 30,
+    "target_words_per_chapter": 6000,
+    "rating": "전체",
+    "structure_type": "3막"
+  },
+  "style_guide": {
+    "narrative_voice": "3인칭 제한 시점",
+    "pov_type": "single",
+    "tone": ["성찰적", "서정적", "담담"],
+    "prose_quality": "high",
+    "literary_devices": "frequent"
+  },
+  "required_tropes": ["인물 내면", "삶의 진실", "성장/변화", "인간관계"],
+  "required_beats": {
+    "내면_성찰": { "frequency": "2-3/chapter", "description": "인물의 깊은 사색" },
+    "관계_변화": { "frequency": "5-8ch_gap", "description": "인간관계의 미묘한 변화" },
+    "에피파니": { "frequency": "10-15ch_gap", "description": "깨달음의 순간" },
+    "삶의_단면": { "frequency": "3-5ch_gap", "description": "일상 속 의미 발견" }
+  },
+  "chapter1_checklist": [
+    "인물의 내면 세계 진입",
+    "현재 삶의 상태와 갈등 암시",
+    "독특한 문체/시선 확립",
+    "읽고 싶게 만드는 문학적 매력"
+  ],
+  "literary_techniques": {
+    "prose": ["은유", "상징", "이미지", "리듬"],
+    "structure": ["비선형", "의식의 흐름", "프레임", "에피소드"],
+    "themes": ["정체성", "상실", "사랑", "죽음", "시간", "기억"]
+  },
+  "quality_focus": {
+    "sentence_craft": "문장 하나하나의 완성도",
+    "subtext": "텍스트 이면의 의미",
+    "ambiguity": "열린 해석의 여지",
+    "resonance": "보편적 공감"
+  },
+  "recommended_cliches": {
+    "tier1_safe": ["성장", "가족", "상실", "사랑"],
+    "tier2_careful": ["죽음", "트라우마", "사회 비판"],
+    "tier3_risky": ["난해함", "플롯 부재", "과도한 실험"]
+  },
+  "validation_rules": {
+    "critic_threshold": 85,
+    "beta_reader_threshold": 80,
+    "genre_validator_threshold": 95,
+    "chapter1_thresholds": {
+      "critic": 90,
+      "beta_reader": 85,
+      "genre_validator": 97
+    },
+    "special_checks": ["문장력", "주제 깊이", "캐릭터 깊이"]
+  },
+  "act_structure": {
+    "act1": { "chapters": [1, 8], "focus": "인물 소개, 일상, 내면 갈등" },
+    "act2": { "chapters": [9, 22], "focus": "갈등 심화, 관계 변화, 시련" },
+    "act3": { "chapters": [23, 30], "focus": "깨달음, 변화, 열린 결말" }
+  }
+}

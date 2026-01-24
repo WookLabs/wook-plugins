@@ -1,0 +1,73 @@
+{
+  "recipe_id": "horror",
+  "recipe_name": "공포/호러",
+  "genre": ["공포"],
+  "sub_genre": ["심리공포", "고어", "오컬트", "크리처", "서바이벌호러"],
+
+  "defaults": {
+    "target_chapters": 40,
+    "target_words_per_chapter": 5000,
+    "rating": "19+",
+    "structure_type": "3막"
+  },
+
+  "style_guide": {
+    "narrative_voice": "1인칭",
+    "pov_type": "single",
+    "tone": ["불안", "긴장", "공포", "절망"],
+    "pacing": "variable",
+    "atmosphere_density": "high"
+  },
+
+  "required_tropes": ["공포 요소", "서스펜스", "위협", "생존"],
+
+  "required_beats": {
+    "불안_조성": { "frequency": "1-2/chapter", "description": "미묘한 이상함, 불길한 암시" },
+    "공포_절정": { "frequency": "5-8ch_gap", "description": "직접적 공포 장면" },
+    "안도_후_반전": { "frequency": "10ch_gap", "description": "안심 후 더 큰 공포" },
+    "진실_폭로": { "frequency": "20ch_gap", "description": "공포의 원인/정체 일부 공개" }
+  },
+
+  "chapter1_checklist": [
+    "평화로운 일상에 스며드는 이상함",
+    "주인공의 취약점 설정",
+    "첫 번째 공포 요소 암시",
+    "돌아갈 수 없는 시작점"
+  ],
+
+  "horror_elements": {
+    "types": ["초자연적", "인간적", "미지의 것", "신체적", "심리적"],
+    "tension_curve": "점진적 상승 with 간헐적 완화",
+    "gore_level": "장르에 맞게 조절"
+  },
+
+  "atmosphere_techniques": {
+    "sensory": ["소리", "냄새", "온도", "촉감"],
+    "psychological": ["고립", "의심", "편집증", "무력감"],
+    "environmental": ["어둠", "밀폐", "미로", "황폐"]
+  },
+
+  "recommended_cliches": {
+    "tier1_safe": ["귀신의 집", "저주", "살인마", "괴물"],
+    "tier2_careful": ["좀비", "악마 빙의", "컬트"],
+    "tier3_risky": ["꿈이었음", "모두 죽음", "설명 없는 결말"]
+  },
+
+  "validation_rules": {
+    "critic_threshold": 85,
+    "beta_reader_threshold": 80,
+    "genre_validator_threshold": 95,
+    "chapter1_thresholds": {
+      "critic": 90,
+      "beta_reader": 85,
+      "genre_validator": 97
+    },
+    "special_checks": ["공포 밀도", "긴장감 유지", "클리셰 회피"]
+  },
+
+  "act_structure": {
+    "act1": { "chapters": [1, 10], "focus": "일상, 첫 이상 징후, 무시" },
+    "act2": { "chapters": [11, 30], "focus": "공포 심화, 희생자, 진실 추적" },
+    "act3": { "chapters": [31, 40], "focus": "최종 대면, 생존 또는 파멸" }
+  }
+}

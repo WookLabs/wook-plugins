@@ -1,0 +1,75 @@
+{
+  "recipe_id": "martial-arts",
+  "recipe_name": "무협",
+  "genre": ["무협"],
+  "sub_genre": ["정통무협", "신무협", "현대무협", "퓨전무협"],
+
+  "defaults": {
+    "target_chapters": 100,
+    "target_words_per_chapter": 5500,
+    "rating": "15+",
+    "structure_type": "5막"
+  },
+
+  "style_guide": {
+    "narrative_voice": "3인칭 전지적 시점",
+    "pov_type": "multiple",
+    "tone": ["웅장", "비장", "호쾌"],
+    "action_density": "high",
+    "martial_arts_description": "detailed"
+  },
+
+  "required_tropes": ["무공 수련", "강호 세계", "복수/정의", "비급/신물", "사제 관계"],
+
+  "required_beats": {
+    "무공_돌파": { "frequency": "10-15ch_gap", "description": "경지 상승, 새 무공 습득" },
+    "비무": { "frequency": "5-8ch_gap", "description": "무술 대결, 실력 검증" },
+    "은원": { "frequency": "15-20ch_gap", "description": "은혜 갚음 또는 원수 대면" },
+    "강호풍파": { "frequency": "20ch_gap", "description": "무림 전체를 흔드는 사건" }
+  },
+
+  "chapter1_checklist": [
+    "무림 세계관의 분위기 제시",
+    "주인공의 무공 수준과 처지",
+    "복수/목표의 암시 또는 직접 제시",
+    "첫 번째 위기 또는 기연"
+  ],
+
+  "power_system": {
+    "required": true,
+    "elements": ["내공", "외공", "경공", "암기", "검법/도법/권법"],
+    "progression": "tiered",
+    "levels": ["하수", "일류", "절정", "화경", "현경", "초절정"]
+  },
+
+  "world_requirements": {
+    "organizations": ["문파", "방파", "사파", "무림맹", "마교"],
+    "locations": ["강호", "중원", "비경", "은거지", "전장"],
+    "items": ["비급", "신병", "영단", "보물"]
+  },
+
+  "recommended_cliches": {
+    "tier1_safe": ["기연", "복수", "문파 재건", "무림맹주"],
+    "tier2_careful": ["천하제일", "절세미녀", "혈해심구"],
+    "tier3_risky": ["무적 주인공", "하렘", "현대 지식 치트"]
+  },
+
+  "validation_rules": {
+    "critic_threshold": 85,
+    "beta_reader_threshold": 80,
+    "genre_validator_threshold": 95,
+    "chapter1_thresholds": {
+      "critic": 90,
+      "beta_reader": 85,
+      "genre_validator": 97
+    }
+  },
+
+  "act_structure": {
+    "act1": { "chapters": [1, 20], "focus": "출신, 수련 시작, 첫 기연" },
+    "act2": { "chapters": [21, 40], "focus": "강호 입문, 명성 획득, 은원 형성" },
+    "act3": { "chapters": [41, 60], "focus": "중간 위기, 큰 비밀 발견" },
+    "act4": { "chapters": [61, 85], "focus": "최대 시련, 돌파, 동료 위기" },
+    "act5": { "chapters": [86, 100], "focus": "최종 대결, 강호 평정/은거" }
+  }
+}

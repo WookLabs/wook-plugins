@@ -1,0 +1,79 @@
+{
+  "recipe_id": "slice-of-life",
+  "recipe_name": "일상물/힐링",
+  "genre": ["일상"],
+  "sub_genre": ["힐링", "코미디", "가족", "직장", "학원일상"],
+
+  "defaults": {
+    "target_chapters": 50,
+    "target_words_per_chapter": 4500,
+    "rating": "전체",
+    "structure_type": "에피소드"
+  },
+
+  "style_guide": {
+    "narrative_voice": "1인칭",
+    "pov_type": "single",
+    "tone": ["따뜻", "유머", "잔잔", "위로"],
+    "pacing": "slow",
+    "atmosphere": "cozy"
+  },
+
+  "required_tropes": ["소소한 행복", "인간관계", "성장", "일상의 발견"],
+
+  "required_beats": {
+    "유머": { "frequency": "2-3/chapter", "description": "웃음 포인트" },
+    "힐링": { "frequency": "1-2/chapter", "description": "따뜻한 순간" },
+    "소소한_갈등": { "frequency": "3-5ch_gap", "description": "일상적 문제와 해결" },
+    "깨달음": { "frequency": "5-8ch_gap", "description": "삶의 작은 진리" }
+  },
+
+  "chapter1_checklist": [
+    "주인공의 일상과 세계관",
+    "매력적인 주변 인물들",
+    "이야기의 무대 (카페, 회사, 동네 등)",
+    "잔잔하지만 흥미로운 시작"
+  ],
+
+  "episode_structure": {
+    "format": "독립 에피소드 + 느슨한 연결",
+    "episode_length": "1-3 chapters",
+    "seasonal_events": "계절, 명절, 기념일 활용"
+  },
+
+  "atmosphere_elements": {
+    "settings": ["카페", "작은 가게", "시골", "오래된 동네", "회사"],
+    "relationships": ["가족", "이웃", "단골", "동료", "오래된 친구"],
+    "activities": ["요리", "산책", "취미", "대화", "계절 행사"]
+  },
+
+  "emotional_goals": {
+    "primary": "독자에게 휴식과 위로",
+    "secondary": "일상의 소중함 재발견",
+    "avoid": "과도한 갈등, 무거운 주제"
+  },
+
+  "recommended_cliches": {
+    "tier1_safe": ["작은 가게", "이웃과의 교류", "계절 이벤트", "음식"],
+    "tier2_careful": ["연애 요소", "가벼운 미스터리", "직장 갈등"],
+    "tier3_risky": ["심각한 갈등", "무거운 주제", "급전개"]
+  },
+
+  "validation_rules": {
+    "critic_threshold": 85,
+    "beta_reader_threshold": 80,
+    "genre_validator_threshold": 95,
+    "chapter1_thresholds": {
+      "critic": 90,
+      "beta_reader": 85,
+      "genre_validator": 97
+    },
+    "special_checks": ["힐링감", "캐릭터 매력", "분위기 일관성"]
+  },
+
+  "act_structure": {
+    "act1": { "chapters": [1, 12], "focus": "인물 소개, 무대 설정, 일상 확립" },
+    "act2": { "chapters": [13, 35], "focus": "에피소드 전개, 관계 심화" },
+    "act3": { "chapters": [36, 50], "focus": "작은 변화, 따뜻한 결말" }
+  }
+}
