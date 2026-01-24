@@ -14,8 +14,7 @@
   "chapter_structure": {
     "opening_hook": true,
     "scene_count_range": [2, 4],
-    "ending_hook": true,
-    "cliffhanger_frequency": "every_chapter"
+    "ending_hook": true
   },
   "emotional_beats": {
     "target_per_chapter": 3,

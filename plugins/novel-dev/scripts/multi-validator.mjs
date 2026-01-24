@@ -10,19 +10,22 @@
 import { existsSync, readFileSync, writeFileSync, mkdirSync } from 'fs';
 import { join } from 'path';
 
-// Thresholds (updated for masterpiece mode)
+// Standard Mode Thresholds (일반 집필)
 export const THRESHOLDS = {
-  critic: 85,        // 기존 70 → 85
-  betaReader: 75,
-  genreValidator: 90
+  critic: 70,
+  betaReader: 70,
+  genreValidator: 85
 };
 
-// Chapter 1 special thresholds (higher quality standard)
+// Masterpiece Mode Thresholds (마스터피스 모드 / Chapter 1 특별 기준)
 export const CHAPTER_1_THRESHOLDS = {
-  critic: 90,         // 85 → 90
-  betaReader: 80,     // 75 → 80
-  genreValidator: 95  // 90 → 95
+  critic: 85,
+  betaReader: 80,
+  genreValidator: 95
 };
+
+// Alias for clarity
+export const MASTERPIECE_THRESHOLDS = CHAPTER_1_THRESHOLDS;
 
 /**
  * Run all 3 validators in parallel

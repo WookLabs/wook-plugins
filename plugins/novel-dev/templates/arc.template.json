@@ -1,16 +1,16 @@
 {
-  "id": "",
+  "id": "sub_001",
   "name": "",
   "description": "",
   "related_characters": [],
   "connection_to_main": "",
-  "start_chapter": null,
-  "resolution_chapter": null,
+  "start_chapter": 1,
+  "resolution_chapter": 10,
   "thematic_function": "",
   "status": "planned",
   "beats": [
     {
-      "chapter": null,
+      "chapter": 1,
       "event": "",
       "impact": "medium"
     }
