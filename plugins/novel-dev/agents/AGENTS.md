@@ -140,7 +140,7 @@ Step-by-step process
 - Predicting drop-off risk zones
 - Detecting emotional beats (심쿵, 긴장, 설렘)
 - Analyzing pacing from reader perspective
-- Threshold: ≥75 engagement score
+- Threshold: ≥80 engagement score
 
 **tension-tracker**:
 - Tracking tension levels (1-10) across scenes
@@ -153,7 +153,7 @@ Step-by-step process
 - Verifying genre-specific required elements
 - Checking cliche usage (acceptable vs overused)
 - Evaluating commercial factors (hook density, dialogue ratio, episode length)
-- Threshold: ≥90 compliance score
+- Threshold: ≥95 compliance score
 
 ### Agent Invocation Example
 
@@ -194,9 +194,9 @@ Agents enforce these standards:
 - **plot-architect**: Clear dramatic structure, proper pacing across acts
 - **proofreader**: Zero grammar/spelling errors in final output
 - **summarizer**: Concise (200-500 words), captures key events and emotional beats
-- **beta-reader**: ≥75 engagement score, drop-off risk zones identified with severity
+- **beta-reader**: ≥80 engagement score, drop-off risk zones identified with severity
 - **tension-tracker**: Tension curve within act-level ranges, required beats present
-- **genre-validator**: ≥90 compliance, all required genre elements present
+- **genre-validator**: ≥95 compliance, all required genre elements present
 
 ### Korean Writing Conventions
 
@@ -228,8 +228,8 @@ Masterpiece Mode uses 3-validator parallel consensus:
 | Validator | Threshold | Focus |
 |-----------|-----------|-------|
 | critic | ≥85 | Quality (narrative, plot, character, setting) |
-| beta-reader | ≥75 | Engagement (hooks, pacing, emotional impact) |
-| genre-validator | ≥90 | Genre compliance (required elements, commercials) |
+| beta-reader | ≥80 | Engagement (hooks, pacing, emotional impact) |
+| genre-validator | ≥95 | Genre compliance (required elements, commercials) |
 
 **ALL three must PASS** for quality gate approval.
 

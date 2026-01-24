@@ -88,7 +88,7 @@ node novel-sisyphus/scripts/grok-writer.mjs \
 1. Grok generates raw chapter text
 2. Output saved to `chapters/chapter_XXX.md`
 3. User notified: "🔞 성인 콘텐츠 키워드가 감지되어 xAI Grok API로 생성했습니다."
-4. Optional: Run `novel-editor` agent for light editing (maintaining adult content)
+4. Optional: Run `editor` agent for light editing (maintaining adult content)
 
 ### Manual Override
 
@@ -121,7 +121,7 @@ Or use dedicated Grok writing command:
 3. **Adult Content Detection**
    - Scan plot for trigger keywords
    - Check user command for flags
-   - Decide: Grok API vs. novel-writer agent
+   - Decide: Grok API vs. novelist agent
 
 4. **Context Assembly**
    - Apply budget system
@@ -150,11 +150,11 @@ ${characterProfiles}
 const result = await executeGrokWriter(grokPrompt);
 ```
 
-#### Option B: novel-writer Agent (Regular Content)
+#### Option B: novelist Agent (Regular Content)
 
 ```javascript
 Task({
-  subagent_type: "novel-dev:novel-writer",
+  subagent_type: "novel-dev:novelist",
   model: "opus",
   prompt: `
 # 회차 집필: ${chapterNumber}
@@ -186,7 +186,7 @@ After chapter generation:
 
 ```javascript
 Task({
-  subagent_type: "novel-dev:novel-editor",
+  subagent_type: "novel-dev:editor",
   model: "opus",
   prompt: `
 # 편집 검토
@@ -215,7 +215,7 @@ Task({
 
 ## Korean Literary Techniques
 
-The novel-writer agent is trained on Korean literary techniques for authentic prose.
+The novelist agent is trained on Korean literary techniques for authentic prose.
 
 ### 은유/비유 (Metaphors)
 

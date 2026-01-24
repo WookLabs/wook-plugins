@@ -36,16 +36,16 @@ Automatically switches to xAI Grok API when keywords detected:
 Manual override: `/write 5 --grok`
 
 ### Quality Assurance
-- novel-writer agent for creative writing
-- novel-editor agent for quality review
+- novelist agent for creative writing
+- editor agent for quality review
 - Automatic state tracking
 
 ## Process Flow
 1. Load chapter plot from `chapters/chapter_XXX.json`
 2. Detect adult content keywords
 3. Assemble context within budget (style guide, previous summaries, characters)
-4. Generate chapter (Grok API or novel-writer agent)
-5. Quality review with novel-editor
+4. Generate chapter (Grok API or novelist agent)
+5. Quality review with editor
 6. Save chapter and update state
 
 ## Documentation

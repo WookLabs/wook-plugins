@@ -460,7 +460,7 @@ When chapter fails validation, enters diagnostic-driven revision loop.
 2. Multi-validate
 3. If ALL PASS → Continue
 4. If ANY FAIL → Generate diagnostic
-5. Call novel-editor with diagnostic
+5. Call editor with diagnostic
 6. Re-validate
 7. Repeat 4-6 (max 3 times)
 8. If still failing → Circuit breaker
@@ -472,7 +472,7 @@ When chapter fails validation, enters diagnostic-driven revision loop.
 const diagnostic = generateDiagnostic(validationResults);
 
 Task({
-  subagent_type: "novel-dev:novel-editor",
+  subagent_type: "novel-dev:editor",
   model: "opus",
   prompt: `
 # Revision Required: Chapter ${chapterNum}
@@ -535,7 +535,7 @@ async function validateAct(actNum) {
 
   // 1. Cross-chapter consistency
   await Task({
-    subagent_type: "novel-dev:consistency-checker",
+    subagent_type: "novel-dev:consistency-verifier",
     prompt: `Check chapters ${actChapters[0]}-${actChapters.at(-1)}`
   });
 

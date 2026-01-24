@@ -17,6 +17,6 @@ description: "[14단계] 회차 집필 - 소설 챕터 작성"
 1. ralph-state.json에서 현재 챕터 확인
 2. chapters/chapter_XXX.json에서 플롯 로드
 3. Context Budget System으로 관련 컨텍스트 로드
-4. novel-writer 에이전트로 챕터 작성
-5. novel-editor 에이전트로 품질 검토
+4. novelist 에이전트로 챕터 작성
+5. editor 에이전트로 품질 검토
 6. 상태 업데이트

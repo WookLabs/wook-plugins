@@ -152,7 +152,7 @@ Generated chapter plots become the blueprint for `/write`:
 
 1. `/gen-plot` creates `chapter_005.json`
 2. `/write 5` reads `chapter_005.json` as the blueprint
-3. novel-writer agent uses:
+3. novelist agent uses:
    - previous_summary for context
    - current_plot as writing guide
    - scenes as structure

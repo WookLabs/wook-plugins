@@ -12,7 +12,7 @@ This writes the next chapter based on `ralph-state.json`:
 - Reads current chapter number
 - Loads plot from `chapters/chapter_XXX.json`
 - Applies context budget system
-- Writes chapter using novel-writer agent
+- Writes chapter using novelist agent
 - Saves to `chapters/chapter_XXX.md`
 
 **Expected output:**
@@ -28,12 +28,12 @@ Context loaded:
 
 Total: 75.9K / 120K tokens
 
-Calling novel-writer agent...
+Calling novelist agent...
 Chapter 5 written: 5,234 characters
 Saved to: novels/novel_20250117_143052/chapters/chapter_005.md
 
 Running quality review...
-novel-editor feedback: Minor adjustments needed
+editor feedback: Minor adjustments needed
 - Dialogue feels slightly stiff in Scene 2
 - Add more sensory detail in opening
 
