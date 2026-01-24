@@ -541,8 +541,8 @@ async function validateAct(actNum) {
 
   // 2. Arc completeness
   await Task({
-    subagent_type: "novel-dev:arc-validator",
-    prompt: `Verify character arcs in Act ${actNum}`
+    subagent_type: "novel-dev:plot-consistency-analyzer",
+    prompt: `Verify character arcs and plot consistency in Act ${actNum}`
   });
 
   // 3. Pacing analysis

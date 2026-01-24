@@ -29,7 +29,7 @@ Writing Chapter 1...
 ✓ Written: 5,124 characters
 
 Multi-validator evaluation...
-├─ critic: 92/100 ✓ (threshold: 90)
+├─ critic: 92/100 ✓ (threshold: 95)
 ├─ beta-reader: 85/100 ✓ (threshold: 80)
 └─ genre-validator: 96/100 ✓ (threshold: 95)
 
@@ -43,8 +43,8 @@ Writing Chapter 2...
 
 Multi-validator evaluation...
 ├─ critic: 88/100 ✓ (threshold: 85)
-├─ beta-reader: 82/100 ✓ (threshold: 75)
-└─ genre-validator: 93/100 ✓ (threshold: 90)
+├─ beta-reader: 82/100 ✓ (threshold: 80)
+└─ genre-validator: 93/100 ✓ (threshold: 95)
 
 All validators passed!
 <promise>CHAPTER_2_DONE</promise>
@@ -140,7 +140,7 @@ Writing Chapter 1...
 ✓ Written: 5,124 characters
 
 Multi-validator evaluation...
-├─ critic: 88/100 ✗ (threshold: 90)
+├─ critic: 88/100 ✗ (threshold: 95)
 ├─ beta-reader: 85/100 ✓ (threshold: 80)
 └─ genre-validator: 96/100 ✓ (threshold: 95)
 
@@ -164,7 +164,7 @@ Calling editor with diagnostic...
 ✓ Revised: 5,089 characters
 
 Re-validating...
-├─ critic: 92/100 ✓ (threshold: 90)
+├─ critic: 92/100 ✓ (threshold: 95)
 ├─ beta-reader: 87/100 ✓ (threshold: 80)
 └─ genre-validator: 97/100 ✓ (threshold: 95)
 
@@ -186,8 +186,8 @@ Switching to Grok API...
 
 Multi-validator evaluation...
 ├─ critic: 72/100 ✗ (threshold: 85)
-├─ beta-reader: 68/100 ✗ (threshold: 75)
-└─ genre-validator: 91/100 ✓ (threshold: 90)
+├─ beta-reader: 68/100 ✗ (threshold: 80)
+└─ genre-validator: 91/100 ✓ (threshold: 95)
 
 Validation FAILED (2/3 validators failed)
 
@@ -215,8 +215,8 @@ Writing Chapter 7...
 
 Multi-validator evaluation...
 ├─ critic: 91/100 ✓ (threshold: 85)
-├─ beta-reader: 88/100 ✓ (threshold: 75)
-└─ genre-validator: 94/100 ✓ (threshold: 90)
+├─ beta-reader: 88/100 ✓ (threshold: 80)
+└─ genre-validator: 94/100 ✓ (threshold: 95)
 
 All validators passed on first attempt!
 Average score: 91/100 (S tier)
@@ -236,8 +236,8 @@ Writing Chapter 10...
 
 Multi-validator evaluation...
 ├─ critic: 78/100 ✗ (threshold: 85)
-├─ beta-reader: 76/100 ✓ (threshold: 75)
-└─ genre-validator: 92/100 ✓ (threshold: 90)
+├─ beta-reader: 76/100 ✓ (threshold: 80)
+└─ genre-validator: 92/100 ✓ (threshold: 95)
 
 Validation FAILED
 
@@ -249,8 +249,8 @@ Revision attempt 1/3...
 
 Re-validating...
 ├─ critic: 79/100 ✗ (threshold: 85)
-├─ beta-reader: 77/100 ✓ (threshold: 75)
-└─ genre-validator: 91/100 ✓ (threshold: 90)
+├─ beta-reader: 77/100 ✓ (threshold: 80)
+└─ genre-validator: 91/100 ✓ (threshold: 95)
 
 Still FAILED (same issue)
 
@@ -259,8 +259,8 @@ Revision attempt 2/3...
 
 Re-validating...
 ├─ critic: 80/100 ✗ (threshold: 85)
-├─ beta-reader: 78/100 ✓ (threshold: 75)
-└─ genre-validator: 93/100 ✓ (threshold: 90)
+├─ beta-reader: 78/100 ✓ (threshold: 80)
+└─ genre-validator: 93/100 ✓ (threshold: 95)
 
 Still FAILED (same issue, 3rd time)
 
@@ -331,8 +331,8 @@ Detecting changes since pause...
 
 Re-validating Chapter 10...
 ├─ critic: 88/100 ✓ (threshold: 85)
-├─ beta-reader: 81/100 ✓ (threshold: 75)
-└─ genre-validator: 94/100 ✓ (threshold: 90)
+├─ beta-reader: 81/100 ✓ (threshold: 80)
+└─ genre-validator: 94/100 ✓ (threshold: 95)
 
 Manual edit successful!
 All validators passed!
@@ -349,13 +349,13 @@ You chose: (B) Relax quality threshold
 
 Applying temporary threshold adjustment:
 - critic: 85 → 70 (for Chapter 10 only)
-- beta-reader: 75 (unchanged)
-- genre-validator: 90 (unchanged)
+- beta-reader: 80 (unchanged)
+- genre-validator: 95 (unchanged)
 
 Re-evaluating with adjusted threshold...
 ├─ critic: 80/100 ✓ (threshold: 70)
-├─ beta-reader: 78/100 ✓ (threshold: 75)
-└─ genre-validator: 93/100 ✓ (threshold: 90)
+├─ beta-reader: 78/100 ✓ (threshold: 80)
+└─ genre-validator: 93/100 ✓ (threshold: 95)
 
 Chapter 10 passed with relaxed threshold.
 ⚠️ Quality note: Below standard threshold (80 vs 85)

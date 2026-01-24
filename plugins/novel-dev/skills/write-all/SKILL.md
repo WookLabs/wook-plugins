@@ -34,8 +34,8 @@ user-invocable: true
 | Validator | Regular | Chapter 1 | Role |
 |-----------|---------|-----------|------|
 | critic | ≥85 | ≥90 | Overall quality (100pt scale) |
-| beta-reader | ≥75 | ≥80 | Engagement & retention |
-| genre-validator | ≥90 | ≥95 | Genre compliance |
+| beta-reader | ≥80 | ≥85 | Engagement & retention |
+| genre-validator | ≥95 | ≥97 | Genre compliance |
 
 **All validators must pass** for chapter to proceed.
 
@@ -180,8 +180,8 @@ for act in acts:
 
 1. **평가 기준**: 3개 validator 모두 통과
    - critic >= 85점
-   - beta-reader >= 75점 (engagement)
-   - genre-validator >= 90점 (compliance)
+   - beta-reader >= 80점 (engagement)
+   - genre-validator >= 95점 (compliance)
 
 2. **검증 프로세스**:
    ```
@@ -251,8 +251,8 @@ const [criticResult, betaResult, genreResult] = await Promise.all(validationProm
 // 3. Consensus 판정
 const allPassed =
   criticResult.score >= 85 &&
-  betaResult.engagement_score >= 75 &&
-  genreResult.compliance_score >= 90;
+  betaResult.engagement_score >= 80 &&
+  genreResult.compliance_score >= 95;
 ```
 
 ### Using verify-chapter Command
@@ -270,7 +270,7 @@ const allPassed =
 The `/verify-chapter` command automatically:
 - Launches all 3 validators in parallel
 - Applies confidence filtering (≥75)
-- Enforces quality thresholds (critic ≥85, beta-reader ≥75, genre-validator ≥90)
+- Enforces quality thresholds (critic ≥85, beta-reader ≥80, genre-validator ≥95)
 - Returns structured verdict with scores and high-confidence issues
 - Saves results to `reviews/verifications/chapter_${N}_verification.json`
 
