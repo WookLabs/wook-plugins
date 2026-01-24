@@ -23,12 +23,12 @@
       "properties": {
         "from": {
           "type": "string",
-          "pattern": "^char_\\d{3}$",
+          "pattern": "^char_[a-z0-9_]+$",
           "description": "관계 주체 캐릭터 ID"
         },
         "to": {
           "type": "string",
-          "pattern": "^char_\\d{3}$",
+          "pattern": "^char_[a-z0-9_]+$",
           "description": "관계 대상 캐릭터 ID"
         },
         "type": {

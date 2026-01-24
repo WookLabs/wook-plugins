@@ -32,7 +32,7 @@
       "items": {
         "type": "object",
         "properties": {
-          "character_id": { "type": "string", "pattern": "^char_\\d{3}$" },
+          "character_id": { "type": "string", "pattern": "^char_[a-z0-9_]+$" },
           "emotional_state": { "type": "string" },
           "location": { "type": "string" }
         }

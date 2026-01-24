@@ -52,7 +52,7 @@
           "type": "array",
           "items": {
             "type": "string",
-            "pattern": "^char_\\d{3}$"
+            "pattern": "^char_[a-z0-9_]+$"
           },
           "maxItems": 20
         },

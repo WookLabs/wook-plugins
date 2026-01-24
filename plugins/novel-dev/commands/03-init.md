@@ -244,7 +244,7 @@ BLUEPRINT.md에서 프로젝트를 생성합니다:
 
 ## 작업 규칙
 - 시점, 분량, 문체, 금지 표현
-- 품질 기준 (critic ≥70, beta-reader ≥75, genre-validator ≥90)
+- 품질 기준 (critic ≥70, beta-reader ≥70, genre-validator ≥85)
 
 ## 현재 상태
 - 마지막 작업, 다음 할 일, 미해결 이슈

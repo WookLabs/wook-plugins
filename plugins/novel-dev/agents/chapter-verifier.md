@@ -8,7 +8,7 @@ description: |
   <example>write-all 루프에서 각 챕터 후 자동 검증</example>
 model: sonnet
 color: green
-allowed-tools:
+tools:
   - Read
   - Glob
   - Grep

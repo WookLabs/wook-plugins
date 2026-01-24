@@ -102,39 +102,41 @@ export function generateDiagnostic(failedValidators, results) {
     let diagnosis;
 
     switch (validator) {
-      case 'critic':
-        const threshold = THRESHOLDS.critic;
+      case 'critic': {
+        const criticThreshold = THRESHOLDS.critic;
         diagnosis = {
           validator: 'critic',
           root_cause: results.critic.lowest_dimension || 'overall_quality',
           severity: results.critic.score < 70 ? 'critical' : 'major',
-          score_gap: threshold - results.critic.score,
+          score_gap: criticThreshold - results.critic.score,
           issues: results.critic.weaknesses || [],
           suggested_fix: generateCriticFix(results.critic),
           estimated_effort: results.critic.score < 70 ? 'significant' : 'moderate'
         };
         break;
+      }
 
-      case 'beta-reader':
-        const threshold = THRESHOLDS.betaReader;
+      case 'beta-reader': {
+        const betaThreshold = THRESHOLDS.betaReader;
         diagnosis = {
           validator: 'beta-reader',
           root_cause: results.betaReader.primary_issue || 'low_engagement',
           severity: results.betaReader.engagement_score < 60 ? 'critical' : 'major',
-          score_gap: threshold - results.betaReader.engagement_score,
+          score_gap: betaThreshold - results.betaReader.engagement_score,
           drop_off_zones: results.betaReader.drop_off_risk || [],
           suggested_fix: generateBetaReaderFix(results.betaReader),
           estimated_effort: (results.betaReader.drop_off_risk?.length || 0) > 3 ? 'significant' : 'moderate'
         };
         break;
+      }
 
-      case 'genre-validator':
-        const threshold = THRESHOLDS.genreValidator;
+      case 'genre-validator': {
+        const genreThreshold = THRESHOLDS.genreValidator;
         diagnosis = {
           validator: 'genre-validator',
           root_cause: 'missing_genre_elements',
           severity: results.genreValidator.compliance_score < 80 ? 'critical' : 'major',
-          score_gap: threshold - results.genreValidator.compliance_score,
+          score_gap: genreThreshold - results.genreValidator.compliance_score,
           missing_elements: Object.entries(results.genreValidator.required_elements || {})
             .filter(([, v]) => v.status === 'FAIL')
             .map(([k]) => k),
@@ -142,6 +144,7 @@ export function generateDiagnostic(failedValidators, results) {
           estimated_effort: 'quick'
         };
         break;
+      }
     }
 
     diagnostics.push(diagnosis);

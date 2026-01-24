@@ -28,7 +28,7 @@
       "type": "array",
       "items": {
         "type": "string",
-        "pattern": "^char_\\d{3}$"
+        "pattern": "^char_[a-z0-9_]+$"
       },
       "description": "관련 캐릭터 ID 목록"
     },

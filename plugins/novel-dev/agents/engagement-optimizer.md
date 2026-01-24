@@ -8,7 +8,7 @@ description: |
   <example>페이싱 문제 진단 및 텐션 곡선 개선안 제시</example>
 model: sonnet
 color: yellow
-allowed-tools:
+tools:
   - Read
   - Glob
   - Grep

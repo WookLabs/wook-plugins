@@ -8,7 +8,7 @@ description: |
   <example>캐릭터 성격 변화 추적 및 일관성 확인</example>
 model: sonnet
 color: cyan
-allowed-tools:
+tools:
   - Read
   - Glob
   - Grep
