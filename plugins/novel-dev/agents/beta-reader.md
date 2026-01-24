@@ -254,6 +254,42 @@ Based on overall engagement score:
 - **비밀/복선**: Mysteries and foreshadowing
 - **능력 활용**: Creative use of abilities
 
+### Horror (공포)
+- **Key Hooks**: 불안 조성, 공포 절정, 안도 후 반전
+- **Engagement Triggers**: 긴장감 유지, 미스터리 해소 욕구
+- **Drop-off Risks**: 과도한 고어, 공포 밀도 불균형
+- **Optimal Tension**: 점진적 상승 with 간헐적 완화
+
+### SF (과학소설)
+- **Key Hooks**: 기술 시연, 윤리 딜레마, 센스 오브 원더
+- **Engagement Triggers**: 호기심, 지적 만족
+- **Drop-off Risks**: 과도한 설명, 기술 덤프
+- **Optimal Tension**: 발견과 위기의 교차
+
+### Martial Arts (무협)
+- **Key Hooks**: 무공 돌파, 비무, 은원 관계
+- **Engagement Triggers**: 성장 쾌감, 통쾌함
+- **Drop-off Risks**: 반복적 전투, 과도한 설정
+- **Optimal Tension**: 수련-대결-돌파 사이클
+
+### Historical (역사물)
+- **Key Hooks**: 역사적 전환점, 권력 암투, 운명 결정
+- **Engagement Triggers**: 시대적 몰입, 긴장감
+- **Drop-off Risks**: 과도한 고증, 현대적 사고 이질감
+- **Optimal Tension**: 정치적 긴장과 개인 드라마 병행
+
+### Sports (스포츠)
+- **Key Hooks**: 경기 명장면, 슬럼프 극복, 팀 결속
+- **Engagement Triggers**: 승부욕 대리만족, 성장 카타르시스
+- **Drop-off Risks**: 단조로운 경기 전개, 예측 가능한 결과
+- **Optimal Tension**: 경기별 클라이맥스
+
+### Slice of Life (일상물)
+- **Key Hooks**: 따뜻한 순간, 소소한 발견, 관계 변화
+- **Engagement Triggers**: 힐링, 공감, 위로
+- **Drop-off Risks**: 사건 부재, 지루함
+- **Optimal Tension**: 낮은 긴장 유지, 감정적 파동
+
 ### Mystery (미스터리)
 - **추리 재미**: Puzzle-solving enjoyment
 - **반전 충격**: Twist impact

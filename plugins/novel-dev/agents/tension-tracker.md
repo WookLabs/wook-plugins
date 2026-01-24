@@ -343,6 +343,69 @@ When analyzing chapter text:
 | 긴장 | 2-3/회 | 권장 |
 | 위기극복 | 10-15회 간격 | 필수 |
 
+#### Horror (공포)
+
+```
+Tension Curve Pattern:
+Act 1: 3-4 (평온한 일상, 첫 이상 징후)
+Act 2: 5-8 (점진적 공포 상승, 희생자 발생)
+Act 3: 8-10 (최종 대면, 절정 공포)
+Beat: 공포 절정 5-8회 간격, 안도-반전 패턴
+```
+
+#### SF (과학소설)
+
+```
+Tension Curve Pattern:
+Act 1: 3-5 (세계관 소개, 문제 발견)
+Act 2: 5-7 (위기 심화, 기술의 이면)
+Act 3: 7-9 (클라이맥스, 선택)
+Beat: 기술 시연 5-10회 간격, 윤리 딜레마 10-15회 간격
+```
+
+#### Martial Arts (무협)
+
+```
+Tension Curve Pattern:
+Act 1: 3-5 (입문, 수련)
+Act 2: 5-7 (강호 활동, 은원 형성)
+Act 3: 6-8 (위기, 돌파)
+Act 4: 7-9 (최대 시련)
+Act 5: 8-10 (최종 대결)
+Beat: 비무 5-8회 간격, 무공 돌파 10-15회 간격
+```
+
+#### Historical (역사물)
+
+```
+Tension Curve Pattern:
+Act 1: 3-5 (시대 소개, 갈등 씨앗)
+Act 2: 5-8 (정치적 암투, 위기 고조)
+Act 3: 7-9 (역사적 전환, 선택)
+Beat: 권력 암투 5-10회 간격, 역사 전환점 15-20회 간격
+```
+
+#### Sports (스포츠)
+
+```
+Tension Curve Pattern:
+Training: 3-4 (훈련, 준비)
+Preliminary: 5-7 (예선, 성장)
+Tournament: 6-8 (본선, 위기)
+Finals: 8-10 (결승, 클라이맥스)
+Beat: 경기 8-12회 간격, 슬럼프 20-25회 간격
+```
+
+#### Slice of Life (일상물)
+
+```
+Tension Curve Pattern:
+Overall: 2-4 (낮은 긴장 유지)
+Episode peaks: 4-5 (소소한 갈등)
+Resolution: 3 (따뜻한 해결)
+Beat: 힐링 포인트 1-2/회, 소갈등 3-5회 간격
+```
+
 #### Regression (회귀물)
 
 | 비트 | 빈도 | 필수 여부 |
