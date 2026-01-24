@@ -1,0 +1,233 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "https://novel-dev.org/schemas/chapter.schema.json",
+  "title": "ChapterMeta",
+  "description": "Chapter metadata including plot, scenes, and narrative elements",
+  "type": "object",
+  "required": [
+    "chapter_number",
+    "chapter_title",
+    "status",
+    "word_count_target",
+    "meta",
+    "context",
+    "narrative_elements",
+    "scenes",
+    "style_guide"
+  ],
+  "properties": {
+    "chapter_number": {
+      "type": "integer",
+      "description": "Chapter number (sequential)",
+      "minimum": 1
+    },
+    "chapter_title": {
+      "type": "string",
+      "description": "Chapter title",
+      "minLength": 1,
+      "maxLength": 200
+    },
+    "status": {
+      "type": "string",
+      "description": "Chapter completion status",
+      "enum": ["planned", "draft", "edited", "final", "published"],
+      "default": "planned"
+    },
+    "word_count_target": {
+      "type": "integer",
+      "description": "Target word count for this chapter",
+      "minimum": 1
+    },
+    "word_count_actual": {
+      "type": "integer",
+      "description": "Actual word count (after writing)",
+      "minimum": 0
+    },
+    "meta": {
+      "type": "object",
+      "description": "Chapter metadata",
+      "required": ["pov_character", "characters", "locations"],
+      "properties": {
+        "pov_character": {
+          "type": "string",
+          "description": "Point-of-view character ID"
+        },
+        "characters": {
+          "type": "array",
+          "description": "Character IDs appearing in this chapter",
+          "items": {
+            "type": "string"
+          },
+          "minItems": 1,
+          "uniqueItems": true
+        },
+        "locations": {
+          "type": "array",
+          "description": "Location IDs appearing in this chapter",
+          "items": {
+            "type": "string"
+          },
+          "uniqueItems": true
+        },
+        "in_story_time": {
+          "type": "string",
+          "description": "In-story timestamp or time period"
+        }
+      }
+    },
+    "context": {
+      "type": "object",
+      "description": "Narrative context and plot summaries",
+      "required": ["current_plot"],
+      "properties": {
+        "previous_summary": {
+          "type": "string",
+          "description": "Summary of previous 3 chapters (empty for chapter 1)",
+          "maxLength": 1500
+        },
+        "current_plot": {
+          "type": "string",
+          "description": "Detailed plot summary for current chapter (1500 chars)",
+          "minLength": 100,
+          "maxLength": 2000
+        },
+        "next_plot": {
+          "type": "string",
+          "description": "Brief plot summary for next chapter (500 chars)",
+          "maxLength": 700
+        }
+      }
+    },
+    "narrative_elements": {
+      "type": "object",
+      "description": "Foreshadowing, hooks, and development points",
+      "required": [
+        "foreshadowing_plant",
+        "foreshadowing_payoff",
+        "hooks_plant",
+        "hooks_reveal"
+      ],
+      "properties": {
+        "foreshadowing_plant": {
+          "type": "array",
+          "description": "Foreshadowing IDs to plant in this chapter",
+          "items": {
+            "type": "string"
+          },
+          "uniqueItems": true
+        },
+        "foreshadowing_payoff": {
+          "type": "array",
+          "description": "Foreshadowing IDs to pay off in this chapter",
+          "items": {
+            "type": "string"
+          },
+          "uniqueItems": true
+        },
+        "hooks_plant": {
+          "type": "array",
+          "description": "Hook/mystery IDs to introduce in this chapter",
+          "items": {
+            "type": "string"
+          },
+          "uniqueItems": true
+        },
+        "hooks_reveal": {
+          "type": "array",
+          "description": "Hook/mystery IDs to reveal in this chapter",
+          "items": {
+            "type": "string"
+          },
+          "uniqueItems": true
+        },
+        "character_development": {
+          "type": "string",
+          "description": "Key character development points"
+        },
+        "emotional_goal": {
+          "type": "string",
+          "description": "Intended reader emotional response"
+        }
+      }
+    },
+    "scenes": {
+      "type": "array",
+      "description": "Scene breakdown",
+      "maxItems": 20,
+      "items": {
+        "type": "object",
+        "required": [
+          "scene_number",
+          "purpose",
+          "characters",
+          "location"
+        ],
+        "properties": {
+          "scene_number": {
+            "type": "integer",
+            "description": "Scene number within chapter",
+            "minimum": 1
+          },
+          "purpose": {
+            "type": "string",
+            "description": "Purpose/function of this scene"
+          },
+          "characters": {
+            "type": "array",
+            "description": "Character IDs in this scene",
+            "items": {
+              "type": "string"
+            },
+            "minItems": 1,
+            "uniqueItems": true
+          },
+          "location": {
+            "type": "string",
+            "description": "Location ID for this scene"
+          },
+          "conflict": {
+            "type": "string",
+            "description": "Main conflict or tension in scene"
+          },
+          "beat": {
+            "type": "string",
+            "description": "Story beat or key event in scene"
+          },
+          "emotional_tone": {
+            "type": "string",
+            "description": "Emotional tone of this scene"
+          },
+          "estimated_words": {
+            "type": "integer",
+            "description": "Estimated word count for this scene",
+            "minimum": 100
+          }
+        }
+      },
+      "minItems": 1
+    },
+    "style_guide": {
+      "type": "object",
+      "description": "Style directives for this specific chapter",
+      "properties": {
+        "tone": {
+          "type": "string",
+          "description": "Specific tone for this chapter"
+        },
+        "pacing": {
+          "type": "string",
+          "description": "Pacing directive",
+          "enum": ["fast", "medium", "slow"]
+        },
+        "focus": {
+          "type": "string",
+          "description": "Primary focus (e.g., action, dialogue, introspection)"
+        }
+      }
+    },
+    "notes": {
+      "type": "string",
+      "description": "Additional notes or reminders"
+    }
+  }
+}

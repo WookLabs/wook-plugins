@@ -1,0 +1,85 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "relationship.schema.json",
+  "title": "Character Relationships",
+  "description": "캐릭터 간 관계 정의",
+  "type": "object",
+  "required": ["relationships"],
+  "properties": {
+    "$schema": {
+      "type": "string"
+    },
+    "relationships": {
+      "type": "array",
+      "items": {
+        "$ref": "#/definitions/Relationship"
+      }
+    }
+  },
+  "definitions": {
+    "Relationship": {
+      "type": "object",
+      "required": ["from", "to", "type"],
+      "properties": {
+        "from": {
+          "type": "string",
+          "pattern": "^char_\\d{3}$",
+          "description": "관계 주체 캐릭터 ID"
+        },
+        "to": {
+          "type": "string",
+          "pattern": "^char_\\d{3}$",
+          "description": "관계 대상 캐릭터 ID"
+        },
+        "type": {
+          "enum": [
+            "family",
+            "friend",
+            "romantic",
+            "rival",
+            "mentor",
+            "enemy",
+            "colleague",
+            "acquaintance",
+            "other"
+          ]
+        },
+        "subtype": {
+          "type": "string",
+          "description": "세부 관계 (예: 형제, 부모-자식)"
+        },
+        "description": {
+          "type": "string",
+          "maxLength": 500
+        },
+        "dynamic": {
+          "enum": ["positive", "negative", "neutral", "complex"],
+          "description": "관계의 성격"
+        },
+        "evolution": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "chapter": {
+                "type": "integer",
+                "minimum": 1
+              },
+              "change": {
+                "type": "string",
+                "maxLength": 500
+              }
+            }
+          },
+          "maxItems": 20,
+          "description": "관계 변화 기록"
+        },
+        "bidirectional": {
+          "type": "boolean",
+          "description": "양방향 관계 여부",
+          "default": true
+        }
+      }
+    }
+  }
+}

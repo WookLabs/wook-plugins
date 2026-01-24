@@ -1,0 +1,225 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "autopilot-state.schema.json",
+  "title": "Novel Autopilot State",
+  "description": "Novel Autopilot 세션 상태 관리 (Phase 0~4)",
+  "type": "object",
+  "required": ["autopilot_active"],
+  "properties": {
+    "$schema": {
+      "type": "string"
+    },
+    "schema_version": {
+      "type": "string",
+      "const": "1.0"
+    },
+    "autopilot_active": {
+      "type": "boolean",
+      "default": false,
+      "description": "Autopilot 실행 중 여부"
+    },
+    "current_phase": {
+      "type": "integer",
+      "minimum": 0,
+      "maximum": 4,
+      "description": "0:Expansion, 1:Planning, 2:Execution, 3:QA, 4:Validation"
+    },
+    "idea": {
+      "type": "string",
+      "description": "사용자 아이디어 (원본)"
+    },
+    "expanded_idea": {
+      "type": "string",
+      "description": "확장된 아이디어 (Phase 0 완료 후)"
+    },
+    "novel_id": {
+      "type": "string",
+      "pattern": "^novel_\\d{8}_\\d{6}$",
+      "description": "생성된 소설 프로젝트 ID"
+    },
+    "started_at": {
+      "type": "string",
+      "format": "date-time",
+      "description": "Autopilot 시작 시간"
+    },
+    "last_updated": {
+      "type": "string",
+      "format": "date-time",
+      "description": "마지막 업데이트 시간"
+    },
+    "last_error": {
+      "type": "string",
+      "description": "마지막 에러 메시지 (있을 경우)",
+      "maxLength": 1000
+    },
+    "can_resume": {
+      "type": "boolean",
+      "default": true,
+      "description": "재개 가능 여부"
+    },
+    "phases": {
+      "type": "object",
+      "description": "5개 Phase의 상태",
+      "properties": {
+        "0": {
+          "$ref": "#/definitions/phaseStatus",
+          "description": "Phase 0: Expansion (아이디어 확장)"
+        },
+        "1": {
+          "$ref": "#/definitions/phaseStatus",
+          "description": "Phase 1: Planning (플롯 생성)"
+        },
+        "2": {
+          "$ref": "#/definitions/phaseStatus",
+          "description": "Phase 2: Execution (집필)"
+        },
+        "3": {
+          "$ref": "#/definitions/phaseStatus",
+          "description": "Phase 3: QA (품질 검증)"
+        },
+        "4": {
+          "$ref": "#/definitions/phaseStatus",
+          "description": "Phase 4: Validation (최종 검증)"
+        }
+      },
+      "required": ["0", "1", "2", "3", "4"]
+    }
+  },
+  "definitions": {
+    "phaseStatus": {
+      "type": "object",
+      "description": "각 Phase의 실행 상태",
+      "properties": {
+        "status": {
+          "type": "string",
+          "enum": ["pending", "in_progress", "completed", "failed"],
+          "default": "pending",
+          "description": "현재 상태"
+        },
+        "started_at": {
+          "type": "string",
+          "format": "date-time",
+          "description": "Phase 시작 시간"
+        },
+        "completed_at": {
+          "type": "string",
+          "format": "date-time",
+          "description": "Phase 완료 시간"
+        },
+        "error": {
+          "type": "string",
+          "description": "실패 원인 (status=failed일 때)",
+          "maxLength": 500
+        },
+        "retry_count": {
+          "type": "integer",
+          "minimum": 0,
+          "default": 0,
+          "description": "재시도 횟수"
+        },
+        "metadata": {
+          "type": "object",
+          "description": "Phase별 추가 메타데이터",
+          "additionalProperties": true
+        }
+      },
+      "required": ["status"]
+    }
+  },
+  "examples": [
+    {
+      "autopilot_active": true,
+      "current_phase": 0,
+      "idea": "현대 로맨스, 계약 연애, 50화",
+      "started_at": "2026-01-22T10:00:00Z",
+      "last_updated": "2026-01-22T10:05:00Z",
+      "can_resume": true,
+      "phases": {
+        "0": {
+          "status": "in_progress",
+          "started_at": "2026-01-22T10:00:00Z"
+        },
+        "1": {
+          "status": "pending"
+        },
+        "2": {
+          "status": "pending"
+        },
+        "3": {
+          "status": "pending"
+        },
+        "4": {
+          "status": "pending"
+        }
+      }
+    },
+    {
+      "autopilot_active": true,
+      "current_phase": 2,
+      "idea": "현대 로맨스, 계약 연애, 50화",
+      "expanded_idea": "현대 서울 배경, 30대 CEO 주인공이 부채 때문에 계약 연애 시작...",
+      "novel_id": "novel_20260122_100000",
+      "started_at": "2026-01-22T10:00:00Z",
+      "last_updated": "2026-01-22T15:30:00Z",
+      "can_resume": true,
+      "phases": {
+        "0": {
+          "status": "completed",
+          "started_at": "2026-01-22T10:00:00Z",
+          "completed_at": "2026-01-22T10:30:00Z"
+        },
+        "1": {
+          "status": "completed",
+          "started_at": "2026-01-22T10:30:00Z",
+          "completed_at": "2026-01-22T11:00:00Z"
+        },
+        "2": {
+          "status": "in_progress",
+          "started_at": "2026-01-22T11:00:00Z",
+          "retry_count": 1
+        },
+        "3": {
+          "status": "pending"
+        },
+        "4": {
+          "status": "pending"
+        }
+      }
+    },
+    {
+      "autopilot_active": false,
+      "current_phase": 2,
+      "idea": "현대 로맨스, 계약 연애, 50화",
+      "expanded_idea": "현대 서울 배경, 30대 CEO 주인공이 부채 때문에 계약 연애 시작...",
+      "novel_id": "novel_20260122_100000",
+      "started_at": "2026-01-22T10:00:00Z",
+      "last_updated": "2026-01-22T14:00:00Z",
+      "last_error": "Phase 2 중단: 사용자 요청",
+      "can_resume": true,
+      "phases": {
+        "0": {
+          "status": "completed",
+          "started_at": "2026-01-22T10:00:00Z",
+          "completed_at": "2026-01-22T10:30:00Z"
+        },
+        "1": {
+          "status": "completed",
+          "started_at": "2026-01-22T10:30:00Z",
+          "completed_at": "2026-01-22T11:00:00Z"
+        },
+        "2": {
+          "status": "failed",
+          "started_at": "2026-01-22T11:00:00Z",
+          "error": "사용자가 중단 요청",
+          "retry_count": 0
+        },
+        "3": {
+          "status": "pending"
+        },
+        "4": {
+          "status": "pending"
+        }
+      }
+    }
+  ]
+}

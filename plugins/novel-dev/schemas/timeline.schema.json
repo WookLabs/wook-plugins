@@ -1,0 +1,89 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "timeline.schema.json",
+  "title": "Story Timeline",
+  "description": "스토리 타임라인 및 이벤트",
+  "type": "object",
+  "required": ["events"],
+  "properties": {
+    "$schema": {
+      "type": "string"
+    },
+    "start_date": {
+      "type": "string",
+      "description": "스토리 시작 날짜 (작품 내)"
+    },
+    "time_unit": {
+      "enum": ["day", "week", "month", "year"],
+      "default": "day"
+    },
+    "events": {
+      "type": "array",
+      "items": {
+        "$ref": "#/definitions/TimelineEvent"
+      }
+    },
+    "conflicts": {
+      "type": "array",
+      "items": {
+        "$ref": "#/definitions/TimelineConflict"
+      },
+      "description": "감지된 타임라인 충돌"
+    }
+  },
+  "definitions": {
+    "TimelineEvent": {
+      "type": "object",
+      "required": ["chapter", "description"],
+      "properties": {
+        "chapter": {
+          "type": "integer",
+          "minimum": 1
+        },
+        "in_story_time": {
+          "type": "string",
+          "description": "작품 내 시간 (예: 'Day 1', '3월 15일')"
+        },
+        "description": {
+          "type": "string",
+          "maxLength": 1000
+        },
+        "characters_involved": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "pattern": "^char_\\d{3}$"
+          },
+          "maxItems": 20
+        },
+        "location": {
+          "type": "string",
+          "pattern": "^loc_\\d{3}$"
+        },
+        "duration": {
+          "type": "string",
+          "description": "이벤트 지속 시간 (예: '2시간', '하루')"
+        },
+        "importance": {
+          "enum": ["major", "minor", "background"],
+          "default": "minor"
+        }
+      }
+    },
+    "TimelineConflict": {
+      "type": "object",
+      "properties": {
+        "type": {
+          "enum": ["simultaneous_presence", "impossible_travel", "chronology_error"]
+        },
+        "chapter_a": { "type": "integer" },
+        "chapter_b": { "type": "integer" },
+        "description": {
+          "type": "string",
+          "maxLength": 500
+        },
+        "severity": { "enum": ["error", "warning"] }
+      }
+    }
+  }
+}

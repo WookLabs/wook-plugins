@@ -1,0 +1,109 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "https://novel-dev.org/schemas/style-guide.schema.json",
+  "title": "NovelStyleGuide",
+  "description": "Style guide for narrative voice, tone, and writing conventions",
+  "type": "object",
+  "required": ["narrative_voice", "tense", "tone"],
+  "properties": {
+    "narrative_voice": {
+      "type": "string",
+      "enum": ["1인칭", "3인칭 제한 시점", "3인칭 전지적 시점"],
+      "description": "Narrative perspective/point of view"
+    },
+    "pov_type": {
+      "type": "string",
+      "enum": ["single", "multiple", "omniscient"],
+      "description": "POV type - single character, multiple POVs, or omniscient narrator"
+    },
+    "tense": {
+      "type": "string",
+      "enum": ["과거형", "현재형"],
+      "description": "Narrative tense"
+    },
+    "tone": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      },
+      "description": "Overall tone and atmosphere (e.g., 달달, 코믹, 긴장감, 우울)",
+      "minItems": 1,
+      "uniqueItems": true
+    },
+    "pacing_default": {
+      "type": "string",
+      "enum": ["fast", "medium", "slow"],
+      "description": "Default pacing for the story",
+      "default": "medium"
+    },
+    "dialogue_style": {
+      "type": "string",
+      "description": "Dialogue style guidelines (e.g., 자연스러운 구어체, 문어체)",
+      "maxLength": 300
+    },
+    "description_density": {
+      "type": "string",
+      "enum": ["high", "medium", "low"],
+      "description": "How much descriptive detail to include"
+    },
+    "sentence_rhythm": {
+      "type": "string",
+      "enum": ["short", "long", "mixed"],
+      "description": "Typical sentence length and rhythm"
+    },
+    "taboo_words": {
+      "type": "array",
+      "items": {
+        "type": "string",
+        "maxLength": 50
+      },
+      "description": "Words or phrases to avoid (e.g., 갑자기, 문득, 그런데)",
+      "maxItems": 50,
+      "uniqueItems": true
+    },
+    "preferred_expressions": {
+      "type": "array",
+      "items": {
+        "type": "string",
+        "maxLength": 100
+      },
+      "description": "Preferred expressions or stylistic choices",
+      "maxItems": 50,
+      "uniqueItems": true
+    },
+    "chapter_structure": {
+      "type": "object",
+      "description": "Standard chapter structure guidelines",
+      "properties": {
+        "opening_hook": {
+          "type": "boolean",
+          "description": "Whether chapters should start with a hook"
+        },
+        "scene_count_range": {
+          "type": "array",
+          "items": {
+            "type": "integer",
+            "minimum": 1
+          },
+          "description": "Typical range of scenes per chapter [min, max]",
+          "minItems": 2,
+          "maxItems": 2
+        },
+        "ending_hook": {
+          "type": "boolean",
+          "description": "Whether chapters should end with a cliffhanger/hook"
+        }
+      }
+    },
+    "show_dont_tell": {
+      "type": "string",
+      "enum": ["strict", "balanced", "flexible"],
+      "description": "How strictly to apply show-don't-tell principle"
+    },
+    "special_instructions": {
+      "type": "string",
+      "description": "Additional style instructions or preferences",
+      "maxLength": 2000
+    }
+  }
+}

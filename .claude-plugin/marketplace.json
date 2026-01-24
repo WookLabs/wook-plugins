@@ -1,0 +1,21 @@
+{
+  "name": "wook-plugins",
+  "owner": {
+    "name": "WookLabs",
+    "email": "contact@wooklabs.com"
+  },
+  "description": "WookLabs의 Claude Code 플러그인 컬렉션",
+  "plugins": [
+    {
+      "name": "novel-dev",
+      "source": "./plugins/novel-dev",
+      "description": "AI 소설 창작을 위한 멀티에이전트 오케스트레이션 플러그인",
+      "version": "3.3.3",
+      "author": {
+        "name": "WookLabs"
+      },
+      "keywords": ["novel", "writing", "creative", "ai-writing", "storytelling"],
+      "category": "productivity"
+    }
+  ]
+}

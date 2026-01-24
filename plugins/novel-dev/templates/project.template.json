@@ -1,0 +1,18 @@
+{
+  "id": "",
+  "title": "",
+  "subtitle": "",
+  "series_name": "",
+  "series_order": null,
+  "genre": [],
+  "sub_genre": [],
+  "tropes": [],
+  "tone": [],
+  "rating": "15+",
+  "target_chapters": 50,
+  "target_words_per_chapter": 5000,
+  "current_chapter": 0,
+  "status": "planning",
+  "created_at": "",
+  "updated_at": ""
+}

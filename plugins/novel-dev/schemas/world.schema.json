@@ -1,0 +1,208 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "https://novel-dev.org/schemas/world.schema.json",
+  "title": "World",
+  "description": "World-building schema for setting, locations, and lore",
+  "type": "object",
+  "required": ["era", "location"],
+  "properties": {
+    "era": {
+      "type": "string",
+      "description": "Time period (e.g., 현대, 근대, 중세, 미래, 2025년)",
+      "minLength": 1
+    },
+    "year": {
+      "type": "string",
+      "description": "Specific year or time period"
+    },
+    "location": {
+      "type": "object",
+      "description": "Primary geographic setting",
+      "properties": {
+        "country": {
+          "type": "string",
+          "description": "Country name"
+        },
+        "city": {
+          "type": "string",
+          "description": "City name"
+        },
+        "region": {
+          "type": "string",
+          "description": "Region, state, or province"
+        },
+        "district": {
+          "type": "string",
+          "description": "District or neighborhood"
+        }
+      }
+    },
+    "technology_level": {
+      "type": "string",
+      "description": "Technology level of the world (e.g., 현대 기술, 마법, SF)"
+    },
+    "social_context": {
+      "type": "object",
+      "description": "Social and cultural context",
+      "properties": {
+        "norms": {
+          "type": "array",
+          "description": "Social norms and conventions",
+          "items": {
+            "type": "string",
+            "maxLength": 300
+          },
+          "maxItems": 20
+        },
+        "relevant_issues": {
+          "type": "array",
+          "description": "Socially relevant issues affecting the story",
+          "items": {
+            "type": "string",
+            "maxLength": 300
+          },
+          "maxItems": 15
+        },
+        "taboos": {
+          "type": "array",
+          "description": "Social taboos",
+          "items": {
+            "type": "string",
+            "maxLength": 200
+          },
+          "maxItems": 10
+        }
+      }
+    },
+    "magic_system": {
+      "type": "object",
+      "description": "Magic or supernatural system (if applicable)",
+      "properties": {
+        "exists": {
+          "type": "boolean",
+          "description": "Whether magic exists in this world"
+        },
+        "type": {
+          "type": "string",
+          "description": "Type of magic system"
+        },
+        "rules": {
+          "type": "array",
+          "description": "Rules and limitations of the magic system",
+          "items": {
+            "type": "string"
+          }
+        },
+        "costs": {
+          "type": "string",
+          "description": "Cost or price of using magic"
+        }
+      }
+    },
+    "special_rules": {
+      "type": "array",
+      "description": "Special rules or laws of physics unique to this world",
+      "items": {
+        "type": "string"
+      }
+    },
+    "species": {
+      "type": "array",
+      "description": "Species or races that exist in this world",
+      "items": {
+        "type": "object",
+        "properties": {
+          "name": {
+            "type": "string",
+            "description": "Species name"
+          },
+          "description": {
+            "type": "string",
+            "description": "Physical and cultural description"
+          },
+          "abilities": {
+            "type": "array",
+            "description": "Special abilities or traits",
+            "items": {
+              "type": "string"
+            }
+          }
+        }
+      }
+    },
+    "locations": {
+      "type": "array",
+      "description": "Important locations in the story world",
+      "maxItems": 100,
+      "items": {
+        "type": "object",
+        "required": ["id", "name", "type"],
+        "properties": {
+          "id": {
+            "type": "string",
+            "description": "Location unique identifier (e.g., loc_001)",
+            "pattern": "^loc_[a-z0-9_]+$"
+          },
+          "name": {
+            "type": "string",
+            "description": "Location name",
+            "maxLength": 100
+          },
+          "type": {
+            "type": "string",
+            "description": "Location type (e.g., 거주지, 직장, 상업시설, 자연)"
+          },
+          "description": {
+            "type": "string",
+            "description": "Detailed description of the location",
+            "maxLength": 1500
+          },
+          "atmosphere": {
+            "type": "string",
+            "description": "Atmosphere and mood of the location"
+          },
+          "related_characters": {
+            "type": "array",
+            "description": "Character IDs associated with this location",
+            "items": {
+              "type": "string",
+              "pattern": "^char_[a-z0-9_]+$"
+            },
+            "maxItems": 50,
+            "uniqueItems": true
+          }
+        }
+      }
+    },
+    "terms": {
+      "type": "array",
+      "description": "Unique terminology and glossary",
+      "items": {
+        "type": "object",
+        "required": ["term", "definition"],
+        "properties": {
+          "term": {
+            "type": "string",
+            "description": "Term or word"
+          },
+          "definition": {
+            "type": "string",
+            "description": "Definition or explanation"
+          },
+          "usage": {
+            "type": "string",
+            "description": "Usage notes or examples"
+          }
+        }
+      }
+    },
+    "history": {
+      "type": "string",
+      "description": "Relevant world history or backstory"
+    },
+    "notes": {
+      "type": "string",
+      "description": "Additional world-building notes"
+    }
+  }
+}

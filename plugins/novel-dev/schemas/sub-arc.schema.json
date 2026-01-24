@@ -1,0 +1,93 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "sub-arc.schema.json",
+  "title": "Sub Arc",
+  "description": "서브플롯 아크 정의",
+  "type": "object",
+  "required": ["id", "name", "start_chapter"],
+  "properties": {
+    "$schema": {
+      "type": "string"
+    },
+    "id": {
+      "type": "string",
+      "pattern": "^sub_\\d{3}$",
+      "description": "서브아크 고유 ID (sub_001 형식)"
+    },
+    "name": {
+      "type": "string",
+      "maxLength": 50,
+      "description": "서브아크 이름 (예: 직장 라이벌)"
+    },
+    "description": {
+      "type": "string",
+      "maxLength": 500,
+      "description": "서브아크에 대한 상세 설명"
+    },
+    "related_characters": {
+      "type": "array",
+      "items": {
+        "type": "string",
+        "pattern": "^char_\\d{3}$"
+      },
+      "description": "관련 캐릭터 ID 목록"
+    },
+    "connection_to_main": {
+      "type": "string",
+      "maxLength": 500,
+      "description": "메인 플롯과의 연결점"
+    },
+    "start_chapter": {
+      "type": "integer",
+      "minimum": 1,
+      "description": "서브아크 시작 회차"
+    },
+    "resolution_chapter": {
+      "type": "integer",
+      "minimum": 1,
+      "description": "서브아크 해결 회차"
+    },
+    "thematic_function": {
+      "type": "string",
+      "maxLength": 500,
+      "description": "서브아크의 주제적 기능"
+    },
+    "status": {
+      "type": "string",
+      "enum": ["planned", "active", "resolved"],
+      "default": "planned",
+      "description": "서브아크 상태"
+    },
+    "beats": {
+      "type": "array",
+      "items": {
+        "$ref": "#/definitions/Beat"
+      },
+      "description": "서브아크 주요 비트 목록"
+    }
+  },
+  "definitions": {
+    "Beat": {
+      "type": "object",
+      "required": ["chapter", "event"],
+      "properties": {
+        "chapter": {
+          "type": "integer",
+          "minimum": 1,
+          "description": "비트가 발생하는 회차"
+        },
+        "event": {
+          "type": "string",
+          "maxLength": 500,
+          "description": "비트 이벤트 설명"
+        },
+        "impact": {
+          "type": "string",
+          "enum": ["low", "medium", "high"],
+          "default": "medium",
+          "description": "메인 플롯에 대한 영향도"
+        }
+      }
+    }
+  }
+}

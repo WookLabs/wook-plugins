@@ -1,0 +1,31 @@
+{
+  "chapter_number": 1,
+  "chapter_title": "",
+  "status": "planned",
+  "word_count_target": 5000,
+  "meta": {
+    "pov_character": "",
+    "characters": [],
+    "locations": [],
+    "in_story_time": ""
+  },
+  "context": {
+    "previous_summary": "",
+    "current_plot": "",
+    "next_plot": ""
+  },
+  "narrative_elements": {
+    "foreshadowing_plant": [],
+    "foreshadowing_payoff": [],
+    "hooks_plant": [],
+    "hooks_reveal": [],
+    "character_development": "",
+    "emotional_goal": ""
+  },
+  "scenes": [],
+  "style_guide": {
+    "tone": "",
+    "pacing": "medium",
+    "focus": ""
+  }
+}

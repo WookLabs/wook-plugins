@@ -1,0 +1,128 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "ralph-state.schema.json",
+  "title": "Ralph Loop State",
+  "description": "Ralph Loop 실행 상태",
+  "type": "object",
+  "required": ["novel_id", "mode", "current_chapter", "last_safe_chapter"],
+  "properties": {
+    "$schema": {
+      "type": "string"
+    },
+    "schema_version": {
+      "type": "string",
+      "const": "2.0"
+    },
+    "novel_id": {
+      "type": "string",
+      "pattern": "^novel_\\d{8}_\\d{6}$"
+    },
+    "mode": {
+      "enum": ["writing", "revising", "evaluating", "validating", "idle"],
+      "default": "idle"
+    },
+    "current_chapter": {
+      "type": "integer",
+      "minimum": 1
+    },
+    "last_safe_chapter": {
+      "type": "integer",
+      "minimum": 0,
+      "description": "마지막으로 안전하게 저장된 챕터"
+    },
+    "current_act": {
+      "type": "integer",
+      "minimum": 1
+    },
+    "total_acts": {
+      "type": "integer",
+      "minimum": 1
+    },
+    "quality_retries": {
+      "type": "integer",
+      "minimum": 0,
+      "maximum": 3
+    },
+    "iteration": {
+      "type": "integer",
+      "minimum": 1
+    },
+    "max_iterations": {
+      "type": "integer",
+      "minimum": 1,
+      "default": 100
+    },
+    "ralph_active": {
+      "type": "boolean",
+      "default": false
+    },
+    "last_updated": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "backup_path": {
+      "type": "string"
+    },
+    "last_error": {
+      "type": "string",
+      "description": "마지막 에러 메시지 (있을 경우)",
+      "maxLength": 1000
+    },
+    "quality_threshold": {
+      "type": "integer",
+      "minimum": 70,
+      "maximum": 100,
+      "default": 85,
+      "description": "품질 게이트 기준 점수 (masterpiece mode: 85)"
+    },
+    "validators": {
+      "type": "array",
+      "items": {
+        "enum": ["critic", "beta-reader", "genre-validator"]
+      },
+      "default": ["critic", "beta-reader", "genre-validator"],
+      "description": "활성화된 검증자 목록"
+    },
+    "circuit_breaker": {
+      "type": "object",
+      "properties": {
+        "failure_count": {
+          "type": "integer",
+          "minimum": 0,
+          "maximum": 3,
+          "default": 0
+        },
+        "failure_reasons": {
+          "type": "array",
+          "items": { "type": "string" }
+        },
+        "triggered": {
+          "type": "boolean",
+          "default": false
+        }
+      },
+      "description": "Circuit breaker 상태 (동일 실패 3회 시 중단)"
+    },
+    "last_validation": {
+      "type": "object",
+      "properties": {
+        "critic": { "type": "number", "minimum": 0, "maximum": 100 },
+        "beta_reader": { "type": "number", "minimum": 0, "maximum": 100 },
+        "genre_validator": { "type": "number", "minimum": 0, "maximum": 100 },
+        "all_passed": { "type": "boolean" },
+        "validated_at": { "type": "string", "format": "date-time" }
+      },
+      "description": "마지막 multi-validation 결과"
+    },
+    "masterpiece_mode": {
+      "type": "boolean",
+      "default": true,
+      "description": "마스터피스 모드 활성화 여부 (85점 기준, 3중 검증)"
+    },
+    "chapter_1_special_gate": {
+      "type": "boolean",
+      "default": true,
+      "description": "1화 특별 품질 게이트 활성화 여부 (90점 기준)"
+    }
+  }
+}

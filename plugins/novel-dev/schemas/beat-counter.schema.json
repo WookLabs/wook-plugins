@@ -1,0 +1,274 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "https://novel-dev.dev/schemas/beat-counter.schema.json",
+  "title": "Beat Counter Schema",
+  "description": "회차별 감정 비트 카운팅 및 밀도 분석 스키마",
+  "type": "object",
+  "required": ["novel_id"],
+  "properties": {
+    "novel_id": {
+      "type": "string",
+      "pattern": "^novel_\\d{8}_\\d{6}$",
+      "description": "소설 프로젝트 고유 ID (novel_YYYYMMDD_HHMMSS 형식)"
+    },
+    "total_beats": {
+      "type": "integer",
+      "minimum": 0,
+      "description": "전체 누적 비트 수"
+    },
+    "total_chapters": {
+      "type": "integer",
+      "minimum": 0,
+      "description": "분석된 총 회차 수"
+    },
+    "beat_density_target": {
+      "type": "object",
+      "description": "회차당 권장 비트 밀도 범위",
+      "properties": {
+        "min": {
+          "type": "integer",
+          "minimum": 0,
+          "default": 5,
+          "description": "최소 권장 비트 수"
+        },
+        "max": {
+          "type": "integer",
+          "minimum": 0,
+          "default": 8,
+          "description": "최대 권장 비트 수"
+        }
+      },
+      "required": ["min", "max"]
+    },
+    "current_density": {
+      "type": "number",
+      "minimum": 0,
+      "description": "현재 평균 비트 밀도 (회차당 평균 비트 수)"
+    },
+    "genre": {
+      "type": "string",
+      "description": "장르 (romance, fantasy, regression, thriller 등)"
+    },
+    "beats_by_chapter": {
+      "type": "object",
+      "description": "회차별 비트 정보 (키: 회차 번호)",
+      "patternProperties": {
+        "^\\d+$": {
+          "type": "object",
+          "required": ["count"],
+          "properties": {
+            "count": {
+              "type": "integer",
+              "minimum": 0,
+              "description": "해당 회차 감정 비트 총 개수"
+            },
+            "types": {
+              "type": "array",
+              "description": "해당 회차에 포함된 비트 타입 목록",
+              "items": {
+                "type": "string",
+                "enum": [
+                  "심쿵",
+                  "긴장",
+                  "설렘",
+                  "질투",
+                  "밀당",
+                  "예지",
+                  "복수",
+                  "성장",
+                  "action",
+                  "revelation",
+                  "emotional",
+                  "dramatic"
+                ]
+              }
+            },
+            "intensity_sum": {
+              "type": "number",
+              "minimum": 0,
+              "description": "해당 회차 비트들의 강도 합계"
+            },
+            "average_intensity": {
+              "type": "number",
+              "minimum": 0,
+              "maximum": 10,
+              "description": "해당 회차 비트들의 평균 강도"
+            },
+            "beat_details": {
+              "type": "array",
+              "description": "각 비트의 상세 정보",
+              "items": {
+                "type": "object",
+                "properties": {
+                  "emotion": {
+                    "type": "string",
+                    "description": "감정 비트 타입"
+                  },
+                  "intensity": {
+                    "type": "number",
+                    "minimum": 0,
+                    "maximum": 10,
+                    "description": "비트 강도"
+                  },
+                  "location": {
+                    "type": "string",
+                    "description": "비트 위치 (예: paragraph_3, scene_2)"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "beat_summary": {
+      "type": "object",
+      "description": "비트 타입별 전체 요약 통계",
+      "patternProperties": {
+        "^.*$": {
+          "type": "object",
+          "properties": {
+            "count": {
+              "type": "integer",
+              "minimum": 0,
+              "description": "해당 비트 타입의 총 발생 횟수"
+            },
+            "average_intensity": {
+              "type": "number",
+              "minimum": 0,
+              "maximum": 10,
+              "description": "해당 비트 타입의 평균 강도"
+            },
+            "chapters_with_this_beat": {
+              "type": "array",
+              "items": {
+                "type": "integer"
+              },
+              "description": "이 비트가 포함된 회차 번호 목록"
+            },
+            "last_occurrence": {
+              "type": "integer",
+              "description": "마지막 발생 회차 번호"
+            }
+          }
+        }
+      }
+    },
+    "outliers": {
+      "type": "array",
+      "description": "이상치 분석 - 권장 범위를 벗어난 회차 목록",
+      "items": {
+        "type": "object",
+        "required": ["chapter", "count", "status"],
+        "properties": {
+          "chapter": {
+            "type": "integer",
+            "description": "회차 번호"
+          },
+          "count": {
+            "type": "integer",
+            "description": "실제 비트 개수"
+          },
+          "status": {
+            "type": "string",
+            "enum": ["UNDER_TARGET", "OVER_TARGET", "OK"],
+            "description": "이상치 상태"
+          },
+          "deviation": {
+            "type": "number",
+            "description": "권장 범위에서의 편차"
+          }
+        }
+      }
+    },
+    "genre_compliance": {
+      "type": "object",
+      "description": "장르별 필수 비트 준수 현황",
+      "patternProperties": {
+        "^.*$": {
+          "type": "object",
+          "properties": {
+            "required": {
+              "type": "boolean",
+              "description": "해당 장르에서 필수인가"
+            },
+            "total_count": {
+              "type": "integer",
+              "description": "전체 발생 횟수"
+            },
+            "chapters_with_beat": {
+              "type": "integer",
+              "description": "이 비트를 포함한 회차 수"
+            },
+            "compliance_rate": {
+              "type": "number",
+              "minimum": 0,
+              "maximum": 100,
+              "description": "준수율 (%)"
+            },
+            "status": {
+              "type": "string",
+              "enum": ["PASS", "WARNING", "FAIL"],
+              "description": "준수 상태"
+            }
+          }
+        }
+      }
+    },
+    "statistics": {
+      "type": "object",
+      "description": "전체 통계 요약",
+      "properties": {
+        "median_beats_per_chapter": {
+          "type": "number",
+          "description": "회차별 비트 수의 중간값"
+        },
+        "std_deviation": {
+          "type": "number",
+          "description": "비트 수 표준편차"
+        },
+        "max_beats_chapter": {
+          "type": "object",
+          "description": "최대 비트 회차",
+          "properties": {
+            "chapter": { "type": "integer" },
+            "count": { "type": "integer" }
+          }
+        },
+        "min_beats_chapter": {
+          "type": "object",
+          "description": "최소 비트 회차",
+          "properties": {
+            "chapter": { "type": "integer" },
+            "count": { "type": "integer" }
+          }
+        }
+      }
+    },
+    "metadata": {
+      "type": "object",
+      "description": "메타데이터",
+      "properties": {
+        "created_at": {
+          "type": "string",
+          "format": "date-time",
+          "description": "분석 생성 시각"
+        },
+        "last_updated": {
+          "type": "string",
+          "format": "date-time",
+          "description": "마지막 수정 시각"
+        },
+        "analyzer_version": {
+          "type": "string",
+          "description": "비트 카운터 버전"
+        },
+        "total_chapters_analyzed": {
+          "type": "integer",
+          "minimum": 0,
+          "description": "분석된 총 회차 수"
+        }
+      }
+    }
+  }
+}

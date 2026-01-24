@@ -1,0 +1,132 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "emotional-context.schema.json",
+  "title": "Emotional Context Cache",
+  "description": "직전 3개 회차의 감정 상태 요약 (빠른 접근용 캐시)",
+  "type": "object",
+  "required": ["novel_id", "last_updated", "previous_chapters", "cumulative_stats"],
+  "properties": {
+    "$schema": {
+      "type": "string"
+    },
+    "novel_id": {
+      "type": "string",
+      "pattern": "^novel_\\d{8}_\\d{6}$",
+      "description": "소설 프로젝트 ID"
+    },
+    "last_updated": {
+      "type": "string",
+      "format": "date-time",
+      "description": "마지막 업데이트 시간"
+    },
+    "previous_chapters": {
+      "type": "array",
+      "maxItems": 3,
+      "description": "직전 3개 회차 상태 (최신순)",
+      "items": {
+        "type": "object",
+        "required": ["chapter", "average_tension", "peak_tension", "emotional_beats"],
+        "properties": {
+          "chapter": {
+            "type": "integer",
+            "minimum": 1,
+            "description": "회차 번호"
+          },
+          "average_tension": {
+            "type": "number",
+            "minimum": 0,
+            "maximum": 10,
+            "description": "평균 텐션 레벨"
+          },
+          "peak_tension": {
+            "type": "integer",
+            "minimum": 0,
+            "maximum": 10,
+            "description": "최고 텐션 레벨"
+          },
+          "emotional_beats": {
+            "type": "object",
+            "description": "감정 비트별 카운트",
+            "additionalProperties": {
+              "type": "integer",
+              "minimum": 0
+            }
+          },
+          "cliffhanger_type": {
+            "type": "string",
+            "enum": ["REVELATION", "CLIFFHANGER", "QUESTION", "EMOTIONAL", "TWIST", "NONE"],
+            "description": "클리프행어 유형"
+          },
+          "cliffhanger_strength": {
+            "type": "integer",
+            "minimum": 0,
+            "maximum": 10,
+            "description": "클리프행어 강도"
+          },
+          "unresolved_hooks": {
+            "type": "array",
+            "items": { "type": "string" },
+            "description": "미해결 떡밥 목록"
+          },
+          "character_emotional_state": {
+            "type": "object",
+            "description": "주요 캐릭터별 감정 상태",
+            "additionalProperties": {
+              "type": "string"
+            }
+          }
+        }
+      }
+    },
+    "cumulative_stats": {
+      "type": "object",
+      "description": "누적 통계",
+      "properties": {
+        "total_beats": {
+          "type": "object",
+          "description": "전체 감정 비트 누적 카운트",
+          "additionalProperties": {
+            "type": "integer",
+            "minimum": 0
+          }
+        },
+        "average_tension_trend": {
+          "type": "array",
+          "items": {
+            "type": "number",
+            "minimum": 0,
+            "maximum": 10
+          },
+          "description": "최근 10개 회차 평균 텐션 추이"
+        },
+        "tension_momentum": {
+          "type": "string",
+          "enum": ["rising", "falling", "stable", "neutral"],
+          "description": "텐션 추세"
+        }
+      }
+    },
+    "recommendations": {
+      "type": "array",
+      "description": "다음 회차를 위한 권장 사항",
+      "items": {
+        "type": "object",
+        "properties": {
+          "type": {
+            "type": "string",
+            "enum": ["TENSION", "HOOKS", "BEAT_DEFICIT", "CLIFFHANGER"],
+            "description": "권장 사항 유형"
+          },
+          "message": {
+            "type": "string",
+            "description": "권장 메시지"
+          },
+          "action": {
+            "type": "string",
+            "description": "구체적 행동 제안"
+          }
+        }
+      }
+    }
+  }
+}

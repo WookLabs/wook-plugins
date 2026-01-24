@@ -1,0 +1,203 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "review.schema.json",
+  "title": "Evaluation Result",
+  "description": "챕터 또는 막 평가 결과",
+  "type": "object",
+  "required": ["chapter_number", "total_score", "scores", "evaluated_at"],
+  "properties": {
+    "$schema": {
+      "type": "string"
+    },
+    "chapter_number": {
+      "type": "integer",
+      "minimum": 1
+    },
+    "act_number": {
+      "type": "integer",
+      "minimum": 1
+    },
+    "total_score": {
+      "type": "number",
+      "minimum": 0,
+      "maximum": 100
+    },
+    "passed": {
+      "type": "boolean",
+      "description": "85점 이상 여부 (masterpiece mode)",
+      "default": false
+    },
+    "scores": {
+      "type": "object",
+      "required": ["narrative_quality", "plot_consistency", "character_consistency", "setting_adherence"],
+      "properties": {
+        "narrative_quality": {
+          "$ref": "#/definitions/ScoreCategory"
+        },
+        "plot_consistency": {
+          "$ref": "#/definitions/ScoreCategory"
+        },
+        "character_consistency": {
+          "$ref": "#/definitions/ScoreCategory"
+        },
+        "setting_adherence": {
+          "$ref": "#/definitions/ScoreCategory"
+        }
+      }
+    },
+    "strengths": {
+      "type": "array",
+      "items": {
+        "type": "string",
+        "maxLength": 500
+      },
+      "maxItems": 10
+    },
+    "weaknesses": {
+      "type": "array",
+      "items": {
+        "type": "string",
+        "maxLength": 500
+      },
+      "maxItems": 10
+    },
+    "suggestions": {
+      "type": "array",
+      "items": {
+        "type": "string",
+        "maxLength": 500
+      },
+      "maxItems": 15
+    },
+    "foreshadowing_status": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "id": { "type": "string" },
+          "status": { "enum": ["planted", "hinted", "missed", "paid_off"] }
+        }
+      }
+    },
+    "evaluated_at": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "retry_count": {
+      "type": "integer",
+      "minimum": 0,
+      "maximum": 3
+    },
+    "multi_validation": {
+      "type": "object",
+      "description": "Multi-validator consensus results",
+      "properties": {
+        "critic_score": {
+          "type": "number",
+          "minimum": 0,
+          "maximum": 100,
+          "description": "Critic validator score"
+        },
+        "engagement_score": {
+          "type": "number",
+          "minimum": 0,
+          "maximum": 100,
+          "description": "Engagement validator score"
+        },
+        "genre_compliance": {
+          "type": "number",
+          "minimum": 0,
+          "maximum": 100,
+          "description": "Genre compliance validator score"
+        },
+        "all_passed": {
+          "type": "boolean",
+          "description": "Whether all validators passed (85+ threshold)"
+        },
+        "failed_validators": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          },
+          "description": "List of validators that failed"
+        },
+        "validation_time_ms": {
+          "type": "integer",
+          "minimum": 0,
+          "description": "Total validation time in milliseconds"
+        }
+      }
+    },
+    "diagnostic": {
+      "type": "object",
+      "description": "Diagnostic information when validation fails",
+      "properties": {
+        "root_cause": {
+          "type": "string",
+          "description": "Root cause analysis of the failure"
+        },
+        "severity": {
+          "type": "string",
+          "enum": ["critical", "major", "minor"],
+          "description": "Severity level of the issue"
+        },
+        "suggested_fix": {
+          "type": "string",
+          "description": "Suggested fix for the issue"
+        },
+        "estimated_effort": {
+          "type": "string",
+          "enum": ["quick", "moderate", "significant"],
+          "description": "Estimated effort to fix the issue"
+        }
+      }
+    },
+    "circuit_breaker": {
+      "type": "object",
+      "description": "Circuit breaker state for repeated failures",
+      "properties": {
+        "failure_count": {
+          "type": "integer",
+          "minimum": 0,
+          "maximum": 3,
+          "description": "Number of consecutive failures"
+        },
+        "failure_reasons": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          },
+          "description": "Reasons for each failure"
+        },
+        "triggered": {
+          "type": "boolean",
+          "description": "Whether circuit breaker has triggered (3 same failures)"
+        }
+      }
+    }
+  },
+  "definitions": {
+    "ScoreCategory": {
+      "type": "object",
+      "required": ["score"],
+      "properties": {
+        "score": {
+          "type": "number",
+          "minimum": 0,
+          "maximum": 25
+        },
+        "feedback": {
+          "type": "string"
+        },
+        "details": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "maxLength": 300
+          },
+          "maxItems": 10
+        }
+      }
+    }
+  }
+}

@@ -1,0 +1,179 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "https://novel-dev.dev/schemas/tension-curve.schema.json",
+  "title": "Tension Curve Schema",
+  "description": "텐션 트래커 에이전트의 긴장도 곡선 분석 결과 스키마",
+  "type": "object",
+  "required": ["novel_id", "chapters", "act_summary", "emotional_beats"],
+  "properties": {
+    "novel_id": {
+      "type": "string",
+      "pattern": "^novel_\\d{8}_\\d{6}$",
+      "description": "소설 프로젝트 고유 ID (novel_YYYYMMDD_HHMMSS 형식)"
+    },
+    "chapters": {
+      "type": "object",
+      "description": "회차별 긴장도 분석 결과",
+      "patternProperties": {
+        "^\\d+$": {
+          "type": "object",
+          "required": ["scenes", "average", "peak", "valley", "arc_compliance"],
+          "properties": {
+            "scenes": {
+              "type": "array",
+              "description": "장면별 긴장도 측정 결과",
+              "items": {
+                "type": "object",
+                "required": ["scene", "tension", "event"],
+                "properties": {
+                  "scene": {
+                    "type": "string",
+                    "description": "장면 설명"
+                  },
+                  "tension": {
+                    "type": "integer",
+                    "minimum": 1,
+                    "maximum": 10,
+                    "description": "긴장도 수치 (1-10)"
+                  },
+                  "event": {
+                    "type": "string",
+                    "description": "긴장도를 유발하는 사건"
+                  }
+                }
+              }
+            },
+            "average": {
+              "type": "number",
+              "minimum": 1,
+              "maximum": 10,
+              "description": "회차 평균 긴장도"
+            },
+            "peak": {
+              "type": "number",
+              "minimum": 1,
+              "maximum": 10,
+              "description": "회차 최고 긴장도"
+            },
+            "valley": {
+              "type": "number",
+              "minimum": 1,
+              "maximum": 10,
+              "description": "회차 최저 긴장도"
+            },
+            "arc_compliance": {
+              "type": "string",
+              "enum": ["PASS", "WARNING", "FAIL"],
+              "description": "아크 긴장도 준수 상태"
+            }
+          }
+        }
+      }
+    },
+    "act_summary": {
+      "type": "object",
+      "description": "막별 긴장도 요약",
+      "patternProperties": {
+        "^\\d+$": {
+          "type": "object",
+          "required": ["expected_range", "actual_average", "status"],
+          "properties": {
+            "expected_range": {
+              "type": "array",
+              "description": "예상 긴장도 범위 [min, max]",
+              "items": {
+                "type": "number",
+                "minimum": 1,
+                "maximum": 10
+              },
+              "minItems": 2,
+              "maxItems": 2
+            },
+            "actual_average": {
+              "type": "number",
+              "minimum": 1,
+              "maximum": 10,
+              "description": "실제 평균 긴장도"
+            },
+            "status": {
+              "type": "string",
+              "enum": ["WITHIN_RANGE", "OUT_OF_RANGE"],
+              "description": "긴장도 범위 준수 상태"
+            }
+          }
+        }
+      }
+    },
+    "emotional_beats": {
+      "type": "object",
+      "description": "감정 비트 추적 결과",
+      "patternProperties": {
+        "^.*$": {
+          "type": "object",
+          "required": ["count", "intensity", "locations"],
+          "properties": {
+            "count": {
+              "type": "integer",
+              "minimum": 0,
+              "description": "해당 감정 비트 발생 횟수"
+            },
+            "intensity": {
+              "type": "number",
+              "minimum": 0,
+              "maximum": 10,
+              "description": "평균 감정 강도"
+            },
+            "locations": {
+              "type": "array",
+              "description": "감정 비트가 발생한 위치 (회차-장면)",
+              "items": {
+                "type": "string",
+                "pattern": "^\\d+-\\d+$",
+                "description": "위치 형식: 회차번호-장면번호"
+              }
+            }
+          }
+        }
+      },
+      "examples": [
+        {
+          "심쿵": {
+            "count": 5,
+            "intensity": 8.2,
+            "locations": ["1-3", "2-5", "3-7"]
+          },
+          "긴장": {
+            "count": 8,
+            "intensity": 7.5,
+            "locations": ["1-1", "2-2", "3-3"]
+          },
+          "설렘": {
+            "count": 12,
+            "intensity": 9.0,
+            "locations": ["1-2", "2-4", "3-6"]
+          }
+        }
+      ]
+    },
+    "metadata": {
+      "type": "object",
+      "description": "메타데이터",
+      "properties": {
+        "created_at": {
+          "type": "string",
+          "format": "date-time",
+          "description": "분석 생성 시각"
+        },
+        "analyzer_version": {
+          "type": "string",
+          "description": "텐션 트래커 버전"
+        },
+        "total_chapters_analyzed": {
+          "type": "integer",
+          "minimum": 0,
+          "description": "분석된 총 회차 수"
+        }
+      }
+    }
+  }
+}

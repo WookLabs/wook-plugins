@@ -1,0 +1,158 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "https://novel-dev.org/schemas/hooks.schema.json",
+  "title": "Hooks",
+  "description": "Story hooks and mysteries to maintain reader engagement",
+  "type": "object",
+  "properties": {
+    "mystery_hooks": {
+      "type": "array",
+      "description": "Long-term mystery elements that create ongoing reader curiosity",
+      "items": {
+        "type": "object",
+        "required": [
+          "id",
+          "content",
+          "plant_chapter",
+          "reveal_chapter"
+        ],
+        "properties": {
+          "id": {
+            "type": "string",
+            "description": "Hook unique identifier (e.g., hook_001)",
+            "pattern": "^hook_[a-z0-9_]+$"
+          },
+          "content": {
+            "type": "string",
+            "description": "The mystery or question being posed",
+            "minLength": 1,
+            "maxLength": 1000
+          },
+          "plant_chapter": {
+            "type": "integer",
+            "description": "Chapter where mystery is introduced",
+            "minimum": 1
+          },
+          "clues": {
+            "type": "array",
+            "description": "Chapters where clues are provided",
+            "items": {
+              "type": "integer",
+              "minimum": 1
+            },
+            "maxItems": 15,
+            "uniqueItems": true
+          },
+          "reveal_chapter": {
+            "type": "integer",
+            "description": "Chapter where mystery is resolved",
+            "minimum": 1
+          },
+          "reader_reaction": {
+            "type": "string",
+            "description": "Expected reader curiosity or question"
+          },
+          "reveal": {
+            "type": "string",
+            "description": "The answer or resolution to the mystery"
+          },
+          "status": {
+            "type": "string",
+            "description": "Current status",
+            "enum": [
+              "not_planted",
+              "active",
+              "revealed"
+            ],
+            "default": "not_planted"
+          }
+        }
+      }
+    },
+    "chapter_end_hooks": {
+      "type": "array",
+      "description": "Chapter-ending hooks/cliffhangers to drive continued reading",
+      "items": {
+        "type": "object",
+        "required": [
+          "chapter",
+          "hook",
+          "purpose"
+        ],
+        "properties": {
+          "chapter": {
+            "type": "integer",
+            "description": "Chapter number",
+            "minimum": 1
+          },
+          "hook": {
+            "type": "string",
+            "description": "The actual hook text or description",
+            "minLength": 1,
+            "maxLength": 800
+          },
+          "hook_type": {
+            "type": "string",
+            "description": "Type of hook",
+            "enum": [
+              "cliffhanger",
+              "revelation",
+              "question",
+              "shocking_dialogue",
+              "action",
+              "emotional"
+            ]
+          },
+          "purpose": {
+            "type": "string",
+            "description": "Why this hook is placed here (narrative purpose)"
+          },
+          "tension_level": {
+            "type": "string",
+            "description": "Intensity of the hook",
+            "enum": ["low", "medium", "high"]
+          }
+        }
+      }
+    },
+    "dramatic_questions": {
+      "type": "array",
+      "description": "Major dramatic questions driving the overall narrative",
+      "items": {
+        "type": "object",
+        "required": [
+          "question",
+          "introduced_chapter",
+          "answered_chapter"
+        ],
+        "properties": {
+          "question": {
+            "type": "string",
+            "description": "The dramatic question",
+            "minLength": 1,
+            "maxLength": 500
+          },
+          "introduced_chapter": {
+            "type": "integer",
+            "description": "When this question is first raised",
+            "minimum": 1
+          },
+          "answered_chapter": {
+            "type": "integer",
+            "description": "When this question is answered",
+            "minimum": 1
+          },
+          "importance": {
+            "type": "string",
+            "description": "How central this question is to the story",
+            "enum": ["primary", "secondary", "tertiary"]
+          }
+        }
+      }
+    },
+    "notes": {
+      "type": "string",
+      "description": "General notes about hook strategy"
+    }
+  }
+}

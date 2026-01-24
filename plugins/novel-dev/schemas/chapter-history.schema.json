@@ -1,0 +1,38 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "chapter-history.schema.json",
+  "title": "Chapter Review History",
+  "description": "회차별 수정 이력 추적",
+  "type": "object",
+  "required": ["chapter_number", "history"],
+  "properties": {
+    "chapter_number": {
+      "type": "integer",
+      "minimum": 1
+    },
+    "history": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["version", "timestamp", "total_score"],
+        "properties": {
+          "version": { "type": "integer", "minimum": 1 },
+          "timestamp": { "type": "string", "format": "date-time" },
+          "total_score": { "type": "number", "minimum": 0, "maximum": 100 },
+          "scores": {
+            "type": "object",
+            "properties": {
+              "critic": { "type": "number" },
+              "beta_reader": { "type": "number" },
+              "genre_validator": { "type": "number" }
+            }
+          },
+          "passed": { "type": "boolean" },
+          "revision_reason": { "type": "string" }
+        }
+      }
+    },
+    "total_revisions": { "type": "integer", "minimum": 0 },
+    "best_version": { "type": "integer" }
+  }
+}

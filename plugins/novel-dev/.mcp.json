@@ -1,0 +1,7 @@
+{
+  "novel-context": {
+    "type": "stdio",
+    "command": "${CLAUDE_PLUGIN_ROOT}/scripts/run-mcp-server.sh",
+    "args": []
+  }
+}

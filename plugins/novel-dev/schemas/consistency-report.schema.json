@@ -1,0 +1,100 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "consistency-report.schema.json",
+  "title": "Consistency Report",
+  "description": "일관성 검사 결과 보고서",
+  "type": "object",
+  "required": ["checked_at", "chapter_range", "issues"],
+  "properties": {
+    "$schema": {
+      "type": "string"
+    },
+    "checked_at": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "chapter_range": {
+      "type": "object",
+      "required": ["start", "end"],
+      "properties": {
+        "start": { "type": "integer", "minimum": 1 },
+        "end": { "type": "integer", "minimum": 1 }
+      }
+    },
+    "total_issues": {
+      "type": "integer",
+      "minimum": 0
+    },
+    "issues": {
+      "type": "array",
+      "items": {
+        "$ref": "#/definitions/ConsistencyIssue"
+      }
+    },
+    "summary": {
+      "type": "object",
+      "properties": {
+        "character_issues": { "type": "integer" },
+        "timeline_issues": { "type": "integer" },
+        "world_issues": { "type": "integer" },
+        "foreshadowing_issues": { "type": "integer" }
+      }
+    }
+  },
+  "definitions": {
+    "ConsistencyIssue": {
+      "type": "object",
+      "required": ["type", "severity", "description", "location"],
+      "properties": {
+        "id": {
+          "type": "string"
+        },
+        "type": {
+          "enum": [
+            "character_inconsistency",
+            "timeline_conflict",
+            "world_contradiction",
+            "foreshadowing_error",
+            "continuity_error",
+            "dialogue_inconsistency"
+          ]
+        },
+        "severity": {
+          "enum": ["critical", "major", "minor"]
+        },
+        "description": {
+          "type": "string",
+          "maxLength": 1000
+        },
+        "location": {
+          "type": "object",
+          "properties": {
+            "chapter": { "type": "integer" },
+            "scene": { "type": "integer" },
+            "context": { "type": "string" }
+          }
+        },
+        "references": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "file": { "type": "string" },
+              "field": { "type": "string" },
+              "expected": { "type": "string" },
+              "found": { "type": "string" }
+            }
+          }
+        },
+        "suggestion": {
+          "type": "string",
+          "maxLength": 800
+        },
+        "auto_fixable": {
+          "type": "boolean",
+          "default": false
+        }
+      }
+    }
+  }
+}

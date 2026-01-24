@@ -1,0 +1,138 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "https://novel-dev.org/schemas/foreshadowing.schema.json",
+  "title": "Foreshadowing",
+  "description": "Foreshadowing tracking schema for planting and paying off narrative elements",
+  "type": "object",
+  "required": ["foreshadowing"],
+  "properties": {
+    "foreshadowing": {
+      "type": "array",
+      "description": "List of all foreshadowing elements in the story",
+      "items": {
+        "type": "object",
+        "required": [
+          "id",
+          "content",
+          "importance",
+          "plant_chapter",
+          "payoff_chapter",
+          "status"
+        ],
+        "properties": {
+          "id": {
+            "type": "string",
+            "description": "Foreshadowing unique identifier (e.g., fore_001)",
+            "pattern": "^fore_[a-z0-9_]+$"
+          },
+          "content": {
+            "type": "string",
+            "description": "What is being foreshadowed (the future event or revelation)",
+            "minLength": 1,
+            "maxLength": 1000
+          },
+          "importance": {
+            "type": "string",
+            "description": "Importance level",
+            "enum": ["A", "B", "C"]
+          },
+          "plant_chapter": {
+            "type": "integer",
+            "description": "Chapter where foreshadowing is first planted",
+            "minimum": 1
+          },
+          "hints": {
+            "type": "array",
+            "description": "Chapters where additional hints are dropped",
+            "items": {
+              "type": "integer",
+              "minimum": 1
+            },
+            "maxItems": 10,
+            "uniqueItems": true
+          },
+          "payoff_chapter": {
+            "type": "integer",
+            "description": "Chapter where foreshadowing pays off/is revealed",
+            "minimum": 1
+          },
+          "status": {
+            "type": "string",
+            "description": "Current status of this foreshadowing",
+            "enum": [
+              "not_planted",
+              "planted",
+              "hinting",
+              "paid_off"
+            ],
+            "default": "not_planted"
+          },
+          "details": {
+            "type": "object",
+            "description": "Detailed implementation notes",
+            "properties": {
+              "plant": {
+                "type": "string",
+                "description": "How to plant this foreshadowing initially"
+              },
+              "hint_1": {
+                "type": "string",
+                "description": "First hint implementation"
+              },
+              "hint_2": {
+                "type": "string",
+                "description": "Second hint implementation"
+              },
+              "hint_3": {
+                "type": "string",
+                "description": "Third hint implementation"
+              },
+              "payoff": {
+                "type": "string",
+                "description": "How the payoff should be executed"
+              }
+            }
+          },
+          "related_characters": {
+            "type": "array",
+            "description": "Character IDs involved in this foreshadowing",
+            "items": {
+              "type": "string",
+              "pattern": "^char_[a-z0-9_]+$"
+            },
+            "maxItems": 10,
+            "uniqueItems": true
+          },
+          "related_plot": {
+            "type": "string",
+            "description": "Main arc or sub-arc this foreshadowing relates to"
+          },
+          "notes": {
+            "type": "string",
+            "description": "Additional notes or reminders"
+          }
+        }
+      }
+    },
+    "rules": {
+      "type": "object",
+      "description": "Foreshadowing rules and guidelines for this story",
+      "properties": {
+        "min_gap_chapters": {
+          "type": "integer",
+          "description": "Minimum chapters between plant and payoff",
+          "minimum": 1
+        },
+        "min_hints_for_A_level": {
+          "type": "integer",
+          "description": "Minimum hints required for A-level foreshadowing",
+          "minimum": 0
+        },
+        "allow_orphan_foreshadowing": {
+          "type": "boolean",
+          "description": "Whether to allow foreshadowing without payoff (generally false)"
+        }
+      }
+    }
+  }
+}

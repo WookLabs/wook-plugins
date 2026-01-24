@@ -1,0 +1,56 @@
+{
+  "id": "",
+  "name": "",
+  "aliases": [],
+  "role": "supporting",
+  "basic": {
+    "age": 0,
+    "gender": "",
+    "birthday": "",
+    "appearance": {
+      "height": "",
+      "build": "",
+      "features": []
+    },
+    "voice": {
+      "tone": "",
+      "speech_pattern": "",
+      "vocabulary": ""
+    }
+  },
+  "background": {
+    "origin": "",
+    "family": "",
+    "education": "",
+    "occupation": "",
+    "economic_status": "",
+    "trauma": "",
+    "secret": {
+      "content": "",
+      "reveal_chapter": null
+    }
+  },
+  "inner": {
+    "want": "",
+    "need": "",
+    "fatal_flaw": "",
+    "values": [],
+    "fears": []
+  },
+  "behavior": {
+    "habits": [],
+    "hobbies": [],
+    "likes": [],
+    "dislikes": [],
+    "stress_response": "",
+    "lying_tell": ""
+  },
+  "arc": {
+    "start_state": "",
+    "catalyst": "",
+    "midpoint": "",
+    "dark_night": "",
+    "transformation": "",
+    "end_state": ""
+  }
+}

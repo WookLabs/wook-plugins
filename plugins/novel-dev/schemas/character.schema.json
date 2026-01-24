@@ -1,0 +1,318 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "https://novel-dev.org/schemas/character.schema.json",
+  "title": "Character",
+  "description": "Character profile schema with detailed background, personality, and development arc",
+  "type": "object",
+  "required": [
+    "id",
+    "name",
+    "role",
+    "basic",
+    "inner"
+  ],
+  "properties": {
+    "id": {
+      "type": "string",
+      "description": "Character unique identifier (e.g., char_001)",
+      "pattern": "^char_[a-z0-9_]+$"
+    },
+    "name": {
+      "type": "string",
+      "description": "Character's full name",
+      "minLength": 1,
+      "maxLength": 50
+    },
+    "aliases": {
+      "type": "array",
+      "description": "Alternative names, nicknames, or titles",
+      "items": {
+        "type": "string",
+        "maxLength": 50
+      },
+      "maxItems": 10,
+      "uniqueItems": true
+    },
+    "role": {
+      "type": "string",
+      "description": "Character role in the story",
+      "enum": [
+        "protagonist",
+        "deuteragonist",
+        "antagonist",
+        "supporting",
+        "minor",
+        "cameo"
+      ]
+    },
+    "basic": {
+      "type": "object",
+      "description": "Basic physical and vocal characteristics",
+      "required": ["age", "gender"],
+      "properties": {
+        "age": {
+          "type": ["integer", "string"],
+          "description": "Age in years or descriptive age group"
+        },
+        "gender": {
+          "type": "string",
+          "description": "Gender identity"
+        },
+        "birthday": {
+          "type": "string",
+          "description": "Birthday (format flexible)"
+        },
+        "appearance": {
+          "type": "object",
+          "description": "Physical appearance details",
+          "properties": {
+            "height": {
+              "type": "string",
+              "description": "Height (e.g., 165cm, 5'5\")"
+            },
+            "build": {
+              "type": "string",
+              "description": "Body build/type"
+            },
+            "features": {
+              "type": "array",
+              "description": "Notable physical features",
+              "items": {
+                "type": "string",
+                "maxLength": 200
+              },
+              "maxItems": 10
+            }
+          }
+        },
+        "voice": {
+          "type": "object",
+          "description": "Voice and speech characteristics",
+          "properties": {
+            "tone": {
+              "type": "string",
+              "description": "Voice tone/quality"
+            },
+            "speech_pattern": {
+              "type": "string",
+              "description": "How they speak (formal, casual, etc.)"
+            },
+            "vocabulary": {
+              "type": "string",
+              "description": "Typical vocabulary/word choice"
+            }
+          }
+        }
+      }
+    },
+    "background": {
+      "type": "object",
+      "description": "Character backstory and history",
+      "properties": {
+        "origin": {
+          "type": "string",
+          "description": "Place of origin/hometown"
+        },
+        "family": {
+          "type": "string",
+          "description": "Family composition and relationships"
+        },
+        "education": {
+          "type": "string",
+          "description": "Educational background"
+        },
+        "occupation": {
+          "type": "string",
+          "description": "Current occupation/job"
+        },
+        "economic_status": {
+          "type": "string",
+          "description": "Economic/social status"
+        },
+        "trauma": {
+          "type": "string",
+          "description": "Past traumatic experiences"
+        },
+        "secret": {
+          "type": "object",
+          "description": "Character secret to be revealed",
+          "properties": {
+            "content": {
+              "type": "string",
+              "description": "The secret itself"
+            },
+            "reveal_chapter": {
+              "type": "integer",
+              "description": "Chapter where secret is revealed",
+              "minimum": 1
+            }
+          }
+        }
+      }
+    },
+    "inner": {
+      "type": "object",
+      "description": "Internal motivations and psychology",
+      "required": ["want", "need"],
+      "properties": {
+        "want": {
+          "type": "string",
+          "description": "Surface-level desire (external goal)"
+        },
+        "need": {
+          "type": "string",
+          "description": "Deep internal need (true requirement for growth)"
+        },
+        "fatal_flaw": {
+          "type": "string",
+          "description": "Fatal flaw or main weakness"
+        },
+        "values": {
+          "type": "array",
+          "description": "Core values",
+          "items": {
+            "type": "string",
+            "maxLength": 100
+          },
+          "maxItems": 10
+        },
+        "fears": {
+          "type": "array",
+          "description": "Deep fears",
+          "items": {
+            "type": "string",
+            "maxLength": 100
+          },
+          "maxItems": 10
+        }
+      }
+    },
+    "behavior": {
+      "type": "object",
+      "description": "Behavioral patterns and habits",
+      "properties": {
+        "habits": {
+          "type": "array",
+          "description": "Regular habits or quirks",
+          "items": {
+            "type": "string",
+            "maxLength": 200
+          },
+          "maxItems": 10
+        },
+        "hobbies": {
+          "type": "array",
+          "description": "Hobbies and interests",
+          "items": {
+            "type": "string",
+            "maxLength": 100
+          },
+          "maxItems": 10
+        },
+        "likes": {
+          "type": "array",
+          "description": "Things they like",
+          "items": {
+            "type": "string",
+            "maxLength": 100
+          },
+          "maxItems": 15
+        },
+        "dislikes": {
+          "type": "array",
+          "description": "Things they dislike",
+          "items": {
+            "type": "string",
+            "maxLength": 100
+          },
+          "maxItems": 15
+        },
+        "stress_response": {
+          "type": "string",
+          "description": "How they react under stress"
+        },
+        "lying_tell": {
+          "type": "string",
+          "description": "Observable behavior when lying"
+        }
+      }
+    },
+    "relationships": {
+      "type": "array",
+      "description": "Relationships with other characters",
+      "items": {
+        "type": "object",
+        "required": ["character_id", "type"],
+        "properties": {
+          "character_id": {
+            "type": "string",
+            "description": "ID of the related character (e.g., char_002)"
+          },
+          "type": {
+            "type": "string",
+            "description": "Type of relationship",
+            "enum": [
+              "family",
+              "friend",
+              "enemy",
+              "rival",
+              "lover",
+              "mentor",
+              "student",
+              "colleague",
+              "acquaintance",
+              "other"
+            ]
+          },
+          "detail": {
+            "type": "string",
+            "description": "Specific relationship description (e.g., 'older sister', 'ex-boyfriend')"
+          },
+          "dynamic": {
+            "type": "string",
+            "description": "How the relationship evolves throughout the story"
+          },
+          "tension": {
+            "type": "string",
+            "description": "Source of conflict or tension in the relationship"
+          }
+        }
+      },
+      "uniqueItems": true
+    },
+    "arc": {
+      "type": "object",
+      "description": "Character development arc throughout the story",
+      "properties": {
+        "start_state": {
+          "type": "string",
+          "description": "Character's state at story beginning"
+        },
+        "catalyst": {
+          "type": "string",
+          "description": "Event that triggers change"
+        },
+        "midpoint": {
+          "type": "string",
+          "description": "Major midpoint change or realization"
+        },
+        "dark_night": {
+          "type": "string",
+          "description": "Lowest point/dark night of the soul"
+        },
+        "transformation": {
+          "type": "string",
+          "description": "Key transformation moment"
+        },
+        "end_state": {
+          "type": "string",
+          "description": "Character's state at story end"
+        }
+      }
+    },
+    "notes": {
+      "type": "string",
+      "description": "Additional notes or considerations"
+    }
+  }
+}

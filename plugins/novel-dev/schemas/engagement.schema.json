@@ -1,0 +1,174 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "https://novel-dev.org/schemas/engagement.schema.json",
+  "title": "Engagement Analysis",
+  "description": "Beta-reader 관점의 독자 몰입도 및 이탈 위험 분석",
+  "type": "object",
+  "required": ["engagement_score", "drop_off_risk", "hooks_detected", "emotional_beats", "reader_questions", "verdict"],
+  "properties": {
+    "$schema": {
+      "type": "string"
+    },
+    "engagement_score": {
+      "type": "number",
+      "minimum": 0,
+      "maximum": 100,
+      "description": "전체 독자 몰입도 점수 (0-100)"
+    },
+    "drop_off_risk": {
+      "type": "array",
+      "description": "독자 이탈 위험 지점들",
+      "items": {
+        "type": "object",
+        "required": ["location", "risk", "reason"],
+        "properties": {
+          "location": {
+            "type": "string",
+            "description": "이탈 위험 지점 (예: '3장 중반', '5장 마지막 장면')",
+            "minLength": 1,
+            "maxLength": 200
+          },
+          "risk": {
+            "type": "number",
+            "minimum": 0,
+            "maximum": 1,
+            "description": "이탈 위험도 (0.0 = 없음, 1.0 = 매우 높음)"
+          },
+          "reason": {
+            "type": "string",
+            "description": "이탈 위험 이유",
+            "minLength": 1,
+            "maxLength": 500
+          }
+        }
+      },
+      "maxItems": 20
+    },
+    "hooks_detected": {
+      "type": "array",
+      "description": "실제로 감지된 훅/떡밥/몰입 요소들",
+      "items": {
+        "type": "object",
+        "required": ["location", "type", "strength"],
+        "properties": {
+          "location": {
+            "type": "string",
+            "description": "훅 발견 지점",
+            "minLength": 1,
+            "maxLength": 200
+          },
+          "type": {
+            "type": "string",
+            "enum": ["mystery", "question", "revelation", "cliffhanger", "tension", "curiosity"],
+            "description": "훅의 종류"
+          },
+          "strength": {
+            "type": "number",
+            "minimum": 0,
+            "maximum": 10,
+            "description": "훅의 강도 (0 = 약함, 10 = 매우 강함)"
+          },
+          "description": {
+            "type": "string",
+            "description": "훅에 대한 설명",
+            "maxLength": 500
+          }
+        }
+      },
+      "maxItems": 30
+    },
+    "emotional_beats": {
+      "type": "array",
+      "description": "감정적 비트 및 강도",
+      "items": {
+        "type": "object",
+        "required": ["location", "emotion", "intensity"],
+        "properties": {
+          "location": {
+            "type": "string",
+            "description": "감정 비트 위치",
+            "minLength": 1,
+            "maxLength": 200
+          },
+          "emotion": {
+            "type": "string",
+            "description": "감정 유형 (예: '긴장', '슬픔', '기쁨', '분노', '설렘')",
+            "minLength": 1,
+            "maxLength": 100
+          },
+          "intensity": {
+            "type": "number",
+            "minimum": 1,
+            "maximum": 10,
+            "description": "감정 강도 (1 = 약함, 10 = 매우 강함)"
+          },
+          "description": {
+            "type": "string",
+            "description": "감정 비트에 대한 설명",
+            "maxLength": 500
+          }
+        }
+      },
+      "maxItems": 50
+    },
+    "reader_questions": {
+      "type": "array",
+      "description": "독자가 가질 법한 궁금증들",
+      "items": {
+        "type": "string",
+        "minLength": 1,
+        "maxLength": 500
+      },
+      "maxItems": 20
+    },
+    "verdict": {
+      "type": "string",
+      "enum": ["ENGAGING", "MODERATE", "AT_RISK", "BORING"],
+      "description": "전체 몰입도 판정 (ENGAGING=매우 몰입적, MODERATE=보통, AT_RISK=이탈 위험, BORING=지루함)"
+    },
+    "improvement_hints": {
+      "type": "array",
+      "description": "몰입도 개선을 위한 힌트",
+      "items": {
+        "type": "string",
+        "minLength": 1,
+        "maxLength": 500
+      },
+      "maxItems": 15
+    },
+    "pacing_analysis": {
+      "type": "object",
+      "description": "페이싱 분석",
+      "properties": {
+        "overall_pace": {
+          "type": "string",
+          "enum": ["too_slow", "slow", "good", "fast", "too_fast"],
+          "description": "전체 페이싱 평가"
+        },
+        "slow_sections": {
+          "type": "array",
+          "description": "너무 느린 구간",
+          "items": {
+            "type": "string",
+            "maxLength": 200
+          },
+          "maxItems": 10
+        },
+        "rushed_sections": {
+          "type": "array",
+          "description": "너무 빠른 구간",
+          "items": {
+            "type": "string",
+            "maxLength": 200
+          },
+          "maxItems": 10
+        }
+      }
+    },
+    "analyzed_at": {
+      "type": "string",
+      "format": "date-time",
+      "description": "분석 수행 시각"
+    }
+  }
+}

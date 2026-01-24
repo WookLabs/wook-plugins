@@ -1,0 +1,78 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "plot.schema.json",
+  "title": "Plot Structure",
+  "description": "소설의 플롯 구조 정의",
+  "type": "object",
+  "required": ["total_acts", "acts"],
+  "properties": {
+    "$schema": {
+      "type": "string"
+    },
+    "total_acts": {
+      "type": "integer",
+      "minimum": 1,
+      "maximum": 10,
+      "description": "총 막 수"
+    },
+    "acts": {
+      "type": "array",
+      "items": {
+        "$ref": "#/definitions/Act"
+      },
+      "minItems": 1
+    }
+  },
+  "definitions": {
+    "Act": {
+      "type": "object",
+      "required": ["act_number", "title", "chapters"],
+      "properties": {
+        "act_number": {
+          "type": "integer",
+          "minimum": 1
+        },
+        "title": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 100
+        },
+        "chapters": {
+          "type": "array",
+          "items": { "type": "integer", "minimum": 1 },
+          "minItems": 1,
+          "maxItems": 2,
+          "description": "[start] 또는 [start, end]"
+        },
+        "summary": {
+          "type": "string",
+          "maxLength": 1000
+        },
+        "key_events": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "maxLength": 500
+          },
+          "maxItems": 10
+        },
+        "character_development": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "maxLength": 500
+          },
+          "maxItems": 15
+        },
+        "themes": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "maxLength": 200
+          },
+          "maxItems": 10
+        }
+      }
+    }
+  }
+}

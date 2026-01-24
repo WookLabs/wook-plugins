@@ -1,0 +1,135 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "Genre Validation Report",
+  "description": "장르 준수도 검증 결과 스키마",
+  "type": "object",
+  "required": [
+    "chapter",
+    "genre",
+    "compliance_score",
+    "required_elements",
+    "cliche_check",
+    "commercial_factors",
+    "verdict",
+    "warnings",
+    "suggestions"
+  ],
+  "properties": {
+    "chapter": {
+      "type": "integer",
+      "description": "검증 대상 회차 번호",
+      "minimum": 1
+    },
+    "genre": {
+      "type": "string",
+      "description": "검증 대상 장르 (romance, fantasy, regression, thriller 등)",
+      "examples": ["romance", "fantasy", "regression", "thriller", "mystery", "comedy"]
+    },
+    "compliance_score": {
+      "type": "number",
+      "description": "장르 준수도 점수 (0-100)",
+      "minimum": 0,
+      "maximum": 100
+    },
+    "required_elements": {
+      "type": "object",
+      "description": "장르별 필수 요소 검증 결과",
+      "patternProperties": {
+        ".*": {
+          "type": "object",
+          "required": ["required", "found", "status"],
+          "properties": {
+            "required": {
+              "type": "number",
+              "description": "필요한 요소 개수",
+              "minimum": 0
+            },
+            "found": {
+              "type": "number",
+              "description": "실제 발견된 요소 개수",
+              "minimum": 0
+            },
+            "status": {
+              "type": "string",
+              "enum": ["PASS", "FAIL", "BONUS", "N/A"],
+              "description": "요소 검증 상태 (PASS: 통과, FAIL: 미달, BONUS: 추가 점수, N/A: 해당 없음)"
+            }
+          }
+        }
+      },
+      "additionalProperties": false
+    },
+    "cliche_check": {
+      "type": "object",
+      "description": "클리셰 사용 분석 결과",
+      "required": ["used", "overused", "status"],
+      "properties": {
+        "used": {
+          "type": "array",
+          "description": "사용된 클리셰 목록",
+          "items": {
+            "type": "string"
+          }
+        },
+        "overused": {
+          "type": "array",
+          "description": "과도하게 사용된 클리셰 목록",
+          "items": {
+            "type": "string"
+          }
+        },
+        "status": {
+          "type": "string",
+          "enum": ["ACCEPTABLE", "WARNING", "OVERUSED"],
+          "description": "클리셰 사용 평가 (ACCEPTABLE: 적절, WARNING: 주의, OVERUSED: 과다)"
+        }
+      }
+    },
+    "commercial_factors": {
+      "type": "object",
+      "description": "상업성 지표 분석",
+      "required": ["hook_density", "cliffhanger", "dialogue_ratio", "episode_length"],
+      "properties": {
+        "hook_density": {
+          "type": "number",
+          "description": "훅 밀도 (회차당 훅 개수)",
+          "minimum": 0
+        },
+        "cliffhanger": {
+          "type": "boolean",
+          "description": "회차 끝에 클리프행어 존재 여부"
+        },
+        "dialogue_ratio": {
+          "type": "number",
+          "description": "대화 비율 (0-1 사이, 1이 100%)",
+          "minimum": 0,
+          "maximum": 1
+        },
+        "episode_length": {
+          "type": "integer",
+          "description": "회차 분량 (글자 수)",
+          "minimum": 0
+        }
+      }
+    },
+    "verdict": {
+      "type": "string",
+      "enum": ["GENRE_COMPLIANT", "NEEDS_WORK", "NON_COMPLIANT"],
+      "description": "최종 판정 (GENRE_COMPLIANT: 장르 준수, NEEDS_WORK: 개선 필요, NON_COMPLIANT: 장르 불일치)"
+    },
+    "warnings": {
+      "type": "array",
+      "description": "경고 메시지 목록",
+      "items": {
+        "type": "string"
+      }
+    },
+    "suggestions": {
+      "type": "array",
+      "description": "개선 제안 목록",
+      "items": {
+        "type": "string"
+      }
+    }
+  }
+}

@@ -1,0 +1,136 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "https://novel-dev.org/schemas/project.schema.json",
+  "title": "NovelProject",
+  "description": "Novel project metadata schema",
+  "type": "object",
+  "required": [
+    "id",
+    "title",
+    "genre",
+    "target_chapters",
+    "target_words_per_chapter",
+    "current_chapter",
+    "status",
+    "created_at",
+    "updated_at"
+  ],
+  "properties": {
+    "id": {
+      "type": "string",
+      "description": "Project unique identifier (format: novel_YYYYMMDD_HHmmss)",
+      "pattern": "^novel_\\d{8}_\\d{6}$"
+    },
+    "title": {
+      "type": "string",
+      "description": "Novel title (working title)",
+      "minLength": 1,
+      "maxLength": 100
+    },
+    "genre": {
+      "type": "array",
+      "description": "Primary genres",
+      "items": {
+        "type": "string"
+      },
+      "minItems": 1,
+      "uniqueItems": true
+    },
+    "sub_genre": {
+      "type": "array",
+      "description": "Sub-genres or specific categories",
+      "items": {
+        "type": "string"
+      },
+      "uniqueItems": true
+    },
+    "tropes": {
+      "type": "array",
+      "description": "Story tropes and themes",
+      "items": {
+        "type": "string"
+      },
+      "uniqueItems": true
+    },
+    "tone": {
+      "type": "array",
+      "description": "Overall tone and atmosphere",
+      "items": {
+        "type": "string"
+      },
+      "uniqueItems": true
+    },
+    "rating": {
+      "type": "string",
+      "description": "Content rating (e.g., 전체, 12+, 15+, 19+)",
+      "enum": ["전체", "12+", "15+", "19+"],
+      "default": "전체"
+    },
+    "target_chapters": {
+      "type": "integer",
+      "description": "Target total chapter count",
+      "minimum": 1,
+      "maximum": 1000
+    },
+    "target_words_per_chapter": {
+      "type": "integer",
+      "description": "Target word count per chapter",
+      "minimum": 500,
+      "maximum": 50000
+    },
+    "current_chapter": {
+      "type": "integer",
+      "description": "Current chapter number (0 if not started)",
+      "minimum": 0
+    },
+    "status": {
+      "type": "string",
+      "description": "Project status",
+      "enum": ["planning", "writing", "editing", "complete", "paused"],
+      "default": "planning"
+    },
+    "created_at": {
+      "type": "string",
+      "description": "Project creation timestamp (ISO 8601)",
+      "format": "date-time"
+    },
+    "updated_at": {
+      "type": "string",
+      "description": "Last update timestamp (ISO 8601)",
+      "format": "date-time"
+    },
+    "author": {
+      "type": "string",
+      "description": "Author name (optional)",
+      "maxLength": 50
+    },
+    "description": {
+      "type": "string",
+      "description": "Project description or notes",
+      "maxLength": 2000
+    },
+    "tags": {
+      "type": "array",
+      "description": "Additional tags for organization",
+      "items": {
+        "type": "string"
+      },
+      "uniqueItems": true
+    },
+    "subtitle": {
+      "type": "string",
+      "description": "Novel subtitle (optional)",
+      "maxLength": 200
+    },
+    "series_name": {
+      "type": "string",
+      "description": "Series name if part of a series",
+      "maxLength": 100
+    },
+    "series_order": {
+      "type": "integer",
+      "description": "Order in series (1-based)",
+      "minimum": 1
+    }
+  }
+}

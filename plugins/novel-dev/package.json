@@ -1,0 +1,50 @@
+{
+  "name": "novel-dev",
+  "version": "3.3.3",
+  "description": "AI 소설 창작을 위한 멀티에이전트 오케스트레이션 플러그인",
+  "type": "module",
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
+  "scripts": {
+    "generate:types": "json2ts schemas/*.schema.json -o src/generated-types.ts",
+    "validate:schemas": "node scripts/validate-schemas.mjs",
+    "validate:agents": "node scripts/validate-agents.mjs",
+    "verify:build": "node scripts/verify-build.mjs",
+    "clean": "rimraf dist",
+    "prebuild": "npm run clean && npm run validate:schemas && npm run validate:agents",
+    "build": "tsc",
+    "postbuild": "npm run verify:build && npm run bundle:mcp",
+    "bundle:mcp": "esbuild src/mcp-server/index.ts --bundle --platform=node --target=node18 --format=esm --outfile=dist/mcp-server/index.bundle.mjs",
+    "test": "vitest run",
+    "test:integration": "node scripts/integration-test.mjs",
+    "watch": "tsc --watch"
+  },
+  "keywords": [
+    "novel",
+    "writing",
+    "creative-writing",
+    "korean",
+    "multi-agent",
+    "claude-plugin"
+  ],
+  "author": "User",
+  "license": "MIT",
+  "engines": {
+    "node": ">=18.0.0"
+  },
+  "devDependencies": {
+    "@types/node": "^20.0.0",
+    "ajv": "^8.12.0",
+    "cross-env": "^7.0.3",
+    "esbuild": "^0.24.0",
+    "json-schema-to-typescript": "^13.1.0",
+    "rimraf": "^5.0.5",
+    "typescript": "^5.0.0",
+    "vitest": "^2.0.0"
+  },
+  "dependencies": {
+    "@modelcontextprotocol/sdk": "^1.25.2",
+    "archiver": "^6.0.1",
+    "zod": "^3.25.0"
+  }
+}
