@@ -29,7 +29,7 @@ If output file already exists:
 
 2. **plot-architect 에이전트 호출**
    ```
-   Task(subagent_type="plot-architect", prompt="
+   Task(subagent_type="novel-dev:plot-architect", prompt="
    프로젝트: {project.json}
    플롯 구조: {structure.json}
    캐릭터: {characters 요약}

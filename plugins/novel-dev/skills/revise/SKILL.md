@@ -23,7 +23,7 @@ $ARGUMENTS
 
 2. **editor 에이전트 호출**
    ```
-   Task(subagent_type="editor", prompt="
+   Task(subagent_type="novel-dev:editor", prompt="
    원고: {chapter.md}
    문체 가이드: {style-guide.json}
 

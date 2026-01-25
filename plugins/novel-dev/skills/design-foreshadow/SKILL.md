@@ -30,7 +30,7 @@ If output file already exists:
 
 2. **plot-architect 에이전트 호출**
    ```
-   Task(subagent_type="plot-architect", prompt="
+   Task(subagent_type="novel-dev:plot-architect", prompt="
    메인 아크: {main-arc.json}
    서브 아크: {sub-arcs}
    캐릭터 비밀: {secrets}

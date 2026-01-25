@@ -37,7 +37,7 @@ If any file is missing, report error and suggest `/01-init` or `/02-world` ~ `/0
 
 2. **plot-architect 에이전트 호출** (회차별 반복)
    ```
-   Task(subagent_type="plot-architect", prompt="
+   Task(subagent_type="novel-dev:plot-architect", prompt="
    프로젝트: {project.json}
    플롯 구조: {structure.json}
    메인 아크: {main-arc.json}
