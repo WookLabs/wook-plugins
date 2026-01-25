@@ -82,7 +82,7 @@ function getLogFilePath() {
 
   if (currentLogDate !== today) {
     currentLogDate = today;
-    currentLogFile = join(config.logDir, `novel-sisyphus-${today}.log`);
+    currentLogFile = join(config.logDir, `novel-dev-${today}.log`);
   }
 
   return currentLogFile;
@@ -96,7 +96,7 @@ function rotateLogFiles() {
 
   try {
     const files = readdirSync(config.logDir)
-      .filter(f => f.startsWith('novel-sisyphus-') && f.endsWith('.log'))
+      .filter(f => f.startsWith('novel-dev-') && f.endsWith('.log'))
       .sort()
       .reverse();
 
@@ -279,7 +279,7 @@ export function getLogStats() {
 
   try {
     const files = readdirSync(config.logDir)
-      .filter(f => f.startsWith('novel-sisyphus-') && f.endsWith('.log'));
+      .filter(f => f.startsWith('novel-dev-') && f.endsWith('.log'));
 
     let totalSize = 0;
     let errors = 0;

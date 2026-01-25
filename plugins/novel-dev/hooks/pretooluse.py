@@ -19,7 +19,7 @@ SCHEMA_PATTERNS = {
     r'ralph-state\.json$': 'ralph-state.schema.json',
     r'foreshadowing\.json$': 'foreshadowing.schema.json',
     r'hooks\.json$': 'hooks.schema.json',
-    r'sub-arc.*\.json$': 'sub-arc.schema.json',
+    r'sub-arc_\d{3}\.json$': 'sub-arc.schema.json',
 }
 
 
@@ -108,6 +108,60 @@ def validate_plot_structure(data):
     return True, "Valid"
 
 
+def validate_foreshadowing_structure(data):
+    """Validate foreshadowing JSON structure."""
+    # Must match foreshadowing.schema.json required fields
+    if 'foreshadowing' not in data:
+        return False, "Missing required field: foreshadowing"
+
+    if not isinstance(data.get('foreshadowing'), list):
+        return False, "foreshadowing must be an array"
+
+    # Validate each foreshadowing item
+    for i, item in enumerate(data.get('foreshadowing', [])):
+        required_item_fields = ['id', 'content', 'importance', 'plant_chapter', 'payoff_chapter', 'status']
+        for field in required_item_fields:
+            if field not in item:
+                return False, f"Foreshadowing item {i}: Missing required field: {field}"
+
+        # Validate ID pattern
+        fore_id = item.get('id', '')
+        if not re.match(r'^fore_[a-z0-9_]+$', fore_id):
+            return False, f"Invalid foreshadowing ID format: {fore_id}. Must match 'fore_[a-z0-9_]+'"
+
+        # Validate importance enum
+        valid_importance = ['A', 'B', 'C']
+        importance = item.get('importance', '')
+        if importance not in valid_importance:
+            return False, f"Invalid importance: {importance}. Must be one of: {', '.join(valid_importance)}"
+
+        # Validate status enum
+        valid_status = ['not_planted', 'planted', 'hinting', 'paid_off']
+        status = item.get('status', '')
+        if status not in valid_status:
+            return False, f"Invalid status: {status}. Must be one of: {', '.join(valid_status)}"
+
+    return True, "Valid"
+
+
+def validate_sub_arc_structure(data):
+    """Validate sub-arc JSON structure."""
+    required = ['id', 'title', 'chapters']
+    for field in required:
+        if field not in data:
+            return False, f"Missing required field: {field}"
+
+    # Validate ID pattern
+    sub_id = data.get('id', '')
+    if not re.match(r'^sub_\d{3}$', sub_id):
+        return False, f"Invalid sub-arc ID format: {sub_id}. Must match 'sub_XXX' (3 digits)"
+
+    if not isinstance(data.get('chapters'), list):
+        return False, "chapters must be an array"
+
+    return True, "Valid"
+
+
 def validate_json_structure(content, schema_name):
     """Basic structure validation without jsonschema dependency."""
     try:
@@ -119,6 +173,8 @@ def validate_json_structure(content, schema_name):
             'project.schema.json': validate_project_structure,
             'world.schema.json': validate_world_structure,
             'plot.schema.json': validate_plot_structure,
+            'foreshadowing.schema.json': validate_foreshadowing_structure,
+            'sub-arc.schema.json': validate_sub_arc_structure,
         }
 
         validator = validators.get(schema_name)

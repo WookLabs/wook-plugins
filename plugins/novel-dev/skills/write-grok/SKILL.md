@@ -41,7 +41,7 @@ XAI_API_KEY=xai-xxxxxxxxxxxx
 Bash 도구로 API 키 존재 여부를 확인합니다:
 
 ```bash
-node novel-sisyphus/scripts/grok-writer.mjs --help
+node novel-dev/scripts/grok-writer.mjs --help
 ```
 
 API 키가 없으면 사용자에게 설정 방법을 안내합니다.
@@ -60,7 +60,7 @@ API 키가 없으면 사용자에게 설정 방법을 안내합니다.
 ### Step 3: Grok API 호출
 
 ```bash
-node novel-sisyphus/scripts/grok-writer.mjs \
+node novel-dev/scripts/grok-writer.mjs \
   --prompt "프롬프트 내용" \
   --system "시스템 프롬프트" \
   --model "grok-3" \

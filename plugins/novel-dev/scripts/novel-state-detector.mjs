@@ -141,7 +141,7 @@ async function main() {
 🚀 **Novel Autopilot 모드 감지됨**
 
 자동 집필 모드를 시작하려면 아이디어와 함께 명령해주세요:
-\`/novel-sisyphus:autopilot {작품 아이디어}\`
+\`/novel-dev:autopilot {작품 아이디어}\`
 
 예시:
 \`\`\`

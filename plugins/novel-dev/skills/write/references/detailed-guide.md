@@ -69,7 +69,7 @@ Keywords are checked in:
 When adult content is detected:
 
 ```bash
-node novel-sisyphus/scripts/grok-writer.mjs \
+node novel-dev/scripts/grok-writer.mjs \
   --prompt "[Plot + Context + Writing Instructions]" \
   --system "당신은 한국어 로맨스/성인 소설 작가입니다. 감각적이고 몰입감 있는 장면을 써주세요." \
   --model "grok-3" \
