@@ -75,10 +75,15 @@ def validate_project_structure(data):
 
 def validate_world_structure(data):
     """Validate world JSON structure."""
-    required = ['id', 'name']
+    # Must match world.schema.json required fields
+    required = ['era', 'location']
     for field in required:
         if field not in data:
             return False, f"Missing required field: {field}"
+
+    # location must be an object if present
+    if 'location' in data and not isinstance(data.get('location'), dict):
+        return False, "location must be an object"
 
     return True, "Valid"
 
