@@ -1,0 +1,180 @@
+{
+  "name": "rtl-forge",
+  "version": "1.0.0",
+  "description": "Verilog/SystemVerilog RTL Design & Verification Plugin with mandatory user approval workflow",
+  "author": "WookLabs",
+  "agents": [
+    {
+      "name": "rtl-architect",
+      "path": "../agents/rtl-architect.json",
+      "model": "opus",
+      "permissions": "read-only"
+    },
+    {
+      "name": "rtl-coder",
+      "path": "../agents/rtl-coder.json",
+      "model": "opus",
+      "permissions": "propose-only"
+    },
+    {
+      "name": "verification-engineer",
+      "path": "../agents/verification-engineer.json",
+      "model": "opus",
+      "permissions": "read-only"
+    },
+    {
+      "name": "assertion-writer",
+      "path": "../agents/assertion-writer.json",
+      "model": "opus",
+      "permissions": "read-only"
+    },
+    {
+      "name": "lint-reviewer",
+      "path": "../agents/lint-reviewer.json",
+      "model": "opus",
+      "permissions": "read-only"
+    },
+    {
+      "name": "cdc-analyst",
+      "path": "../agents/cdc-analyst.json",
+      "model": "opus",
+      "permissions": "read-only"
+    },
+    {
+      "name": "synthesis-advisor",
+      "path": "../agents/synthesis-advisor.json",
+      "model": "opus",
+      "permissions": "read-only"
+    },
+    {
+      "name": "coverage-analyst",
+      "path": "../agents/coverage-analyst.json",
+      "model": "opus",
+      "permissions": "read-only"
+    },
+    {
+      "name": "rtl-critic",
+      "path": "../agents/rtl-critic.json",
+      "model": "opus",
+      "permissions": "read-only"
+    },
+    {
+      "name": "doc-writer",
+      "path": "../agents/doc-writer.json",
+      "model": "opus",
+      "permissions": "docs-only"
+    }
+  ],
+  "commands": [
+    {
+      "name": "approve-spec",
+      "path": "../commands/approve-spec.mjs",
+      "description": "승인 대기 중인 스펙 문서를 승인합니다"
+    },
+    {
+      "name": "approve-change",
+      "path": "../commands/approve-change.mjs",
+      "description": "승인 대기 중인 RTL 변경을 승인합니다"
+    },
+    {
+      "name": "reject-change",
+      "path": "../commands/reject-change.mjs",
+      "description": "승인 대기 중인 RTL 변경을 거부합니다"
+    },
+    {
+      "name": "reject-spec",
+      "path": "../commands/reject-spec.mjs",
+      "description": "승인 대기 중인 스펙 문서를 거부합니다"
+    },
+    {
+      "name": "show-pending",
+      "path": "../commands/show-pending.mjs",
+      "description": "승인 대기 중인 스펙/변경 목록을 표시합니다"
+    },
+    {
+      "name": "note",
+      "path": "../commands/note.mjs",
+      "description": "프로젝트 노트패드에 학습, 결정, 이슈, 문제를 기록합니다"
+    }
+  ],
+  "skills": [
+    {
+      "name": "spec-driven-design",
+      "path": "../skills/spec-driven-design/SKILL.md",
+      "description": "문서 기반 설계 워크플로우 (스펙 → 리뷰 → 승인 → RTL)"
+    },
+    {
+      "name": "rtl-change-protocol",
+      "path": "../skills/rtl-change-protocol/SKILL.md",
+      "description": "RTL 변경 승인 프로토콜 (문서 기반)"
+    },
+    {
+      "name": "timing-diagram",
+      "path": "../skills/timing-diagram/SKILL.md",
+      "description": "ASCII 타이밍 다이어그램 생성"
+    },
+    {
+      "name": "rtl-review",
+      "path": "../skills/rtl-review/SKILL.md",
+      "description": "RTL 코드 리뷰, LSP 정적 분석, 스펙 대비 검증"
+    },
+    {
+      "name": "notepad-wisdom",
+      "path": "../skills/notepad-wisdom/SKILL.md",
+      "description": "프로젝트 지식 관리 및 노트패드 활용"
+    },
+    {
+      "name": "verification-sim",
+      "path": "../skills/verification-sim/SKILL.md",
+      "description": "시뮬레이션 기반 검증 (Questa/VCS/Xcelium)"
+    },
+    {
+      "name": "systematic-debugging",
+      "path": "../skills/systematic-debugging/SKILL.md",
+      "description": "시뮬레이터 기반 체계적 디버깅 프로토콜"
+    },
+    {
+      "name": "rtl-analyze",
+      "path": "../skills/rtl-analyze/SKILL.md",
+      "description": "Slang 기반 RTL 정밀 분석 (신호 추적, 계층 분석)"
+    },
+    {
+      "name": "rtl-init",
+      "path": "../skills/rtl-init/SKILL.md",
+      "description": "RTL 프로젝트 초기화 (CLAUDE.md 생성)"
+    }
+  ],
+  "hooks": {
+    "PreToolUse": [
+      {
+        "name": "rtl-write-guard",
+        "path": "../hooks/rtl-write-guard.mjs",
+        "tools": ["Edit", "Write"],
+        "description": "RTL 파일 무단 수정 차단"
+      }
+    ],
+    "UserPromptSubmit": [
+      {
+        "name": "auto-skill-trigger",
+        "path": "../hooks/auto-skill-trigger.mjs",
+        "description": "키워드 기반 자동 스킬 활성화 (한글/영어)"
+      }
+    ]
+  },
+  "configuration": {
+    "rtlExtensions": [".v", ".sv", ".vh", ".svh", ".vhd", ".vhdl"],
+    "requireTimingDiagram": true,
+    "requireUserApproval": true,
+    "allAgentsOpus": true
+  },
+  "philosophy": {
+    "core": "RTL은 승인된 문서를 구현한다. 문서 없이 RTL 없다.",
+    "principles": [
+      "문서 기반 설계: 스펙 → 리뷰 → 승인 → RTL",
+      "모든 변경에는 명분과 이유가 필요하다",
+      "타이밍 다이어그램 없이 변경 불가",
+      "사용자 승인 없이 RTL 수정 불가",
+      "시뮬레이션은 Questa, 합성/STA는 AI 범위 밖"
+    ]
+  }
+}

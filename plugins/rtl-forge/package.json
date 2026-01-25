@@ -1,0 +1,15 @@
+{
+  "name": "rtl-forge",
+  "version": "1.0.0",
+  "description": "Verilog/SystemVerilog RTL Design & Verification Plugin with mandatory user approval workflow",
+  "type": "module",
+  "scripts": {
+    "test": "echo \"No tests yet\""
+  },
+  "keywords": [
+    "claude-plugin",
+    "oh-my-plugin"
+  ],
+  "author": "WookLabs",
+  "license": "MIT"
+}

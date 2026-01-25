@@ -1,0 +1,164 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "https://rtl-forge/schemas/simulation-output.schema.json",
+  "title": "Simulation Output",
+  "description": "Output schema for Phase 4: Simulation Execution",
+  "type": "object",
+  "required": ["phase", "status", "timestamp", "simulation_runs"],
+  "properties": {
+    "phase": {
+      "type": "string",
+      "const": "simulation"
+    },
+    "status": {
+      "type": "string",
+      "enum": ["pending", "in_progress", "complete", "failed"]
+    },
+    "timestamp": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "simulation_runs": {
+      "type": "array",
+      "description": "Individual simulation run results",
+      "items": {
+        "type": "object",
+        "required": ["run_id", "module_name", "status", "duration_ms"],
+        "properties": {
+          "run_id": {
+            "type": "string",
+            "description": "Unique simulation run identifier"
+          },
+          "module_name": {
+            "type": "string",
+            "description": "Module being simulated"
+          },
+          "testbench": {
+            "type": "string",
+            "description": "Testbench file used"
+          },
+          "status": {
+            "type": "string",
+            "enum": ["passed", "failed", "timeout", "error"]
+          },
+          "duration_ms": {
+            "type": "number",
+            "minimum": 0,
+            "description": "Simulation duration in milliseconds"
+          },
+          "simulator": {
+            "type": "string",
+            "description": "Simulator used",
+            "enum": ["ModelSim", "VCS", "Xcelium", "Verilator", "Icarus", "GHDL"]
+          },
+          "waveform_path": {
+            "type": "string",
+            "description": "Path to waveform dump file"
+          },
+          "log_path": {
+            "type": "string",
+            "description": "Path to simulation log"
+          },
+          "assertions": {
+            "type": "object",
+            "properties": {
+              "total": {"type": "integer", "minimum": 0},
+              "passed": {"type": "integer", "minimum": 0},
+              "failed": {"type": "integer", "minimum": 0},
+              "failures": {
+                "type": "array",
+                "items": {
+                  "type": "object",
+                  "properties": {
+                    "name": {"type": "string"},
+                    "message": {"type": "string"},
+                    "time_ns": {"type": "number"},
+                    "severity": {"type": "string", "enum": ["error", "warning", "info"]}
+                  }
+                }
+              }
+            }
+          },
+          "errors": {
+            "type": "array",
+            "description": "Simulation errors",
+            "items": {
+              "type": "object",
+              "properties": {
+                "type": {"type": "string", "enum": ["compile", "runtime", "timeout"]},
+                "message": {"type": "string"},
+                "file": {"type": "string"},
+                "line": {"type": "integer"},
+                "severity": {"type": "string", "enum": ["fatal", "error", "warning"]}
+              }
+            }
+          },
+          "performance": {
+            "type": "object",
+            "properties": {
+              "simulated_time_ns": {"type": "number", "minimum": 0},
+              "simulation_rate": {
+                "type": "number",
+                "description": "Simulation speed in cycles/second"
+              },
+              "memory_usage_mb": {"type": "number", "minimum": 0}
+            }
+          },
+          "test_results": {
+            "type": "object",
+            "properties": {
+              "total_tests": {"type": "integer", "minimum": 0},
+              "passed_tests": {"type": "integer", "minimum": 0},
+              "failed_tests": {"type": "integer", "minimum": 0},
+              "skipped_tests": {"type": "integer", "minimum": 0}
+            }
+          }
+        }
+      }
+    },
+    "summary": {
+      "type": "object",
+      "required": ["total_runs", "passed_runs", "failed_runs"],
+      "properties": {
+        "total_runs": {"type": "integer", "minimum": 0},
+        "passed_runs": {"type": "integer", "minimum": 0},
+        "failed_runs": {"type": "integer", "minimum": 0},
+        "success_rate": {"type": "number", "minimum": 0, "maximum": 100},
+        "total_duration_ms": {"type": "number", "minimum": 0},
+        "total_assertions_checked": {"type": "integer", "minimum": 0},
+        "total_assertion_failures": {"type": "integer", "minimum": 0}
+      }
+    },
+    "regression": {
+      "type": "object",
+      "description": "Regression test results",
+      "properties": {
+        "baseline_comparison": {
+          "type": "object",
+          "properties": {
+            "new_failures": {"type": "integer"},
+            "fixed_tests": {"type": "integer"},
+            "performance_delta_percent": {"type": "number"}
+          }
+        },
+        "seed_coverage": {
+          "type": "object",
+          "description": "Random seed coverage statistics",
+          "properties": {
+            "total_seeds": {"type": "integer"},
+            "unique_behaviors": {"type": "integer"}
+          }
+        }
+      }
+    },
+    "outputs": {
+      "type": "object",
+      "properties": {
+        "report_path": {"type": "string"},
+        "waveform_directory": {"type": "string"},
+        "log_directory": {"type": "string"},
+        "artifacts_archive": {"type": "string"}
+      }
+    }
+  }
+}
