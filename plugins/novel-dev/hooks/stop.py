@@ -92,7 +92,7 @@ def main():
 
     if not state or not state.get('ralph_active', False):
         # No active Ralph loop - allow stop
-        print(json.dumps({"decision": "allow"}))
+        print(json.dumps({"decision": "approve"}))
         return
 
     # Check for completion promise in transcript
@@ -110,19 +110,19 @@ def main():
     if novel_done_promise in search_text:
         # Novel complete - allow stop
         result = {
-            "decision": "allow",
+            "decision": "approve",
             "reason": "Novel completion promise detected. Ralph loop completed successfully."
         }
     elif completion_promise in search_text:
         # Generic completion promise - allow stop
         result = {
-            "decision": "allow",
+            "decision": "approve",
             "reason": "Completion promise detected. Ralph loop completed successfully."
         }
     elif act_promise_pattern in search_text and '_DONE</promise>' in search_text:
         # Act completion promise - allow stop
         result = {
-            "decision": "allow",
+            "decision": "approve",
             "reason": "Act completion promise detected. Ralph loop phase completed."
         }
     else:
