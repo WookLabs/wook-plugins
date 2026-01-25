@@ -16,6 +16,17 @@
       },
       "keywords": ["novel", "writing", "creative", "ai-writing", "storytelling"],
       "category": "productivity"
+    },
+    {
+      "name": "rtl-forge",
+      "source": "./plugins/rtl-forge",
+      "description": "Verilog/SystemVerilog RTL Design & Verification Plugin with mandatory user approval workflow",
+      "version": "1.0.0",
+      "author": {
+        "name": "WookLabs"
+      },
+      "keywords": ["rtl", "verilog", "systemverilog", "verification", "hardware"],
+      "category": "development"
     }
   ]
 }
