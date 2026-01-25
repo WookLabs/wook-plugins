@@ -41,13 +41,67 @@ BLUEPRINT.md
 
 ## 워크플로우
 
-### 1. 아이디어 분석
-- 사용자 입력이 충분하면 바로 진행
-- 불충분하면 인터뷰 질문 (장르, 트로프, 톤, 주인공, 갈등, 화수)
+### 1. 아이디어 분석 (AskUserQuestion 사용)
+
+사용자 입력이 불충분하면 **클릭 가능한 UI**로 질문:
+
+```javascript
+// 예시: 장르 선택
+AskUserQuestion({
+  questions: [{
+    question: "어떤 장르의 소설을 쓰시나요?",
+    header: "장르",
+    options: [
+      { label: "로맨스 (권장)", description: "사랑과 관계 중심의 이야기" },
+      { label: "판타지", description: "마법, 이세계, 초능력 요소" },
+      { label: "스릴러/미스터리", description: "긴장감과 반전 중심" },
+      { label: "일상/힐링", description: "따뜻하고 잔잔한 이야기" }
+    ],
+    multiSelect: false
+  }]
+});
+
+// 예시: 트로프 선택 (다중 선택)
+AskUserQuestion({
+  questions: [{
+    question: "포함하고 싶은 요소를 모두 선택하세요",
+    header: "트로프",
+    options: [
+      { label: "계약 연애", description: "가짜 연애에서 진짜로" },
+      { label: "재회", description: "과거의 인연이 다시" },
+      { label: "신분 차이", description: "재벌/서민 등" },
+      { label: "라이벌→연인", description: "적에서 연인으로" }
+    ],
+    multiSelect: true
+  }]
+});
+```
+
+**인터뷰 질문 순서:**
+1. 장르 선택 (단일)
+2. 세부 장르/트로프 선택 (다중)
+3. 분위기/톤 선택 (단일)
+4. 목표 화수 선택 (단일)
+5. 등급 선택 (단일)
 
 ### 2. 레시피 매칭
 - 장르/트로프 분석하여 적합한 레시피 자동 선택
-- 사용 가능: romance, romance-contract, romance-ceo, fantasy, fantasy-regression, fantasy-hunter, bl, thriller
+- 사용 가능 레시피 (17종):
+
+| 장르 | 레시피 |
+|------|--------|
+| 로맨스 | romance, romance-contract, romance-ceo |
+| 판타지 | fantasy, fantasy-regression, fantasy-hunter |
+| BL/GL | bl, gl |
+| 스릴러 | thriller |
+| SF | sf |
+| 무협 | martial-arts |
+| 역사물 | historical |
+| 공포 | horror |
+| 순문학 | literary |
+| 라이트노벨 | light-novel |
+| 스포츠 | sports |
+| 일상물 | slice-of-life |
 
 ### 3. 블루프린트 생성
 - plot-architect 에이전트로 템플릿 채우기
