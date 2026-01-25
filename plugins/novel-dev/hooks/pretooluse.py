@@ -90,13 +90,20 @@ def validate_world_structure(data):
 
 def validate_plot_structure(data):
     """Validate plot/main-arc JSON structure."""
-    required = ['id', 'title', 'acts']
+    # Must match plot.schema.json required fields
+    required = ['total_acts', 'acts']
     for field in required:
         if field not in data:
             return False, f"Missing required field: {field}"
 
+    if not isinstance(data.get('total_acts'), int):
+        return False, "total_acts must be an integer"
+
     if not isinstance(data.get('acts'), list):
         return False, "acts must be an array"
+
+    if len(data.get('acts', [])) == 0:
+        return False, "acts array must have at least one act"
 
     return True, "Valid"
 

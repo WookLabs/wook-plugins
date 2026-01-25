@@ -35,5 +35,37 @@
       "traits": ["냉철", "비밀 있음"],
       "arc": "벽 허물기"
     }
+  },
+
+  "style_guide": {
+    "narrative_voice": "3인칭 제한 시점",
+    "pov_type": "dual",
+    "tone": ["달달", "밀당", "긴장"],
+    "dialogue_ratio": { "min": 0.55, "max": 0.65 },
+    "emotional_beats_per_chapter": { "min": 2, "max": 4 }
+  },
+
+  "chapter1_checklist": [
+    "첫 문장 훅 (계약 상황 암시)",
+    "주인공의 절박한 상황 제시",
+    "계약 상대 등장 또는 암시",
+    "3-5화 내 계약 성립 예고"
+  ],
+
+  "validation_rules": {
+    "critic_threshold": 85,
+    "beta_reader_threshold": 80,
+    "genre_validator_threshold": 95,
+    "chapter1_thresholds": {
+      "critic": 90,
+      "beta_reader": 85,
+      "genre_validator": 97
+    }
+  },
+
+  "act_structure": {
+    "act1": { "chapters": [1, 18], "focus": "계약 성립, 첫 공개 연기" },
+    "act2": { "chapters": [19, 48], "focus": "감정 자각, 비밀 위기" },
+    "act3": { "chapters": [49, 60], "focus": "진심 고백, 해피엔딩" }
   }
 }

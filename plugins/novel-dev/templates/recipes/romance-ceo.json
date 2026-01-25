@@ -48,5 +48,37 @@
     "tier1_safe": ["비서와 CEO", "구원", "우연한 동거"],
     "tier2_careful": ["정략 결혼 파기", "숨겨진 후계자", "복수극"],
     "tier3_risky": ["이복형제", "출생의 비밀"]
+  },
+
+  "style_guide": {
+    "narrative_voice": "3인칭 제한 시점",
+    "pov_type": "dual",
+    "tone": ["달달", "설렘", "럭셔리"],
+    "dialogue_ratio": { "min": 0.50, "max": 0.60 },
+    "emotional_beats_per_chapter": { "min": 2, "max": 4 }
+  },
+
+  "chapter1_checklist": [
+    "첫 문장 훅 (재벌 세계 암시)",
+    "주인공 매력 포인트 3문단 내 등장",
+    "신분 차이 또는 CEO 등장",
+    "3-5화 내 운명적 재회 예고"
+  ],
+
+  "validation_rules": {
+    "critic_threshold": 85,
+    "beta_reader_threshold": 80,
+    "genre_validator_threshold": 95,
+    "chapter1_thresholds": {
+      "critic": 90,
+      "beta_reader": 85,
+      "genre_validator": 97
+    }
+  },
+
+  "act_structure": {
+    "act1": { "chapters": [1, 20], "focus": "운명적 만남, 신분 차이 인식" },
+    "act2": { "chapters": [21, 55], "focus": "비밀 연애, 가문 갈등" },
+    "act3": { "chapters": [56, 70], "focus": "선택과 해피엔딩" }
   }
 }
