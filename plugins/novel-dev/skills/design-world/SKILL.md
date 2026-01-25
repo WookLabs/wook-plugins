@@ -30,7 +30,7 @@ If output file already exists:
 
 2. **lore-keeper 에이전트 호출**
    ```
-   Task(subagent_type="lore-keeper", prompt="
+   Task(subagent_type="novel-dev:lore-keeper", prompt="
    프로젝트 정보:
    - 장르: {genre}
    - 톤: {tone}

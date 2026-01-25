@@ -43,7 +43,7 @@
       "items": {
         "type": "object",
         "properties": {
-          "id": { "type": "string", "pattern": "^fore_\\d{3}$" },
+          "id": { "type": "string", "pattern": "^fore_[a-z0-9_]+$" },
           "action": { "enum": ["planted", "hinted", "paid_off"] }
         }
       }

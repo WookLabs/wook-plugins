@@ -143,7 +143,7 @@ def main():
 
     # Only validate Write tool for JSON files
     if tool_name != 'Write':
-        print(json.dumps({"decision": "allow"}))
+        print(json.dumps({"decision": "approve"}))
         return
 
     file_path = tool_input.get('file_path', '')
@@ -151,7 +151,7 @@ def main():
 
     # Skip non-JSON files
     if not file_path.endswith('.json'):
-        print(json.dumps({"decision": "allow"}))
+        print(json.dumps({"decision": "approve"}))
         return
 
     # Normalize path separators for matching
@@ -170,7 +170,7 @@ def main():
                 return
             break
 
-    print(json.dumps({"decision": "allow"}))
+    print(json.dumps({"decision": "approve"}))
 
 
 if __name__ == "__main__":

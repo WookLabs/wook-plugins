@@ -20,7 +20,7 @@ For projects with > 20 chapters:
 
 2. **lore-keeper 에이전트 호출**
    ```
-   Task(subagent_type="lore-keeper", prompt="
+   Task(subagent_type="novel-dev:lore-keeper", prompt="
    설정: {world, characters, plot}
    본문: {chapters}
 

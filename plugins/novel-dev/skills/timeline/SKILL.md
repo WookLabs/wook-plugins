@@ -21,7 +21,7 @@ user-invocable: true
 
 2. **lore-keeper 에이전트 호출**
    ```
-   Task(subagent_type="lore-keeper", prompt="
+   Task(subagent_type="novel-dev:lore-keeper", prompt="
    회차별 시간대: {chapter times}
 
    타임라인을 정리해주세요:

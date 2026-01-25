@@ -58,7 +58,7 @@
         },
         "location": {
           "type": "string",
-          "pattern": "^loc_\\d{3}$"
+          "pattern": "^loc_[a-z0-9_]+$"
         },
         "duration": {
           "type": "string",
