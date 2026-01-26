@@ -1,6 +1,6 @@
 {
   "name": "rtl-forge",
-  "version": "1.0.0",
+  "version": "1.1.0",
   "description": "Verilog/SystemVerilog RTL Design & Verification Plugin with mandatory user approval workflow",
   "author": "WookLabs",
   "agents": [
@@ -95,6 +95,11 @@
       "name": "note",
       "path": "../commands/note.mjs",
       "description": "프로젝트 노트패드에 학습, 결정, 이슈, 문제를 기록합니다"
+    },
+    {
+      "name": "propose-change",
+      "path": "../commands/propose-change.mjs",
+      "description": "RTL 변경 제안을 등록합니다 (pending-changes에 추가)"
     }
   ],
   "skills": [
