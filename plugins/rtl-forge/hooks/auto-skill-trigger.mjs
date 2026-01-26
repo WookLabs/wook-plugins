@@ -206,7 +206,7 @@ export default function autoSkillTrigger(hookContext) {
   const { prompt } = hookContext;
 
   if (!prompt || typeof prompt !== 'string') {
-    return { continue: true };
+    return { decision: 'approve' };
   }
 
   const matches = findMatchingSkills(prompt);
@@ -215,8 +215,8 @@ export default function autoSkillTrigger(hookContext) {
     const message = generateActivationMessage(matches);
 
     return {
-      continue: true,
-      message: message,
+      decision: 'approve',
+      systemMessage: message,
       metadata: {
         detected_skills: matches.map(m => m.skill),
         primary_skill: matches[0].skill,
@@ -225,7 +225,7 @@ export default function autoSkillTrigger(hookContext) {
     };
   }
 
-  return { continue: true };
+  return { decision: 'approve' };
 }
 
 // CLI 테스트용

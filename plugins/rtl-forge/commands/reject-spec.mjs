@@ -12,6 +12,7 @@
 
 import fs from 'fs';
 import path from 'path';
+import { fileURLToPath } from 'url';
 
 const OMC_DIR = '.omc/rtl-forge';
 const PENDING_FILE = path.join(OMC_DIR, 'pending-specs.json');
@@ -134,7 +135,8 @@ function parseArgs(args) {
 }
 
 // CLI entry point
-if (import.meta.url === `file://${process.argv[1]}`) {
+const __filename = fileURLToPath(import.meta.url);
+if (process.argv[1] === __filename) {
   const args = process.argv.slice(2);
   rejectSpec(args)
     .then(result => {

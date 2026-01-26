@@ -21,7 +21,7 @@
       "name": "rtl-forge",
       "source": "./plugins/rtl-forge",
       "description": "Verilog/SystemVerilog RTL Design & Verification Plugin with mandatory user approval workflow",
-      "version": "1.0.0",
+      "version": "1.1.0",
       "author": {
         "name": "WookLabs"
       },

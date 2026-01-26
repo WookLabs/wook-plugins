@@ -13,6 +13,7 @@
 import fs from 'fs';
 import path from 'path';
 import crypto from 'crypto';
+import { fileURLToPath } from 'url';
 
 // RTL 파일 확장자
 const RTL_EXTENSIONS = [
@@ -78,18 +79,18 @@ export default function rtlWriteGuard(hookContext) {
 
   // Edit 또는 Write 도구만 검사
   if (tool !== 'Edit' && tool !== 'Write') {
-    return { allow: true };
+    return { decision: 'approve' };
   }
 
   const filePath = parameters.file_path || parameters.path;
 
   if (!filePath) {
-    return { allow: true };
+    return { decision: 'approve' };
   }
 
   // RTL 파일이 아니면 허용
   if (!isRtlFile(filePath)) {
-    return { allow: true };
+    return { decision: 'approve' };
   }
 
   // RTL 파일에 대한 수정 시도 감지
@@ -98,16 +99,13 @@ export default function rtlWriteGuard(hookContext) {
 
   // 승인된 변경인지 확인
   if (isChangeApproved(filePath, changeHash)) {
-    return {
-      allow: true,
-      message: `✓ Approved RTL change: ${path.basename(filePath)}`
-    };
+    return { decision: 'approve' };
   }
 
   // 미승인 RTL 수정 차단
   return {
-    allow: false,
-    message: `
+    decision: 'block',
+    reason: `
 ╔═══════════════════════════════════════════════════════════════╗
 ║                    ⚠️  RTL WRITE BLOCKED                       ║
 ╠═══════════════════════════════════════════════════════════════╣
@@ -128,13 +126,15 @@ export default function rtlWriteGuard(hookContext) {
 ║  5. /approve-change 로 사용자 승인                           ║
 ║                                                               ║
 ╚═══════════════════════════════════════════════════════════════╝
-`,
-    suggestion: 'Use rtl-change-protocol skill to propose changes with proper timing diagrams and get user approval.'
+
+Use rtl-change-protocol skill to propose changes with proper timing diagrams and get user approval.
+`
   };
 }
 
 // CLI 테스트용
-if (process.argv[1] === new URL(import.meta.url).pathname) {
+const __filename = fileURLToPath(import.meta.url);
+if (process.argv[1] === __filename) {
   console.log('RTL Write Guard Hook');
   console.log('====================');
   console.log('Protected extensions:', RTL_EXTENSIONS.join(', '));
