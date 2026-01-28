@@ -1,25 +1,23 @@
 {
-  "description": "RTL Forge hooks for write protection and auto-skill triggering",
+  "description": "RTL-Forge hooks - Write guard and auto skill trigger",
   "hooks": {
     "PreToolUse": [
       {
-        "matcher": "*",
         "hooks": [
           {
             "type": "command",
-            "command": "node \"${CLAUDE_PLUGIN_ROOT}/hooks/rtl-write-guard.mjs\"",
-            "timeout": 5
+            "command": "node ${CLAUDE_PLUGIN_ROOT}/hooks/rtl-write-guard.mjs",
+            "timeout": 10
           }
         ]
       }
     ],
     "UserPromptSubmit": [
       {
-        "matcher": "*",
         "hooks": [
           {
             "type": "command",
-            "command": "node \"${CLAUDE_PLUGIN_ROOT}/hooks/auto-skill-trigger.mjs\"",
+            "command": "node ${CLAUDE_PLUGIN_ROOT}/hooks/auto-skill-trigger.mjs",
             "timeout": 5
           }
         ]

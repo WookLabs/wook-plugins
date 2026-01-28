@@ -1,5 +1,6 @@
 ---
 description: 승인 대기 중인 RTL 변경을 승인합니다
+allowed-tools: ["Read", "Write", "Bash"]
 ---
 
 # Approve Change

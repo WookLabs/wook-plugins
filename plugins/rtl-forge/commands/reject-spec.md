@@ -1,4 +1,5 @@
 ---
+allowed-tools: ["Read", "Write", "Bash"]
 description: 승인 대기 중인 스펙 문서를 거부합니다
 ---
 

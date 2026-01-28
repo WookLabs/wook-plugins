@@ -1,4 +1,5 @@
 ---
+allowed-tools: ["Read", "Write", "Bash"]
 description: 프로젝트 노트패드에 학습, 결정, 이슈, 문제를 기록합니다
 ---
 

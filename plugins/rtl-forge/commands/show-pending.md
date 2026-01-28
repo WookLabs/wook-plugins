@@ -1,4 +1,5 @@
 ---
+allowed-tools: ["Read", "Glob"]
 description: 승인 대기 중인 스펙/변경 목록을 표시합니다
 ---
 

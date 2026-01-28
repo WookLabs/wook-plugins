@@ -1,4 +1,5 @@
 ---
+allowed-tools: ["Read", "Write", "Bash"]
 description: RTL 변경 제안을 등록합니다 (pending-changes에 추가)
 ---
 
