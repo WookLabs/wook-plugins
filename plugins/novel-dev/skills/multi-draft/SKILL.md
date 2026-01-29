@@ -21,6 +21,8 @@ allowed-tools:
 
 # Multi-Draft Skill
 
+> **Note**: 이 문서의 코드 블록은 AI 오케스트레이터를 위한 실행 패턴 명세입니다. 실행 가능한 TypeScript/JavaScript 코드가 아닙니다.
+
 같은 챕터 또는 장면을 2-3가지 다른 접근법으로 작성하고, 객관적으로 비교한 뒤 최적 초안을 선택하는 스킬입니다.
 
 ## 워크플로우
@@ -29,7 +31,7 @@ allowed-tools:
 
 #### Step 1: 대상 장면 결정
 
-```typescript
+```spec
 // 대상 결정
 const target = detectTarget()
   || await AskUserQuestion("어떤 장면을 여러 버전으로 작성할까요?", [
@@ -53,7 +55,7 @@ const context = {
 
 AskUserQuestion으로 비교할 접근법을 선택합니다:
 
-```typescript
+```spec
 const approachType = await AskUserQuestion(
   "어떤 차원에서 변주할까요? (복수 선택 가능)",
   [
@@ -78,7 +80,7 @@ const approachType = await AskUserQuestion(
 | **감정** | 감정 절제 (여백) | 감정 폭발 (직접) | 내면 독백 (깊이) |
 
 **커스텀 지정 시:**
-```typescript
+```spec
 if (approachType === "직접 지정") {
   const customApproaches = await AskUserQuestion(
     "각 초안의 접근법을 설명해주세요.\n예: 'A는 유머러스하게, B는 비극적으로, C는 미스터리하게'",
@@ -89,7 +91,7 @@ if (approachType === "직접 지정") {
 
 #### Step 3: 초안 수 결정
 
-```typescript
+```spec
 const draftCount = await AskUserQuestion("몇 개의 초안을 작성할까요?", [
   "2개 (빠른 비교)",
   "3개 (다각도 비교, 권장)"
@@ -100,7 +102,7 @@ const draftCount = await AskUserQuestion("몇 개의 초안을 작성할까요?"
 
 각 초안을 독립된 novelist 에이전트에게 병렬로 위임합니다:
 
-```typescript
+```spec
 // 공통 컨텍스트 (모든 초안이 공유)
 const sharedContext = `
 ## 공통 요구사항 (모든 초안 동일)
@@ -176,7 +178,7 @@ const drafts = await Promise.all(
 
 **접근법별 세부 가이드라인:**
 
-```typescript
+```spec
 function getApproachGuidelines(approach) {
   const guidelines = {
     // 톤 변주
@@ -260,7 +262,7 @@ function getApproachGuidelines(approach) {
 
 모든 초안이 완성되면 critic 에이전트가 객관적으로 비교합니다:
 
-```typescript
+```spec
 const comparison = Task({
   subagent_type: "novel-dev:critic",
   model: "opus",
@@ -319,7 +321,7 @@ ${context.plotRequirements}
 
 추가로 beta-reader 에이전트가 독자 경험 관점에서 비교:
 
-```typescript
+```spec
 const readerComparison = Task({
   subagent_type: "novel-dev:beta-reader",
   model: "sonnet",
@@ -423,7 +425,7 @@ Draft C: 가장 균형 잡힌 분포 (82-92)
 
 ### Phase 5: 사용자 선택
 
-```typescript
+```spec
 const choice = await AskUserQuestion(
   "어떤 초안을 채택하시겠습니까?",
   [
@@ -440,7 +442,7 @@ const choice = await AskUserQuestion(
 
 #### 단일 초안 채택 시
 
-```typescript
+```spec
 if (choice.startsWith("Draft")) {
   const selected = choice.includes("A") ? "A" : choice.includes("B") ? "B" : "C"
 
@@ -465,7 +467,7 @@ if (choice.startsWith("Draft")) {
 
 #### 하이브리드 채택 시
 
-```typescript
+```spec
 if (choice === "하이브리드") {
   const hybridSpec = await AskUserQuestion(
     "어떤 요소를 결합할까요?",
@@ -524,7 +526,7 @@ ${draftC_content ? `## 초안 C\n${draftC_content}` : ""}
 
 #### 전부 폐기 시
 
-```typescript
+```spec
 if (choice === "전부 폐기") {
   const newApproach = await AskUserQuestion(
     "새로운 접근법을 설명해주세요. 이전 초안에서 배운 것을 반영합니다.",
@@ -539,7 +541,7 @@ if (choice === "전부 폐기") {
 
 ### Phase 7: 결과 저장
 
-```typescript
+```spec
 // 비교 분석 결과 저장
 Write(`drafts/chapter_${N}_comparison.json`, JSON.stringify({
   chapter: N,
@@ -611,7 +613,7 @@ Write(`drafts/chapter_${N}_comparison.json`, JSON.stringify({
 
 ### 장르별 추천 접근법
 
-```typescript
+```spec
 const genrePresets = {
   "로맨스": {
     recommended: "감정 변주",

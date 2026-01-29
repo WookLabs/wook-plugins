@@ -20,6 +20,12 @@ allowed-tools:
 
 # /deep-evaluate - LongStoryEval 8축 심층 평가
 
+> **통합 안내**: 이 스킬은 `/evaluate --deep`으로 통합되었습니다.
+> `/deep-evaluate`는 하위 호환성을 위해 유지되며, 내부적으로 `/evaluate --deep`과 동일하게 동작합니다.
+> 새로운 사용법: `/evaluate [회차] --deep`
+
+> **Note**: 이 문서의 코드 블록은 AI 오케스트레이터를 위한 실행 패턴 명세입니다. 실행 가능한 TypeScript/JavaScript 코드가 아닙니다.
+
 LongStoryEval 연구(600권 장편소설 분석)에서 도출된 8개 평가 축으로
 챕터, 막, 또는 전체 원고의 품질을 다각도로 분석합니다.
 
@@ -56,6 +62,23 @@ LongStoryEval 연구(600권 장편소설 분석)에서 도출된 8개 평가 축
 | 기대 충족 | **EXP** | 장르 기대 충족, 독자 예상 관리, 반전 효과 | "기대에 부응하는가?" |
 
 ## 워크플로우
+
+### Phase 0: 비용 경고 (Cost Warning)
+
+실행 전 사용자에게 비용을 안내합니다:
+
+> **Deep Evaluate 비용 안내**
+> 이 작업은 8개 병렬 에이전트를 사용합니다:
+> - 4x Opus (PLOT, CHA, WRI, THE) — 고비용
+> - 4x Sonnet (WOR, EMO, ENJ, EXP) — 중비용
+>
+> 예상 토큰 사용량: 회차당 ~120K 입력 + ~16K 출력
+
+AskUserQuestion으로 사용자 확인:
+- "진행" — 8축 전체 평가 실행
+- "/evaluate 사용" — 3 에이전트, ~40% 비용
+- "특정 축만 선택" — 원하는 축만 평가 (예: PLOT,CHA)
+- "Quick 모드" — haiku 모델 사용, ~10% 비용
 
 ### Phase 1: 평가 대상 파악
 
@@ -111,7 +134,7 @@ AskUserQuestion:
 
 8개 평가 축을 **병렬로** 실행합니다. 각 축은 전문 프롬프트로 독립 평가합니다.
 
-```typescript
+```spec
 // === 객관적 축 (5개) ===
 
 // 1. PLOT: 플롯 & 구조
@@ -432,7 +455,7 @@ const [plot, cha, wri, the, wor, emo, enj, exp] = await Promise.all([
 
 ### 종합 점수 계산
 
-```typescript
+```spec
 // 객관적 축 가중치 (60%)
 const objectiveScore = (
   plot.score * 0.15 +   // PLOT: 15%

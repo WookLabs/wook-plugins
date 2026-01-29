@@ -120,6 +120,9 @@ export interface BudgetConfig {
 
   /** Whether to include all foreshadowing or only active ones */
   includeAllForeshadowing?: boolean;
+
+  /** Number of chapters per act (default: 10) */
+  chaptersPerAct?: number;
 }
 
 /**
@@ -130,6 +133,7 @@ export const DEFAULT_BUDGET_CONFIG: Required<BudgetConfig> = {
   summaryDepth: 3,
   includeAllCharacters: false,
   includeAllForeshadowing: false,
+  chaptersPerAct: 10,
 };
 
 // ============================================================================

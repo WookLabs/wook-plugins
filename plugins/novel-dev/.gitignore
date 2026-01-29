@@ -3,3 +3,4 @@ node_modules/
 .DS_Store
 .claude/settings.local.json
 __pycache__/
+hooks/__pycache__/

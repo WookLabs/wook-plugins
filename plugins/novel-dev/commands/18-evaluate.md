@@ -6,7 +6,24 @@ description: "[18단계] 평가 - 품질 평가"
 
 $ARGUMENTS
 
-## 실행 단계
+## 평가 모드
+
+| 플래그 | 설명 | 에이전트 수 | 비용 |
+|--------|------|------------|------|
+| (없음) | 4축 표준 평가 | 3 | 낮음 |
+| `--deep` | 8축 심층 평가 | 8 | 높음 |
+| `--quick` | 빠른 평가 (haiku) | 1 | 최소 |
+| `--axis=PLOT,CHA` | 특정 축만 평가 | 1-8 | 가변 |
+
+### 사용 예시
+```
+/evaluate 5                    -- 5화 표준 평가
+/evaluate 5 --deep             -- 5화 8축 심층 평가
+/evaluate 5 --quick            -- 5화 빠른 평가
+/evaluate 5 --deep --axis=PLOT,CHA  -- 5화 특정 축만 심층 평가
+```
+
+## 실행 단계 (기본 모드)
 
 1. **대상 결정**
    - 회차 지정: 해당 회차
@@ -39,6 +56,15 @@ $ARGUMENTS
    - 첫 평가: `reviews/history/chapter_{N}.json` 생성, version=1
    - 재평가: 기존 history에 새 version 추가
    - 스키마: `schemas/chapter-history.schema.json` 참조
+
+## Deep Evaluation Mode (--deep)
+
+When `--deep` flag is detected, delegate to the 8-axis LongStoryEval framework:
+- See `skills/deep-evaluate/SKILL.md` for complete workflow
+- 8 parallel agents (4x Opus + 4x Sonnet)
+- Objective axes: PLOT, CHA, WRI, THE, WOR
+- Subjective axes: EMO, ENJ, EXP
+- Output includes radar chart and actionable improvement items
 
 ## 등급 기준
 

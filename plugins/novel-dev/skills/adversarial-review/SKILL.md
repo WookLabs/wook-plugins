@@ -21,17 +21,35 @@ allowed-tools:
 
 # Adversarial Review Skill
 
+> **Note**: 이 문서의 코드 블록은 AI 오케스트레이터를 위한 실행 패턴 명세입니다. 실행 가능한 TypeScript/JavaScript 코드가 아닙니다.
+
 챕터를 적대적 관점에서 검증하는 스킬입니다. superpowers의 "Defensive Distrust" 패턴을 적용하여, 검증자가 작성자의 출력을 적극적으로 의심하고 독립적으로 검증합니다.
 
 > **핵심 원칙**: "작성자가 수상하게 빨리 끝냈다. 보고서는 불완전하거나 부정확하거나 낙관적일 수 있다. 모든 것을 독립적으로 검증해야 한다."
 
 ## 워크플로우
 
+### Phase 0: 비용 경고 (Cost Warning)
+
+실행 전 사용자에게 비용을 안내합니다:
+
+> **적대적 검증 비용 안내**
+> 이 작업은 5축 병렬 검증을 수행합니다:
+> - 5x 검증 에이전트 (PLOT, CHARACTER, WORLD, EMOTION, TRUST)
+> - 교차 검증 시 추가 에이전트 호출 가능
+>
+> 예상 토큰 사용량: 회차당 ~80K 입력 + ~12K 출력
+
+AskUserQuestion으로 사용자 확인:
+- "전체 검증" — 5축 모두 실행
+- "핵심 축만" — PLOT, CHARACTER만 검증 (~40% 비용)
+- "단일 축" — 가장 우려되는 축 하나만 검증
+
 ### Phase 1: 검증 대상 및 레벨 결정
 
 사용자가 지정하지 않은 경우 자동 감지 후 AskUserQuestion으로 확인:
 
-```typescript
+```spec
 // 1. 대상 챕터 결정
 const targetChapter = detectLatestWrittenChapter()
   || await AskUserQuestion("어떤 챕터를 검증할까요?", [
@@ -73,7 +91,7 @@ const level = await AskUserQuestion("검증 강도를 선택하세요:", [
 
 5개의 공격 축을 병렬로 실행합니다:
 
-```typescript
+```spec
 // 1. 플롯 구멍 탐지 (plot-consistency-analyzer)
 const plotAttack = Task({
   subagent_type: "novel-dev:plot-consistency-analyzer",
@@ -213,7 +231,7 @@ const [plot, character, world, emotion, trust] = await Promise.all([
 
 5축 공격 결과를 통합하여 심각도별 분류:
 
-```typescript
+```spec
 // 심각도 기준
 const SEVERITY = {
   CRITICAL: {
@@ -270,7 +288,7 @@ const crossValidated = allIssues.map(issue => {
 
 동일 문제가 이전 검증에서 반복 발견된 경우:
 
-```typescript
+```spec
 // 이전 검증 이력 로드
 const previousReviews = loadPreviousAdversarialReviews()
 
@@ -388,7 +406,7 @@ for (const issue of recurringIssues) {
 
 #### 판정 기준
 
-```typescript
+```spec
 const VERDICTS = {
   BATTLE_HARDENED: {
     range: "90-100",
@@ -420,7 +438,7 @@ const VERDICTS = {
 
 ### Phase 7: 검증 결과 저장
 
-```typescript
+```spec
 // JSON 결과 저장
 const report = {
   review_type: "adversarial",

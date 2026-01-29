@@ -1,0 +1,11 @@
+{
+  "number": 1,
+  "title": "시작",
+  "act": 1,
+  "status": "complete",
+  "word_count": 4800,
+  "scenes": [
+    {"scene_number": 1, "summary": "주인공 등장", "tension": 3},
+    {"scene_number": 2, "summary": "사건 발생", "tension": 6}
+  ]
+}

@@ -1,0 +1,11 @@
+{
+  "number": 2,
+  "title": "전개",
+  "act": 1,
+  "status": "complete",
+  "word_count": 5200,
+  "scenes": [
+    {"scene_number": 1, "summary": "조사 시작", "tension": 4},
+    {"scene_number": 2, "summary": "단서 발견", "tension": 7}
+  ]
+}

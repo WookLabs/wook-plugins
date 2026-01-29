@@ -130,6 +130,26 @@ Recipes are automatically applied based on BLUEPRINT.md metadata.
 ### Recipe Documentation
 See `templates/recipes/README.md` for full recipe schema and customization guide.
 
+### Mode 선택 (최초 1회)
+
+`.omc/state/novel-dev-prefs.json`이 없으면 AskUserQuestion으로 모드를 선택합니다:
+
+질문: "어떤 모드로 작업하시겠습니까?"
+옵션:
+- "Simple (5단계, 가이드)" — 처음 사용자에게 추천. `/quickstart`로 안내됩니다.
+- "Standard (17 커맨드)" — 단계별 수동 실행
+- "Expert (40+ 스킬)" — 전체 기능 접근
+
+선택 결과를 `.omc/state/novel-dev-prefs.json`에 저장합니다:
+```json
+{
+  "mode": "simple",
+  "updatedAt": "2026-01-29T10:30:00.000Z"
+}
+```
+
+Simple 선택 시, init 완료 후 자동으로 `/quickstart` Step 2로 안내합니다.
+
 ## Error Handling
 
 ### Missing BLUEPRINT.md

@@ -1,5 +1,6 @@
 {
   "description": "Novel-Sisyphus 훅 설정 - 소설 창작 워크플로우 지원",
+  "_runtime_notes": "This plugin uses both Node.js (.mjs) and Python (.py) hooks. Python 3.10+ is required for schema validation (pretooluse.py) and Ralph loop persistence (stop.py). Node.js 18+ handles session management and state detection.",
   "hooks": {
     "SessionStart": [
       {

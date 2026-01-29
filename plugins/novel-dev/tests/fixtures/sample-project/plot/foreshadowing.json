@@ -1,0 +1,6 @@
+{
+  "foreshadowing": [
+    {"id": "fs_1", "setup_chapter": 1, "payoff_chapter": 12, "description": "검의 비밀", "status": "active"},
+    {"id": "fs_2", "setup_chapter": 3, "payoff_chapter": 8, "description": "배신자의 정체", "status": "active"}
+  ]
+}

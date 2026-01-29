@@ -164,7 +164,8 @@ async function collectCandidates(
   await collectActSummaryCandidates(
     candidates,
     chapterNumber,
-    projectPath
+    projectPath,
+    config
   );
 
   return candidates;
@@ -407,17 +408,48 @@ async function collectForeshadowingCandidates(
 }
 
 /**
+ * Determine which act number the given chapter belongs to.
+ * First tries to read plot/structure.json for variable-size acts,
+ * falls back to fixed-size calculation using config.chaptersPerAct.
+ */
+async function getCurrentActNumber(
+  chapterNumber: number,
+  projectPath: string,
+  chaptersPerAct: number
+): Promise<number> {
+  try {
+    const structurePath = path.join(projectPath, 'plot', 'structure.json');
+    const content = await fs.readFile(structurePath, 'utf-8');
+    const structure = JSON.parse(content);
+    if (structure.acts && Array.isArray(structure.acts)) {
+      for (let i = 0; i < structure.acts.length; i++) {
+        const act = structure.acts[i];
+        const start = act.chapters?.start ?? act.start_chapter ?? (i * chaptersPerAct + 1);
+        const end = act.chapters?.end ?? act.end_chapter ?? ((i + 1) * chaptersPerAct);
+        if (chapterNumber >= start && chapterNumber <= end) {
+          return i + 1;
+        }
+      }
+    }
+  } catch {
+    // structure.json not found or invalid — fall through to default
+  }
+  return Math.ceil(chapterNumber / chaptersPerAct);
+}
+
+/**
  * Collects act summary candidates
  */
 async function collectActSummaryCandidates(
   candidates: ContextItem[],
   chapterNumber: number,
-  projectPath: string
+  projectPath: string,
+  config: Required<BudgetConfig>
 ): Promise<void> {
   const actsPath = path.join(projectPath, 'plot', 'acts');
 
-  // Determine which act we're in (simple heuristic: 10 chapters per act)
-  const currentAct = Math.ceil(chapterNumber / 10);
+  // Determine which act we're in (reads from structure.json or uses config)
+  const currentAct = await getCurrentActNumber(chapterNumber, projectPath, config.chaptersPerAct);
 
   // Include summary of previous act
   if (currentAct > 1) {

@@ -13,6 +13,11 @@ user-invocable: true
 
 # /swarm - Swarm Writing
 
+> **Note**: 이 문서의 코드 블록은 AI 오케스트레이터를 위한 실행 패턴 명세입니다. 실행 가능한 TypeScript/JavaScript 코드가 아닙니다.
+
+> **아키텍처 노트**: 이 스킬은 작업 풀 관리와 배치 실행을 `oh-my-claudecode:swarm`에 위임합니다.
+> novel-dev 고유의 모드 정의, 에이전트 라우팅, 도메인별 태스크 타입만 이 스킬에서 관리합니다.
+
 여러 에이전트가 동시에 태스크 풀에서 작업을 가져가며 병렬로 처리하는 Swarm 패턴.
 
 ## Quick Start
@@ -22,6 +27,21 @@ user-invocable: true
 /swarm review 5          # 5화 다관점 병렬 리뷰
 /swarm design characters # 캐릭터 병렬 설계
 ```
+
+## Phase 0: 비용 경고 (Cost Warning)
+
+실행 전 사용자에게 비용을 안내합니다:
+
+> **Swarm 비용 안내**
+> 요청된 워커 수: N개 (사용자 지정)
+> 모드별 에이전트: verify(consistency-verifier), review(critic+beta-reader+engagement-optimizer+character-voice-analyzer), design(lore-keeper)
+>
+> 예상 토큰 사용량: 워커당 ~30K 입력 + ~8K 출력
+
+AskUserQuestion으로 사용자 확인:
+- "진행" — 전체 워커 투입
+- "2워커만" — 최소 병렬로 시작
+- "순차 실행" — 워커 1개로 순차 처리
 
 ## Swarm 모드
 
@@ -39,7 +59,7 @@ user-invocable: true
 
 **Step 1: 대상 챕터 목록 생성**
 
-```javascript
+```spec
 // 범위 파싱
 const range = parseRange(args); // e.g. "1-12" → [1,2,...,12]
 
@@ -70,7 +90,7 @@ const targets = range.filter(n =>
 
 최대 5개 Worker를 동시에 실행. 각 Worker는 consistency-verifier 에이전트를 호출:
 
-```javascript
+```spec
 // 배치 1: 최대 5개 동시 실행
 const batch1 = targets.slice(0, 5).map(chapter =>
   Task({
@@ -153,7 +173,7 @@ const results1 = await Promise.all(batch1);
 | W1 | critic | opus | 문학 품질 (구조, 문체, 깊이) |
 | W2 | beta-reader | sonnet | 독자 경험 (몰입, 감정, 후킹) |
 | W3 | consistency-verifier | sonnet | 설정 일관성 (캐릭터, 세계관, 타임라인) |
-| W4 | pacing-analyzer | sonnet | 페이싱 (긴장 곡선, 장면 리듬, 비트 타이밍) |
+| W4 | engagement-optimizer | sonnet | 페이싱 (긴장 곡선, 장면 리듬, 비트 타이밍) |
 | W5 | character-voice-analyzer | sonnet | 음성 일관성 (말투, OOC 감지, 관계 역학) |
 
 기존 verify-chapter의 3개 검증을 5개로 확장한 심층 리뷰.
@@ -162,7 +182,7 @@ const results1 = await Promise.all(batch1);
 
 **Step 1: 챕터 컨텍스트 준비**
 
-```javascript
+```spec
 const chapterNum = parseChapterNum(args);
 const chapterMd = read(`chapters/chapter_${pad(chapterNum)}.md`);
 const chapterJson = read(`chapters/chapter_${pad(chapterNum)}.json`);
@@ -174,7 +194,7 @@ const wisdom = read('meta/wisdom/');
 
 **Step 2: 5개 Worker 동시 실행**
 
-```javascript
+```spec
 const [criticResult, betaResult, consistencyResult, pacingResult, voiceResult] =
   await Promise.all([
     Task({
@@ -202,7 +222,7 @@ const [criticResult, betaResult, consistencyResult, pacingResult, voiceResult] =
         - 점수 (0-100), 이슈, 권장 사항 JSON 반환`
     }),
     Task({
-      subagent_type: "novel-dev:pacing-analyzer",
+      subagent_type: "novel-dev:engagement-optimizer",
       model: "sonnet",
       prompt: `챕터 ${chapterNum} 페이싱 분석:
         - chapters/chapter_${pad(chapterNum)}.md 읽기
@@ -277,7 +297,7 @@ const [criticResult, betaResult, consistencyResult, pacingResult, voiceResult] =
 
 **A. 캐릭터 병렬 설계 (`/swarm design characters`)**
 
-```javascript
+```spec
 // characters.json에서 설계 대상 추출
 const chars = read('meta/characters.json');
 const undesigned = chars.filter(c => !c.detailed);
@@ -329,9 +349,26 @@ Worker 5: 타임라인               → meta/timeline.json
 
 ## Swarm 관리 프로토콜
 
-### A. 태스크 풀 관리
+### 작업 조율 (Coordination)
 
-태스크 풀은 `.omc/state/swarm-state.json`에서 관리:
+작업 풀 관리, 배치 실행, 재시도, 진행률 표시는 `oh-my-claudecode:swarm`에 위임합니다.
+
+novel-dev swarm은 다음만 담당합니다:
+- **모드별 태스크 정의**: verify/review/design 각 모드의 작업 목록 생성
+- **에이전트 라우팅**: 모드별 적절한 에이전트 매핑
+- **도메인 소유권**: 소설 파일 구조 기반의 소유권 규칙
+- **결과 통합**: 소설 도메인에 맞는 결과 병합 및 보고서 생성
+
+oh-my-claudecode:swarm에 위임하는 항목:
+- 태스크 풀 관리 (pending/claimed/done 상태)
+- 배치 실행 엔진 (워커 수 제어)
+- 재시도 로직 (실패 시 자동 재시도)
+- 진행률 표시 (.omc/state/)
+- 타임아웃 관리
+
+### A. 태스크 정의 (novel-dev 책임)
+
+novel-dev가 정의하는 작업 구조:
 
 ```json
 {
@@ -341,23 +378,17 @@ Worker 5: 타임라인               → meta/timeline.json
   "total_tasks": 12,
   "max_workers": 5,
   "tasks": [
-    { "id": "t1", "target": "chapter_001", "status": "completed", "worker": "W1", "result": "PASS" },
-    { "id": "t2", "target": "chapter_002", "status": "in_progress", "worker": "W2" },
-    { "id": "t3", "target": "chapter_003", "status": "pending" }
-  ],
-  "completed": 1,
-  "in_progress": 1,
-  "pending": 10
+    { "id": "t1", "target": "chapter_001", "status": "pending", "agent": "consistency-verifier" },
+    { "id": "t2", "target": "chapter_002", "status": "pending", "agent": "consistency-verifier" }
+  ]
 }
 ```
 
-태스크 상태 전이:
-```
-pending → in_progress → completed
-                      → failed → pending (재시도, 최대 2회)
-```
+이 작업 정의를 `oh-my-claudecode:swarm`에 전달하여 실행 위임.
 
-### B. 충돌 방지
+### B. 충돌 방지 (novel-dev 책임)
+
+소설 파일 구조 기반의 도메인별 소유권 규칙:
 
 | 작업 유형 | 파일 접근 | 충돌 전략 |
 |-----------|-----------|-----------|
@@ -365,7 +396,7 @@ pending → in_progress → completed
 | 리뷰 (review) | 읽기 전용 | 동일 파일 동시 접근 허용 |
 | 설계 (design) | 쓰기 | 파일 소유권 분리 (Worker당 비중복 파일 세트) |
 
-설계 모드 소유권 규칙:
+설계 모드 소유권 규칙 (novel-dev가 정의):
 ```json
 {
   "ownership": {
@@ -383,56 +414,9 @@ pending → in_progress → completed
 - 공유 참조 파일은 읽기 전용으로 모든 Worker 접근 허용
 - Worker가 소유권 외 파일에 쓰기 시도 시 차단
 
-### C. 배치 실행
+이 소유권 규칙을 `oh-my-claudecode:swarm`에 전달하여 충돌 방지 위임.
 
-태스크가 Worker 수보다 많을 때 배치 처리:
-
-```javascript
-async function batchExecute(tasks, maxWorkers, executor) {
-  const results = [];
-  for (let i = 0; i < tasks.length; i += maxWorkers) {
-    const batch = tasks.slice(i, i + maxWorkers);
-    const batchResults = await Promise.all(
-      batch.map((task, idx) => executor(task, `W${idx + 1}`))
-    );
-    results.push(...batchResults);
-
-    // 진행률 표시
-    const done = Math.min(i + maxWorkers, tasks.length);
-    console.log(`진행: ${done}/${tasks.length} (${Math.round(done/tasks.length*100)}%)`);
-  }
-  return results;
-}
-```
-
-### D. 에러 복구
-
-```javascript
-// Worker 실패 시 자동 재시도 (최대 2회)
-async function executeWithRetry(task, maxRetries = 2) {
-  for (let attempt = 0; attempt <= maxRetries; attempt++) {
-    try {
-      const result = await executeTask(task);
-      return result;
-    } catch (error) {
-      if (attempt === maxRetries) {
-        return { status: 'failed', error: error.message, task: task.id };
-      }
-      // 재시도 전 대기
-      await sleep(1000 * (attempt + 1));
-    }
-  }
-}
-```
-
-실패한 태스크는 리포트에 별도 표시:
-```
-FAILED TASKS:
-  t7 (chapter_007): Agent timeout after 2 retries
-  → 수동 검증 필요: /verify-chapter 7
-```
-
-### E. 결과 집계
+### C. 결과 집계 (novel-dev 책임)
 
 모든 Worker 완료 후 종합 리포트 생성:
 
@@ -465,30 +449,6 @@ FAILED TASKS:
 
 ---
 
-## 진행률 표시
-
-Swarm 실행 중 진행률을 실시간 표시:
-
-```
-+==================================================+
-|          SWARM VERIFICATION                      |
-+==================================================+
-|                                                  |
-|  Worker 1: chapter_001 → consistency-verifier    |
-|  Worker 2: chapter_002 → consistency-verifier    |
-|  Worker 3: chapter_003 → consistency-verifier    |
-|  Worker 4: chapter_004 → consistency-verifier    |
-|  Worker 5: chapter_005 → consistency-verifier    |
-|                                                  |
-|  진행: [========............] 5/12 (42%)          |
-|  완료: ch01 OK  ch02 OK  ch03 ...  ch04 ...     |
-|        ch05 ...                                  |
-|                                                  |
-+==================================================+
-```
-
----
-
 ## 출력 파일
 
 | 모드 | 저장 경로 | 형식 |
@@ -507,7 +467,7 @@ Swarm 실행 중 진행률을 실시간 표시:
 | consistency-verifier | sonnet | verify |
 | critic | opus | review |
 | beta-reader | sonnet | review |
-| pacing-analyzer | sonnet | review |
+| engagement-optimizer | sonnet | review |
 | character-voice-analyzer | sonnet | review |
 | lore-keeper | sonnet | design |
 | plot-architect | opus | design (arc) |
