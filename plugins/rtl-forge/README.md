@@ -1,103 +1,95 @@
-# RTL-Forge
+# RTL-Forge v2.0
 
-> Verilog/SystemVerilog RTL Design & Verification Plugin with Document-Driven Workflow
+> Simulation-First Verilog/SystemVerilog RTL Design & Verification Plugin
 
 ## 핵심 철학
 
-**Iron Law: RTL은 승인된 문서를 구현한다. 문서 없이 RTL 없다.**
+**Simulation-First: 코드 먼저, 검증 즉시, 문서는 필요할 때만**
 
-- **문서 기반 설계**: 스펙 → 리뷰 → 승인 → RTL
-- **무단 수정 차단**: 모든 RTL 변경은 사용자 승인 필수
-- **타이밍 다이어그램 필수**: 사이클 단위 시각화 없이 변경 불가
-- **명분 기반 변경**: 모든 로직에는 이유가 있다
-- **Opus 전용**: RTL은 대충할 부분이 없음
+| v1.x (Document-First) | v2.0 (Simulation-First) |
+|----------------------|------------------------|
+| 모든 변경에 문서 필수 | 분류별 차등 문서화 |
+| 타이밍 다이어그램 필수 | MAJOR/ARCH만 필요 |
+| 전체 승인 필수 | TRIVIAL/MINOR는 자유 |
+| 모든 에이전트 Opus | 스마트 모델 라우팅 |
+| Hash 기반 write guard | 분류 기반 write guard |
 
 ## 설치
 
 ```bash
+# oh-my-claudecode 플러그인 매니저
 node tools/plugin-manager/manager.mjs install ./plugins/rtl-forge
 node tools/plugin-manager/manager.mjs enable rtl-forge
+
+# 도구 감지 실행 (선택)
+node plugins/rtl-forge/scripts/detect-tools.mjs
 ```
 
-## 에이전트
+## 변경 분류
 
-| Agent | Model | 권한 | 역할 |
-|-------|-------|------|------|
-| rtl-architect | Opus | READ-ONLY | 마이크로아키텍처 분석 |
-| rtl-coder | Opus | PROPOSE-ONLY | RTL 코드 작성 제안 |
-| verification-engineer | Opus | READ-ONLY | UVM 검증 환경 분석 |
-| assertion-writer | Opus | READ-ONLY | SVA/PSL 어서션 분석 |
-| lint-reviewer | Opus | READ-ONLY | Lint 및 코딩 스타일 검사 |
-| cdc-analyst | Opus | READ-ONLY | CDC 분석 |
-| synthesis-advisor | Opus | READ-ONLY | 합성 최적화 조언 |
-| coverage-analyst | Opus | READ-ONLY | 커버리지 분석 |
-| rtl-critic | Opus | READ-ONLY | 변경 제안 검토 |
-| doc-writer | Opus | DOCS-ONLY | 문서화 |
+모든 RTL 변경은 자동으로 분류됩니다:
+
+| Level | Examples | 승인 | 문서 |
+|-------|----------|------|------|
+| **TRIVIAL** | 주석, 공백, lint fix | 없음 | 없음 |
+| **MINOR** | 버그 수정, 파라미터 변경 | 사후 리뷰 | 커밋 메시지 |
+| **MAJOR** | FSM 변경, 포트 추가 | 사전 승인 | 변경 문서 |
+| **ARCHITECTURAL** | 새 모듈, CDC 추가 | Ralplan | 전체 스펙 |
 
 ## 사용법
 
-### RTL 코드 수정 요청
+### 빠른 시작
 
 ```
-"FIFO에 backpressure 처리를 추가해줘"
+"FIFO write pointer 버그 수정해줘"     → sim-first-workflow (MINOR)
+"새 CDC bridge 모듈 추가해줘"           → arch-design (ARCHITECTURAL)
+"이 모듈 리뷰해줘"                     → rtl-review
+"시뮬레이션 실패 디버깅해줘"            → systematic-debugging
 ```
 
-자동으로 rtl-change-protocol이 활성화되어:
-1. 변경 이유 분석
-2. BEFORE/AFTER 타이밍 다이어그램 생성
-3. 영향 분석
-4. 사용자 승인 요청
-
-### RTL 코드 리뷰
-
-```
-"이 모듈 리뷰해줘"
-```
-
-자동으로 rtl-review 스킬이 활성화되어:
-1. 아키텍처 분석
-2. Lint 검사
-3. CDC 분석
-4. 합성 검토
-
-### 스펙/변경 승인/거부
+### 커맨드
 
 ```bash
-# 스펙 문서 승인/거부
-/approve-spec                        # 스펙 문서 승인
-/reject-spec --reason "인터페이스 재검토"  # 스펙 거부
-
-# RTL 변경 승인/거부
-/approve-change                      # 최근 변경 승인
-/approve-change --comment "조건부 승인"  # 코멘트와 함께 승인
-/reject-change --reason "타이밍 재검토"  # 거부
-
-# 기타
-/show-pending                        # 대기 중인 스펙/변경 확인
-/note learning "CDC 동기화 패턴 학습"   # 노트패드에 기록
+/approve-change              # MAJOR/ARCH 변경 승인
+/show-pending                # 대기 중인 변경 (분류 레벨 표시)
+/rtl-review                  # RTL 코드 리뷰
+/note learning "내용"        # 프로젝트 노트
 ```
 
-## 타이밍 다이어그램 예시
+## 에이전트 (12개)
 
-```
-         cycle  1    2    3    4    5    6    7    8
-                │    │    │    │    │    │    │    │
-   clk      ────┴────┴────┴────┴────┴────┴────┴────┴────
+| Agent | Model | 역할 |
+|-------|-------|------|
+| rtl-architect | opus | 아키텍처 분석, Ralplan |
+| rtl-coder | sonnet | RTL 코드 작성/수정 |
+| rtl-critic | opus | 리뷰, Ralplan Critic |
+| verification-engineer | sonnet | UVM 테스트벤치 |
+| verification-runner | sonnet | 시뮬레이션 실행 |
+| assertion-writer | sonnet | SVA 어서션 |
+| lint-reviewer | haiku | Lint, 코딩 스타일 |
+| cdc-analyst | opus | CDC 분석 |
+| synthesis-advisor | sonnet | 합성 조언 |
+| coverage-analyst | haiku | 커버리지 분석 |
+| doc-writer | haiku | 문서화 |
+| change-classifier | haiku | LLM 분류 폴백 |
 
-   valid    ____/‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾\________________
+## 훅
 
-   data     ====<D0  ><D1  ><D2  ><D3  ><D4  >=========
+| Hook | 트리거 | 설명 |
+|------|--------|------|
+| rtl-write-guard | PreToolUse | 분류 기반 쓰기 라우팅 |
+| post-write-verify | PostToolUse | 자동 Verilator/Slang 린트 |
+| auto-skill-trigger | UserPrompt | 키워드 기반 스킬 활성화 |
 
-   ready    ‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾\____/‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾
-                             │
-                        backpressure
-```
+## 도구 지원
 
-## 보안
+| 카테고리 | 도구 |
+|----------|------|
+| **린트** | Verilator, Slang, Verible |
+| **시뮬레이션** | Questa, VCS, Xcelium |
+| **분석** | Slang (AST, 계층, 심볼) |
 
-- `rtl-write-guard` 훅이 모든 RTL 파일 수정 시도를 차단
-- 승인된 변경만 `.omc/rtl-forge/approved-changes.json`에 기록
-- 모든 변경 이력은 `.omc/rtl-forge/change-history.json`에 보존
+`scripts/detect-tools.mjs`로 자동 감지 후 `.rtl-forge/tool-config.json`에 저장.
 
 ## 라이선스
 

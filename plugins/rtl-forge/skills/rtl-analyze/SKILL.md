@@ -22,6 +22,13 @@ Slang의 정확한 SystemVerilog 파싱을 활용하여 RTL 코드를 분석합�
 
 ## Slang 명령어 레퍼런스
 
+> **참고**: Slang이 설치되지 않은 환경에서는 Verilator를 대체 도구로 사용합니다.
+> ```bash
+> # Verilator 대체 명령어
+> verilator --lint-only -Wall {file}.sv          # 린트
+> verilator --xml-only {file}.sv -o design.xml   # XML AST 출력
+> ```
+
 ### 1. 심볼 덤프 (가장 많이 사용)
 
 ```bash
@@ -272,7 +279,8 @@ slang --compat vcs {file}.sv
 
 - **rtl-review**: 종합 리뷰 (slang 린트 포함)
 - **systematic-debugging**: 디버깅 시 신호 추적 활용
-- **spec-driven-design**: 스펙 대비 포트 검증
+- **sim-first-workflow**: Simulation-First 워크플로우
+- **verify-and-claim**: 결정론적 검증 게이트
 
 ---
 

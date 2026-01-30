@@ -11,7 +11,7 @@
 
 // 스킬별 트리거 키워드 매핑
 const SKILL_TRIGGERS = {
-  'spec-driven-design': {
+  'arch-design': {
     keywords: [
       // 한글
       '설계하자', '스펙 작성', '아키텍처', '새 모듈', '인터페이스 정의',
@@ -23,17 +23,28 @@ const SKILL_TRIGGERS = {
     priority: 'high'
   },
 
-  'rtl-change-protocol': {
+  'sim-first-workflow': {
     keywords: [
       // 한글
       'RTL 수정', 'RTL 변경', '코드 수정', '로직 변경', '모듈 수정',
       '신호 추가', '포트 추가', '레지스터 추가', 'FSM 수정',
-      '파이프라인 추가', '클럭 변경',
+      '파이프라인 추가', '클럭 변경', '시뮬레이션 우선', '시뮬 우선',
       // 영어
-      'modify RTL', 'change RTL', 'edit verilog', 'update module'
+      'modify RTL', 'change RTL', 'edit verilog', 'update module', 'sim first'
     ],
-    description: 'RTL 변경 승인 프로토콜 (문서 기반)',
+    description: '시뮬레이션 우선 RTL 변경 워크플로우 (분류 → 시뮬 → 검증)',
     priority: 'high'
+  },
+
+  'classify-change': {
+    keywords: [
+      // 한글
+      '분류', '분류해', '변경 분류', '이 변경은', '이거 분류',
+      // 영어
+      'classify', 'classify change', 'what level'
+    ],
+    description: 'RTL 변경 자동 분류 (TRIVIAL/MINOR/MAJOR/ARCHITECTURAL)',
+    priority: 'medium'
   },
 
   'rtl-review': {
@@ -63,17 +74,17 @@ const SKILL_TRIGGERS = {
     priority: 'medium'
   },
 
-  'verification-sim': {
+  'verify-and-claim': {
     keywords: [
       // 한글
-      '시뮬레이션', '시뮬 돌려', '검증해', '테스트해',
+      '시뮬레이션', '시뮬 돌려', '검증해', '테스트해', '검증',
       '커버리지', '시뮬 실행',
       // 시뮬레이터
       'questa', 'vsim', 'vcs', 'xcelium', 'xrun', 'verdi',
       // 영어
-      'simulation', 'simulate', 'run sim', 'coverage'
+      'simulation', 'simulate', 'run sim', 'coverage', 'verify'
     ],
-    description: '시뮬레이션 기반 검증 (Questa/VCS/Xcelium)',
+    description: '시뮬레이션 검증 및 완료 선언 (증거 기반)',
     priority: 'high'
   },
 

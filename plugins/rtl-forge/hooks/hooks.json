@@ -1,13 +1,26 @@
 {
-  "description": "RTL-Forge hooks - Write guard and auto skill trigger",
+  "description": "RTL-Forge v2.0 hooks - Smart write guard, post-write verification, auto skill trigger",
   "hooks": {
     "PreToolUse": [
       {
+        "matcher": "Edit|Write",
         "hooks": [
           {
             "type": "command",
             "command": "node ${CLAUDE_PLUGIN_ROOT}/hooks/rtl-write-guard.mjs",
-            "timeout": 10
+            "timeout": 15
+          }
+        ]
+      }
+    ],
+    "PostToolUse": [
+      {
+        "matcher": "Edit|Write",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "node ${CLAUDE_PLUGIN_ROOT}/hooks/post-write-verify.mjs",
+            "timeout": 30
           }
         ]
       }

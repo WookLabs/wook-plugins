@@ -44,6 +44,15 @@ AskUserQuestion을 사용하여 다음 정보 수집:
 - 복수 선택 가능
 ```
 
+#### Q2.5. 린트 도구
+```
+사용 린트 도구 (자동 감지 가능):
+- Verilator (오픈소스, 빠름)
+- Slang (정확한 SystemVerilog 파싱)
+- Verible (Google, 스타일 검사)
+- 자동 감지 (추천)
+```
+
 #### Q3. 클럭 도메인
 ```
 주요 클럭:
@@ -93,12 +102,12 @@ AskUserQuestion을 사용하여 다음 정보 수집:
 
 이 프로젝트는 RTL-Forge 플러그인을 사용합니다.
 
-**Iron Law: RTL은 승인된 문서를 구현한다. 문서 없이 RTL 없다.**
+**Iron Law: 증거 없이 완료 주장 금지** — 시뮬레이션 결과가 증거다.
 
-### 필수 워크플로우
-1. 새 모듈: `spec-driven-design` → 문서 작성 → `/approve-spec` → RTL
-2. RTL 변경: `rtl-change-protocol` → 변경 문서 → `/approve-change` → 수정
-3. RTL 파일 직접 수정 금지 (rtl-write-guard 훅이 차단함)
+### 워크플로우 (Simulation-First)
+1. 변경 분류: 자동 (TRIVIAL/MINOR/MAJOR/ARCHITECTURAL)
+2. 코드 수정 → 린트 (자동) → 시뮬레이션 → 검증
+3. MAJOR/ARCHITECTURAL만 사전 승인 필요
 
 ---
 
@@ -252,11 +261,11 @@ end
 
 | 작업 | 트리거 키워드 | 스킬 |
 |------|--------------|------|
-| 새 모듈 설계 | "설계하자", "스펙 작성" | spec-driven-design |
-| RTL 수정 | "RTL 수정", "신호 추가" | rtl-change-protocol |
+| 새 모듈 설계 | "설계하자", "스펙 작성" | arch-design |
+| RTL 수정 | "RTL 수정", "신호 추가" | sim-first-workflow |
 | 신호 추적 | "신호 추적", "어디서 구동" | rtl-analyze |
 | 코드 리뷰 | "리뷰해", "검토해" | rtl-review |
-| 시뮬레이션 | "시뮬 돌려", "검증해" | verification-sim |
+| 검증 게이트 | 완료 주장 전 | verify-and-claim |
 | 디버깅 | "왜 안돼", "디버그" | systematic-debugging |
 | 타이밍 그리기 | "타이밍", "파형" | timing-diagram |
 
@@ -288,11 +297,10 @@ end
 
 ## 금지 사항
 
-- ❌ RTL 파일 직접 수정 (승인 없이)
-- ❌ 타이밍 다이어그램 없이 변경 제안
-- ❌ 스펙 문서 없이 새 모듈 작성
-- ❌ 검증 없이 "완료" 주장
+- ❌ 증거 없이 "완료" 주장 (verify-and-claim 필수)
 - ❌ CDC 동기화 없이 클럭 도메인 교차
+- ❌ MAJOR/ARCHITECTURAL 변경을 승인 없이 진행
+- ❌ 신뢰도 80 미만 분석 결과 보고
 
 ---
 
@@ -439,6 +447,7 @@ logic [2:0] state_q, state_d;
 
 ## 관련 스킬
 
-- **spec-driven-design**: 초기화 후 첫 모듈 설계 시 사용
+- **arch-design**: 초기화 후 첫 모듈 설계 시 사용
+- **sim-first-workflow**: RTL 변경 메인 워크플로우
 - **rtl-analyze**: 기존 RTL 분석 시 사용
 - **notepad-wisdom**: 프로젝트 지식 기록

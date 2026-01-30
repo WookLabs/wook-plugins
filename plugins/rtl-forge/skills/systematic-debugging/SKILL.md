@@ -167,105 +167,47 @@ git bisect good v1.0.0
 # git이 자동으로 이진 탐색
 ```
 
-### Phase 4: Fix (문서 기반 수정)
+### Phase 4: Fix (분류 기반 수정)
 
-**⚠️ 중요: 디버깅으로 발견한 수정사항도 문서 워크플로우를 따름**
+**수정 워크플로우는 변경 분류에 따라 달라집니다.**
 
-#### 4.1 변경 문서 작성
-디버깅 결과를 문서화하여 사용자 승인을 받습니다.
+#### 4.1 변경 분류 확인
+```
+scripts/classify-change.mjs가 자동 분류:
+- TRIVIAL/MINOR → 바로 수정 + 린트 검증
+- MAJOR → /approve-change 후 수정
+- ARCHITECTURAL → Ralplan 루프 필요
+```
+
+#### 4.2 수정 및 즉시 검증
 
 ```bash
-# 변경 문서 생성
-docs/changes/$(date +%Y%m%d)-fix-timing-violation.md
+# 수정 후 자동 린트 (PostToolUse hook)
+verilator --lint-only -Wall {file}.sv
+
+# 시뮬레이션 재실행
+vsim -c work.{tb} -do "run -all; quit"
+
+# 회귀 테스트
+vsim -c work.tb_top -do "run -all; quit"
 ```
 
-**문서 템플릿**:
-```markdown
-# Fix: Setup Timing Violation in Multiplier
+#### 4.3 Verify-and-Claim 게이트
 
-## Problem Found
-- Phase 1-3 디버깅 결과 요약
-- 근본 원인: [한 문장]
-
-## Proposed Solution
-- 파이프라인 레지스터 추가
-- 예상 효과: 타이밍 여유 0.3ns 확보
-
-## Impact Analysis
-- 영향 받는 모듈: multiplier.sv
-- 레이턴시 변경: 1 cycle → 2 cycles
-```
-
-**체크리스트**:
-- [ ] 디버깅 Phase 1-3 결과 문서화
-- [ ] 제안된 수정사항 명시
-- [ ] 영향도 분석 포함
-
-#### 4.2 사용자 리뷰 및 승인
-문서를 사용자에게 제출하고 승인을 기다립니다.
-
-```markdown
-📋 **Review Request**
-
-디버깅 결과를 문서화했습니다. 검토해주세요:
-- 파일: docs/changes/20260124-fix-timing-violation.md
-
-승인하시면 `/approve-change` 명령으로 RTL 수정을 진행합니다.
-```
-
-**체크리스트**:
-- [ ] 문서 리뷰 요청
-- [ ] 사용자 질문 응답
-- [ ] `/approve-change` 대기
-
-#### 4.3 승인 후 RTL 수정
-`/approve-change` 명령 후에만 코드 수정을 진행합니다.
-
-```bash
-# 승인 후 실행
-vlog -sv rtl/multiplier.sv
-vsim -c work.tb_multiplier -do "run -all"
-```
-
-**검증 체크리스트**:
-- [ ] 변경 문서 승인됨
-- [ ] RTL 코드 수정
-- [ ] Questa 시뮬레이션 통과
-- [ ] 회귀 테스트 통과
-
-#### 4.4 Questa 기반 검증
-Mentor Graphics Questa로 수정 사항을 검증합니다.
-
-```bash
-# 컴파일
-vlog -sv +incdir+../include rtl/multiplier.sv tb/tb_multiplier.sv
-
-# 시뮬레이션 실행
-vsim -c work.tb_multiplier -do "run -all; quit -f"
-
-# 파형 덤프
-vsim work.tb_multiplier -do "add wave *; run -all; write format wave dump.wlf"
-
-# 커버리지 수집
-vsim -c work.tb_multiplier -coverage -do "run -all; coverage report"
-```
+수정 완료 주장 전 반드시:
+1. **IDENTIFY**: 무엇을 증명할 것인가?
+2. **RUN**: 도구 실행
+3. **READ**: 출력 확인
+4. **VERIFY**: 기준 충족?
+5. **CLAIM**: 증거와 함께 주장
 
 **통과 기준**:
-| 검증 단계 | Questa 명령어 | 기준 | 결과 |
-|----------|---------------|------|------|
-| 단위 테스트 | `vsim -c -do "run -all"` | 100% PASS | [ ] |
-| 회귀 테스트 | `vsim -batch regression.do` | 0 new failures | [ ] |
-| 어서션 검증 | `vsim -assertdebug` | 0 failures | [ ] |
-| 커버리지 | `vsim -coverage` | >90% | [ ] |
-
-#### 4.5 경계 조건 테스트
-```systemverilog
-// 수정 후 엣지 케이스 확인
-test_empty_fifo();      // 완전히 비었을 때
-test_full_fifo();       // 완전히 찼을 때
-test_wrap_around();     // 포인터 랩어라운드
-test_back_to_back();    // 연속 읽기/쓰기
-test_simultaneous_rw(); // 동시 읽기+쓰기
+| 검증 단계 | 기준 | 결과 |
+|----------|------|------|
+| 린트 | 0 errors | [ ] |
+| 시뮬레이션 | all PASS | [ ] |
+| 회귀 | 0 new failures | [ ] |
+| 어서션 | 0 failures | [ ] |
 ```
 
 ## Questa 디버깅 명령어
@@ -638,7 +580,8 @@ Info: All assertions passed
 - `rtl-review`: 전체 모듈 분석
 - `timing-diagram`: 타이밍 시각화
 - `rtl-analyze`: Slang 기반 신호 추적
-- `rtl-change-protocol`: 안전한 수정 프로토콜
+- `sim-first-workflow`: Simulation-First 워크플로우
+- `verify-and-claim`: 결정론적 검증 게이트
 
 ## 참고 자료
 

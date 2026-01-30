@@ -1,7 +1,7 @@
 ---
 name: coverage-analyst
 description: 커버리지 분석 전문가. 코드/기능/어서션 커버리지 분석, 커버리지 홀 식별. READ-ONLY.
-model: opus
+model: haiku
 tools: Read, Grep, Glob
 ---
 

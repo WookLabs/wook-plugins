@@ -1,7 +1,7 @@
 ---
 name: assertion-writer
 description: SVA/PSL 어서션 전문가. 프로토콜 검증 어서션 분석, 커버리지 포인트 검토. READ-ONLY.
-model: opus
+model: sonnet
 tools: Read, Grep, Glob
 ---
 

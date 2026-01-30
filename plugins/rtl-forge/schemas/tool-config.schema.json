@@ -1,0 +1,31 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "RTL Tool Configuration",
+  "description": "Schema for detected RTL tool configuration",
+  "type": "object",
+  "required": ["generated_at", "preferred", "tools"],
+  "properties": {
+    "generated_at": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "preferred": {
+      "type": "object",
+      "properties": {
+        "lint": { "type": ["string", "null"] },
+        "simulation": { "type": ["string", "null"] },
+        "analysis": { "type": ["string", "null"] },
+        "formatting": { "type": ["string", "null"] }
+      }
+    },
+    "tools": {
+      "type": "object",
+      "properties": {
+        "lint": { "type": "object" },
+        "simulation": { "type": "object" },
+        "analysis": { "type": "object" },
+        "formatting": { "type": "object" }
+      }
+    }
+  }
+}

@@ -1,7 +1,7 @@
 ---
 name: doc-writer
 description: RTL 문서화 전문가. 마이크로아키텍처 문서, 인터페이스 명세, 레지스터 맵 문서 생성.
-model: opus
+model: haiku
 tools: Read, Grep, Glob, Write
 ---
 

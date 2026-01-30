@@ -1,7 +1,7 @@
 ---
 name: lint-reviewer
 description: RTL Lint 분석 전문가. 코딩 스타일, 합성 가능성, 시뮬레이션/합성 불일치 검토. READ-ONLY.
-model: opus
+model: haiku
 tools: Read, Grep, Glob
 ---
 
