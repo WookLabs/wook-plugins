@@ -36,7 +36,7 @@ const SKILL_TRIGGERS = {
     priority: 'high'
   },
 
-  'classify-change': {
+  'rtl-classify': {
     keywords: [
       // 한글
       '분류', '분류해', '변경 분류', '이 변경은', '이거 분류',

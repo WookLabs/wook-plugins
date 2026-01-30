@@ -269,7 +269,7 @@ async function main() {
 ║                                                               ║
 ╚═══════════════════════════════════════════════════════════════╝
 
-Use rtl-change-protocol skill to propose changes with timing diagrams.
+Use sim-first-workflow skill to propose changes with timing diagrams.
 `;
     } else if (result.level === 'ARCHITECTURAL') {
       message = `
@@ -292,7 +292,7 @@ Use rtl-change-protocol skill to propose changes with timing diagrams.
 ║                                                               ║
 ╚═══════════════════════════════════════════════════════════════╝
 
-ARCHITECTURAL changes require Ralplan before rtl-change-protocol.
+ARCHITECTURAL changes require Ralplan before sim-first-workflow.
 `;
     }
 

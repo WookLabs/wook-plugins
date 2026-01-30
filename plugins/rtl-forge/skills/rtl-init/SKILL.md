@@ -275,11 +275,9 @@ end
 
 | 커맨드 | 설명 |
 |--------|------|
-| `/approve-spec` | 스펙 문서 승인 |
-| `/reject-spec --reason "이유"` | 스펙 문서 거부 |
 | `/approve-change` | RTL 변경 승인 |
-| `/reject-change --reason "이유"` | RTL 변경 거부 |
-| `/show-pending` | 대기 중인 스펙/변경 목록 |
+| `/show-pending` | 대기 중인 변경 목록 |
+| `/rtl-review` | RTL 코드 리뷰 |
 | `/note {type} "내용"` | 노트패드에 기록 |
 
 ---

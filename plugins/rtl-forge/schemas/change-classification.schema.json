@@ -10,6 +10,11 @@
       "enum": ["TRIVIAL", "MINOR", "MAJOR", "ARCHITECTURAL"],
       "description": "Classification level of the RTL change"
     },
+    "subClassification": {
+      "type": "string",
+      "enum": ["MINOR-MECHANICAL", "MINOR-LOGIC"],
+      "description": "Sub-classification for MINOR level changes"
+    },
     "confidence": {
       "type": "number",
       "minimum": 0,

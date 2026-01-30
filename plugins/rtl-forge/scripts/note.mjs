@@ -336,56 +336,6 @@ function resolveProblem(designName, problemTitle, solution) {
   };
 }
 
-export default async function note(args) {
-  const options = parseArgs(args);
-
-  if (options.action === 'show') {
-    const designName = options.design || inferDesignName();
-    return showNotes(designName, options.category);
-  }
-
-  if (options.action === 'search') {
-    if (!options.keyword) {
-      return {
-        success: false,
-        message: '검색 키워드를 지정해주세요: /note search "키워드"'
-      };
-    }
-    const designName = options.design || inferDesignName();
-    return searchNotes(designName, options.keyword);
-  }
-
-  if (options.action === 'resolve-problem') {
-    if (!options.problemTitle || !options.solution) {
-      return {
-        success: false,
-        message: '문제 제목과 해결책을 지정해주세요: /note resolve-problem "제목" --solution "해결책"'
-      };
-    }
-    const designName = options.design || inferDesignName();
-    return resolveProblem(designName, options.problemTitle, options.solution);
-  }
-
-  // Add note
-  const category = options.action;
-  if (!CATEGORIES[category]) {
-    return {
-      success: false,
-      message: `잘못된 카테고리: ${category}\n유효한 카테고리: learning, decision, issue, problem`
-    };
-  }
-
-  if (!options.content) {
-    return {
-      success: false,
-      message: `내용을 지정해주세요: /note ${category} "내용"`
-    };
-  }
-
-  const designName = options.design || inferDesignName();
-  return addNote(category, options.content, designName, options);
-}
-
 function parseArgs(args) {
   const options = {
     action: null,
@@ -449,6 +399,56 @@ function parseArgs(args) {
   }
 
   return options;
+}
+
+export default async function note(args) {
+  const options = parseArgs(args);
+
+  if (options.action === 'show') {
+    const designName = options.design || inferDesignName();
+    return showNotes(designName, options.category);
+  }
+
+  if (options.action === 'search') {
+    if (!options.keyword) {
+      return {
+        success: false,
+        message: '검색 키워드를 지정해주세요: /note search "키워드"'
+      };
+    }
+    const designName = options.design || inferDesignName();
+    return searchNotes(designName, options.keyword);
+  }
+
+  if (options.action === 'resolve-problem') {
+    if (!options.problemTitle || !options.solution) {
+      return {
+        success: false,
+        message: '문제 제목과 해결책을 지정해주세요: /note resolve-problem "제목" --solution "해결책"'
+      };
+    }
+    const designName = options.design || inferDesignName();
+    return resolveProblem(designName, options.problemTitle, options.solution);
+  }
+
+  // Add note
+  const category = options.action;
+  if (!CATEGORIES[category]) {
+    return {
+      success: false,
+      message: `잘못된 카테고리: ${category}\n유효한 카테고리: learning, decision, issue, problem`
+    };
+  }
+
+  if (!options.content) {
+    return {
+      success: false,
+      message: `내용을 지정해주세요: /note ${category} "내용"`
+    };
+  }
+
+  const designName = options.design || inferDesignName();
+  return addNote(category, options.content, designName, options);
 }
 
 // CLI entry point

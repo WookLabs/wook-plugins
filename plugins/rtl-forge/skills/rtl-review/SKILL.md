@@ -68,7 +68,7 @@ lint-reviewer 에이전트 호출 (haiku):
 ### Step 3: CDC 분석 (해당 시)
 
 ```
-cdc-analyst 에이전트 호출 (opus):
+cdc-analyst 에이전트 호출 (sonnet):
 - 클럭 도메인 교차 식별
 - 동기화 회로 검증
 - 메타스테빌리티 위험 평가
@@ -140,7 +140,7 @@ synthesis-advisor 에이전트 호출 (sonnet):
 |----------|---------|------|
 | 아키텍처 | rtl-architect | opus |
 | 린트 | lint-reviewer | haiku |
-| CDC | cdc-analyst | opus |
+| CDC | cdc-analyst | sonnet |
 | 합성 | synthesis-advisor | sonnet |
 
 ---

@@ -3,7 +3,7 @@
 /**
  * RTL Tool Detection Script
  * Detects available lint, simulation, and analysis tools
- * Outputs: .rtl-forge/tool-config.json
+ * Outputs: .omc/rtl-forge/tool-config.json
  */
 
 import { execSync } from 'child_process';
@@ -134,7 +134,7 @@ function main() {
   };
 
   // Write config
-  const configDir = join(process.cwd(), '.rtl-forge');
+  const configDir = join(process.cwd(), '.omc', 'rtl-forge');
   if (!existsSync(configDir)) {
     mkdirSync(configDir, { recursive: true });
   }

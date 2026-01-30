@@ -1,18 +1,18 @@
-# RTL-Forge v2.0
+# RTL-Forge v2.1
 
-> Simulation-First Verilog/SystemVerilog RTL Design & Verification Plugin
+> Logic-First Verilog/SystemVerilog RTL Design & Verification Plugin
 
 ## 핵심 철학
 
-**Simulation-First: 코드 먼저, 검증 즉시, 문서는 필요할 때만**
+**Logic-First: 로직 변경 여부로 판단, 검증 즉시, 문서는 필요할 때만**
 
-| v1.x (Document-First) | v2.0 (Simulation-First) |
-|----------------------|------------------------|
+| v1.x (Document-First) | v2.1 (Logic-First) |
+|----------------------|-------------------|
 | 모든 변경에 문서 필수 | 분류별 차등 문서화 |
 | 타이밍 다이어그램 필수 | MAJOR/ARCH만 필요 |
 | 전체 승인 필수 | TRIVIAL/MINOR는 자유 |
 | 모든 에이전트 Opus | 스마트 모델 라우팅 |
-| Hash 기반 write guard | 분류 기반 write guard |
+| 4단계 분류 | 5단계 분류 (MINOR 세분화) |
 
 ## 설치
 
@@ -32,7 +32,8 @@ node plugins/rtl-forge/scripts/detect-tools.mjs
 | Level | Examples | 승인 | 문서 |
 |-------|----------|------|------|
 | **TRIVIAL** | 주석, 공백, lint fix | 없음 | 없음 |
-| **MINOR** | 버그 수정, 파라미터 변경 | 사후 리뷰 | 커밋 메시지 |
+| **MINOR-MECHANICAL** | 리네이밍, 리팩토링 (로직 불변) | 없음 | 커밋 메시지 |
+| **MINOR-LOGIC** | 버그 수정, 파라미터 변경 | 사후 리뷰 | 커밋 메시지 |
 | **MAJOR** | FSM 변경, 포트 추가 | 사전 승인 | 변경 문서 |
 | **ARCHITECTURAL** | 새 모듈, CDC 추가 | Ralplan | 전체 스펙 |
 
@@ -56,7 +57,7 @@ node plugins/rtl-forge/scripts/detect-tools.mjs
 /note learning "내용"        # 프로젝트 노트
 ```
 
-## 에이전트 (12개)
+## 에이전트 (15개)
 
 | Agent | Model | 역할 |
 |-------|-------|------|
@@ -67,11 +68,14 @@ node plugins/rtl-forge/scripts/detect-tools.mjs
 | verification-runner | sonnet | 시뮬레이션 실행 |
 | assertion-writer | sonnet | SVA 어서션 |
 | lint-reviewer | haiku | Lint, 코딩 스타일 |
-| cdc-analyst | opus | CDC 분석 |
+| cdc-analyst | sonnet | CDC 분석 |
 | synthesis-advisor | sonnet | 합성 조언 |
 | coverage-analyst | haiku | 커버리지 분석 |
 | doc-writer | haiku | 문서화 |
 | change-classifier | haiku | LLM 분류 폴백 |
+| rdc-analyst | sonnet | 리셋 도메인 교차 분석 |
+| timing-analyst | sonnet | 타이밍 경로 분석 |
+| dft-advisor | sonnet | DFT 패턴 제안 |
 
 ## 훅
 
