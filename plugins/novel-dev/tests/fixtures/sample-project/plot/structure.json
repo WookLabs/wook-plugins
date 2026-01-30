@@ -1,0 +1,7 @@
+{
+  "acts": [
+    {"number": 1, "title": "서막", "chapters": {"start": 1, "end": 12}},
+    {"number": 2, "title": "전개", "chapters": {"start": 13, "end": 22}},
+    {"number": 3, "title": "결말", "chapters": {"start": 23, "end": 30}}
+  ]
+}

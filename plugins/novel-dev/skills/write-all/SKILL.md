@@ -13,6 +13,8 @@ user-invocable: true
 
 # /write-all - Ralph Loop 전체 자동 집필
 
+> **Note**: 이 문서의 코드 블록은 AI 오케스트레이터를 위한 실행 패턴 명세입니다. 실행 가능한 TypeScript/JavaScript 코드가 아닙니다.
+
 완성까지 멈추지 않는 자동 집필 시스템입니다.
 
 ## Quick Start
@@ -77,6 +79,22 @@ user-invocable: true
 - Quality gate examples
 - Circuit breaker activation
 - Act completion flow
+
+## Phase 0: 비용 경고 (Cost Warning)
+
+실행 전 사용자에게 비용을 안내합니다:
+
+> **전체 집필 비용 안내**
+> 대상: N화 집필 (사용자 지정 범위)
+> 회차당: novelist(opus) + 검증 에이전트(sonnet)
+>
+> 예상 토큰 사용량: 회차당 ~80K 입력 + ~20K 출력
+> 총 예상: N × 100K 토큰
+
+AskUserQuestion으로 사용자 확인:
+- "전체 진행" — 모든 회차 연속 집필
+- "1막만" — 첫 번째 막만 집필
+- "5화만 시범" — 5화만 먼저 작성 후 품질 확인
 
 ## THE NOVEL OATH
 
@@ -228,7 +246,7 @@ for act in acts:
 
 회차 집필 완료 후 다음을 수행:
 
-```javascript
+```spec
 // 1. 3개 validator 병렬 호출
 const validationPromises = [
   Task({

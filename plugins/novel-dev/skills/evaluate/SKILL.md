@@ -15,6 +15,23 @@ user-invocable: true
 
 챕터 또는 막 단위 품질을 다차원적으로 평가합니다.
 
+## 평가 모드
+
+| 모드 | 설명 | 에이전트 수 | 비용 |
+|------|------|------------|------|
+| 기본 (default) | 4축 표준 평가 | 3 | 낮음 |
+| `--deep` | 8축 심층 평가 | 8 | 높음 |
+| `--quick` | 빠른 평가 (haiku) | 1 | 최소 |
+| `--axis=PLOT,CHA` | 특정 축만 평가 | 1-8 | 가변 |
+
+### 사용 예시
+```
+/evaluate 5                    -- 5화 표준 평가
+/evaluate 5 --deep             -- 5화 8축 심층 평가
+/evaluate 5 --quick            -- 5화 빠른 평가
+/evaluate 5 --deep --axis=PLOT,CHA  -- 5화 특정 축만 심층 평가
+```
+
 ## Quick Start
 ```bash
 /evaluate 5      # 5화 평가
@@ -73,6 +90,17 @@ For write-all integration:
 - Cross-chapter consistency checking
 - Pacing analysis across chapters
 - Character arc completeness verification
+
+## Deep Evaluation Mode (--deep)
+
+When `--deep` flag is passed, the evaluation delegates to the LongStoryEval 8-axis framework:
+- **Objective axes (5)**: PLOT, CHA, WRI, THE, WOR
+- **Subjective axes (3)**: EMO, ENJ, EXP
+- **8 parallel agents** for comprehensive analysis
+- **Radar chart visualization** of all 8 dimensions
+- **Actionable improvement items** with file:line references
+
+For full details on the 8-axis framework, see `skills/deep-evaluate/SKILL.md`.
 
 ## Documentation
 

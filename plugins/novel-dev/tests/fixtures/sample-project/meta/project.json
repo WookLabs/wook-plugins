@@ -1,0 +1,8 @@
+{
+  "title": "테스트 소설",
+  "genre": "fantasy",
+  "status": "writing",
+  "target_chapters": 30,
+  "chapters_per_act": 10,
+  "current_chapter": 5
+}

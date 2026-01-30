@@ -1,0 +1,8 @@
+{
+  "id": "char_1",
+  "name": "이서진",
+  "role": "protagonist",
+  "age": 25,
+  "personality": ["용감", "정의감"],
+  "speech_pattern": "직설적, 존댓말 위주"
+}

@@ -18,7 +18,7 @@ export interface NovelProject {
   target_chapters: number;
   target_words_per_chapter: number;
   current_chapter: number;
-  status: "planning" | "writing" | "editing" | "complete";
+  status: "planning" | "writing" | "editing" | "complete" | "paused"; // SYNC: schemas/project.schema.json
   created_at: string; // ISO 8601 format
   updated_at: string; // ISO 8601 format
 }
@@ -493,7 +493,7 @@ export interface ChapterScore {
 // ============================================================================
 
 export type ChapterStatus = "planned" | "draft" | "edited" | "reviewed" | "final";
-export type ProjectStatus = "planning" | "writing" | "editing" | "complete";
+export type ProjectStatus = "planning" | "writing" | "editing" | "complete" | "paused"; // SYNC: schemas/project.schema.json
 export type Importance = "A" | "B" | "C";
 export type Severity = "critical" | "major" | "minor";
 export type Grade = "S" | "A" | "B" | "C" | "F";

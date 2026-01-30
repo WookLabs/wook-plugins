@@ -1,0 +1,6 @@
+{
+  "characters": [
+    {"id": "char_1", "name": "이서진", "role": "protagonist"},
+    {"id": "char_2", "name": "박도현", "role": "antagonist"}
+  ]
+}

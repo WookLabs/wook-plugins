@@ -1,15 +1,27 @@
 <!-- Parent: ../AGENTS.md -->
-<!-- Generated: 2026-01-17 -->
+<!-- Generated: 2026-01-29 -->
+<!-- Updated: Agent consolidation - 18 agents reduced to 14 functional + 4 deprecated -->
 
 # agents
 
 ## Purpose
 
-Contains prompt definitions for the 18 specialized agents used in the novel writing workflow. Each agent is defined in a Markdown file with frontmatter specifying the agent name, description, Claude model tier (opus/sonnet/haiku), and a comprehensive prompt that defines their role, constraints, guidelines, and output format.
+Contains prompt definitions for the specialized agents used in the novel writing workflow. After consolidation, the plugin has **14 functional agents** and **4 deprecated stubs** (kept for backward compatibility). Each agent is defined in a Markdown file with frontmatter specifying the agent name, description, Claude model tier (opus/sonnet/haiku), and a comprehensive prompt that defines their role, constraints, guidelines, and output format.
 
 Agents are invoked via the Task tool by commands and orchestration workflows. They operate with specific domain expertise while maintaining consistency with the overall project structure.
 
-## Key Files
+## Agent Consolidation Summary
+
+The following merges were performed to reduce overlap:
+
+| Absorbed Agent | Merged Into | Capabilities Transferred |
+|----------------|-------------|--------------------------|
+| `pacing-analyzer` | `engagement-optimizer` | Scene length analysis, beat timing, rhythm/variety, genre-specific pacing |
+| `tension-tracker` | `engagement-optimizer` | Korean emotion keyword detection, cross-chapter state, arc compliance, cliffhanger analysis, fatigue detection |
+| `dialogue-analyzer` | `character-voice-analyzer` | Naturalness, subtext, tags/beats, dialogue ratio, info dump detection, conflict/tension, purpose verification |
+| `plot-consistency-analyzer` | `consistency-verifier` | Plot hole detection, cause-effect logic chains, foreshadowing setup/payoff tracking |
+
+## Key Files - Functional Agents (14)
 
 | File | Agent | Model | Role |
 |------|-------|-------|------|
@@ -21,35 +33,43 @@ Agents are invoked via the Task tool by commands and orchestration workflows. Th
 | `proofreader.md` | proofreader | haiku | Grammar and spelling - checks Korean language correctness, typos, formatting issues |
 | `summarizer.md` | summarizer | haiku | Chapter summarization - creates concise summaries for context in subsequent chapters |
 | `beta-reader.md` | beta-reader | sonnet | Reader simulation - predicts engagement, drop-off risk, emotional beats from reader perspective |
-| `tension-tracker.md` | tension-tracker | sonnet | Emotional arc tracking - tension curves, beat counting, cliffhanger analysis, cross-chapter state |
 | `genre-validator.md` | genre-validator | sonnet | Genre compliance - validates genre-specific requirements, cliches, commercial factors |
 | `chapter-verifier.md` | chapter-verifier | sonnet | Verification orchestrator - coordinates parallel validation before completion claims |
-| `consistency-verifier.md` | consistency-verifier | sonnet | Consistency checker - detects character, timeline, setting, and factual contradictions |
-| `engagement-optimizer.md` | engagement-optimizer | sonnet | Engagement analysis - pacing, tension curves, emotional beats, hook density optimization |
-| `plot-consistency-analyzer.md` | plot-consistency-analyzer | sonnet | Plot hole detection - timeline errors, causality issues, foreshadowing tracking |
-| `character-voice-analyzer.md` | character-voice-analyzer | sonnet | Voice consistency - speech patterns, OOC detection, relationship dynamics |
+| `consistency-verifier.md` | consistency-verifier | sonnet | **EXPANDED** - Consistency checker (5 domains): character, timeline, setting, factual, and plot logic (absorbed plot-consistency-analyzer) |
+| `engagement-optimizer.md` | engagement-optimizer | sonnet | **EXPANDED** - Engagement analysis (7 domains): pacing, tension curves, emotional beats with Korean keyword detection, hook density, drop-off risk, cliffhanger analysis, arc compliance (absorbed pacing-analyzer + tension-tracker) |
+| `character-voice-analyzer.md` | character-voice-analyzer | sonnet | **EXPANDED** - Voice and dialogue analysis: speech patterns, OOC detection, relationship dynamics, naturalness, subtext, tags/beats, info dump detection, dialogue purpose (absorbed dialogue-analyzer) |
 | `prose-quality-analyzer.md` | prose-quality-analyzer | sonnet | Prose analysis - show vs tell, sensory detail, filter words, specificity |
-| `pacing-analyzer.md` | pacing-analyzer | sonnet | Pacing analysis - tension curves, scene rhythm, beat timing |
-| `dialogue-analyzer.md` | dialogue-analyzer | sonnet | Dialogue analysis - naturalness, subtext, info dump detection |
+
+## Deprecated Agent Stubs (4)
+
+These files are kept for backward compatibility. They redirect to their merged target.
+
+| File | Original Role | Redirects To |
+|------|---------------|--------------|
+| `pacing-analyzer.md` | Pacing analysis - tension curves, scene rhythm, beat timing | `engagement-optimizer` |
+| `tension-tracker.md` | Emotional arc tracking - tension curves, beat counting, cliffhanger analysis | `engagement-optimizer` |
+| `dialogue-analyzer.md` | Dialogue analysis - naturalness, subtext, info dump detection | `character-voice-analyzer` |
+| `plot-consistency-analyzer.md` | Plot hole detection - timeline errors, causality issues, foreshadowing tracking | `consistency-verifier` |
 
 ## Agent Characteristics
 
 ### Model Selection Rationale
 
 - **Opus (novelist, critic, plot-architect)**: Complex creative tasks requiring deep reasoning, narrative understanding, and quality judgment
-- **Sonnet (editor, lore-keeper, beta-reader, tension-tracker, genre-validator)**: Balanced tasks needing both creativity and analytical skills, fast validation workflows
+- **Sonnet (editor, lore-keeper, beta-reader, genre-validator, chapter-verifier, consistency-verifier, engagement-optimizer, character-voice-analyzer, prose-quality-analyzer)**: Balanced tasks needing both creativity and analytical skills, fast validation workflows
 - **Haiku (proofreader, summarizer)**: Fast, focused tasks with clear criteria and limited scope
 
 ### Agent Interaction Patterns
 
 Agents work together in specific workflows:
 
-1. **Planning Phase**: `plot-architect` → `lore-keeper` (story structure → worldbuilding)
-2. **Writing Phase**: `novelist` → `summarizer` (prose → summary for context)
-3. **Revision Phase**: `critic` → `editor` → `proofreader` (evaluation → revision → cleanup)
-4. **Consistency Phase**: `lore-keeper` (validates against canonical data)
+1. **Planning Phase**: `plot-architect` -> `lore-keeper` (story structure -> worldbuilding)
+2. **Writing Phase**: `novelist` -> `summarizer` (prose -> summary for context)
+3. **Revision Phase**: `critic` -> `editor` -> `proofreader` (evaluation -> revision -> cleanup)
+4. **Consistency Phase**: `consistency-verifier` (validates character, timeline, setting, facts, and plot logic)
 5. **Quality Gate Phase**: `critic` + `beta-reader` + `genre-validator` (parallel multi-validation)
-6. **Emotional Arc Phase**: `tension-tracker` (updates tension-curve.json, beat-counter.json after each chapter)
+6. **Engagement Phase**: `engagement-optimizer` (pacing, tension curves, emotional beats, hooks, drop-off, cliffhangers, arc compliance)
+7. **Voice & Dialogue Phase**: `character-voice-analyzer` (voice consistency, OOC detection, dialogue quality)
 
 ### Common Prompt Structure
 
@@ -133,34 +153,57 @@ Step-by-step process
 - Extracting key events and character developments
 - Maintaining continuity information
 
-### New Validation Agents (Masterpiece Mode)
+### Expanded Validation Agents
 
 **beta-reader**:
 - Simulating reader engagement experience
 - Predicting drop-off risk zones
 - Detecting emotional beats (심쿵, 긴장, 설렘)
 - Analyzing pacing from reader perspective
-- Threshold: ≥80 engagement score
+- Threshold: >=80 engagement score
 
-**tension-tracker**:
-- Tracking tension levels (1-10) across scenes
-- Counting emotional beats per genre requirements
-- Analyzing cliffhanger effectiveness
-- Maintaining cross-chapter state (3-chapter sliding window)
-- Generating recommendations for next chapter
+**engagement-optimizer** (expanded - absorbs pacing-analyzer + tension-tracker):
+- 7-domain engagement analysis: pacing, tension, emotional beats, hooks, drop-off, cliffhangers, arc compliance
+- Scene length analysis and beat timing verification
+- Korean emotion keyword-based beat detection with intensity scoring
+- Cross-chapter state tracking via emotional-context.json (3-chapter sliding window)
+- Cliffhanger effectiveness scoring (5 types: REVELATION, CLIFFHANGER, QUESTION, EMOTIONAL, TWIST)
+- Arc-level tension compliance (기/승/전/결)
+- Reader fatigue detection and warnings
+- Genre-specific pacing standards and beat requirements
+- Actionable optimization suggestions with impact estimates
+
+**character-voice-analyzer** (expanded - absorbs dialogue-analyzer):
+- Voice consistency and OOC detection with profile-based comparison
+- Dialogue naturalness assessment (Korean speech patterns)
+- Subtext vs on-the-nose analysis
+- Dialogue tags & beats quality evaluation
+- Dialogue-to-narration ratio analysis (genre-specific)
+- Info dump detection in dialogue
+- Conflict & tension in conversations
+- Dialogue purpose verification (every line must serve the story)
+- Korean honorifics and speech hierarchy validation
+
+**consistency-verifier** (expanded - absorbs plot-consistency-analyzer):
+- 5-domain consistency checking: character, timeline, setting, factual, plot logic
+- Plot hole detection with confidence scoring
+- Cause-effect logic chain validation
+- Foreshadowing setup/payoff bidirectional checking
+- Enhanced timeline verification with reconstruction
+- Systematic entity extraction and cross-referencing
 
 **genre-validator**:
 - Verifying genre-specific required elements
 - Checking cliche usage (acceptable vs overused)
 - Evaluating commercial factors (hook density, dialogue ratio, episode length)
-- Threshold: ≥95 compliance score
+- Threshold: >=95 compliance score
 
 ### Agent Invocation Example
 
 ```javascript
 // From a command or workflow script
 Task(
-  subagent_type: "oh-my-claude-sisyphus:novelist",
+  subagent_type: "novel-dev:novelist",
   prompt: `
 ## Context
 ${previousChapterSummaries}
@@ -187,16 +230,18 @@ ${characterProfiles}
 
 Agents enforce these standards:
 
-- **novelist**: ±10% word count tolerance, all required scenes included, foreshadowing planted naturally
+- **novelist**: +-10% word count tolerance, all required scenes included, foreshadowing planted naturally
 - **editor**: Style guide adherence, improved scores on all metrics
 - **critic**: Objective scoring (25 points each for narrative quality, plot coherence, character consistency, worldbuilding)
 - **lore-keeper**: No contradictions with established canon
 - **plot-architect**: Clear dramatic structure, proper pacing across acts
 - **proofreader**: Zero grammar/spelling errors in final output
 - **summarizer**: Concise (200-500 words), captures key events and emotional beats
-- **beta-reader**: ≥80 engagement score, drop-off risk zones identified with severity
-- **tension-tracker**: Tension curve within act-level ranges, required beats present
-- **genre-validator**: ≥95 compliance, all required genre elements present
+- **beta-reader**: >=80 engagement score, drop-off risk zones identified with severity
+- **engagement-optimizer**: 7-domain analysis with prioritized actionable fixes
+- **character-voice-analyzer**: Voice consistency + dialogue quality across all characters
+- **consistency-verifier**: 5-domain verification with chapter:line citations
+- **genre-validator**: >=95 compliance, all required genre elements present
 
 ### Korean Writing Conventions
 
@@ -220,6 +265,7 @@ Agents (especially novelist and editor) follow these Korean literary techniques:
 - Use Western idioms that don't translate well
 - Telegraph foreshadowing ("This would be important later")
 - Write meta-commentary in prose output
+- Call deprecated agents directly (use their merged targets instead)
 
 ## Multi-Validator Quality Gate (v2)
 
@@ -227,9 +273,9 @@ Masterpiece Mode uses 3-validator parallel consensus:
 
 | Validator | Threshold | Focus |
 |-----------|-----------|-------|
-| critic | ≥85 | Quality (narrative, plot, character, setting) |
-| beta-reader | ≥80 | Engagement (hooks, pacing, emotional impact) |
-| genre-validator | ≥95 | Genre compliance (required elements, commercials) |
+| critic | >=85 | Quality (narrative, plot, character, setting) |
+| beta-reader | >=80 | Engagement (hooks, pacing, emotional impact) |
+| genre-validator | >=95 | Genre compliance (required elements, commercials) |
 
 **ALL three must PASS** for quality gate approval.
 
@@ -257,6 +303,7 @@ Failed validators provide:
 - lore-keeper manages canonical data in `../world/` and `../characters/`
 - plot-architect produces structure consumed by novelist
 - summarizer produces context for novelist
+- engagement-optimizer uses emotional-context.json for cross-chapter state
 
 **Model Availability:**
 - Agents are hardcoded to specific Claude models
@@ -300,68 +347,33 @@ When modifying agent prompts:
 
 ## External Agent Integration
 
-### oh-my-claude-sisyphus 에이전트 활용
+### oh-my-claude-sisyphus / oh-my-claudecode Agent Usage
 
-novel-dev는 oh-my-claude-sisyphus의 전략적 에이전트를 활용할 수 있습니다:
+novel-dev can leverage external strategic agents:
 
-| 상황 | 호출 에이전트 | 용도 |
-|------|-------------|------|
-| 전략 계획 | `oh-my-claude-sisyphus:prometheus` | 프로젝트 전체 계획 수립, 인터뷰 기반 요구사항 도출 |
-| 계획/원고 리뷰 | `oh-my-claude-sisyphus:momus` | 비판적 검토, 구조적 결함 식별 |
-| 위험 분석 | `oh-my-claude-sisyphus:metis` | 숨겨진 위험 요소, 미리 대비할 문제 식별 |
-| 자료 조사 | `oh-my-claude-sisyphus:librarian` | 외부 문서/자료 검색 및 정리 |
+| Situation | Agent to Call | Purpose |
+|-----------|--------------|---------|
+| Strategic planning | `oh-my-claudecode:planner` | Project-wide planning, interview-based requirements |
+| Plan/manuscript review | `oh-my-claudecode:critic` | Critical review, structural flaw identification |
+| Risk analysis | `oh-my-claudecode:analyst` | Hidden risk factors, preemptive issue identification |
+| Research | `oh-my-claudecode:researcher` | External documentation/resource search |
 
-### 활용 예시
+### Usage Notes
 
-**init-review에서 momus 호출:**
-
-~~~javascript
-Task(
-  subagent_type: "oh-my-claude-sisyphus:momus",
-  prompt: `
-## 검토 대상
-프로젝트: ${projectJson}
-플롯 구조: ${structureJson}
-
-## 검토 요청
-1. 구조적 결함 식별
-2. 숨겨진 위험 요소
-3. 개선 제안
-  `
-)
-~~~
-
-**전략 계획 시 prometheus 호출:**
-
-~~~javascript
-Task(
-  subagent_type: "oh-my-claude-sisyphus:prometheus",
-  prompt: `
-## 프로젝트 정보
-${projectOverview}
-
-## 질문
-이 소설 프로젝트의 전체 전략을 수립해주세요.
-  `
-)
-~~~
-
-### 주의사항
-
-- oh-my-claude-sisyphus 플러그인이 설치되어 있어야 함
-- 해당 에이전트들은 소설 도메인 특화가 아님 (범용 전략/리뷰 에이전트)
-- 소설 특화 작업은 novel-dev 내장 에이전트 사용 권장
+- External plugins must be installed
+- External agents are general-purpose (not novel-domain-specific)
+- Use novel-dev built-in agents for novel-specific tasks
 
 ---
 
-## Magic Keywords (자동 커맨드 트리거)
+## Magic Keywords (Auto-Command Triggers)
 
-Novel-Sisyphus는 자연어 키워드를 인식하여 해당 커맨드를 자동으로 실행합니다.
+Novel-dev recognizes natural language keywords and automatically executes corresponding commands.
 
-### 키워드-커맨드 매핑
+### Keyword-Command Mapping
 
-| 키워드 패턴 | 트리거 커맨드 | 예시 |
-|-------------|--------------|------|
+| Keyword Pattern | Trigger Command | Example |
+|-----------------|----------------|---------|
 | "집필", "써줘", "작성해" | `/novel-dev:write [chapter]` | "15화 집필해줘" |
 | "퇴고", "수정", "다듬어" | `/novel-dev:revise` | "이 장면 퇴고해줘" |
 | "평가", "점수", "품질" | `/novel-dev:evaluate` | "품질 평가해봐" |
@@ -370,27 +382,14 @@ Novel-Sisyphus는 자연어 키워드를 인식하여 해당 커맨드를 자동
 | "통계", "현황" | `/novel-dev:stats` | "진행 통계 보여줘" |
 | "내보내기", "출력" | `/novel-dev:export` | "원고 내보내기" |
 
-### 사용 규칙
+### Usage Rules
 
-1. **명시적 커맨드 우선**: `/write 15` 같은 명시적 커맨드가 키워드보다 우선합니다.
-2. **컨텍스트 인식**: 소설 프로젝트가 활성화된 상태에서만 키워드가 작동합니다.
-3. **조합 가능**: "15화 집필하고 퇴고까지 해줘" → `/write 15` + `/revise`
+1. **Explicit commands take priority**: `/write 15` overrides keyword detection.
+2. **Context-aware**: Keywords only trigger when a novel project is active.
+3. **Combinable**: "15화 집필하고 퇴고까지 해줘" -> `/write 15` + `/revise`
 
-### 키워드 감지 예시
+### Deactivation
 
-**입력:** "망작소설 15화 집필해줘"
-**해석:**
-- "집필" 키워드 감지 → `/novel-dev:write` 트리거
-- "15화" 숫자 감지 → chapter=15 파라미터
-- **실행:** `/novel-dev:write 15`
-
-**입력:** "품질이 너무 낮아. 퇴고 좀 해줘"
-**해석:**
-- "퇴고" 키워드 감지 → `/novel-dev:revise` 트리거
-- **실행:** `/novel-dev:revise`
-
-### 비활성화
-
-키워드 자동 트리거를 원하지 않으면 명시적 커맨드를 사용하세요:
-- `/novel-dev:write 15` (명시적)
-- "15화 작성해줘" (키워드 - 자동 트리거됨)
+Use explicit commands to bypass keyword auto-triggers:
+- `/novel-dev:write 15` (explicit)
+- "15화 작성해줘" (keyword - auto-triggered)

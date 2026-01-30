@@ -1,0 +1,287 @@
+---
+name: brainstorm
+description: |
+  소설 아이디어를 소크라틱 대화로 체계적으로 정제합니다.
+  한 번에 하나씩 질문하며 아이디어의 깊이를 파헤칩니다.
+  blueprint-gen 전에 사용하여 아이디어의 방향과 깊이를 잡습니다.
+  <example>brainstorm</example>
+  <example>아이디어 브레인스토밍</example>
+  <example>소설 구상 도와줘</example>
+  <example>이런 소설 어떨까</example>
+  <example>아이디어 발전시켜줘</example>
+  <example>소설 아이디어 정리</example>
+user-invocable: true
+allowed-tools:
+  - Read
+  - Write
+  - AskUserQuestion
+---
+
+# Brainstorm Skill
+
+소설 아이디어를 소크라틱 대화로 체계적으로 정제합니다.
+한 번에 하나의 질문만 던지며, 사용자의 아이디어를 바꾸지 않고 발전시킵니다.
+
+## 핵심 원칙
+
+1. **한 번에 하나의 질문만** - 절대 여러 질문을 동시에 하지 않는다
+2. **200-300 단어 단위** - 각 응답은 짧고 집중적으로
+3. **여러 접근법 제시** - 최소 2-3가지 대안을 항상 제시
+4. **사용자 의도 존중** - 아이디어를 바꾸지 않고 발전시킨다
+5. **AskUserQuestion 적극 활용** - 텍스트 프롬프트 대신 구조화된 선택지 제공
+
+## 워크플로우
+
+### Phase 1: 씨앗 (Seed)
+
+사용자의 초기 아이디어를 듣고 핵심 요소를 파악한다.
+
+**입력이 있는 경우:**
+```
+/brainstorm "평범한 대학생이 갑자기 마법을 쓸 수 있게 되는 현대 판타지"
+```
+→ 아이디어의 핵심 감정/갈등에 대해 첫 질문
+
+**입력이 없는 경우:**
+```
+/brainstorm
+```
+→ "어떤 이야기를 쓰고 싶으신가요?" 로 시작
+
+**첫 질문 원칙:**
+- 장르나 설정이 아닌 **감정/동기**에 대해 먼저 묻는다
+- "이 이야기에서 독자가 가장 강하게 느꼈으면 하는 감정은?"
+- "이 아이디어를 떠올렸을 때 가장 먼저 본 장면은?"
+
+### Phase 2: 뿌리 (Root)
+
+AskUserQuestion으로 한 번에 하나씩 핵심 방향을 잡는다.
+각 질문은 이전 답변을 반영하여 자연스럽게 이어져야 한다.
+
+**질문 영역 (순서는 대화 흐름에 따라 유동적):**
+
+```javascript
+// 독자층
+AskUserQuestion({
+  questions: [{
+    question: "주 타겟 독자층은 누구인가요?",
+    header: "독자층",
+    options: [
+      { label: "10대", description: "학원물, 성장, 우정 중심" },
+      { label: "20대", description: "연애, 자아 탐색, 사회 진입" },
+      { label: "30대+", description: "인생, 가족, 커리어 갈등" },
+      { label: "전연령", description: "보편적 주제, 넓은 공감대" }
+    ],
+    multiSelect: false
+  }]
+});
+
+// 핵심 갈등
+AskUserQuestion({
+  questions: [{
+    question: "이 이야기의 중심 갈등은 어디에 있나요?",
+    header: "핵심 갈등",
+    options: [
+      { label: "내적 갈등", description: "주인공 내면의 싸움 (트라우마, 정체성, 욕망)" },
+      { label: "외적 갈등", description: "주인공 vs 외부 세력 (빌런, 시스템, 자연)" },
+      { label: "관계 갈등", description: "사람 사이의 갈등 (사랑, 배신, 오해)" },
+      { label: "사회 갈등", description: "개인 vs 사회 구조 (불평등, 관습, 차별)" }
+    ],
+    multiSelect: false
+  }]
+});
+
+// 톤
+AskUserQuestion({
+  questions: [{
+    question: "원하는 작품 분위기는?",
+    header: "톤/분위기",
+    options: [
+      { label: "밝고 경쾌한", description: "유머, 희망, 에너지" },
+      { label: "어둡고 묵직한", description: "긴장, 비극, 깊은 감정" },
+      { label: "코믹/패러디", description: "웃음, 풍자, 가볍게 즐기는" },
+      { label: "시리어스/치밀한", description: "논리적, 몰입, 단단한 서사" }
+    ],
+    multiSelect: false
+  }]
+});
+
+// 길이
+AskUserQuestion({
+  questions: [{
+    question: "목표 분량은 어느 정도인가요?",
+    header: "목표 분량",
+    options: [
+      { label: "단편 (1-5화)", description: "짧고 강렬한 한 편의 이야기" },
+      { label: "중편 (10-30화)", description: "하나의 완결된 서사 아크" },
+      { label: "장편 (50-100화)", description: "다층적 서사, 캐릭터 성장" },
+      { label: "대하 (100화+)", description: "복수의 아크, 세계관 확장" }
+    ],
+    multiSelect: false
+  }]
+});
+```
+
+**주의:** 위 질문을 한꺼번에 던지지 않는다. 대화 흐름에 따라 자연스럽게 하나씩 진행한다.
+
+### Phase 3: 줄기 (Stem)
+
+핵심 구조를 함께 설계한다. 각 항목마다 2-3가지 접근법을 제시하고 사용자가 선택한다.
+
+**주인공 원형:**
+
+```javascript
+// 이전 답변(감정, 갈등, 톤)을 반영한 3가지 캐릭터 접근법
+AskUserQuestion({
+  questions: [{
+    question: "주인공의 성격 방향은?",
+    header: "주인공 원형",
+    options: [
+      { label: "냉철한 전략가", description: "감정을 숨기고 논리적으로 행동하는 타입" },
+      { label: "열정적 행동파", description: "직감과 감정으로 움직이는 타입" },
+      { label: "성장형 평범인", description: "평범하지만 사건을 통해 성장하는 타입" }
+    ],
+    multiSelect: false
+  }]
+});
+```
+
+**세계관 기반:**
+- 사용자 아이디어에 맞는 2-3가지 세계관 방향을 텍스트로 제시
+- 각 방향의 장단점과 차별점을 간결하게 설명
+- 사용자 선택 후 세부 요소 확장
+
+**핵심 전제:**
+- "만약 ~라면?" 형식으로 전제를 구체화
+- 같은 아이디어에서 뻗어나가는 2-3가지 "what if" 제시
+- 가장 매력적인 전제를 사용자와 함께 선택
+
+### Phase 4: 가지 (Branch)
+
+구체적 요소를 확장한다. 여전히 한 번에 하나의 주제만 다룬다.
+
+**오프닝 후보:**
+
+```javascript
+AskUserQuestion({
+  questions: [{
+    question: "어떤 방식으로 이야기를 시작할까요?",
+    header: "오프닝 스타일",
+    options: [
+      { label: "액션/사건", description: "긴박한 장면으로 바로 몰입 (in medias res)" },
+      { label: "미스터리/질문", description: "궁금증을 던지며 시작 (떡밥)" },
+      { label: "일상/대비", description: "평범한 일상에서 균열이 생기며 시작" }
+    ],
+    multiSelect: false
+  }]
+});
+```
+
+**클라이맥스 방향:**
+- 지금까지의 선택을 종합하여 2가지 클라이맥스 시나리오 제시
+- 각 시나리오가 독자에게 주는 감정 효과 설명
+
+**결말 톤:**
+
+```javascript
+AskUserQuestion({
+  questions: [{
+    question: "결말의 방향은?",
+    header: "결말 톤",
+    options: [
+      { label: "해피엔딩", description: "갈등 해소, 성장 완성, 카타르시스" },
+      { label: "새드엔딩", description: "비극적 결말, 여운과 깊은 감동" },
+      { label: "오픈엔딩", description: "해석의 여지, 독자에게 맡기는 결말" },
+      { label: "반전엔딩", description: "예상을 뒤엎는 충격적 마무리" }
+    ],
+    multiSelect: false
+  }]
+});
+```
+
+### Phase 5: 열매 (Fruit)
+
+브레인스토밍 결과를 정리하고 다음 단계로 연결한다.
+
+**결과 요약 포맷:**
+
+```markdown
+# 브레인스토밍 결과
+
+## 핵심 아이디어
+> {한 문장 로그라인}
+
+## 방향 정리
+| 항목 | 결정 사항 |
+|------|-----------|
+| **장르** | {장르} |
+| **독자층** | {타겟} |
+| **톤** | {분위기} |
+| **핵심 갈등** | {갈등 유형} |
+| **목표 분량** | {분량} |
+
+## 주인공
+- **원형**: {선택한 원형}
+- **핵심 특성**: {2-3가지}
+
+## 세계관
+{선택한 세계관 방향 요약}
+
+## 구조
+- **오프닝**: {선택한 방식}
+- **핵심 전제**: "만약 {전제}라면?"
+- **클라이맥스**: {방향}
+- **결말**: {톤}
+
+## 추가 아이디어
+- {대화 중 나온 좋은 아이디어들}
+
+---
+*Generated by novel-dev brainstorm*
+*Date: {YYYY-MM-DD}*
+```
+
+**저장:**
+```
+meta/brainstorm-result.md
+```
+
+프로젝트가 아직 없으면:
+```
+.claude/brainstorms/{title-slug}.md
+```
+
+**다음 단계 안내:**
+
+```
+✅ 브레인스토밍 완료!
+
+정리 파일: {저장 경로}
+
+다음 단계:
+1. /blueprint-gen  - 이 결과를 기반으로 블루프린트 생성
+2. 추가 브레인스토밍이 필요하면 계속 대화해도 됩니다
+```
+
+## 대화 스타일 가이드
+
+- **톤**: 친근하지만 전문적. 소설 편집자가 작가와 대화하는 느낌
+- **공감**: 사용자 아이디어에 진심으로 반응. "흥미롭네요", "그 방향 좋습니다" 등
+- **추가 제안**: 사용자가 선택한 방향에서 파생 아이디어를 자연스럽게 제안
+- **절대 하지 않을 것**: 아이디어 부정, 여러 질문 동시에, 장황한 설명
+
+## 옵션
+
+### --continue
+이전 브레인스토밍 결과를 이어서 발전:
+```bash
+/brainstorm --continue
+```
+
+### --focus
+특정 영역에 집중하여 브레인스토밍:
+```bash
+/brainstorm --focus=character
+/brainstorm --focus=world
+/brainstorm --focus=plot
+```

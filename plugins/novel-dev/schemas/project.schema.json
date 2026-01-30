@@ -85,7 +85,7 @@
     },
     "status": {
       "type": "string",
-      "description": "Project status",
+      "description": "Project status. SYNC: src/types.ts ProjectStatus",
       "enum": ["planning", "writing", "editing", "complete", "paused"],
       "default": "planning"
     },

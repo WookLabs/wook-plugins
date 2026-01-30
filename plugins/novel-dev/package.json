@@ -1,6 +1,6 @@
 {
   "name": "novel-dev",
-  "version": "3.8.6",
+  "version": "4.0.0",
   "description": "AI 소설 창작을 위한 멀티에이전트 오케스트레이션 플러그인",
   "type": "module",
   "main": "dist/index.js",
@@ -15,6 +15,8 @@
     "build": "tsc",
     "postbuild": "npm run verify:build",
     "test": "vitest run",
+    "test:watch": "vitest",
+    "test:coverage": "vitest run --coverage",
     "test:integration": "node scripts/integration-test.mjs",
     "watch": "tsc --watch"
   },
@@ -39,7 +41,7 @@
     "json-schema-to-typescript": "^13.1.0",
     "rimraf": "^5.0.5",
     "typescript": "^5.0.0",
-    "vitest": "^2.0.0"
+    "vitest": "^3.0.0"
   },
   "dependencies": {
     "archiver": "^6.0.1",

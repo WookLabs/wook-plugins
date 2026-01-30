@@ -1,0 +1,6 @@
+{
+  "locations": [
+    {"name": "아케디아", "type": "city", "description": "왕국의 수도"},
+    {"name": "어둠의 숲", "type": "wilderness", "description": "금지된 영역"}
+  ]
+}
