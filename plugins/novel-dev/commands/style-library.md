@@ -1,5 +1,5 @@
 ---
-description: "스타일 라이브러리 - 문체 예시(exemplar) 관리"
+description: 스타일 라이브러리
 ---
 
 # /style-library - 스타일 예시 라이브러리 관리

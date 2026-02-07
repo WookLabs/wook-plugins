@@ -1,5 +1,5 @@
 ---
-description: "[17단계] 퇴고 - 원고 퇴고"
+description: 퇴고
 ---
 
 [NOVEL-SISYPHUS: 퇴고]
@@ -34,3 +34,8 @@ $ARGUMENTS
    - `chapters/chapter_{N}.md` 덮어쓰기
    - `chapters/chapter_{N}_draft.md` 원본 유지
    - status → 'edited'
+
+## 다음 단계
+
+- `/evaluate` - 품질 평가
+- `/write` - 다음 회차 집필

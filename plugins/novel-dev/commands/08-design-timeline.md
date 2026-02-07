@@ -1,5 +1,5 @@
 ---
-description: "[8단계] 타임라인 설계 - 작품 내 시간 흐름 및 이벤트 설계"
+description: 타임라인 설계
 ---
 
 [NOVEL-SISYPHUS: 타임라인 설계]

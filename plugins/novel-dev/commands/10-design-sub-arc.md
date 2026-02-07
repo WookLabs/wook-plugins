@@ -1,5 +1,5 @@
 ---
-description: "[10단계] 서브 아크 설계 - 서브플롯 설계"
+description: 서브 아크 설계
 ---
 
 # /design-sub-arc - 서브아크 설계
@@ -86,3 +86,7 @@ If output file already exists:
   "status": "planned"
 }
 ```
+
+## 다음 단계
+
+- `/design-foreshadow` - 복선 설계

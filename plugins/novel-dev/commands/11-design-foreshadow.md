@@ -1,5 +1,5 @@
 ---
-description: "[11단계] 복선 설계 - 복선 설계 및 배치"
+description: 복선 설계
 ---
 
 # /design-foreshadow - 복선 설계
@@ -80,3 +80,8 @@ If output file already exists:
   ]
 }
 ```
+
+## 다음 단계
+
+- `/design-hook` - 훅/떡밥 설계
+- `/gen-plot` - 플롯 생성 (훅 설계 생략 가능)

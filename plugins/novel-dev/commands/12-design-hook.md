@@ -1,5 +1,5 @@
 ---
-description: "[12단계] 훅 설계 - 떡밥(미스터리 요소) 설계"
+description: 훅/떡밥 설계
 ---
 
 # /design-hook - 떡밥 설계
@@ -75,3 +75,7 @@ If output file already exists:
   ]
 }
 ```
+
+## 다음 단계
+
+- `/gen-plot` - 회차별 플롯 생성

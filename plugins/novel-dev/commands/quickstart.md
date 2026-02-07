@@ -1,6 +1,6 @@
 ---
 name: quickstart
-description: "5단계 퀵스타트 - 소설 완성까지 가장 빠른 경로"
+description: 퀵스타트 가이드
 skill: quickstart
 aliases: ["qs", "빠른시작", "퀵스타트"]
 ---

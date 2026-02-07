@@ -1,5 +1,5 @@
 ---
-description: "[7단계] 관계 설계 - 캐릭터 간 관계 네트워크 설계"
+description: 관계 설계
 ---
 
 [NOVEL-SISYPHUS: 관계 설계]

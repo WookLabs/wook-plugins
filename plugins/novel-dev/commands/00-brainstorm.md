@@ -1,5 +1,5 @@
 ---
-description: "[0단계] 브레인스토밍 - 소설 아이디어를 소크라틱 대화로 정제합니다"
+description: 아이디어 브레인스토밍
 argument-hint: <아이디어 (선택)>
 allowed-tools:
   - Read

@@ -1,5 +1,5 @@
 ---
-description: "[19단계] 일관성 검사 - 전체 설정 일관성 검사"
+description: 일관성 검사
 ---
 
 # /consistency-check - 일관성 검사
@@ -75,3 +75,8 @@ For projects with > 20 chapters:
   ]
 }
 ```
+
+## 다음 단계
+
+- `/revise` - 불일치 발견 시 해당 회차 퇴고
+- `/write` - 다음 회차 집필 계속

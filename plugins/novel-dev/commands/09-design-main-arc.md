@@ -1,5 +1,5 @@
 ---
-description: "[9단계] 메인 아크 설계 - 메인 플롯 아크 설계"
+description: 메인 아크 설계
 ---
 
 # /design-main-arc - 메인 아크 설계
@@ -102,3 +102,8 @@ If output file already exists:
   "theme": "진정한 사랑은 조건과 신분을 초월하며, 가짜 관계에서도 진짜 감정이 싹틀 수 있다. 자신의 가치를 외부 인정이 아닌 내면에서 찾을 때 비로소 진정한 행복을 얻는다."
 }
 ```
+
+## 다음 단계
+
+- `/design-sub-arc` - 서브플롯 설계
+- `/design-foreshadow` - 복선 설계 (서브플롯 없으면 건너뛰기)

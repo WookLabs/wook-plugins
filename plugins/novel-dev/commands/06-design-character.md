@@ -1,5 +1,5 @@
 ---
-description: "[6단계] 캐릭터 설계 - 캐릭터 상세 설계"
+description: 캐릭터 설계
 ---
 
 # /design-character - 캐릭터 설계
@@ -153,3 +153,8 @@ If output file already exists:
   ]
 }
 ```
+
+## 다음 단계
+
+- `/design-relationship` - 캐릭터 간 관계 설계
+- `/design-timeline` - 타임라인 설계 (관계가 단순하면 건너뛰기)

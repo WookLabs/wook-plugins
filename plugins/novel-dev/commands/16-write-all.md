@@ -1,5 +1,5 @@
 ---
-description: "[16단계] 전체 집필 - 1화부터 목표화수까지 자동 집필 (Ralph Loop)"
+description: 전체 자동 집필
 ---
 
 [NOVEL-SISYPHUS: 전체 자동 집필 - RALPH LOOP]

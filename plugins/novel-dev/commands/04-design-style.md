@@ -1,5 +1,5 @@
 ---
-description: "[4단계] 문체 설계 - 작품의 문체와 서술 스타일 정의"
+description: 문체 설계
 ---
 
 [NOVEL-SISYPHUS: 문체 설계]

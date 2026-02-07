@@ -1,5 +1,5 @@
 ---
-description: "[18단계] 평가 - 품질 평가"
+description: 품질 평가
 ---
 
 [NOVEL-SISYPHUS: 평가]
@@ -75,3 +75,9 @@ When `--deep` flag is detected, delegate to the 8-axis LongStoryEval framework:
 | 70-79 | B | 양호 (품질 게이트 통과) |
 | 60-69 | C | 개선 필요 |
 | 60 미만 | F | 재작성 권장 |
+
+## 다음 단계
+
+- `/revise` - 점수가 낮으면 퇴고 후 재평가
+- `/consistency-check` - 전체 일관성 검사
+- `/write` - 다음 회차 집필

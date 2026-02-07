@@ -1,5 +1,5 @@
 ---
-description: "[14단계] 회차 집필 - 소설 챕터 작성"
+description: 회차 집필
 ---
 
 # /write - 소설 챕터 작성
@@ -20,3 +20,9 @@ description: "[14단계] 회차 집필 - 소설 챕터 작성"
 4. novelist 에이전트로 챕터 작성
 5. editor 에이전트로 품질 검토
 6. 상태 업데이트
+
+## 다음 단계
+
+- `/revise` - 퇴고
+- `/evaluate` - 품질 평가
+- `/write` - 다음 회차 계속 집필

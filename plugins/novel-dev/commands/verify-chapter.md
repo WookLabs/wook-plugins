@@ -1,5 +1,5 @@
 ---
-description: "회차 병렬 검증 - 3개 검증기로 챕터 병렬 검증 (critic+beta+genre)"
+description: 회차 병렬 검증
 argument-hint: <chapter_number>
 allowed-tools:
   - Read

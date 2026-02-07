@@ -1,5 +1,5 @@
 ---
-description: "[3단계] 프로젝트 초기화 - BLUEPRINT.md 기반 프로젝트 생성"
+description: 프로젝트 초기화
 prerequisite: "BLUEPRINT.md must exist (run /blueprint-gen first)"
 ---
 
@@ -263,3 +263,8 @@ BLUEPRINT.md에서 프로젝트를 생성합니다:
 
 ### 템플릿 위치
 `templates/CLAUDE.template.md`
+
+## 다음 단계
+
+- `/design-style` - 문체 설계
+- `/quickstart` - 설계부터 집필까지 한번에

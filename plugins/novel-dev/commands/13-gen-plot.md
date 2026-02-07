@@ -1,5 +1,5 @@
 ---
-description: "[13단계] 플롯 생성 - 전체 회차별 플롯 JSON 생성"
+description: 플롯 생성
 ---
 
 # /gen-plot - 회차 플롯 생성
@@ -149,3 +149,9 @@ If any file is missing, report error and suggest `/01-init` or `/02-world` ~ `/0
   }
 }
 ```
+
+## 다음 단계
+
+- `/write` - 회차 집필
+- `/write-act` - 막 단위 집필
+- `/write-all` - 전체 자동 집필

@@ -1,5 +1,5 @@
 ---
-description: "[15단계] 막 집필 - 특정 막(Act) 전체 집필"
+description: 막 집필
 ---
 
 [NOVEL-SISYPHUS: 막 집필]

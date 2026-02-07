@@ -1,5 +1,5 @@
 ---
-description: 아이디어부터 완성 원고까지 완전 자동 집필 (Novel Autopilot)
+description: 완전 자동 집필
 ---
 
 [NOVEL-SISYPHUS: NOVEL AUTOPILOT - 완전 자동 집필]

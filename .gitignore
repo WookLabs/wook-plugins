@@ -8,3 +8,5 @@ Thumbs.db
 .env.local
 test-project/
 test-output.txt
+.omc/
+nul

@@ -1,5 +1,5 @@
 ---
-description: "[1단계] 블루프린트 생성 - BLUEPRINT.md 작품 기획서 생성"
+description: 블루프린트 생성
 argument-hint: <아이디어>
 allowed-tools:
   - Read

@@ -1,5 +1,5 @@
 ---
-description: "[2단계] 블루프린트 검토 - BLUEPRINT.md 검토 및 개선"
+description: 블루프린트 검토
 allowed-tools:
   - Read
   - Write
@@ -85,3 +85,7 @@ BLUEPRINT.md를 3개 관점에서 검토하고 개선합니다.
 - 강점/약점 분석
 - 구체적 개선안
 - 자동 수정 옵션
+
+## 다음 단계
+
+- `/init` - 프로젝트 초기화 (설정 파일 생성)

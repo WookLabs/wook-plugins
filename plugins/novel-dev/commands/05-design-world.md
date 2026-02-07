@@ -1,5 +1,5 @@
 ---
-description: "[5단계] 세계관 설계 - 세계관 상세 설계"
+description: 세계관 설계
 ---
 
 # /design-world - 세계관 설계
@@ -94,3 +94,7 @@ If output file already exists:
   ]
 }
 ```
+
+## 다음 단계
+
+- `/design-character` - 캐릭터 설계
