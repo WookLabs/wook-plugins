@@ -1,0 +1,179 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://novel-dev.wook.io/schemas/subtext-annotation.schema.json",
+  "title": "SubtextAnnotation",
+  "description": "Complete subtext annotation for a dialogue exchange, capturing hidden emotions and physical manifestations",
+  "type": "object",
+  "required": [
+    "dialogueId",
+    "speakerId",
+    "listenerId",
+    "surfaceLevel",
+    "subtextLayers",
+    "physicalManifestations",
+    "narrativeFunction"
+  ],
+  "properties": {
+    "dialogueId": {
+      "type": "string",
+      "description": "Reference ID linking to dialogue in scene",
+      "minLength": 1
+    },
+    "speakerId": {
+      "type": "string",
+      "description": "Character ID of the speaker",
+      "minLength": 1
+    },
+    "listenerId": {
+      "type": "string",
+      "description": "Character ID of the listener",
+      "minLength": 1
+    },
+    "surfaceLevel": {
+      "type": "object",
+      "description": "Surface-level content of the dialogue",
+      "required": ["text", "topic"],
+      "properties": {
+        "text": {
+          "type": "string",
+          "description": "The literal words spoken",
+          "minLength": 1
+        },
+        "topic": {
+          "type": "string",
+          "description": "Apparent topic of discussion"
+        }
+      },
+      "additionalProperties": false
+    },
+    "subtextLayers": {
+      "type": "array",
+      "description": "Layers of hidden meaning (1-3 layers)",
+      "minItems": 1,
+      "maxItems": 3,
+      "items": {
+        "$ref": "#/$defs/EmotionLayer"
+      }
+    },
+    "physicalManifestations": {
+      "$ref": "#/$defs/PhysicalManifestations"
+    },
+    "narrativeFunction": {
+      "type": "string",
+      "description": "What narrative work this dialogue performs",
+      "enum": ["reveal", "conceal", "deflect", "test", "manipulate"]
+    }
+  },
+  "additionalProperties": false,
+  "$defs": {
+    "EmotionLayer": {
+      "type": "object",
+      "description": "A layer of hidden emotion beneath the surface dialogue",
+      "required": [
+        "level",
+        "actualIntention",
+        "underlyingEmotion",
+        "hiddenContext",
+        "tellSigns"
+      ],
+      "properties": {
+        "level": {
+          "type": "integer",
+          "description": "Layer depth: 1 = primary, 2 = deeper, 3 = deepest",
+          "minimum": 1,
+          "maximum": 3
+        },
+        "actualIntention": {
+          "type": "string",
+          "description": "What character is really trying to accomplish",
+          "minLength": 1
+        },
+        "underlyingEmotion": {
+          "type": "string",
+          "description": "The underlying emotion driving the behavior",
+          "minLength": 1
+        },
+        "hiddenContext": {
+          "type": "string",
+          "description": "What the character is deliberately NOT saying",
+          "minLength": 1
+        },
+        "tellSigns": {
+          "type": "array",
+          "description": "Subtle tells that reveal this layer",
+          "items": {
+            "type": "string",
+            "minLength": 1
+          },
+          "minItems": 1
+        }
+      },
+      "additionalProperties": false
+    },
+    "PhysicalManifestations": {
+      "type": "object",
+      "description": "Physical expressions that accompany emotional subtext",
+      "required": ["bodyLanguage", "actionBeats", "vocalCues"],
+      "properties": {
+        "bodyLanguage": {
+          "type": "array",
+          "description": "Involuntary body language",
+          "items": {
+            "type": "string"
+          },
+          "examples": [["clenched jaw", "avoided eye contact", "shoulders tensed"]]
+        },
+        "actionBeats": {
+          "type": "array",
+          "description": "Deliberate actions during or around dialogue",
+          "items": {
+            "type": "string"
+          },
+          "examples": [["fidgeted with ring", "turned away", "picked at sleeve"]]
+        },
+        "vocalCues": {
+          "type": "array",
+          "description": "Voice quality and speech pattern changes",
+          "items": {
+            "type": "string"
+          },
+          "examples": [["voice dropped", "words came too fast", "forced lightness"]]
+        }
+      },
+      "additionalProperties": false
+    }
+  },
+  "examples": [
+    {
+      "dialogueId": "dlg_001",
+      "speakerId": "char_minji",
+      "listenerId": "char_junho",
+      "surfaceLevel": {
+        "text": "괜찮아요. 신경 쓰지 마세요.",
+        "topic": "상대방의 걱정에 대한 응답"
+      },
+      "subtextLayers": [
+        {
+          "level": 1,
+          "actualIntention": "거리를 두려 함",
+          "underlyingEmotion": "상처받음",
+          "hiddenContext": "그의 무관심이 상처를 줬다는 것",
+          "tellSigns": ["시선 회피", "목소리의 경직"]
+        },
+        {
+          "level": 2,
+          "actualIntention": "자존심 보호",
+          "underlyingEmotion": "취약함",
+          "hiddenContext": "그에게 의존하고 싶다는 마음",
+          "tellSigns": ["손을 꽉 쥠", "말끝이 떨림"]
+        }
+      ],
+      "physicalManifestations": {
+        "bodyLanguage": ["어깨가 움츠러듦", "시선이 창밖으로 향함"],
+        "actionBeats": ["컵을 테이블에 내려놓음", "머리카락을 귀 뒤로 넘김"],
+        "vocalCues": ["목소리가 평소보다 높아짐", "말이 빨라짐"]
+      },
+      "narrativeFunction": "conceal"
+    }
+  ]
+}

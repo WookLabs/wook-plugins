@@ -1,0 +1,136 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "https://novel-dev.org/schemas/context-bundle.schema.json",
+  "title": "TieredContextBundle",
+  "description": "Output shape of tiered context assembly with hot/warm/cold tiers and sandwich split for exemplar positioning",
+  "type": "object",
+  "required": ["hot", "warm", "cold", "totalTokens", "tierBreakdown", "sandwichSplit"],
+  "properties": {
+    "hot": {
+      "type": "array",
+      "description": "Hot tier context items (scene plan, exemplars, character profiles)",
+      "items": {
+        "$ref": "#/definitions/contextItem"
+      }
+    },
+    "warm": {
+      "type": "array",
+      "description": "Warm tier context items (5-chapter window summaries, active foreshadowing, relationships)",
+      "items": {
+        "$ref": "#/definitions/contextItem"
+      }
+    },
+    "cold": {
+      "type": "array",
+      "description": "Cold tier context items (world, distant history, reference material)",
+      "items": {
+        "$ref": "#/definitions/contextItem"
+      }
+    },
+    "totalTokens": {
+      "type": "integer",
+      "description": "Total estimated token count across all tiers",
+      "minimum": 0
+    },
+    "tierBreakdown": {
+      "type": "object",
+      "description": "Token count breakdown by tier",
+      "required": ["hot", "warm", "cold"],
+      "properties": {
+        "hot": {
+          "type": "integer",
+          "description": "Token count in hot tier",
+          "minimum": 0
+        },
+        "warm": {
+          "type": "integer",
+          "description": "Token count in warm tier",
+          "minimum": 0
+        },
+        "cold": {
+          "type": "integer",
+          "description": "Token count in cold tier",
+          "minimum": 0
+        }
+      },
+      "additionalProperties": false
+    },
+    "sandwichSplit": {
+      "type": "object",
+      "description": "Sandwich split for prompt assembly - places exemplars at both beginning and end",
+      "required": ["hotPrefix", "hotSuffix"],
+      "properties": {
+        "hotPrefix": {
+          "type": "array",
+          "description": "Items placed at prompt beginning (scene plan + first exemplar)",
+          "items": {
+            "$ref": "#/definitions/contextItem"
+          }
+        },
+        "hotSuffix": {
+          "type": "array",
+          "description": "Items placed after warm/cold (remaining exemplars + characters + emotional directives)",
+          "items": {
+            "$ref": "#/definitions/contextItem"
+          }
+        }
+      },
+      "additionalProperties": false
+    }
+  },
+  "additionalProperties": false,
+  "definitions": {
+    "contextItem": {
+      "type": "object",
+      "description": "A single context item",
+      "required": ["id", "type", "path", "estimatedTokens", "priority", "required"],
+      "properties": {
+        "id": {
+          "type": "string",
+          "description": "Unique identifier for the context item"
+        },
+        "type": {
+          "type": "string",
+          "description": "Type of context",
+          "enum": [
+            "style",
+            "plot",
+            "summary",
+            "character",
+            "world",
+            "foreshadowing",
+            "act_summary",
+            "exemplar",
+            "scene_plan",
+            "emotional_directive",
+            "relationship_state"
+          ]
+        },
+        "path": {
+          "type": "string",
+          "description": "File path to the context file"
+        },
+        "content": {
+          "type": "string",
+          "description": "Loaded content (lazy loaded)"
+        },
+        "estimatedTokens": {
+          "type": "integer",
+          "description": "Estimated token count",
+          "minimum": 0
+        },
+        "priority": {
+          "type": "integer",
+          "description": "Priority level (1-10, higher is more important)",
+          "minimum": 1,
+          "maximum": 10
+        },
+        "required": {
+          "type": "boolean",
+          "description": "Whether this item is required (cannot be dropped)"
+        }
+      },
+      "additionalProperties": true
+    }
+  }
+}

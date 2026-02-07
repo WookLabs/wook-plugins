@@ -13,18 +13,89 @@
  * Types of context that can be loaded for novel generation
  */
 export type ContextType =
-  | 'style'           // style-guide.json
-  | 'plot'            // chapter_N.json
-  | 'summary'         // chapter summaries
-  | 'character'       // character profiles
-  | 'world'           // locations, world settings
-  | 'foreshadowing'   // active foreshadowing
-  | 'act_summary';    // act-level summary
+  | 'style'               // style-guide.json
+  | 'plot'                // chapter_N.json
+  | 'summary'             // chapter summaries
+  | 'character'           // character profiles
+  | 'world'               // locations, world settings
+  | 'foreshadowing'       // active foreshadowing
+  | 'act_summary'         // act-level summary
+  // V5 context types for tiered assembly
+  | 'exemplar'            // style exemplars (hot tier)
+  | 'scene_plan'          // current scene plan (hot tier)
+  | 'emotional_directive' // emotional arc directives (hot tier)
+  | 'relationship_state'; // active relationship dynamics (warm tier)
 
 /**
  * Content type for token estimation
  */
 export type ContentType = 'korean' | 'json' | 'mixed';
+
+// ============================================================================
+// V5 Tiered Context Types
+// ============================================================================
+
+/**
+ * Context tier assignment for tiered assembly
+ * - hot: Maximum attention items (scene plan, exemplars, characters)
+ * - warm: Narrative continuity (5-chapter window, foreshadowing)
+ * - cold: Reference material (world, distant content)
+ */
+export type ContextTier = 'hot' | 'warm' | 'cold';
+
+/**
+ * Token budget allocation per tier
+ */
+export interface TierBudget {
+  /** Hot tier budget (scene plan, exemplars, characters) */
+  hot: number;
+  /** Warm tier budget (5-chapter window, active foreshadowing) */
+  warm: number;
+  /** Cold tier budget (reference material) */
+  cold: number;
+}
+
+/**
+ * Default token budget per tier
+ * - Hot: 15K for scene essentials (plan, exemplars, characters)
+ * - Warm: 25K for narrative continuity (5-chapter summaries, relationships)
+ * - Cold: 40K for reference material (world, distant history)
+ */
+export const DEFAULT_TIER_BUDGET: TierBudget = {
+  hot: 15000,
+  warm: 25000,
+  cold: 40000,
+};
+
+/**
+ * Sandwich split for hot tier items
+ * Positions exemplars at both beginning and end of prompt
+ * to counter "lost in the middle" attention degradation
+ */
+export interface SandwichSplit {
+  /** Items placed at prompt beginning (scene plan + first exemplar) */
+  hotPrefix: ContextItem[];
+  /** Items placed after warm/cold (remaining exemplars + characters + emotional directives) */
+  hotSuffix: ContextItem[];
+}
+
+/**
+ * Result of tiered context assembly
+ */
+export interface TieredContextBundle {
+  /** Hot tier items (scene plan, exemplars, characters) */
+  hot: ContextItem[];
+  /** Warm tier items (5-chapter summaries, relationships, active foreshadowing) */
+  warm: ContextItem[];
+  /** Cold tier items (world, distant history) */
+  cold: ContextItem[];
+  /** Total estimated token count across all tiers */
+  totalTokens: number;
+  /** Token breakdown by tier */
+  tierBreakdown: Record<ContextTier, number>;
+  /** Sandwich split for prompt assembly */
+  sandwichSplit: SandwichSplit;
+}
 
 // ============================================================================
 // Context Item
@@ -96,6 +167,23 @@ export interface ItemMetadata {
 
   /** Chapter where foreshadowing pays off */
   payoffChapter?: number;
+
+  // V5 metadata fields for tiered assembly
+
+  /** Whether character/item appears in the current scene (more specific than chapter) */
+  appearsInCurrentScene?: boolean;
+
+  /** Whether foreshadowing/relationship is currently active */
+  isActive?: boolean;
+
+  /** Whether this is the POV character (for character budget priority) */
+  isPovCharacter?: boolean;
+
+  /** Whether scene has emotional_arc defined (for emotional_directive priority) */
+  hasEmotionalArc?: boolean;
+
+  /** Whether characters have evolving relationship in current chapter */
+  hasEvolvingRelationship?: boolean;
 
   /** Additional metadata for specific context types */
   [key: string]: unknown;

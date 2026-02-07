@@ -1,0 +1,100 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "quality-trend.schema.json",
+  "title": "QualityTrend",
+  "description": "Persistent quality trend data for tracking chapter-by-chapter writing quality over time",
+  "type": "object",
+  "required": ["project_id", "snapshots", "metadata"],
+  "properties": {
+    "project_id": {
+      "type": "string",
+      "description": "Project identifier"
+    },
+    "snapshots": {
+      "type": "array",
+      "description": "All recorded quality snapshots",
+      "items": {
+        "type": "object",
+        "required": ["chapter_number", "timestamp", "version", "overall_score", "dimensions", "verdict"],
+        "properties": {
+          "chapter_number": {
+            "type": "integer",
+            "minimum": 1,
+            "description": "Chapter number"
+          },
+          "timestamp": {
+            "type": "string",
+            "format": "date-time",
+            "description": "ISO 8601 timestamp of recording"
+          },
+          "version": {
+            "type": "integer",
+            "minimum": 1,
+            "description": "Revision version number"
+          },
+          "overall_score": {
+            "type": "number",
+            "minimum": 0,
+            "maximum": 100,
+            "description": "Overall quality score (0-100)"
+          },
+          "dimensions": {
+            "type": "object",
+            "description": "Per-dimension quality scores",
+            "properties": {
+              "prose_quality": { "type": "number" },
+              "sensory_grounding": { "type": "number" },
+              "filter_word_density": { "type": "number" },
+              "rhythm_variation": { "type": "number" },
+              "character_voice": { "type": "number" },
+              "transition_quality": { "type": "number" },
+              "honorific_consistency": { "type": "number" },
+              "korean_texture": { "type": "number" },
+              "style_alignment": { "type": "number" }
+            },
+            "additionalProperties": false
+          },
+          "verdict": {
+            "type": "string",
+            "enum": ["PASS", "REVISE"],
+            "description": "Final verdict from Quality Oracle"
+          },
+          "superseded": {
+            "type": "boolean",
+            "default": false,
+            "description": "Whether this snapshot has been superseded by a newer version"
+          }
+        },
+        "additionalProperties": false
+      }
+    },
+    "metadata": {
+      "type": "object",
+      "required": ["total_snapshots", "last_updated", "auto_exemplars_added", "regression_alerts_fired"],
+      "properties": {
+        "total_snapshots": {
+          "type": "integer",
+          "minimum": 0,
+          "description": "Total number of non-superseded snapshots"
+        },
+        "last_updated": {
+          "type": "string",
+          "format": "date-time",
+          "description": "ISO 8601 timestamp of last update"
+        },
+        "auto_exemplars_added": {
+          "type": "integer",
+          "minimum": 0,
+          "description": "Count of auto-accumulated exemplars"
+        },
+        "regression_alerts_fired": {
+          "type": "integer",
+          "minimum": 0,
+          "description": "Count of regression alerts fired"
+        }
+      },
+      "additionalProperties": false
+    }
+  },
+  "additionalProperties": false
+}

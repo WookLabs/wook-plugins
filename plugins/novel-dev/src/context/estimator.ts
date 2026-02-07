@@ -49,6 +49,11 @@ export const AVERAGE_TOKENS_BY_TYPE: Record<ContextType, number> = {
   world: 1000,
   foreshadowing: 400,
   act_summary: 800,
+  // V5 context types
+  exemplar: 1500,            // Scene-level exemplars (500~1500 chars)
+  scene_plan: 800,           // Current scene plan
+  emotional_directive: 300,  // Emotional arc directives
+  relationship_state: 500,   // Relationship dynamics
 };
 
 // ============================================================================

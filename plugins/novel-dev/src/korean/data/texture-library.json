@@ -1,0 +1,129 @@
+{
+  "version": "1.0",
+  "categories": {
+    "emotion": {
+      "heartbeat": [
+        { "korean": "두근두근", "intensity": "medium", "verbForm": "두근거리다", "contexts": ["excitement", "nervousness", "anticipation", "romance"] },
+        { "korean": "콩닥콩닥", "intensity": "soft", "verbForm": "콩닥거리다", "contexts": ["flutter", "nervousness", "shyness"] },
+        { "korean": "쿵쿵", "intensity": "strong", "verbForm": "쿵쿵거리다", "contexts": ["fear", "anger", "intense emotion"] }
+      ],
+      "trembling": [
+        { "korean": "부들부들", "intensity": "strong", "verbForm": "부들거리다", "contexts": ["anger", "fear", "cold"] },
+        { "korean": "오들오들", "intensity": "medium", "verbForm": "오들거리다", "contexts": ["cold", "fear", "shivering"] },
+        { "korean": "덜덜", "intensity": "strong", "verbForm": "덜덜거리다", "contexts": ["fear", "cold", "shock"] },
+        { "korean": "벌벌", "intensity": "strong", "verbForm": "벌벌거리다", "contexts": ["fear", "terror", "trembling"] }
+      ],
+      "anxiety": [
+        { "korean": "조마조마", "intensity": "medium", "verbForm": "조마조마하다", "contexts": ["anxiety", "suspense", "worry"] },
+        { "korean": "초조", "intensity": "strong", "verbForm": "초조하다", "contexts": ["impatience", "anxiety", "nervousness"] },
+        { "korean": "안절부절", "intensity": "strong", "verbForm": "안절부절못하다", "contexts": ["restlessness", "anxiety", "agitation"] }
+      ]
+    },
+    "sound": {
+      "crying": [
+        { "korean": "엉엉", "intensity": "strong", "verbForm": "엉엉거리다", "contexts": ["grief", "despair", "loud crying"] },
+        { "korean": "훌쩍훌쩍", "intensity": "soft", "verbForm": "훌쩍거리다", "contexts": ["sadness", "sniffling", "quiet crying"] },
+        { "korean": "흐느끼다", "intensity": "medium", "verbForm": null, "contexts": ["grief", "sobbing"] },
+        { "korean": "울먹울먹", "intensity": "medium", "verbForm": "울먹거리다", "contexts": ["about to cry", "tearful", "emotional"] },
+        { "korean": "찔끔찔끔", "intensity": "soft", "verbForm": null, "contexts": ["few tears", "quiet crying", "suppressed"] }
+      ],
+      "laughter": [
+        { "korean": "낄낄", "intensity": "soft", "verbForm": "낄낄거리다", "contexts": ["giggling", "amusement", "mischief"] },
+        { "korean": "깔깔", "intensity": "strong", "verbForm": "깔깔거리다", "contexts": ["hearty laughter", "amusement"] },
+        { "korean": "킥킥", "intensity": "soft", "verbForm": "킥킥거리다", "contexts": ["suppressed laughter", "sneaky"] },
+        { "korean": "픽픽", "intensity": "soft", "verbForm": null, "contexts": ["snickering", "suppressed laughter"] },
+        { "korean": "하하", "intensity": "medium", "verbForm": null, "contexts": ["laughter", "amusement"] }
+      ],
+      "speaking": [
+        { "korean": "속삭속삭", "intensity": "soft", "verbForm": "속삭거리다", "contexts": ["whispering", "secrets", "intimacy"] },
+        { "korean": "중얼중얼", "intensity": "soft", "verbForm": "중얼거리다", "contexts": ["mumbling", "muttering", "thinking aloud"] },
+        { "korean": "투덜투덜", "intensity": "medium", "verbForm": "투덜거리다", "contexts": ["complaining", "grumbling"] },
+        { "korean": "웅성웅성", "intensity": "medium", "verbForm": "웅성거리다", "contexts": ["murmuring crowd", "commotion"] },
+        { "korean": "수군수군", "intensity": "soft", "verbForm": "수군거리다", "contexts": ["whispering gossip", "murmuring"] }
+      ],
+      "breathing": [
+        { "korean": "헉헉", "intensity": "strong", "verbForm": "헉헉거리다", "contexts": ["panting", "exhaustion", "running"] },
+        { "korean": "후우", "intensity": "soft", "verbForm": null, "contexts": ["sigh", "relief", "blowing"] },
+        { "korean": "쌕쌕", "intensity": "strong", "verbForm": "쌕쌕거리다", "contexts": ["wheezing", "labored breathing", "illness"] }
+      ]
+    },
+    "movement": {
+      "walking": [
+        { "korean": "살금살금", "intensity": "soft", "verbForm": "살금거리다", "contexts": ["sneaking", "careful", "quiet"] },
+        { "korean": "성큼성큼", "intensity": "strong", "verbForm": "성큼거리다", "contexts": ["striding", "determined", "urgent"] },
+        { "korean": "터벅터벅", "intensity": "medium", "verbForm": "터벅거리다", "contexts": ["trudging", "tired", "heavy steps"] },
+        { "korean": "어슬렁어슬렁", "intensity": "soft", "verbForm": "어슬렁거리다", "contexts": ["loitering", "wandering", "aimless"] },
+        { "korean": "총총", "intensity": "soft", "verbForm": "총총거리다", "contexts": ["quick light steps", "hurrying"] }
+      ],
+      "running": [
+        { "korean": "쿵쿵", "intensity": "strong", "verbForm": "쿵쿵거리다", "contexts": ["stomping", "running", "heavy footsteps"] },
+        { "korean": "달그락달그락", "intensity": "medium", "verbForm": "달그락거리다", "contexts": ["clattering", "rattling"] },
+        { "korean": "우당탕탕", "intensity": "strong", "verbForm": null, "contexts": ["crashing", "chaos", "running noisily"] },
+        { "korean": "쾅쾅", "intensity": "strong", "verbForm": null, "contexts": ["banging", "stomping", "pounding"] }
+      ],
+      "falling": [
+        { "korean": "데굴데굴", "intensity": "medium", "verbForm": "데굴거리다", "contexts": ["rolling", "tumbling"] },
+        { "korean": "휘청휘청", "intensity": "medium", "verbForm": "휘청거리다", "contexts": ["staggering", "unsteady", "dizzy"] },
+        { "korean": "털썩", "intensity": "strong", "verbForm": null, "contexts": ["collapsing", "falling heavily"] },
+        { "korean": "풀썩", "intensity": "medium", "verbForm": null, "contexts": ["slumping", "collapsing weakly"] },
+        { "korean": "쓰러지다", "intensity": "strong", "verbForm": null, "contexts": ["falling down", "collapsing"] }
+      ],
+      "swaying": [
+        { "korean": "흔들흔들", "intensity": "medium", "verbForm": "흔들거리다", "contexts": ["swaying", "shaking", "wobbling"] },
+        { "korean": "흔들흔들", "intensity": "medium", "verbForm": "흔들거리다", "contexts": ["swaying", "rocking"] },
+        { "korean": "비틀비틀", "intensity": "medium", "verbForm": "비틀거리다", "contexts": ["staggering", "drunk", "unsteady"] }
+      ]
+    },
+    "visual": {
+      "light": [
+        { "korean": "반짝반짝", "intensity": "soft", "verbForm": "반짝거리다", "contexts": ["sparkling", "twinkling", "eyes"] },
+        { "korean": "번쩍번쩍", "intensity": "strong", "verbForm": "번쩍거리다", "contexts": ["flashing", "lightning", "bright"] },
+        { "korean": "흐릿흐릿", "intensity": "soft", "verbForm": null, "contexts": ["blurry", "dim", "fading"] },
+        { "korean": "깜빡깜빡", "intensity": "soft", "verbForm": "깜빡거리다", "contexts": ["blinking", "flickering"] },
+        { "korean": "아른아른", "intensity": "soft", "verbForm": "아른거리다", "contexts": ["shimmering", "flickering vision", "hazy"] }
+      ],
+      "appearance": [
+        { "korean": "알록달록", "intensity": "medium", "verbForm": null, "contexts": ["colorful", "varied", "patterned"] },
+        { "korean": "끈적끈적", "intensity": "medium", "verbForm": "끈적거리다", "contexts": ["sticky", "gooey", "humid"] },
+        { "korean": "말끔", "intensity": "soft", "verbForm": null, "contexts": ["neat", "clean", "tidy"] },
+        { "korean": "번들번들", "intensity": "medium", "verbForm": "번들거리다", "contexts": ["shiny", "glossy", "oily"] }
+      ],
+      "gaze": [
+        { "korean": "빤히", "intensity": "strong", "verbForm": null, "contexts": ["staring", "gazing intently"] },
+        { "korean": "흘끗", "intensity": "soft", "verbForm": null, "contexts": ["glancing", "side-eye"] },
+        { "korean": "멍하니", "intensity": "soft", "verbForm": null, "contexts": ["blankly", "dazed", "vacant stare"] }
+      ]
+    },
+    "nature": {
+      "rain": [
+        { "korean": "주룩주룩", "intensity": "medium", "verbForm": "주룩거리다", "contexts": ["rain", "pouring", "drizzling"] },
+        { "korean": "후드득후드득", "intensity": "strong", "verbForm": null, "contexts": ["heavy rain", "pattering"] },
+        { "korean": "보슬보슬", "intensity": "soft", "verbForm": null, "contexts": ["light rain", "drizzle", "gentle"] },
+        { "korean": "부슬부슬", "intensity": "soft", "verbForm": null, "contexts": ["light rain", "mist", "drizzle"] },
+        { "korean": "쏴아", "intensity": "strong", "verbForm": null, "contexts": ["heavy downpour", "rushing water"] }
+      ],
+      "wind": [
+        { "korean": "살랑살랑", "intensity": "soft", "verbForm": "살랑거리다", "contexts": ["gentle breeze", "swaying", "light wind"] },
+        { "korean": "쏴아", "intensity": "medium", "verbForm": null, "contexts": ["rushing wind", "water rushing"] },
+        { "korean": "휭", "intensity": "strong", "verbForm": null, "contexts": ["whoosh", "swift", "sudden wind"] },
+        { "korean": "쌩쌩", "intensity": "strong", "verbForm": "쌩쌩거리다", "contexts": ["strong wind", "whipping wind"] },
+        { "korean": "산들산들", "intensity": "soft", "verbForm": null, "contexts": ["gentle breeze", "soft wind"] }
+      ],
+      "sun": [
+        { "korean": "쨍쨍", "intensity": "strong", "verbForm": null, "contexts": ["blazing sun", "hot", "bright day"] },
+        { "korean": "따사로이", "intensity": "soft", "verbForm": null, "contexts": ["warm", "gentle sunshine", "cozy"] },
+        { "korean": "포근", "intensity": "soft", "verbForm": null, "contexts": ["warm", "cozy", "comfortable"] }
+      ],
+      "cold": [
+        { "korean": "싸늘", "intensity": "strong", "verbForm": null, "contexts": ["cold", "chilly", "icy"] },
+        { "korean": "서늘", "intensity": "medium", "verbForm": null, "contexts": ["cool", "refreshing cold", "autumn"] },
+        { "korean": "으스스", "intensity": "medium", "verbForm": null, "contexts": ["creepy cold", "eerie", "chilling"] }
+      ]
+    }
+  },
+  "metadata": {
+    "source": "Korean mimetic word research, TOPIK Guide, 나무위키",
+    "lastUpdated": "2026-02-05",
+    "note": "Use 1-2 texture words per 500 chars maximum to avoid forced feeling"
+  }
+}

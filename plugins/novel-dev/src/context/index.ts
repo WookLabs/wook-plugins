@@ -41,11 +41,18 @@ export type {
   BudgetConfig,
   LoadContextResult,
   LoadingStats,
+  // V5 tiered context types
+  ContextTier,
+  TierBudget,
+  TieredContextBundle,
+  SandwichSplit,
 } from './types.js';
 
 export {
   DEFAULT_BUDGET_CONFIG,
   ContextOverflowError,
+  // V5 tier budget
+  DEFAULT_TIER_BUDGET,
 } from './types.js';
 
 // ============================================================================
@@ -105,3 +112,14 @@ export {
   validateBudget,
   assertRequiredItemsFit,
 } from './overflow-handler.js';
+
+// ============================================================================
+// Tiered Assembly Exports (V5)
+// ============================================================================
+
+export {
+  assignTier,
+  assembleTieredContext,
+  formatPromptOrder,
+  getTierStats,
+} from './tiers.js';

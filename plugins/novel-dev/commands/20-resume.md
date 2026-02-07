@@ -1,5 +1,5 @@
 ---
-description: "중단된 집필 세션을 감지하고 복구합니다"
+description: "[20단계] 세션 복구 - 중단된 집필 세션을 감지하고 복구합니다"
 ---
 
 [NOVEL-DEV: SESSION RESUME]

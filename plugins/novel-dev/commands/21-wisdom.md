@@ -1,5 +1,5 @@
 ---
-description: "집필 과정에서 축적된 지혜(wisdom)를 관리합니다"
+description: "[21단계] 지혜 관리 - 집필 과정에서 축적된 지혜(wisdom)를 관리합니다"
 ---
 
 [NOVEL-DEV: WISDOM MANAGEMENT]

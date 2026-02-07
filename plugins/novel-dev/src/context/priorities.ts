@@ -16,13 +16,18 @@ import { ContextType, ItemMetadata } from './types.js';
  * Higher values indicate higher priority
  */
 export const basePriority: Record<ContextType, number> = {
-  style: 10,           // Style guide is always required
-  plot: 9,             // Current chapter plot is essential
-  summary: 8,          // Recent summaries provide continuity
-  character: 7,        // Character profiles for consistency
-  world: 6,            // World/location details
-  foreshadowing: 5,    // Active foreshadowing elements
-  act_summary: 4,      // Act-level summaries for big picture
+  style: 10,               // Style guide is always required
+  plot: 9,                 // Current chapter plot is essential
+  summary: 8,              // Recent summaries provide continuity
+  character: 7,            // Character profiles for consistency
+  world: 6,                // World/location details
+  foreshadowing: 5,        // Active foreshadowing elements
+  act_summary: 4,          // Act-level summaries for big picture
+  // V5 context types - research shows exemplars are dominant quality factor
+  exemplar: 10,            // Style exemplars (highest - dominant quality factor)
+  scene_plan: 10,          // Current scene plan (always required in hot tier)
+  emotional_directive: 8,  // Emotional arc directives
+  relationship_state: 6,   // Active relationship dynamics
 };
 
 /**
@@ -30,13 +35,18 @@ export const basePriority: Record<ContextType, number> = {
  * Some types are always required, others are optional
  */
 export const requiredByType: Record<ContextType, boolean> = {
-  style: true,         // Always required
-  plot: true,          // Current chapter plot always required
-  summary: false,      // Can be dropped if far from current
-  character: false,    // Only appearing characters required
-  world: false,        // Can be dropped if not used
-  foreshadowing: false,// Can be dropped if not active
-  act_summary: false,  // Optional context
+  style: true,               // Always required
+  plot: true,                // Current chapter plot always required
+  summary: false,            // Can be dropped if far from current
+  character: false,          // Only appearing characters required
+  world: false,              // Can be dropped if not used
+  foreshadowing: false,      // Can be dropped if not active
+  act_summary: false,        // Optional context
+  // V5 context types
+  exemplar: true,            // At least 1 exemplar must be present
+  scene_plan: true,          // Scene plan always required
+  emotional_directive: false,// Can be dropped if budget tight
+  relationship_state: false, // Can be dropped if budget tight
 };
 
 // ============================================================================
@@ -138,6 +148,36 @@ export function getPriority(type: ContextType, metadata: ItemMetadata): number {
     }
   }
 
+  // V5 context types
+
+  // Exemplar: always highest priority (no dynamic adjustment)
+  if (type === 'exemplar') {
+    priority = 10;
+  }
+
+  // Scene plan: always highest priority (no dynamic adjustment)
+  if (type === 'scene_plan') {
+    priority = 10;
+  }
+
+  // Emotional directive: higher if scene has emotional_arc defined
+  if (type === 'emotional_directive') {
+    if (metadata.hasEmotionalArc) {
+      priority = 9;
+    } else {
+      priority = 6;
+    }
+  }
+
+  // Relationship state: higher if characters have evolving relationship
+  if (type === 'relationship_state') {
+    if (metadata.hasEvolvingRelationship) {
+      priority = 8;
+    } else {
+      priority = 5;
+    }
+  }
+
   return priority;
 }
 
@@ -159,6 +199,18 @@ export function isRequired(type: ContextType, metadata: ItemMetadata): boolean {
 
   // Foreshadowing with payoff in current chapter is required
   if (type === 'foreshadowing' && metadata.payoffChapter === metadata.currentChapter) {
+    required = true;
+  }
+
+  // V5 context types
+
+  // Scene plan is always required
+  if (type === 'scene_plan') {
+    required = true;
+  }
+
+  // Exemplar is required (at least 1 must be present)
+  if (type === 'exemplar') {
     required = true;
   }
 

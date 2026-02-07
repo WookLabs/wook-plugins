@@ -602,6 +602,11 @@ export async function loadContextWithStats(
     world: 0,
     foreshadowing: 0,
     act_summary: 0,
+    // V5 context types
+    exemplar: 0,
+    scene_plan: 0,
+    emotional_directive: 0,
+    relationship_state: 0,
   };
 
   for (const item of budget.items) {

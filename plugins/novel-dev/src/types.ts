@@ -4,6 +4,23 @@
  */
 
 // ============================================================================
+// Style Library Types (v5.0)
+// ============================================================================
+
+// Re-export StyleExemplar and related types from style-library module
+export type {
+  StyleExemplar,
+  StyleLibrary,
+  StyleLibraryMetadata,
+  ExemplarCategory,
+  ExemplarQuery,
+  ExemplarResult,
+  SceneType,
+  POV,
+  PacingSpeed,
+} from './style-library/types.js';
+
+// ============================================================================
 // Project Types
 // ============================================================================
 
@@ -326,8 +343,10 @@ export interface Scene {
   purpose: string;
   characters: string[]; // Character IDs
   location: string; // Location ID
-  conflict: string;
-  beat: string;
+  conflict?: string;
+  beat?: string;
+  emotional_tone?: string;
+  estimated_words?: number;
 }
 
 export interface ChapterStyleGuide {
@@ -498,3 +517,18 @@ export type Importance = "A" | "B" | "C";
 export type Severity = "critical" | "major" | "minor";
 export type Grade = "S" | "A" | "B" | "C" | "F";
 export type Pacing = "fast" | "medium" | "slow";
+
+// ============================================================================
+// Scene V5 Types (Re-exported from scene module)
+// ============================================================================
+
+export type {
+  SceneV5,
+  EmotionalArc,
+  SceneForeshadowing,
+  SceneTransition,
+  SceneStyleOverride,
+  DecompositionConfig,
+  DecompositionResult,
+  ValidationResult,
+} from './scene/types.js';

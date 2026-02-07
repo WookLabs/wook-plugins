@@ -1,5 +1,5 @@
 ---
-description: "병렬 에이전트 Swarm으로 검증/리뷰/설계를 수행합니다"
+description: "[22단계] 병렬 검증 - 병렬 에이전트 Swarm으로 검증/리뷰/설계를 수행합니다"
 argument-hint: <mode> <target>
 allowed-tools:
   - Read

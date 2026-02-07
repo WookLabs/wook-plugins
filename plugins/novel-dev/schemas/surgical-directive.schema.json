@@ -1,0 +1,100 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "https://novel-dev.org/schemas/surgical-directive.schema.json",
+  "title": "SurgicalDirective",
+  "description": "A targeted prose revision directive from Quality Oracle to Prose Surgeon",
+  "type": "object",
+  "required": ["id", "type", "priority", "location", "issue", "instruction", "maxScope"],
+  "properties": {
+    "id": {
+      "type": "string",
+      "description": "Unique identifier in format dir_{type}_{NNN}",
+      "pattern": "^dir_[a-z_-]+_[0-9]{3}$"
+    },
+    "type": {
+      "type": "string",
+      "description": "Type of prose quality issue",
+      "enum": [
+        "show-not-tell",
+        "filter-word-removal",
+        "sensory-enrichment",
+        "rhythm-variation",
+        "dialogue-subtext",
+        "cliche-replacement",
+        "transition-smoothing",
+        "voice-consistency",
+        "proofreading"
+      ]
+    },
+    "priority": {
+      "type": "integer",
+      "description": "Priority from 1 (highest) to 10 (lowest)",
+      "minimum": 1,
+      "maximum": 10
+    },
+    "location": {
+      "type": "object",
+      "description": "Location of the problematic passage",
+      "required": ["sceneNumber", "paragraphStart", "paragraphEnd"],
+      "properties": {
+        "sceneNumber": {
+          "type": "integer",
+          "description": "Scene number (1-indexed)",
+          "minimum": 1
+        },
+        "paragraphStart": {
+          "type": "integer",
+          "description": "Starting paragraph number (0-indexed)",
+          "minimum": 0
+        },
+        "paragraphEnd": {
+          "type": "integer",
+          "description": "Ending paragraph number (0-indexed, inclusive)",
+          "minimum": 0
+        },
+        "characterOffset": {
+          "type": "integer",
+          "description": "Optional character offset within paragraph for precise targeting",
+          "minimum": 0
+        }
+      },
+      "additionalProperties": false
+    },
+    "issue": {
+      "type": "string",
+      "description": "Specific description of the problem",
+      "minLength": 10,
+      "maxLength": 500
+    },
+    "currentText": {
+      "type": "string",
+      "description": "The current problematic text",
+      "minLength": 1,
+      "maxLength": 2000
+    },
+    "instruction": {
+      "type": "string",
+      "description": "Concrete instruction for fixing the issue",
+      "minLength": 10,
+      "maxLength": 1000
+    },
+    "exemplarId": {
+      "type": "string",
+      "description": "Reference exemplar ID from style library",
+      "pattern": "^exm_[a-z0-9_]+$"
+    },
+    "exemplarContent": {
+      "type": "string",
+      "description": "Actual exemplar text for context",
+      "minLength": 1,
+      "maxLength": 2000
+    },
+    "maxScope": {
+      "type": "integer",
+      "description": "Maximum number of paragraphs this fix should touch",
+      "minimum": 1,
+      "maximum": 5
+    }
+  },
+  "additionalProperties": false
+}

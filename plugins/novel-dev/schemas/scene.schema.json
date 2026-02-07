@@ -1,0 +1,173 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "https://novel-dev.org/schemas/scene.schema.json",
+  "title": "SceneV5",
+  "description": "Enriched scene data model for scene-based writing pipeline. Backward compatible superset of chapter.schema.json scenes.",
+  "type": "object",
+  "required": [
+    "scene_number",
+    "purpose",
+    "characters",
+    "location"
+  ],
+  "properties": {
+    "scene_number": {
+      "type": "integer",
+      "description": "Scene number within chapter",
+      "minimum": 1
+    },
+    "purpose": {
+      "type": "string",
+      "description": "Purpose/function of this scene",
+      "maxLength": 1000
+    },
+    "characters": {
+      "type": "array",
+      "description": "Character IDs in this scene",
+      "items": {
+        "type": "string"
+      },
+      "minItems": 1,
+      "uniqueItems": true
+    },
+    "location": {
+      "type": "string",
+      "description": "Location ID for this scene"
+    },
+    "conflict": {
+      "type": "string",
+      "description": "Main conflict or tension in scene",
+      "maxLength": 1000
+    },
+    "beat": {
+      "type": "string",
+      "description": "Story beat or key event in scene",
+      "maxLength": 2000
+    },
+    "emotional_tone": {
+      "type": "string",
+      "description": "Emotional tone of this scene"
+    },
+    "estimated_words": {
+      "type": "integer",
+      "description": "Estimated word count for this scene",
+      "minimum": 100
+    },
+    "pov_character": {
+      "type": "string",
+      "description": "Character ID for scene point-of-view"
+    },
+    "sensory_anchors": {
+      "type": "array",
+      "description": "Required sensory details to ground the scene (at least 2: e.g., sight + sound for action)",
+      "items": {
+        "type": "string",
+        "minLength": 1
+      },
+      "minItems": 2
+    },
+    "emotional_arc": {
+      "type": "object",
+      "description": "Emotional trajectory within the scene",
+      "properties": {
+        "entry_emotion": {
+          "type": "string",
+          "description": "Character's emotional state entering the scene"
+        },
+        "exit_emotion": {
+          "type": "string",
+          "description": "Character's emotional state leaving the scene"
+        },
+        "peak_moment": {
+          "type": "string",
+          "description": "Description of the emotional peak moment"
+        },
+        "tension_target": {
+          "type": "integer",
+          "description": "Target tension level (1-10 scale)",
+          "minimum": 1,
+          "maximum": 10
+        }
+      },
+      "required": ["entry_emotion", "exit_emotion", "peak_moment", "tension_target"]
+    },
+    "dialogue_goals": {
+      "type": "array",
+      "description": "What dialogue must accomplish in this scene",
+      "items": {
+        "type": "string"
+      }
+    },
+    "foreshadowing": {
+      "type": "object",
+      "description": "Foreshadowing elements to plant, payoff, or hint in this scene",
+      "properties": {
+        "plant": {
+          "type": "array",
+          "description": "Foreshadowing IDs to plant (fore_XXX format)",
+          "items": {
+            "type": "string",
+            "pattern": "^fore_[a-z0-9_]+$"
+          }
+        },
+        "payoff": {
+          "type": "array",
+          "description": "Foreshadowing IDs to pay off",
+          "items": {
+            "type": "string",
+            "pattern": "^fore_[a-z0-9_]+$"
+          }
+        },
+        "hint": {
+          "type": "array",
+          "description": "Foreshadowing IDs to hint at",
+          "items": {
+            "type": "string",
+            "pattern": "^fore_[a-z0-9_]+$"
+          }
+        }
+      }
+    },
+    "transition": {
+      "type": "object",
+      "description": "Scene transition directives",
+      "properties": {
+        "from_previous": {
+          "type": "string",
+          "description": "How this scene connects from the previous scene (or 'chapter opening' for first scene)"
+        },
+        "to_next": {
+          "type": "string",
+          "description": "How this scene connects to the next scene (or 'chapter ending hook' for last scene)"
+        }
+      }
+    },
+    "style_override": {
+      "type": "object",
+      "description": "Scene-specific style directives that override chapter defaults",
+      "properties": {
+        "pacing": {
+          "type": "string",
+          "description": "Pacing directive for this scene",
+          "enum": ["fast", "medium", "slow"]
+        },
+        "focus": {
+          "type": "string",
+          "description": "Primary focus (e.g., action, dialogue, introspection)"
+        },
+        "tone": {
+          "type": "string",
+          "description": "Specific tone for this scene"
+        }
+      }
+    },
+    "exemplar_tags": {
+      "type": "array",
+      "description": "Tags for matching style exemplars to this scene (e.g., 'dialogue-heavy', 'action-sequence', 'emotional-climax')",
+      "items": {
+        "type": "string"
+      }
+    }
+  },
+  "additionalProperties": true
+}

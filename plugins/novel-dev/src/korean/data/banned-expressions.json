@@ -1,0 +1,193 @@
+{
+  "version": "1.0",
+  "categories": {
+    "ai-tell": {
+      "description": "AI-generated text characteristic connectors",
+      "severity": "critical",
+      "expressions": [
+        {
+          "pattern": "한편,",
+          "replacements": ["", "그때", "그런데"],
+          "context": "narration",
+          "reason": "AI 특유의 문단 전환어"
+        },
+        {
+          "pattern": "그러나,",
+          "replacements": ["하지만", "그런데", ""],
+          "context": "narration",
+          "reason": "번역투 접속사"
+        },
+        {
+          "pattern": "따라서,",
+          "replacements": ["그래서", ""],
+          "context": "narration",
+          "reason": "설명문 전환어"
+        },
+        {
+          "pattern": "결과적으로",
+          "replacements": ["결국", ""],
+          "context": "narration",
+          "reason": "AI 특유의 정리 표현"
+        },
+        {
+          "pattern": "특히,",
+          "replacements": ["", "무엇보다"],
+          "context": "narration",
+          "reason": "AI 특유의 강조 표현"
+        }
+      ]
+    },
+    "archaic-verb": {
+      "description": "Archaic/formal verb forms that sound AI-generated",
+      "severity": "critical",
+      "expressions": [
+        {
+          "pattern": "하였다",
+          "isRegex": true,
+          "regexPattern": "하였다\\.?$",
+          "replacements": ["했다"],
+          "context": "any",
+          "reason": "문어체 과잉"
+        },
+        {
+          "pattern": "되었다",
+          "isRegex": true,
+          "regexPattern": "되었다\\.?$",
+          "replacements": ["됐다"],
+          "context": "any",
+          "reason": "문어체 과잉"
+        },
+        {
+          "pattern": "것이었다",
+          "isRegex": true,
+          "regexPattern": "것이었다\\.?$",
+          "replacements": ["것이다", "거였다"],
+          "context": "any",
+          "reason": "과거 시제 과잉"
+        },
+        {
+          "pattern": "인 것이다",
+          "replacements": ["이다", "인 거다"],
+          "context": "any",
+          "reason": "설명체 과잉"
+        },
+        {
+          "pattern": "있었다",
+          "isRegex": true,
+          "regexPattern": "있었다\\.?$",
+          "replacements": ["있었다"],
+          "context": "any",
+          "note": "문맥에 따라 허용 가능"
+        }
+      ]
+    },
+    "translationese": {
+      "description": "Patterns typical of translated text",
+      "severity": "high",
+      "expressions": [
+        {
+          "pattern": "인 것 중 하나",
+          "replacements": ["대표적인", "중 하나"],
+          "context": "narration",
+          "reason": "번역투 표현"
+        },
+        {
+          "pattern": "에 있어서",
+          "replacements": ["에서", "에"],
+          "context": "any",
+          "reason": "번역투 조사"
+        },
+        {
+          "pattern": "에 있어",
+          "replacements": ["에서", "에"],
+          "context": "any",
+          "reason": "번역투 조사"
+        },
+        {
+          "pattern": "로 인한",
+          "replacements": ["때문에", "탓에"],
+          "context": "any",
+          "reason": "번역투 표현"
+        },
+        {
+          "pattern": "으로 인한",
+          "replacements": ["때문에", "탓에"],
+          "context": "any",
+          "reason": "번역투 표현"
+        },
+        {
+          "pattern": "하지 않을 수 없다",
+          "replacements": ["해야 한다", "어쩔 수 없이"],
+          "context": "any",
+          "reason": "이중 부정 번역투"
+        },
+        {
+          "pattern": "것이 사실이다",
+          "replacements": ["그렇다", "맞다"],
+          "context": "any",
+          "reason": "번역투 강조"
+        }
+      ]
+    },
+    "punctuation": {
+      "description": "AI-characteristic comma placement",
+      "severity": "medium",
+      "expressions": [
+        {
+          "pattern": ", 그리고 ",
+          "replacements": ["그리고 ", " 그리고 "],
+          "context": "any",
+          "reason": "불필요한 쉼표"
+        },
+        {
+          "pattern": ", 그러나 ",
+          "replacements": [". 그러나 ", "그러나 "],
+          "context": "any",
+          "reason": "쉼표 후 접속사 패턴"
+        },
+        {
+          "pattern": ", 따라서 ",
+          "replacements": [". 따라서 ", "따라서 "],
+          "context": "any",
+          "reason": "쉼표 후 접속사 패턴"
+        },
+        {
+          "pattern": ", 또한 ",
+          "replacements": [". 또한 ", "또한 "],
+          "context": "any",
+          "reason": "불필요한 쉼표"
+        }
+      ]
+    },
+    "pronoun-overuse": {
+      "description": "Overuse of pronouns (translationese pattern)",
+      "severity": "low",
+      "expressions": [
+        {
+          "pattern": "그녀는",
+          "replacements": ["[이름]은", ""],
+          "context": "narration",
+          "note": "캐릭터 이름으로 대체하거나 생략",
+          "reason": "대명사 과다 사용"
+        },
+        {
+          "pattern": "그는",
+          "replacements": ["[이름]은", ""],
+          "context": "narration",
+          "note": "캐릭터 이름으로 대체하거나 생략",
+          "reason": "대명사 과다 사용"
+        },
+        {
+          "pattern": "그것은",
+          "replacements": ["", "[구체적 명사]는"],
+          "context": "narration",
+          "reason": "지시대명사 번역투"
+        }
+      ]
+    }
+  },
+  "metadata": {
+    "source": "KatFishNet research, 나무위키 번역체, Korean novel writing guides",
+    "lastUpdated": "2026-02-05"
+  }
+}

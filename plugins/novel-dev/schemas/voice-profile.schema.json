@@ -1,0 +1,306 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://novel-dev.wook.io/schemas/voice-profile.schema.json",
+  "title": "VoiceProfile",
+  "description": "Complete voice profile for a character, capturing speech patterns, habits, and linguistic markers",
+  "type": "object",
+  "required": [
+    "characterId",
+    "characterName",
+    "speechPatterns",
+    "internalMonologue",
+    "linguisticMarkers",
+    "voiceFingerprint"
+  ],
+  "properties": {
+    "characterId": {
+      "type": "string",
+      "description": "Unique character identifier",
+      "minLength": 1
+    },
+    "characterName": {
+      "type": "string",
+      "description": "Character name",
+      "minLength": 1
+    },
+    "speechPatterns": {
+      "$ref": "#/$defs/SpeechPatterns"
+    },
+    "internalMonologue": {
+      "$ref": "#/$defs/InternalMonologue"
+    },
+    "linguisticMarkers": {
+      "$ref": "#/$defs/LinguisticMarkers"
+    },
+    "voiceFingerprint": {
+      "$ref": "#/$defs/VoiceFingerprint"
+    }
+  },
+  "additionalProperties": false,
+  "$defs": {
+    "SpeechPatterns": {
+      "type": "object",
+      "description": "Complete speech patterns for a character",
+      "required": ["sentenceStructure", "vocabulary", "verbalHabits", "rhythm"],
+      "properties": {
+        "sentenceStructure": {
+          "$ref": "#/$defs/SentenceStructure"
+        },
+        "vocabulary": {
+          "$ref": "#/$defs/VocabularyProfile"
+        },
+        "verbalHabits": {
+          "$ref": "#/$defs/VerbalHabits"
+        },
+        "rhythm": {
+          "$ref": "#/$defs/SpeechRhythm"
+        }
+      },
+      "additionalProperties": false
+    },
+    "SentenceStructure": {
+      "type": "object",
+      "description": "Sentence structure preferences",
+      "required": ["preferredLength", "complexityLevel", "fragmentUsage"],
+      "properties": {
+        "preferredLength": {
+          "type": "string",
+          "enum": ["short", "medium", "long", "varied"],
+          "description": "Preferred sentence length"
+        },
+        "complexityLevel": {
+          "type": "string",
+          "enum": ["simple", "moderate", "complex"],
+          "description": "Complexity level of sentence construction"
+        },
+        "fragmentUsage": {
+          "type": "string",
+          "enum": ["never", "rare", "occasional", "frequent"],
+          "description": "Use of sentence fragments"
+        }
+      },
+      "additionalProperties": false
+    },
+    "VocabularyProfile": {
+      "type": "object",
+      "description": "Vocabulary characteristics",
+      "required": ["register", "favoredExpressions"],
+      "properties": {
+        "register": {
+          "type": "string",
+          "enum": ["colloquial", "standard", "formal", "literary"],
+          "description": "Register of speech"
+        },
+        "technicalTerms": {
+          "type": "array",
+          "description": "Domain-specific terms the character uses",
+          "items": { "type": "string" }
+        },
+        "avoidedWords": {
+          "type": "array",
+          "description": "Words the character avoids",
+          "items": { "type": "string" }
+        },
+        "favoredExpressions": {
+          "type": "array",
+          "description": "Characteristic expressions and phrases",
+          "items": { "type": "string" }
+        }
+      },
+      "additionalProperties": false
+    },
+    "VerbalHabits": {
+      "type": "object",
+      "description": "Verbal habits and speech patterns",
+      "required": ["fillers", "catchphrases", "exclamations", "hedging"],
+      "properties": {
+        "fillers": {
+          "type": "array",
+          "description": "Filler words and sounds",
+          "items": { "type": "string" },
+          "examples": [["음", "저기", "그니까"]]
+        },
+        "catchphrases": {
+          "type": "array",
+          "description": "Signature expressions or catchphrases",
+          "items": { "type": "string" }
+        },
+        "exclamations": {
+          "type": "array",
+          "description": "Exclamations",
+          "items": { "type": "string" },
+          "examples": [["이런!", "세상에"]]
+        },
+        "hedging": {
+          "type": "string",
+          "enum": ["none", "minimal", "moderate", "heavy"],
+          "description": "Level of hedging in speech"
+        }
+      },
+      "additionalProperties": false
+    },
+    "SpeechRhythm": {
+      "type": "object",
+      "description": "Speech rhythm characteristics",
+      "required": ["tempo", "pauseUsage", "interruption"],
+      "properties": {
+        "tempo": {
+          "type": "string",
+          "enum": ["slow", "moderate", "fast", "variable"],
+          "description": "Speaking tempo"
+        },
+        "pauseUsage": {
+          "type": "string",
+          "enum": ["rare", "occasional", "frequent"],
+          "description": "Use of pauses in speech"
+        },
+        "interruption": {
+          "type": "string",
+          "enum": ["never", "sometimes", "often"],
+          "description": "Tendency to interrupt"
+        }
+      },
+      "additionalProperties": false
+    },
+    "InternalMonologue": {
+      "type": "object",
+      "description": "Internal monologue style for POV characters",
+      "required": ["style", "selfAddressing", "tangentFrequency"],
+      "properties": {
+        "style": {
+          "type": "string",
+          "enum": ["stream-of-consciousness", "analytical", "emotional", "sparse"],
+          "description": "Style of internal thought"
+        },
+        "selfAddressing": {
+          "type": "string",
+          "enum": ["first-person", "second-person", "none"],
+          "description": "How the character addresses themselves in thought"
+        },
+        "tangentFrequency": {
+          "type": "string",
+          "enum": ["low", "medium", "high"],
+          "description": "Frequency of tangential thoughts"
+        }
+      },
+      "additionalProperties": false
+    },
+    "LinguisticMarkers": {
+      "type": "object",
+      "description": "Korean-specific linguistic markers",
+      "required": ["honorificDefault", "educationSignals"],
+      "properties": {
+        "honorificDefault": {
+          "type": "string",
+          "enum": ["haeche", "haeyoche", "hapsyoche"],
+          "description": "Default honorific level"
+        },
+        "dialectFeatures": {
+          "type": "array",
+          "description": "Dialect features if any",
+          "items": { "type": "string" }
+        },
+        "educationSignals": {
+          "type": "array",
+          "description": "Education/background indicators in speech",
+          "items": { "type": "string" }
+        }
+      },
+      "additionalProperties": false
+    },
+    "VoiceFingerprint": {
+      "type": "object",
+      "description": "Quantitative voice metrics for objective comparison",
+      "required": [
+        "avgSentenceLength",
+        "vocabularyComplexity",
+        "dialogueToNarrationRatio",
+        "exclamationFrequency",
+        "questionFrequency",
+        "fillerWordDensity"
+      ],
+      "properties": {
+        "avgSentenceLength": {
+          "type": "number",
+          "description": "Average sentence length in characters",
+          "minimum": 0
+        },
+        "vocabularyComplexity": {
+          "type": "number",
+          "description": "Vocabulary complexity on 0-1 scale",
+          "minimum": 0,
+          "maximum": 1
+        },
+        "dialogueToNarrationRatio": {
+          "type": "number",
+          "description": "Ratio of dialogue to narration",
+          "minimum": 0,
+          "maximum": 1
+        },
+        "exclamationFrequency": {
+          "type": "number",
+          "description": "Exclamation frequency per 1000 characters",
+          "minimum": 0
+        },
+        "questionFrequency": {
+          "type": "number",
+          "description": "Question frequency per 1000 characters",
+          "minimum": 0
+        },
+        "fillerWordDensity": {
+          "type": "number",
+          "description": "Filler word density per 1000 characters",
+          "minimum": 0
+        }
+      },
+      "additionalProperties": false
+    }
+  },
+  "examples": [
+    {
+      "characterId": "char_001",
+      "characterName": "김철수",
+      "speechPatterns": {
+        "sentenceStructure": {
+          "preferredLength": "medium",
+          "complexityLevel": "moderate",
+          "fragmentUsage": "rare"
+        },
+        "vocabulary": {
+          "register": "formal",
+          "favoredExpressions": ["그렇습니다", "말씀드리자면"],
+          "avoidedWords": ["걍", "뭐"],
+          "technicalTerms": ["경제", "시장"]
+        },
+        "verbalHabits": {
+          "fillers": ["음", "그러니까"],
+          "catchphrases": ["제 생각에는"],
+          "exclamations": ["아"],
+          "hedging": "moderate"
+        },
+        "rhythm": {
+          "tempo": "slow",
+          "pauseUsage": "frequent",
+          "interruption": "never"
+        }
+      },
+      "internalMonologue": {
+        "style": "analytical",
+        "selfAddressing": "first-person",
+        "tangentFrequency": "low"
+      },
+      "linguisticMarkers": {
+        "honorificDefault": "hapsyoche",
+        "educationSignals": ["전문 용어 사용", "정확한 표현"]
+      },
+      "voiceFingerprint": {
+        "avgSentenceLength": 45,
+        "vocabularyComplexity": 0.7,
+        "dialogueToNarrationRatio": 0.4,
+        "exclamationFrequency": 0.5,
+        "questionFrequency": 1.5,
+        "fillerWordDensity": 2.0
+      }
+    }
+  ]
+}
