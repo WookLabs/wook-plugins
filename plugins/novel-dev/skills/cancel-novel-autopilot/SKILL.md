@@ -1,8 +1,10 @@
 ---
-description: 활성 Novel Autopilot 세션 취소
+name: cancel-novel-autopilot
+description: 활성 Novel Autopilot 세션 안전 중단
+user-invocable: true
 ---
 
-[NOVEL-SISYPHUS: CANCEL NOVEL AUTOPILOT]
+[NOVEL-DEV: CANCEL NOVEL AUTOPILOT]
 
 ## 취소 프로토콜
 

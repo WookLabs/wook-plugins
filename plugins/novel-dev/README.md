@@ -64,6 +64,14 @@ claude plugin uninstall novel-dev@novel-dev
 claude plugin install novel-dev@novel-dev
 ```
 
+### 캐시 문제 해결
+
+플러그인 업데이트 후 이전 명령어가 남아있는 경우:
+```bash
+rm -rf ~/.claude/plugins/cache
+```
+Claude Code 재시작 후 자동으로 새로 로드됩니다.
+
 ## 워크플로우 (19단계)
 
 ```
@@ -87,7 +95,7 @@ claude plugin install novel-dev@novel-dev
 │  10. /sub-arc          서브플롯 설계                          │
 │  11. /foreshadow       복선 설계 및 배치                      │
 │  12. /hook             떡밥/미스터리 훅 설계                  │
-│  13. /plot             회차별 플롯 JSON 생성                  │
+│  13. /gen-plot         회차별 플롯 JSON 생성                  │
 └─────────────────────────────────────────────────────────────┘
                               ↓
 ┌─────────────────────────────────────────────────────────────┐

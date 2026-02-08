@@ -1,8 +1,10 @@
 ---
-description: 완전 자동 집필
+name: novel-autopilot
+description: 아이디어부터 완성 원고까지 전체 자동 집필
+user-invocable: true
 ---
 
-[NOVEL-SISYPHUS: NOVEL AUTOPILOT - 완전 자동 집필]
+[NOVEL-DEV: NOVEL AUTOPILOT - 완전 자동 집필]
 
 $ARGUMENTS
 
@@ -26,12 +28,12 @@ Novel Autopilot은 2-3줄의 아이디어에서 완성된 소설까지 전 과�
 1. 아이디어 분석 (장르, 분위기, 길이 추론)
 2. `/init {expanded_idea}` 실행
 3. 자동으로 다음 설계 실행:
-   - `/design_world` - 세계관
-   - `/design_character` - 캐릭터
-   - `/design_main_arc` - 메인 아크
-   - `/design_sub_arc` - 서브 아크
-   - `/design_foreshadowing` - 복선
-   - `/design_hook` - 떡밥
+   - `/design-world` - 세계관
+   - `/design-character` - 캐릭터
+   - `/design-main-arc` - 메인 아크
+   - `/design-sub-arc` - 서브 아크
+   - `/design-foreshadow` - 복선
+   - `/design-hook` - 떡밥
 
 **Output**: `novels/{novel_id}/` 프로젝트 구조
 
@@ -40,7 +42,7 @@ Novel Autopilot은 2-3줄의 아이디어에서 완성된 소설까지 전 과�
 **목표**: 회차별 플롯 생성
 
 **실행**:
-1. `/gen_plot` 실행
+1. `/gen-plot` 실행
 2. 설정 일관성 검증
 
 **Output**: `plot/chapters.json`
@@ -52,7 +54,7 @@ Novel Autopilot은 2-3줄의 아이디어에서 완성된 소설까지 전 과�
 **모드**: Ralph Loop + 병렬 집필
 
 **실행**:
-1. `/write_all` 호출
+1. `/write-all` 호출
 2. 막별 자동 집필
 3. 품질 게이트 (70점 기준)
 4. 자동 재시도 (최대 3회)
@@ -64,7 +66,7 @@ Novel Autopilot은 2-3줄의 아이디어에서 완성된 소설까지 전 과�
 **목표**: 전체 품질 검증
 
 **실행**:
-1. `/consistency_check` - 설정 일관성
+1. `/consistency-check` - 설정 일관성
 2. `/evaluate` - 전체 품질 평가
 
 **품질 게이트**:
@@ -117,12 +119,12 @@ Phase 0 (Expansion)
     ▼
 Phase 1 (Planning)
     │
-    ├── gen_plot → consistency_check
+    ├── gen-plot → consistency-check
     │
     ▼
 Phase 2 (Execution)
     │
-    ├── write_all (Ralph Loop)
+    ├── write-all (Ralph Loop)
     │   ├── Act 1 → QA → Gate
     │   ├── Act 2 → QA → Gate
     │   └── Act 3 → QA → Gate
@@ -130,7 +132,7 @@ Phase 2 (Execution)
     ▼
 Phase 3 (QA)
     │
-    ├── consistency_check + evaluate
+    ├── consistency-check + evaluate
     │
     ▼
 Phase 4 (Validation)
