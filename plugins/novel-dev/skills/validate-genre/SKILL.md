@@ -1,12 +1,6 @@
 ---
 name: validate-genre
-description: |
-  Triggers when user wants to validate chapter genre compliance and commercial elements.
-  <example>장르 적합성 검증해줘</example>
-  <example>이 회차가 로맨스 요소 충족하는지 확인</example>
-  <example>클리셰 사용량 분석해줘</example>
-  <example>validate genre for chapter 3</example>
-  <example>check commercial elements</example>
+description: 장르 적합성 검증 및 상업적 요소 확인
 user-invocable: true
 ---
 

@@ -1,13 +1,6 @@
 ---
 name: write-all
-description: |
-  Triggers when user wants to write all chapters from start to finish using Ralph Loop.
-  <example>전체 집필</example>
-  <example>1화부터 끝까지</example>
-  <example>write all chapters</example>
-  <example>/write-all</example>
-  <example>소설 완성</example>
-  <example>전체 자동 집필</example>
+description: Ralph Loop으로 1화부터 완결까지 전체 자동 집필
 user-invocable: true
 ---
 

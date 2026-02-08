@@ -1,13 +1,6 @@
 ---
 name: evaluate
-description: |
-  Triggers when user wants to evaluate chapter or act quality.
-  <example>5화 평가해줘</example>
-  <example>품질 검사</example>
-  <example>evaluate chapter 5</example>
-  <example>/evaluate 5</example>
-  <example>현재 막 평가</example>
-  <example>5-10화 일괄 평가</example>
+description: 챕터/막 단위 다차원 품질 평가
 user-invocable: true
 ---
 

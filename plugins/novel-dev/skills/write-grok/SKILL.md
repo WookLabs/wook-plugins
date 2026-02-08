@@ -1,13 +1,6 @@
 ---
 name: write-grok
-description: |
-  Triggers when user wants to use xAI Grok API for novel generation (bypassing Claude restrictions).
-  <example>Grok으로 써줘</example>
-  <example>19금 장면 생성</example>
-  <example>write with grok</example>
-  <example>/write-grok</example>
-  <example>성인 콘텐츠 작성</example>
-  <example>제한 우회 생성</example>
+description: xAI Grok API를 사용한 소설 생성
 user-invocable: true
 ---
 

@@ -1,16 +1,6 @@
 ---
 name: wisdom
-description: |
-  소설 집필 과정에서 발견한 스타일 패턴, 캐릭터 음성, 복선 추적, 용어 등을
-  자동으로 축적하고 다음 챕터 집필에 주입합니다.
-  <example>wisdom 확인해줘</example>
-  <example>지금까지 배운 것들 보여줘</example>
-  <example>wisdom 정리해줘</example>
-  <example>복선 추적 현황</example>
-  <example>캐릭터 말투 패턴</example>
-  <example>/wisdom</example>
-  <example>/wisdom check</example>
-  <example>/wisdom add style "..."</example>
+description: 집필 중 발견한 스타일 패턴, 복선, 용어 축적 및 재사용
 user-invocable: true
 allowed-tools:
   - Read

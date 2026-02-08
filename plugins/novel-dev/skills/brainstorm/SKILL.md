@@ -1,15 +1,6 @@
 ---
 name: brainstorm
-description: |
-  소설 아이디어를 소크라틱 대화로 체계적으로 정제합니다.
-  한 번에 하나씩 질문하며 아이디어의 깊이를 파헤칩니다.
-  blueprint-gen 전에 사용하여 아이디어의 방향과 깊이를 잡습니다.
-  <example>brainstorm</example>
-  <example>아이디어 브레인스토밍</example>
-  <example>소설 구상 도와줘</example>
-  <example>이런 소설 어떨까</example>
-  <example>아이디어 발전시켜줘</example>
-  <example>소설 아이디어 정리</example>
+description: 소크라틱 대화로 소설 아이디어 체계적 정제
 user-invocable: true
 allowed-tools:
   - Read

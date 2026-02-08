@@ -1,13 +1,6 @@
 ---
 name: design-foreshadow
-description: |
-  Triggers when user wants to design foreshadowing elements.
-  <example>복선 설계</example>
-  <example>복선 깔기</example>
-  <example>design foreshadowing</example>
-  <example>/design-foreshadow</example>
-  <example>떡밥 배치</example>
-  <example>암시 설정</example>
+description: 복선 요소 설계 및 배치 계획
 user-invocable: true
 ---
 

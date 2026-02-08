@@ -1,14 +1,6 @@
 ---
 name: ai-slop-detector
-description: |
-  AI스러운 문장 패턴을 감지하고 재작성을 제안합니다.
-  <example>AI 느낌 검사해줘</example>
-  <example>slop 체크</example>
-  <example>문장 자연스러움 검사</example>
-  <example>AI 탐지</example>
-  <example>이거 AI가 쓴 것 같은데</example>
-  <example>문장이 너무 뻔해</example>
-  <example>ai-slop 검사</example>
+description: AI스러운 문장 패턴 감지 및 재작성 제안
 user-invocable: true
 allowed-tools:
   - Read

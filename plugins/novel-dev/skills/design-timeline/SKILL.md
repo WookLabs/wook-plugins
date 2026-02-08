@@ -1,12 +1,6 @@
 ---
 name: design-timeline
-description: |
-  Triggers when user wants to design story timeline.
-  <example>타임라인 설계</example>
-  <example>시간 흐름 설계</example>
-  <example>/design-timeline</example>
-  <example>timeline design</example>
-  <example>회귀 타임라인</example>
+description: 작품 내 시간 흐름과 이벤트 타임라인 설계
 user-invocable: true
 ---
 

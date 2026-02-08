@@ -1,13 +1,6 @@
 ---
 name: consistency-check
-description: |
-  Triggers when user wants to check consistency across all chapters.
-  <example>일관성 검사</example>
-  <example>설정 모순 확인해줘</example>
-  <example>전체 검증</example>
-  <example>consistency check</example>
-  <example>verify plot consistency</example>
-  <example>/consistency-check</example>
+description: 전체 챕터 일관성 검사 (설정 모순, 플롯 구멍 탐지)
 user-invocable: true
 ---
 

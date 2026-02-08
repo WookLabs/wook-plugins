@@ -1,14 +1,6 @@
 ---
 name: deep-evaluate
-description: |
-  8축 심층 평가로 챕터/원고 품질을 다각도로 분석합니다.
-  LongStoryEval 연구(600권 분석)의 8개 기준을 적용합니다.
-  <example>심층 평가해줘</example>
-  <example>deep evaluate</example>
-  <example>8축 평가</example>
-  <example>전체 품질 분석</example>
-  <example>deep-evaluate 5화</example>
-  <example>심층 품질 검사</example>
+description: LongStoryEval 8축 기준 심층 품질 평가
 user-invocable: true
 allowed-tools:
   - Read

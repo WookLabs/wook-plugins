@@ -1,12 +1,6 @@
 ---
 name: check-retention
-description: |
-  Triggers when user wants to predict reader retention rates between chapters.
-  <example>회차간 이탈률 예측해줘</example>
-  <example>1화 독자 유지율 체크해줘</example>
-  <example>retention rate 확인</example>
-  <example>check retention for chapter 1</example>
-  <example>predict drop-off between chapters</example>
+description: 회차 간 독자 유지율 예측 및 이탈 분석
 user-invocable: true
 ---
 

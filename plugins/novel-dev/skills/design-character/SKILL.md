@@ -1,13 +1,6 @@
 ---
 name: design-character
-description: |
-  Triggers when user wants to design novel characters.
-  <example>캐릭터 설계</example>
-  <example>등장인물 만들기</example>
-  <example>주인공 프로필 작성</example>
-  <example>design character</example>
-  <example>create protagonist profile</example>
-  <example>/design-character</example>
+description: 소설 캐릭터 프로필 설계
 user-invocable: true
 ---
 

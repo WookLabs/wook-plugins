@@ -1,12 +1,6 @@
 ---
 name: write
-description: |
-  Triggers when user wants to write a specific novel chapter.
-  <example>5화 작성해줘</example>
-  <example>다음 챕터 써줘</example>
-  <example>write chapter 5</example>
-  <example>5-10화 연속 집필</example>
-  <example>/write 5</example>
+description: 특정 회차 챕터 집필
 user-invocable: true
 ---
 

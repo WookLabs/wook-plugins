@@ -1,13 +1,6 @@
 ---
 name: swarm
-description: |
-  여러 에이전트가 병렬로 소설 작업을 수행합니다.
-  <example>swarm으로 검증해줘</example>
-  <example>병렬 검증</example>
-  <example>swarm 집필</example>
-  <example>동시에 여러 챕터</example>
-  <example>swarm review 5</example>
-  <example>swarm design characters</example>
+description: 여러 에이전트 병렬 작업 수행
 user-invocable: true
 ---
 

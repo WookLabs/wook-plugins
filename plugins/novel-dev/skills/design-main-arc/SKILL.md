@@ -1,13 +1,6 @@
 ---
 name: design-main-arc
-description: |
-  Triggers when user wants to design main plot arc.
-  <example>메인 아크 설계</example>
-  <example>주 플롯 짜기</example>
-  <example>design main arc</example>
-  <example>/design-main-arc</example>
-  <example>중심 갈등 설정</example>
-  <example>플롯 구조 만들기</example>
+description: 메인 플롯 아크 및 중심 갈등 설계
 user-invocable: true
 ---
 

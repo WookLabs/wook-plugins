@@ -1,13 +1,6 @@
 ---
 name: adversarial-review
-description: |
-  챕터를 적대적 관점에서 검증합니다. 작성자의 주장을 의심하고 독립 검증합니다.
-  <example>적대적 검증해줘</example>
-  <example>adversarial review</example>
-  <example>빡세게 검토해줘</example>
-  <example>까다롭게 봐줘</example>
-  <example>악마의 변호인 검토</example>
-  <example>/adversarial-review</example>
+description: 적대적 관점(악마의 변호인)에서 챕터 검증
 user-invocable: true
 allowed-tools:
   - Read

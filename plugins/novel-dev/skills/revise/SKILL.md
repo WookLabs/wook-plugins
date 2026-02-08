@@ -1,13 +1,6 @@
 ---
 name: revise
-description: |
-  Triggers when user wants to revise manuscript.
-  <example>퇴고</example>
-  <example>5화 수정해줘</example>
-  <example>원고 다듬기</example>
-  <example>revise chapter 5</example>
-  <example>edit and polish manuscript</example>
-  <example>/revise 5</example>
+description: 원고 퇴고 및 수정
 user-invocable: true
 ---
 

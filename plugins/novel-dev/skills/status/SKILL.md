@@ -1,13 +1,6 @@
 ---
 name: status
-description: |
-  Triggers when user wants to check workflow progress.
-  <example>상태 확인</example>
-  <example>진행 상황</example>
-  <example>check status</example>
-  <example>/status</example>
-  <example>어디까지 했어?</example>
-  <example>워크플로우 현황</example>
+description: 워크플로우 진행 상황 표시
 user-invocable: true
 ---
 

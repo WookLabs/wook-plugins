@@ -1,13 +1,6 @@
 ---
 name: blueprint-review
-description: |
-  Triggers when user wants to review and improve BLUEPRINT.md project blueprint.
-  <example>블루프린트 검토해줘</example>
-  <example>기획서 리뷰</example>
-  <example>컨셉 피드백 줘</example>
-  <example>review blueprint</example>
-  <example>check project plan</example>
-  <example>/blueprint-review</example>
+description: BLUEPRINT.md 기획서 검토 및 개선
 user-invocable: true
 allowed-tools:
   - Read

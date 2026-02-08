@@ -1,13 +1,6 @@
 ---
 name: style-library
-description: |
-  스타일 예시 문장(exemplar) 라이브러리 관리 스킬. Few-shot 스타일 학습을 위한 예시 문장을 추가, 검색, 관리합니다.
-  <example>스타일 예시 추가해줘</example>
-  <example>로맨스 대화 예시 찾아줘</example>
-  <example>안티 예시 만들어줘</example>
-  <example>/style-library add</example>
-  <example>/style-library search romance dialogue</example>
-  <example>/style-library stats</example>
+description: Few-shot 스타일 학습용 예시 문장 라이브러리 관리
 user-invocable: true
 allowed-tools:
   - Read

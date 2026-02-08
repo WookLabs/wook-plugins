@@ -1,13 +1,6 @@
 ---
 name: multi-draft
-description: |
-  같은 장면을 여러 접근법으로 작성하고 비교합니다.
-  <example>이 장면 여러 버전으로 써봐</example>
-  <example>multi draft</example>
-  <example>다른 방식으로도 써봐</example>
-  <example>A/B 테스트</example>
-  <example>초안 비교</example>
-  <example>/multi-draft</example>
+description: 같은 장면을 여러 접근법으로 작성 및 비교
 user-invocable: true
 allowed-tools:
   - Read

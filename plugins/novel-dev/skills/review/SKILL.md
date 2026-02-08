@@ -1,13 +1,6 @@
 ---
 name: review
-description: |
-  설계 결과물 검토 스킬. 캐릭터, 플롯, 세계관 등 설계 완료 후 다각도 검토 및 승인/거부 판정.
-  <example>설계 검토해줘</example>
-  <example>캐릭터 리뷰</example>
-  <example>플롯 검토</example>
-  <example>review world</example>
-  <example>세계관 승인 가능?</example>
-  <example>/review</example>
+description: 설계 결과물(캐릭터, 플롯, 세계관) 다각도 검토 및 승인 판정
 user-invocable: true
 allowed-tools:
   - Read

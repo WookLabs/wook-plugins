@@ -1,10 +1,6 @@
 ---
 name: write-scene
-description: |
-  장면 단위로 챕터를 집필합니다. 각 장면에 스타일 예시를 주입하고, 품질 검증 후 수술적 수정을 거쳐 조합합니다.
-  <example>이 챕터를 장면 단위로 써줘</example>
-  <example>/write-scene chapter 3</example>
-  <example>/write-scene --no-revision</example>
+description: 장면 단위 집필 (스타일 예시 주입 + 품질 검증)
 version: 1.0.0
 user-invocable: true
 allowed-tools:

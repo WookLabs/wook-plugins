@@ -1,13 +1,6 @@
 ---
 name: init
-description: |
-  Triggers when user wants to initialize a new novel project from BLUEPRINT.md.
-  <example>소설 시작</example>
-  <example>프로젝트 생성</example>
-  <example>initialize novel</example>
-  <example>/init --from-blueprint</example>
-  <example>새 소설 만들기</example>
-  <example>웹소설 프로젝트 시작</example>
+description: BLUEPRINT.md 기반 소설 프로젝트 초기화
 user-invocable: true
 ---
 

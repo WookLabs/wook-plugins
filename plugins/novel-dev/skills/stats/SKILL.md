@@ -1,13 +1,6 @@
 ---
 name: stats
-description: |
-  Triggers when user wants to see project statistics.
-  <example>통계</example>
-  <example>프로젝트 현황</example>
-  <example>stats</example>
-  <example>/stats</example>
-  <example>글자 수</example>
-  <example>진행률 확인</example>
+description: 프로젝트 통계 표시 (글자수, 진행률, 현황)
 user-invocable: true
 ---
 

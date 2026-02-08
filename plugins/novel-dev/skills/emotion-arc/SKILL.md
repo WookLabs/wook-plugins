@@ -1,14 +1,6 @@
 ---
 name: emotion-arc
-description: |
-  작품의 감정 곡선을 분석하고 6가지 기본 아크와 비교합니다.
-  <example>감정 아크 분석해줘</example>
-  <example>감정 곡선 확인</example>
-  <example>이 챕터 감정 흐름은?</example>
-  <example>emotion arc</example>
-  <example>감정 분석</example>
-  <example>감정선 체크</example>
-  <example>/emotion-arc</example>
+description: 감정 곡선 분석 및 6가지 기본 아크 비교
 user-invocable: true
 allowed-tools:
   - Read

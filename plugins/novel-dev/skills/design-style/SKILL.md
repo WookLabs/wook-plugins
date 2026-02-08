@@ -1,12 +1,6 @@
 ---
 name: design-style
-description: |
-  Triggers when user wants to design writing style for the novel.
-  <example>문체 설계</example>
-  <example>스타일 가이드 만들기</example>
-  <example>/design-style</example>
-  <example>writing style</example>
-  <example>서술 스타일 설정</example>
+description: 작품 문체 및 서술 스타일 설계
 user-invocable: true
 ---
 

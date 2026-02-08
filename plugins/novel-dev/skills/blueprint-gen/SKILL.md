@@ -1,13 +1,6 @@
 ---
 name: blueprint-gen
-description: |
-  Triggers when user wants to generate BLUEPRINT.md project blueprint from initial idea.
-  <example>블루프린트 만들어줘</example>
-  <example>작품 기획서 생성</example>
-  <example>소설 컨셉 잡아줘</example>
-  <example>generate blueprint</example>
-  <example>create project plan from idea</example>
-  <example>/blueprint-gen "계약 연애 아이디어"</example>
+description: 아이디어로 BLUEPRINT.md 작품 기획서 생성
 user-invocable: true
 allowed-tools:
   - Read

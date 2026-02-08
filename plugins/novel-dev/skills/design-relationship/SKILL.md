@@ -1,12 +1,6 @@
 ---
 name: design-relationship
-description: |
-  Triggers when user wants to design character relationships.
-  <example>관계 설계</example>
-  <example>캐릭터 관계도</example>
-  <example>/design-relationship</example>
-  <example>인물 관계</example>
-  <example>relationship design</example>
+description: 캐릭터 간 관계 네트워크 설계
 user-invocable: true
 ---
 

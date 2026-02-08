@@ -1,12 +1,6 @@
 ---
 name: analyze-engagement
-description: |
-  Triggers when user wants to analyze chapter engagement and reader retention risk.
-  <example>이 회차 몰입도 분석해줘</example>
-  <example>독자 이탈 위험 구간 찾아줘</example>
-  <example>회차별 텐션 곡선 보여줘</example>
-  <example>analyze engagement for chapter 5</example>
-  <example>check drop-off risks</example>
+description: 회차별 몰입도 분석 및 독자 이탈 위험 구간 탐지
 user-invocable: true
 ---
 

@@ -1,14 +1,6 @@
 ---
 name: resume
-description: |
-  중단된 집필 세션을 자동 감지하고 이어서 작업합니다.
-  <example>이어서 써줘</example>
-  <example>resume</example>
-  <example>계속 집필</example>
-  <example>어디까지 했지</example>
-  <example>/resume</example>
-  <example>중단된 거 이어서</example>
-  <example>다시 시작</example>
+description: 중단된 집필 세션 자동 감지 및 이어쓰기
 user-invocable: true
 ---
 

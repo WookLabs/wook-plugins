@@ -1,13 +1,6 @@
 ---
 name: timeline
-description: |
-  Triggers when user wants to visualize in-story timeline.
-  <example>타임라인</example>
-  <example>시간 흐름</example>
-  <example>timeline</example>
-  <example>/timeline</example>
-  <example>작품 시간대</example>
-  <example>사건 순서</example>
+description: 작품 내 시간대 시각화 및 사건 순서 표시
 user-invocable: true
 ---
 

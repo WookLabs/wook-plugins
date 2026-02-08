@@ -1,15 +1,6 @@
 ---
 name: analyze
-description: |
-  범용 소설 분석 스킬. 캐릭터, 플롯, 세계관, 문체, 페이싱 등 다양한 요소를 체계적으로 분석합니다.
-  <example>이 캐릭터 분석해줘</example>
-  <example>플롯 구조 분석</example>
-  <example>뭔가 이상한데 찾아줘</example>
-  <example>왜 재미없지?</example>
-  <example>세계관 일관성 체크</example>
-  <example>analyze character</example>
-  <example>분석</example>
-  <example>/analyze</example>
+description: 소설 요소(캐릭터, 플롯, 세계관, 문체, 페이싱) 체계적 분석
 user-invocable: true
 allowed-tools:
   - Read

@@ -1,12 +1,6 @@
 ---
 name: help
-description: |
-  novel-dev 플러그인 사용법과 전체 워크플로우를 보여줍니다.
-  <example>도움말</example>
-  <example>사용법</example>
-  <example>/help</example>
-  <example>워크플로우</example>
-  <example>how to use</example>
+description: novel-dev 플러그인 사용법 및 워크플로우 안내
 user-invocable: true
 ---
 

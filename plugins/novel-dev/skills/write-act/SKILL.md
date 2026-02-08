@@ -1,13 +1,6 @@
 ---
 name: write-act
-description: |
-  Triggers when user wants to write an entire act.
-  <example>1막 집필</example>
-  <example>막 전체 쓰기</example>
-  <example>write act 1</example>
-  <example>/write-act 1</example>
-  <example>첫 번째 막 작성</example>
-  <example>act 2 집필</example>
+description: 막(Act) 단위 일괄 집필
 user-invocable: true
 ---
 
