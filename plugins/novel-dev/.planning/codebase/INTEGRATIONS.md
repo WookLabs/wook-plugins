@@ -78,7 +78,6 @@
 **Installation Methods:**
 1. Marketplace via `GITHUB_TOKEN`: `claude plugin install novel-dev@novel-dev`
 2. Local installation: Git clone + `.claude/settings.json` plugin registration
-3. Via oh-my-claude-sisyphus: `/oh-my-claude-sisyphus:install-novel-dev`
 
 ## Environment Configuration
 

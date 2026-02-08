@@ -12,7 +12,7 @@ oh-my-claude-sisyphus의 컨셉을 기반으로 한국어 소설 창작에 특�
 
 ## 특징
 
-- **18개 전문 에이전트**: 작가, 편집자, 평론가, 설정관리자, 플롯설계자, 교정자, 요약자 + 11개 분석/검증 에이전트
+- **14개 전문 에이전트**: 작가, 편집자, 평론가, 설정관리자, 플롯설계자, 교정자, 요약자 + 7개 분석/검증 에이전트
 - **29개 스킬, 30개 커맨드**: 블루프린트부터 완성까지 19단계 워크플로우 + 분석/리뷰 기능
 - **Ralph Loop**: 막(Act) 단위 자동 집필 + 퇴고 + 평가 사이클
 - **품질 게이트**: 70점 기준 자동 재작업 시스템
@@ -51,13 +51,6 @@ npm install
 ```
 
 3. Claude Code 세션 재시작
-
-### 방법 3: oh-my-claude-sisyphus에서 설치
-
-oh-my-claude-sisyphus가 설치되어 있다면:
-```
-/oh-my-claude-sisyphus:install-novel-dev
-```
 
 ## 업데이트
 
@@ -130,7 +123,7 @@ claude plugin install novel-dev@novel-dev
 /write-grok          # Grok API로 생성 (Claude 제한 우회)
 ```
 
-## 에이전트 (18개)
+## 에이전트 (14개)
 
 ### 핵심 에이전트
 | 에이전트 | 모델 | 역할 |
@@ -148,19 +141,15 @@ claude plugin install novel-dev@novel-dev
 |---------|------|------|
 | beta-reader | sonnet | 독자 관점 몰입도 분석 |
 | genre-validator | sonnet | 장르별 필수 요소 검증 |
-| tension-tracker | sonnet | 감정 곡선 추적 |
 | chapter-verifier | sonnet | 병렬 검증 오케스트레이터 |
-| consistency-verifier | sonnet | 일관성 검증 (캐릭터, 타임라인, 설정) |
-| engagement-optimizer | sonnet | 몰입도 최적화 제안 |
+| consistency-verifier | sonnet | 일관성 검증 (캐릭터, 타임라인, 설정, 플롯) |
+| engagement-optimizer | sonnet | 몰입도 최적화, 텐션 곡선, 페이싱 분석 |
 
-### 병렬 분석 에이전트 (신규)
+### 분석 에이전트
 | 에이전트 | 모델 | 역할 |
 |---------|------|------|
-| plot-consistency-analyzer | sonnet | 플롯 구멍, 타임라인 오류 탐지 |
-| character-voice-analyzer | sonnet | 말투 일관성, OOC 탐지 |
+| character-voice-analyzer | sonnet | 말투 일관성, OOC 탐지, 대화 분석 |
 | prose-quality-analyzer | sonnet | Show vs Tell, 문장력 분석 |
-| pacing-analyzer | sonnet | 텐션 곡선, 페이싱 분석 |
-| dialogue-analyzer | sonnet | 대화 자연스러움, 서브텍스트 |
 
 ## 프로젝트 구조
 

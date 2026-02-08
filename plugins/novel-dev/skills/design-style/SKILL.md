@@ -41,4 +41,4 @@ user-invocable: true
 
 ## Documentation
 
-See `commands/04-design-style.md` for full workflow.
+See `skills/design-style/references/detailed-guide.md` for full workflow.

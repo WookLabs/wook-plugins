@@ -14,7 +14,7 @@ Before execution, verify these files exist:
 - `plot/structure.json` - Plot structure (at least skeleton)
 - `characters/` - At least one character file
 
-If any file is missing, report error and suggest `/01-init` or `/02-world` ~ `/07-hook` commands.
+If any file is missing, report error and suggest `/init` or `/design-world` ~ `/design-hook` commands.
 
 ## 실행 단계
 
