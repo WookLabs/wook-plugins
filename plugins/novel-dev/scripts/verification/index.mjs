@@ -55,7 +55,7 @@ export const NOVEL_CHECKS = {
     description: '텐션 커브, 리듬, 호흡 조절 검사',
     evidenceType: 'pacing_verified',
     required: true,
-    agent: 'pacing-analyzer',
+    agent: 'engagement-optimizer',
     threshold: 70,
     completed: false
   },
@@ -75,7 +75,7 @@ export const NOVEL_CHECKS = {
     description: '대화 자연스러움, 서브텍스트, 정보 전달',
     evidenceType: 'dialogue_verified',
     required: false,
-    agent: 'dialogue-analyzer',
+    agent: 'character-voice-analyzer',
     threshold: 75,
     completed: false
   },
@@ -85,7 +85,7 @@ export const NOVEL_CHECKS = {
     description: '복선 배치 및 회수 검증',
     evidenceType: 'foreshadow_verified',
     required: false,
-    agent: 'plot-consistency-analyzer',
+    agent: 'consistency-verifier',
     threshold: 70,
     completed: false
   }

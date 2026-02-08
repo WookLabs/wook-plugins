@@ -337,7 +337,7 @@ Refer to `src/pipeline/revision-loop.ts` for orchestration details.
 
 ### 집필 후: 자동 기록
 
-회차 완료 시 tension-tracker 자동 호출하여:
+회차 완료 시 engagement-optimizer 자동 호출하여:
 1. `emotional-arc/chapter-{N}-state.json` 저장
 2. `tension-curve.json` 업데이트
 3. `beat-counter.json` 업데이트

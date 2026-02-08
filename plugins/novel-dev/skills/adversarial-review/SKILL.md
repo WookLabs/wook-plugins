@@ -85,9 +85,9 @@ const level = await AskUserQuestion("검증 강도를 선택하세요:", [
 5개의 공격 축을 병렬로 실행합니다:
 
 ```spec
-// 1. 플롯 구멍 탐지 (plot-consistency-analyzer)
+// 1. 플롯 구멍 탐지 (consistency-verifier)
 const plotAttack = Task({
-  subagent_type: "novel-dev:plot-consistency-analyzer",
+  subagent_type: "novel-dev:consistency-verifier",
   model: "sonnet",
   prompt: `적대적 관점에서 플롯 구멍을 찾으세요.
 

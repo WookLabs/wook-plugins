@@ -402,7 +402,7 @@
 | 캐릭터 | plot-architect (opus) | beta-reader (sonnet) |
 | 세계관 | lore-keeper (sonnet) | critic (opus) |
 | 문체 | editor (sonnet) | - |
-| 페이싱 | beta-reader (sonnet) | tension-tracker (sonnet) |
+| 페이싱 | beta-reader (sonnet) | engagement-optimizer (sonnet) |
 | 독자 경험 | beta-reader (sonnet) | engagement-optimizer (sonnet) |
 
 ## 자주 하는 실수

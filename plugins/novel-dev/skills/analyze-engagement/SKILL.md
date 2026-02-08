@@ -36,7 +36,7 @@ Analyzes chapter-by-chapter reader engagement and identifies drop-off risk zones
 ## Agent Workflow
 
 1. **beta-reader** (opus) → Engagement analysis with drop-off risks
-2. **tension-tracker** (sonnet) → Scene-by-scene tension levels
+2. **engagement-optimizer** (sonnet) → Scene-by-scene tension levels & pacing
 3. Results combined → `validations/engagement/chapter_{N}_engagement.json`
 
 ## Scoring Guide

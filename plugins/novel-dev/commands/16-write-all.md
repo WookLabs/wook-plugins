@@ -53,8 +53,8 @@ $ARGUMENTS
 
 이전 세션이 중단된 경우:
 1. 세션 시작 시 복구 가능 여부 알림
-2. `/11-write-all --resume` → 중단점에서 이어서 집필
-3. `/11-write-all --restart` → 처음부터 다시 시작
+2. `/write-all --resume` → 중단점에서 이어서 집필
+3. `/write-all --restart` → 처음부터 다시 시작
 
 복구 정보는 `meta/ralph-state.json`에 저장됩니다.
 
@@ -75,7 +75,7 @@ $ARGUMENTS
 ```
 for act in acts:
     for chapter in act.chapters:
-        /09-write {chapter}
+        /write {chapter}
 
         # Multi-Validator 품질 게이트
         results = parallel_validate(critic, beta-reader, genre-validator)
@@ -87,7 +87,7 @@ for act in acts:
         # Diagnostic 기반 수정 루프
         for retry in range(3):
             diagnostic = generate_diagnostic(results)
-            /12-revise {chapter} with diagnostic
+            /revise {chapter} with diagnostic
             results = parallel_validate(...)
 
             if all_passed(results):
@@ -102,8 +102,8 @@ for act in acts:
         <promise>CHAPTER_{chapter}_DONE</promise>
 
     # 막 단위 검증
-    /12-revise (막 전체)
-    /14-check
+    /revise (막 전체)
+    /consistency-check
 
     # 막 완료
     <promise>ACT_{act}_DONE</promise>
@@ -165,7 +165,7 @@ for act in acts:
 
 2. **검증 프로세스**:
    ```
-   /09-write {chapter}
+   /write {chapter}
        │
        v
    [Multi-Validator 병렬 실행]

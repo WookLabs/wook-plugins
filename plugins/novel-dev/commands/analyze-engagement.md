@@ -19,7 +19,7 @@ description: 회차별 몰입도 분석
 ## Flow
 
 1. **beta-reader** 에이전트 호출 → 몰입도 분석
-2. **tension-tracker** 에이전트 호출 → 텐션 곡선 분석
+2. **engagement-optimizer** 에이전트 호출 → 텐션 곡선 분석
 3. 결과 종합 → `engagement-report.json` 생성
 4. 위험 구간 시각화 (ASCII chart)
 
@@ -71,7 +71,7 @@ JSON 형식으로 출력:
 ### 2. Tension-Tracker (텐션 곡선)
 
 ```javascript
-Task(subagent_type="novel-dev:tension-tracker", model="sonnet", prompt=`
+Task(subagent_type="novel-dev:engagement-optimizer", model="sonnet", prompt=`
 Chapter: ${chapterNumber}
 Content: ${chapterContent}
 Previous Context: ${emotionalContext}

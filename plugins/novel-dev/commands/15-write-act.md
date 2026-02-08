@@ -15,10 +15,10 @@ $ARGUMENTS
 2. **순차 집필**
    ```
    for chapter in act_chapters:
-       /09-write {chapter}
+       /write {chapter}
    ```
 
 3. **막 완료 후 자동 트리거**
-   - `/12-revise` (막 전체)
-   - `/13-evaluate` (막 전체)
-   - `/14-check`
+   - `/revise` (막 전체)
+   - `/evaluate` (막 전체)
+   - `/consistency-check`

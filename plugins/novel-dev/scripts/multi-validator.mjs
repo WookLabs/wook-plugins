@@ -40,7 +40,7 @@ export async function runMultiValidation(projectPath, chapter) {
   const chapterContent = readFileSync(chapterPath, 'utf-8');
   const projectMeta = JSON.parse(readFileSync(join(projectPath, 'meta', 'project.json'), 'utf-8'));
 
-  // Load previous chapter context for tension-tracker
+  // Load previous chapter context for engagement-optimizer
   const emotionalContext = loadEmotionalContext(projectPath, chapter);
 
   console.log(`[Multi-Validator] Starting parallel validation for chapter ${chapter}...`);

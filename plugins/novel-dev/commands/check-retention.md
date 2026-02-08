@@ -40,7 +40,7 @@ $ARGUMENTS
 
 ```
 for chapter in target_chapters:
-    Task(subagent_type="oh-my-claude-sisyphus:beta-reader", prompt="
+    Task(subagent_type="novel-dev:beta-reader", prompt="
     다음 회차의 engagement scores를 평가해주세요:
 
     ## 회차 내용
@@ -63,7 +63,7 @@ for chapter in target_chapters:
 첫 회차는 75%+ retention 목표:
 
 ```
-Task(subagent_type="oh-my-claude-sisyphus:beta-reader", prompt="
+Task(subagent_type="novel-dev:beta-reader", prompt="
 1화의 retention 예측 분석 (1→2 이탈률 집중):
 
 ## 1화 내용
@@ -272,7 +272,7 @@ validations/retention/retention_prediction.json
 ## Agent Invocations
 
 ```
-Task(subagent_type="oh-my-claude-sisyphus:beta-reader",
+Task(subagent_type="novel-dev:beta-reader",
      model="opus",
      prompt="...")
 ```

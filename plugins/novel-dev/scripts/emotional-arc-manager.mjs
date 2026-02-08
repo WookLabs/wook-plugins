@@ -334,7 +334,7 @@ export function updateEmotionalContext(projectPath, chapter, chapterState) {
 }
 
 /**
- * Load previous chapter context for tension-tracker
+ * Load previous chapter context for engagement-optimizer
  */
 export function loadPreviousChapterContext(projectPath, currentChapter) {
   const contextPath = join(projectPath, 'emotional-arc', 'emotional-context.json');

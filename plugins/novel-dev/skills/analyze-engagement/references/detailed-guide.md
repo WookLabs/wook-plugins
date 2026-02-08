@@ -48,13 +48,13 @@ JSON 형식으로 출력:
 `)
 ```
 
-### 2. Tension-Tracker (Tension Curve)
+### 2. Engagement-Optimizer (Tension Curve & Pacing)
 
-**Agent:** `novel-dev:tension-tracker`
+**Agent:** `novel-dev:engagement-optimizer`
 **Model:** `sonnet`
 
 ```javascript
-Task(subagent_type="novel-dev:tension-tracker", model="sonnet", prompt=`
+Task(subagent_type="novel-dev:engagement-optimizer", model="sonnet", prompt=`
 Chapter: ${chapterNumber}
 Content: ${chapterContent}
 Previous Context: ${emotionalContext}

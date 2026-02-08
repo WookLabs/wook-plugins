@@ -55,7 +55,7 @@ $ARGUMENTS
    - W1: critic (opus) - 문학 품질
    - W2: beta-reader (sonnet) - 독자 경험
    - W3: consistency-verifier (sonnet) - 설정 일관성
-   - W4: pacing-analyzer (sonnet) - 페이싱
+   - W4: engagement-optimizer (sonnet) - 페이싱
    - W5: character-voice-analyzer (sonnet) - 음성 일관성
 3. 5개 결과 통합 및 교차 이슈 분석
 4. 종합 판정: APPROVED / APPROVED WITH NOTES / REVISION REQUIRED

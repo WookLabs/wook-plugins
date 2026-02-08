@@ -81,7 +81,7 @@
    W1: critic (opus)              → 문학 품질
    W2: beta-reader (sonnet)       → 독자 경험
    W3: consistency-verifier (sonnet) → 설정 일관성
-   W4: pacing-analyzer (sonnet)    → 페이싱
+   W4: engagement-optimizer (sonnet)    → 페이싱
    W5: character-voice-analyzer (sonnet) → 음성 일관성
 
 4. 결과 통합
@@ -103,7 +103,7 @@
 | critic | "문학적으로 가치 있는가?" | 구조, 문체, 깊이, 독창성 |
 | beta-reader | "독자가 계속 읽을까?" | 몰입도, 감정 이입, 이탈 위험 구간 |
 | consistency-verifier | "설정과 모순이 없는가?" | 캐릭터, 세계관, 타임라인 오류 |
-| pacing-analyzer | "리듬이 적절한가?" | 긴장 곡선, 장면 전환, 비트 밀도 |
+| engagement-optimizer | "리듬이 적절한가?" | 긴장 곡선, 장면 전환, 비트 밀도 |
 | character-voice-analyzer | "캐릭터답게 말하는가?" | 말투, OOC 빈도, 관계 반영 |
 
 **교차 이슈 분석 규칙:**
