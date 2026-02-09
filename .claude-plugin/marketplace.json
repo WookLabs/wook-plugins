@@ -20,12 +20,12 @@
     {
       "name": "rtl-forge",
       "source": "./plugins/rtl-forge",
-      "description": "Verilog/SystemVerilog RTL Design & Verification Plugin with mandatory user approval workflow",
-      "version": "1.1.0",
+      "description": "RTL design assistant — formatting, analysis, and modification workflow for Verilog/SystemVerilog",
+      "version": "3.0.0",
       "author": {
         "name": "WookLabs"
       },
-      "keywords": ["rtl", "verilog", "systemverilog", "verification", "hardware"],
+      "keywords": ["rtl", "verilog", "systemverilog", "formatting", "hardware"],
       "category": "development"
     }
   ]
