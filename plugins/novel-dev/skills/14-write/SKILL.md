@@ -23,7 +23,7 @@ user-invocable: true
 | writer_mode | 동작 |
 |-------------|------|
 | `"grok"` | 모든 회차를 Grok API로 작성 |
-| `"hybrid"` | 성인 키워드 감지 시 Grok, 그 외 novelist |
+| `"hybrid"` | ~~(deprecated)~~ 성인 키워드 감지 시 Grok, 그 외 novelist. **성인소설은 `"grok"` 권장** |
 | `"claude"` | 모든 회차를 novelist 에이전트로 작성 |
 
 `--grok` 플래그 사용 시 writer_mode 무시하고 Grok으로 작성합니다.
@@ -152,7 +152,10 @@ Chapter {N} 평가:
 > **주의**: Grok이 생성한 성인 콘텐츠를 Claude가 평가할 때,
 > 성인 장면 자체가 아닌 서사 구조, 캐릭터 일관성, 플롯 정합성만 평가합니다.
 
-## Hybrid 모드: 성인 키워드 자동 감지
+## Hybrid 모드: 성인 키워드 자동 감지 (Deprecated)
+
+> **Deprecated**: hybrid 모드는 챕터 단위 라우팅만 지원하며 씬 단위 전환이 불가합니다.
+> 성인소설은 `writer_mode: "grok"`으로 통일을 권장합니다.
 
 Korean: 야한, 19금, 베드신, 관능, 정사, 밀애, 섹시, 에로, R-18, NC-17, 수위
 English: nsfw, explicit, adult, erotic, intimate scene, love scene, 18+

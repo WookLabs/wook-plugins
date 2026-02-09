@@ -111,7 +111,9 @@ node novel-dev/scripts/grok-writer.mjs \
 
 검증 에이전트: critic, beta-reader, genre-validator (모두 Claude)
 
-## Hybrid 모드 키워드
+## Hybrid 모드 키워드 (Deprecated)
+
+> **Deprecated**: hybrid 모드 대신 `writer_mode: "grok"` 사용을 권장합니다.
 
 `writer_mode: "hybrid"` 시 아래 키워드가 플롯에 포함되면 자동으로 Grok 전환:
 

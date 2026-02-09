@@ -22,7 +22,7 @@ $ARGUMENTS
    ```
 
    - `writer_mode: "grok"` → 모든 회차를 Grok API로 생성
-   - `writer_mode: "hybrid"` → 성인 키워드 감지 시 Grok
+   - `writer_mode: "hybrid"` → (deprecated) 성인 키워드 감지 시 Grok. **성인소설은 `"grok"` 권장**
    - `writer_mode: "claude"` → Claude novelist 에이전트로 생성
 
 3. **회차별 사후 처리**

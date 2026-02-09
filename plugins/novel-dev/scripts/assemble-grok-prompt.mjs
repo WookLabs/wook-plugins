@@ -180,6 +180,54 @@ function buildSystemPrompt(styleGuide) {
       lines.push('');
       lines.push(`추가 지시: ${styleGuide.special_instructions}`);
     }
+
+    // 성인 장면 스타일
+    if (styleGuide.adult_writing) {
+      const aw = styleGuide.adult_writing;
+      lines.push('');
+      lines.push('## 성인 장면 작성 가이드');
+
+      if (aw.explicitness) {
+        const explMap = {
+          low: '암시적으로 표현하세요. 직접적인 묘사 대신 분위기와 감정으로.',
+          medium: '은유적 표현을 사용하세요. 감각적이되 노골적이지 않게.',
+          high: '구체적이고 감각적으로 묘사하세요. 신체 반응과 행위를 생생하게.'
+        };
+        lines.push(`- 수위: ${explMap[aw.explicitness] || aw.explicitness}`);
+      }
+
+      if (aw.emotional_focus) {
+        lines.push('- 감정 묘사: 신체적 행위만이 아닌, 캐릭터의 심리와 감정 변화를 함께 묘사하세요.');
+      }
+
+      if (aw.sensory_detail) {
+        const sensMap = {
+          visual: '시각적 묘사 중심 (표정, 몸짓, 시선).',
+          tactile: '촉각적 묘사 중심 (피부 감촉, 체온, 접촉).',
+          emotional: '감정적 묘사 중심 (내면 독백, 감정 파도).',
+          all: '시각, 촉각, 청각, 후각 등 모든 감각을 활용한 입체적 묘사.'
+        };
+        lines.push(`- 감각: ${sensMap[aw.sensory_detail] || aw.sensory_detail}`);
+      }
+
+      if (aw.pacing) {
+        const paceMap = {
+          quick: '빠르게 전개. 짧은 문장, 호흡 가빠지는 리듬.',
+          gradual: '점진적 전개. 분위기를 천천히 고조시키며 감정선을 따라가세요.',
+          'slow-burn': '느리게 타오르는 전개. 긴장과 기대감을 최대한 끌어올린 뒤 해소.'
+        };
+        lines.push(`- 페이싱: ${paceMap[aw.pacing] || aw.pacing}`);
+      }
+
+      if (aw.vocabulary_level) {
+        const vocabMap = {
+          crude: '직설적인 어휘를 사용하세요.',
+          moderate: '적당한 수준의 성적 어휘를 사용하세요.',
+          literary: '문학적이고 우아한 표현을 사용하세요. 저속한 표현은 피하세요.'
+        };
+        lines.push(`- 어휘: ${vocabMap[aw.vocabulary_level] || aw.vocabulary_level}`);
+      }
+    }
   }
 
   // 공통 작문 규칙

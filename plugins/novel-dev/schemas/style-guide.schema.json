@@ -158,6 +158,41 @@
       "type": "string",
       "description": "Additional style instructions or preferences",
       "maxLength": 2000
+    },
+    "adult_writing": {
+      "type": "object",
+      "description": "성인 장면 작성 스타일 설정 (writer_mode: grok 시 활용)",
+      "properties": {
+        "explicitness": {
+          "type": "string",
+          "enum": ["low", "medium", "high"],
+          "description": "묘사 수위 (low: 암시적, medium: 은유적, high: 직접적)",
+          "default": "high"
+        },
+        "emotional_focus": {
+          "type": "boolean",
+          "description": "감정 묘사 중심 여부",
+          "default": true
+        },
+        "sensory_detail": {
+          "type": "string",
+          "enum": ["visual", "tactile", "emotional", "all"],
+          "description": "주요 감각 묘사 유형",
+          "default": "all"
+        },
+        "pacing": {
+          "type": "string",
+          "enum": ["quick", "gradual", "slow-burn"],
+          "description": "성인 장면 페이싱",
+          "default": "gradual"
+        },
+        "vocabulary_level": {
+          "type": "string",
+          "enum": ["crude", "moderate", "literary"],
+          "description": "어휘 수준 (crude: 직설적, literary: 문학적)",
+          "default": "literary"
+        }
+      }
     }
   }
 }

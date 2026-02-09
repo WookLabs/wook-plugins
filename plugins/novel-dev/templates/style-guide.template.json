@@ -26,5 +26,12 @@
     "sentence_variation": true
   },
   "show_dont_tell": "balanced",
-  "special_instructions": ""
+  "special_instructions": "",
+  "adult_writing": {
+    "explicitness": "high",
+    "emotional_focus": true,
+    "sensory_detail": "all",
+    "pacing": "gradual",
+    "vocabulary_level": "literary"
+  }
 }
