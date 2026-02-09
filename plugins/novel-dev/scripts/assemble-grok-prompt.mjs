@@ -19,7 +19,7 @@ import path from 'path';
 // ─── CLI Argument Parsing ────────────────────────────────────────────────────
 
 function parseArgs(argv) {
-  const result = { chapter: null, project: null };
+  const result = { chapter: null, project: null, batch: false };
 
   for (let i = 0; i < argv.length; i++) {
     const arg = argv[i];
@@ -27,6 +27,8 @@ function parseArgs(argv) {
       result.chapter = parseInt(argv[++i], 10);
     } else if (arg === '--project' && argv[i + 1]) {
       result.project = argv[++i];
+    } else if (arg === '--batch') {
+      result.batch = true;
     } else if (arg === '--help' || arg === '-h') {
       printUsage();
       process.exit(0);
@@ -46,6 +48,7 @@ Grok Prompt Assembler - 소설 프로젝트 파일을 읽어 Grok API용 프롬�
 옵션:
   --chapter N      회차 번호 (필수)
   --project PATH   소설 프로젝트 경로 (필수)
+  --batch          배치 모드 (요약/직전챕터 스킵, 플롯 기반 깨끗한 컨텍스트)
   --help, -h       도움말
 
 출력:
@@ -435,14 +438,17 @@ function main() {
   );
 
   // 3. Previous summaries (up to 3, reverse chronological collection then chronological output)
+  //    batch 모드에서는 스킵 (플롯 기반 깨끗한 컨텍스트)
   const summaries = [];
-  for (let i = chapter - 1; i >= Math.max(1, chapter - 3); i--) {
-    const summaryPath = path.join(
-      projectDir, 'context', 'summaries', `chapter_${padChapter(i)}_summary.md`
-    );
-    const content = tryReadText(summaryPath);
-    if (content) {
-      summaries.unshift({ chapter: i, content: content.trim() });
+  if (!args.batch) {
+    for (let i = chapter - 1; i >= Math.max(1, chapter - 3); i--) {
+      const summaryPath = path.join(
+        projectDir, 'context', 'summaries', `chapter_${padChapter(i)}_summary.md`
+      );
+      const content = tryReadText(summaryPath);
+      if (content) {
+        summaries.unshift({ chapter: i, content: content.trim() });
+      }
     }
   }
 
@@ -500,8 +506,9 @@ function main() {
   }
 
   // 7. Previous chapter tail (last 1500 chars)
+  //    batch 모드에서는 스킵 (플롯 기반 깨끗한 컨텍스트)
   let prevChapterTail = null;
-  if (chapter > 1) {
+  if (!args.batch && chapter > 1) {
     const prevPath = path.join(
       projectDir, 'chapters', `chapter_${padChapter(chapter - 1)}.md`
     );
@@ -538,6 +545,7 @@ function main() {
   // ── Context stats ──────────────────────────────────────────────────────────
 
   const contextStats = {
+    batchMode: args.batch,
     hasStyleGuide: styleGuide !== null,
     hasPlot: chapterPlot !== null,
     summaryCount: summaries.length,
