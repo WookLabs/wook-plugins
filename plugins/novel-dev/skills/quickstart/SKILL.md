@@ -1,7 +1,7 @@
 ---
 name: quickstart
 description: "5단계 퀵스타트 가이드 - 새로운 사용자를 위한 간편 워크플로우"
-user_invocable: true
+user-invocable: true
 trigger_patterns:
   - "퀵스타트"
   - "빠른 시작"
