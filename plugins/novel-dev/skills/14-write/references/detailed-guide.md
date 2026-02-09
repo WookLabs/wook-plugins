@@ -68,19 +68,21 @@ Keywords are checked in:
 
 When adult content is detected:
 
+Context is auto-assembled by `assemble-grok-prompt.mjs`, which applies the priority-based context budget system and outputs system/prompt files ready for the API call.
+
 ```bash
 node novel-dev/scripts/grok-writer.mjs \
   --prompt "[Plot + Context + Writing Instructions]" \
   --system "당신은 한국어 로맨스/성인 소설 작가입니다. 감각적이고 몰입감 있는 장면을 써주세요." \
-  --model "grok-3" \
-  --max-tokens 4096 \
+  --model "grok-4-1-fast-reasoning" \
+  --max-tokens 8192 \
   --temperature 0.85
 ```
 
 **Parameters:**
-- `model`: grok-3 (latest model for creative writing)
+- `model`: grok-4-1-fast-reasoning (latest model for creative writing)
 - `temperature`: 0.85 (higher for creative, sensual content)
-- `max-tokens`: 4096 (sufficient for 5000-word chapter)
+- `max-tokens`: 8192 (sufficient for extended chapter generation)
 - `system`: Korean romance/adult fiction specialist prompt
 
 #### Output Handling

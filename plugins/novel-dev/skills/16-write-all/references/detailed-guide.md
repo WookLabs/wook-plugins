@@ -653,6 +653,54 @@ class ContextCache {
 }
 ```
 
+## Grok Mode Integration
+
+### Writer Mode Detection
+
+Ralph Loop 시작 시 `meta/project.json`에서 `writer_mode`를 읽습니다:
+
+```javascript
+const project = JSON.parse(readFile('meta/project.json'));
+const writerMode = project.writer_mode || 'claude';
+const grokConfig = project.grok_config || {
+  model: 'grok-4-1-fast-reasoning',
+  temperature: 0.85,
+  max_tokens: 8192
+};
+```
+
+### Grok Mode Chapter Flow
+
+```
+1. assemble-grok-prompt.mjs로 컨텍스트 조립
+2. grok-writer.mjs로 Grok API 호출
+3. 챕터 파일 저장
+4. summarizer로 요약 생성 (Claude haiku)
+5. ralph-state.json 상태 업데이트
+6. Multi-Validator 품질 게이트 (Claude가 수행)
+   - critic >= 85점
+   - beta-reader >= 80점
+   - genre-validator >= 95점
+7. 미달 시 editor(Claude)로 퇴고 → 재검증
+```
+
+### 성인 콘텐츠와 품질 검증
+
+Grok이 생성한 성인 콘텐츠를 Claude가 평가할 때:
+- 성인 장면의 **존재 자체는 감점 사유가 아닙니다**
+- **서사 구조**, **캐릭터 일관성**, **플롯 정합성**만 평가합니다
+- 문체 가이드 준수 여부를 확인합니다
+- 퇴고 시에도 성인 콘텐츠를 삭제하거나 순화하지 않습니다
+
+### Grok 모드 비용 추정
+
+| 항목 | 회차당 | 50회차 |
+|------|--------|--------|
+| Grok API (생성) | ~$0.15 | ~$7.50 |
+| Claude (검증 3종) | ~$0.10 | ~$5.00 |
+| Claude (요약) | ~$0.01 | ~$0.50 |
+| **합계** | ~$0.26 | ~$13.00 |
+
 ## Error Handling
 
 ### Validator Failure

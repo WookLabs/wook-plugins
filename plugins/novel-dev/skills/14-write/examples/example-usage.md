@@ -116,9 +116,9 @@ Writing Chapter 5...
 Switching to xAI Grok API for unrestricted content...
 
 Grok API parameters:
-- Model: grok-3
+- Model: grok-4-1-fast-reasoning
 - Temperature: 0.85
-- Max tokens: 4096
+- Max tokens: 8192
 
 Generating...
 ✓ Chapter written: 5,678 characters

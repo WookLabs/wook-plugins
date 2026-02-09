@@ -6,11 +6,13 @@
  *   node scripts/grok-writer.mjs --prompt "소설 프롬프트" [options]
  *
  * Options:
- *   --prompt     생성 프롬프트 (필수)
- *   --system     시스템 프롬프트 (선택)
- *   --model      모델 선택 (기본: grok-4-1-fast-reasoning)
- *   --max-tokens 최대 토큰 (기본: 4096)
- *   --output     출력 파일 경로 (선택, 없으면 stdout)
+ *   --prompt      생성 프롬프트 (필수, --prompt-file과 택1)
+ *   --prompt-file 프롬프트를 파일에서 읽기 (--prompt 대신 사용)
+ *   --system      시스템 프롬프트 (선택)
+ *   --system-file 시스템 프롬프트를 파일에서 읽기 (--system 대신 사용)
+ *   --model       모델 선택 (기본: grok-4-1-fast-reasoning)
+ *   --max-tokens  최대 토큰 (기본: 8192)
+ *   --output      출력 파일 경로 (선택, 없으면 stdout)
  */
 
 import fs from 'fs';
@@ -89,7 +91,7 @@ async function callGrokAPI(options) {
     prompt,
     systemPrompt,
     model = 'grok-4-1-fast-reasoning',
-    maxTokens = 4096,
+    maxTokens = 8192,
     temperature = 0.8
   } = options;
 
@@ -141,7 +143,7 @@ function parseArgs(args) {
     prompt: null,
     system: null,
     model: 'grok-4-1-fast-reasoning',
-    maxTokens: 4096,
+    maxTokens: 8192,
     output: null,
     temperature: 0.8
   };
@@ -151,8 +153,12 @@ function parseArgs(args) {
 
     if (arg === '--prompt' && args[i + 1]) {
       result.prompt = args[++i];
+    } else if (arg === '--prompt-file' && args[i + 1]) {
+      result.prompt = fs.readFileSync(args[++i], 'utf-8');
     } else if (arg === '--system' && args[i + 1]) {
       result.system = args[++i];
+    } else if (arg === '--system-file' && args[i + 1]) {
+      result.system = fs.readFileSync(args[++i], 'utf-8');
     } else if (arg === '--model' && args[i + 1]) {
       result.model = args[++i];
     } else if (arg === '--max-tokens' && args[i + 1]) {
@@ -169,13 +175,15 @@ ${colors.yellow}사용법:${colors.reset}
   node scripts/grok-writer.mjs --prompt "프롬프트" [options]
 
 ${colors.yellow}옵션:${colors.reset}
-  --prompt      생성 프롬프트 (필수)
-  --system      시스템 프롬프트 (선택)
-  --model       모델 (기본: grok-4-1-fast-reasoning)
-  --max-tokens  최대 토큰 (기본: 4096)
-  --temperature 창의성 (기본: 0.8)
-  --output      출력 파일 경로 (선택)
-  --help, -h    도움말
+  --prompt       생성 프롬프트 (필수, --prompt-file과 택1)
+  --prompt-file  프롬프트를 파일에서 읽기 (--prompt 대신 사용)
+  --system       시스템 프롬프트 (선택)
+  --system-file  시스템 프롬프트를 파일에서 읽기 (--system 대신 사용)
+  --model        모델 (기본: grok-4-1-fast-reasoning)
+  --max-tokens   최대 토큰 (기본: 8192)
+  --temperature  창의성 (기본: 0.8)
+  --output       출력 파일 경로 (선택)
+  --help, -h     도움말
 
 ${colors.yellow}환경 설정:${colors.reset}
   ~/.env 파일에 XAI_API_KEY를 설정하세요:

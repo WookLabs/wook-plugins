@@ -131,6 +131,37 @@
       "type": "integer",
       "description": "Order in series (1-based)",
       "minimum": 1
+    },
+    "writer_mode": {
+      "type": "string",
+      "enum": ["claude", "grok", "hybrid"],
+      "default": "claude",
+      "description": "집필 모드: claude(기본), grok(전체 Grok API), hybrid(성인 장면만 Grok)"
+    },
+    "grok_config": {
+      "type": "object",
+      "description": "Grok API 설정 (writer_mode가 grok 또는 hybrid일 때 사용)",
+      "properties": {
+        "model": {
+          "type": "string",
+          "default": "grok-4-1-fast-reasoning",
+          "description": "Grok 모델 ID"
+        },
+        "temperature": {
+          "type": "number",
+          "minimum": 0,
+          "maximum": 1,
+          "default": 0.85,
+          "description": "창의성 파라미터"
+        },
+        "max_tokens": {
+          "type": "integer",
+          "minimum": 1000,
+          "maximum": 32768,
+          "default": 8192,
+          "description": "최대 출력 토큰"
+        }
+      }
     }
   }
 }

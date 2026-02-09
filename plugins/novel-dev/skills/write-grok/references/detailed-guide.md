@@ -95,11 +95,13 @@ Grok API는 사용량 기반 과금입니다:
 **max_tokens (길이)**
 - `1000-2000`: 짧은 장면 (1-2페이지)
 - `3000-4000`: 일반 챕터 (3-4페이지)
-- `6000-8000`: 긴 챕터 (5-8페이지)
+- `6000-8192`: 긴 챕터 (5-8페이지)
 
 ### 컨텍스트 주입
 
-이전 장면과의 연속성을 위해 컨텍스트를 제공합니다:
+이전 장면과의 연속성을 위해 컨텍스트를 제공합니다.
+
+> **참고:** `assemble-grok-prompt.mjs`가 이 과정을 자동화합니다. 챕터 번호를 지정하면 style-guide, 캐릭터 프로필, 이전 챕터 요약 등이 자동으로 조립되어 Grok에 전달됩니다. 아래는 수동으로 컨텍스트를 구성하는 레거시 방법입니다.
 
 ```bash
 node scripts/grok-writer.mjs \
@@ -113,40 +115,62 @@ node scripts/grok-writer.mjs \
 [작성할 장면]
 긴장감 속에서 서로를 바라보다가 키스하는 장면을 써주세요.
 감정의 흐름을 섬세하게 묘사해주세요.
-  "
+  " \
+  --max-tokens 8192
 ```
 
 ## 워크플로우 통합
 
-### Claude와 협업 패턴
+### assemble-grok-prompt.mjs 자동 파이프라인
 
-1. **계획은 Claude**: 플롯, 구조, 캐릭터 설계
-2. **민감한 장면은 Grok**: 로맨스, 성인, 폭력 등
-3. **평가는 Claude**: 일관성 검사, 품질 평가
+`/write-grok {N}` 또는 `/write --grok {N}` 실행 시, `assemble-grok-prompt.mjs`가 프로젝트 컨텍스트를 자동으로 조립합니다:
 
 ```mermaid
-graph LR
-    A[플롯 설계] -->|Claude| B[일반 장면]
-    A -->|Grok| C[민감 장면]
-    B --> D[품질 평가]
-    C --> D
-    D -->|Claude| E[퇴고/편집]
+graph TD
+    A["/write-grok 5"] --> B["assemble-grok-prompt.mjs"]
+    B --> C["style-guide.json 로드"]
+    B --> D["캐릭터 프로필 로드"]
+    B --> E["플롯/비트 정보 로드"]
+    B --> F["이전 챕터 요약 로드"]
+    C & D & E & F --> G["system + prompt JSON 출력"]
+    G --> H["grok-writer.mjs API 호출"]
+    H --> I["챕터 파일 저장"]
+    I --> J["요약 생성 + 상태 업데이트"]
 ```
 
-### 자동화 스크립트
+**파이프라인 단계:**
 
-여러 챕터를 일괄 생성:
+1. `assemble-grok-prompt.mjs --chapter {N}` 실행
+2. 프로젝트의 style-guide, 캐릭터, 플롯, 이전 요약을 읽어 system/prompt 구성
+3. 조립된 프롬프트를 파일로 저장
+4. `grok-writer.mjs`에 전달하여 Grok API 호출
+5. 결과를 챕터 파일로 저장하고 사후 처리 수행
+
+### Claude와 역할 분담
+
+| 역할 | 담당 |
+|------|------|
+| 플롯 설계, 캐릭터, 구조 | Claude |
+| 챕터 집필 (일반) | Claude (`/write`) |
+| 챕터 집필 (Grok 모드) | Grok (`/write-grok`) |
+| 품질 평가, 일관성 검사 | Claude (`/evaluate`) |
+| 퇴고/편집 | Claude (`/revise`) |
+
+### 일괄 생성
+
+여러 챕터를 Grok으로 일괄 생성:
 
 ```javascript
 // scripts/batch-grok.mjs
 import { writeGrok } from './grok-writer.mjs';
 
-const chapters = [5, 12, 28]; // 민감 장면이 있는 회차
+const chapters = [5, 12, 28];
 for (const ch of chapters) {
   await writeGrok({
     chapter: ch,
-    model: 'grok-4-1-fast',
-    temperature: 0.8
+    model: 'grok-4-1-fast-reasoning',
+    temperature: 0.85,
+    maxTokens: 8192
   });
 }
 ```

@@ -4,102 +4,105 @@ description: xAI Grok API를 사용한 소설 생성
 user-invocable: true
 ---
 
-# /write-grok - Grok API로 소설 생성
+# /write-grok - Grok API로 챕터 집필
 
-xAI Grok API를 사용하여 소설을 생성합니다.
-Claude의 콘텐츠 정책으로 인해 생성이 어려운 장면에 사용할 수 있습니다.
+xAI Grok API를 사용하여 소설 챕터를 생성합니다.
+프로젝트 컨텍스트(문체, 캐릭터, 플롯, 이전 요약)를 자동으로 조립합니다.
 
 ## Prerequisites
 
-1. `~/.env` 파일에 API 키 설정:
+`~/.env` 파일에 API 키 설정:
 ```
 XAI_API_KEY=xai-xxxxxxxxxxxx
 ```
 
-2. API 키는 https://console.x.ai 에서 발급
+API 키는 https://console.x.ai 에서 발급받을 수 있습니다.
 
 ## Usage
 
+```bash
+/write-grok 5          # 5화를 Grok으로 생성 (컨텍스트 자동 조립)
+/write-grok "프롬프트"  # 직접 프롬프트로 생성 (레거시 모드)
 ```
-/write-grok "로맨스 소설의 키스 장면을 써줘"
-/write-grok --chapter 5    # 5화를 Grok으로 생성
-```
 
-## Process
+## 실행 흐름
 
-이 스킬이 호출되면 다음 단계를 수행합니다:
+### 챕터 번호 지정 시 (권장)
 
-### Step 1: API 키 확인
+`/write --grok`과 동일한 파이프라인을 실행합니다:
 
-Bash 도구로 API 키 존재 여부를 확인합니다:
+**Step 1. 컨텍스트 조립**
 
 ```bash
-node novel-dev/scripts/grok-writer.mjs --help
+node novel-dev/scripts/assemble-grok-prompt.mjs \
+  --chapter {N} \
+  --project {소설 프로젝트 경로}
 ```
 
-API 키가 없으면 사용자에게 설정 방법을 안내합니다.
+stdout JSON에서 `system`, `prompt`, `outputPath` 추출.
 
-### Step 2: 프롬프트 구성
+**Step 2. 프롬프트 파일 저장**
 
-사용자의 요청을 바탕으로 소설 생성 프롬프트를 구성합니다.
+- `/tmp/grok_system_{N}.txt` ← system
+- `/tmp/grok_prompt_{N}.txt` ← prompt
 
-시스템 프롬프트 예시:
-```
-당신은 한국어 소설 작가입니다.
-감각적이고 몰입감 있는 장면을 작성합니다.
-대화, 묘사, 감정 표현을 자연스럽게 섞어서 써주세요.
-```
-
-### Step 3: Grok API 호출
+**Step 3. Grok API 호출**
 
 ```bash
 node novel-dev/scripts/grok-writer.mjs \
-  --prompt "프롬프트 내용" \
-  --system "시스템 프롬프트" \
+  --system-file /tmp/grok_system_{N}.txt \
+  --prompt-file /tmp/grok_prompt_{N}.txt \
   --model "grok-4-1-fast-reasoning" \
-  --max-tokens 4096 \
+  --max-tokens 8192 \
+  --temperature 0.85 \
+  --output {outputPath}
+```
+
+**Step 4. 사후 처리**
+
+- 생성된 챕터 내용과 분량 확인
+- `context/summaries/chapter_XXX_summary.md` 요약 생성 (summarizer 호출)
+- `meta/ralph-state.json` 상태 업데이트
+- 사용자에게 결과 보고
+
+### 직접 프롬프트 시 (레거시)
+
+```bash
+node novel-dev/scripts/grok-writer.mjs \
+  --prompt "{사용자 프롬프트}" \
+  --model "grok-4-1-fast-reasoning" \
+  --max-tokens 8192 \
   --temperature 0.85
 ```
 
-### Step 4: 결과 처리
+컨텍스트 자동 조립 없이 직접 프롬프트만 전달됩니다.
+결과는 stdout으로 출력되며 사후 처리 없음.
 
-- 결과는 stdout으로 출력됩니다
-- 필요시 `--output` 옵션으로 파일에 저장
-- 생성된 텍스트를 사용자에게 보여줍니다
-
-## Options
-
-| 옵션 | 설명 | 기본값 |
-|------|------|--------|
-| --model | Grok 모델 | grok-4-1-fast-reasoning |
-| --max-tokens | 최대 토큰 | 4096 |
-| --temperature | 창의성 (0~1) | 0.85 |
-| --output | 출력 파일 | (stdout) |
-
-## Available Models
+## Grok 모델
 
 | 모델 | 설명 |
 |------|------|
 | grok-3 | 기본 모델, 균형잡힌 성능 |
 | grok-4-1-fast | 최신 모델, 빠른 응답 |
-| grok-4-1-fast-reasoning | 추론 강화 모델 |
+| grok-4-1-fast-reasoning | 추론 강화 모델 (기본값) |
 
-## Examples
+## 프로젝트 전체 Grok 모드
 
-### 기본 사용
-```
-/write-grok "두 주인공이 처음 키스하는 로맨스 장면"
+성인소설 프로젝트에서 매번 `--grok`을 붙이지 않으려면:
+
+`meta/project.json`에 설정:
+```json
+{
+  "writer_mode": "grok",
+  "grok_config": {
+    "model": "grok-4-1-fast-reasoning",
+    "temperature": 0.85,
+    "max_tokens": 8192
+  }
+}
 ```
 
-### 컨텍스트와 함께
-```
-/write-grok "이전 장면: 비 내리는 밤, 서로의 진심을 고백한 후. 다음 장면을 이어서 써줘."
-```
-
-### 특정 장르 스타일
-```
-/write-grok --system "당신은 무협 소설 작가입니다" "주인공이 적과 대결하는 액션 장면"
-```
+이후 `/write 5`만으로 자동으로 Grok이 사용됩니다.
 
 ## Error Handling
 
@@ -115,24 +118,13 @@ node novel-dev/scripts/grok-writer.mjs \
 → API 키가 잘못되었거나 만료됨
 ```
 
-### 토큰 한도 초과
+### 컨텍스트 조립 실패
 ```
-[ERROR] Grok API Error (400): max_tokens exceeded
-→ --max-tokens 값을 줄이거나 프롬프트 축소
+[ERROR] 프로젝트 경로를 찾을 수 없습니다.
+→ --project 경로 확인 또는 소설 프로젝트 디렉토리에서 실행
 ```
 
-## Integration with Novel Workflow
+## Documentation
 
-기존 워크플로우와 통합하여 사용:
-
-1. `/write 5` 로 기본 집필 시도
-2. Claude 정책으로 거부되면 `/write-grok --chapter 5` 로 대체
-3. 생성된 결과를 `chapters/chapter_005.md`에 저장
-4. `/evaluate 5` 로 품질 평가 (평가는 Claude가 수행)
-
-## Notes
-
-- Grok API는 유료입니다 (사용량에 따라 과금)
-- Claude보다 콘텐츠 제한이 덜 엄격합니다
-- 생성 결과의 품질은 프롬프트에 크게 좌우됩니다
-- 한국어 지원이 잘 됩니다
+**Detailed Guide**: See `references/detailed-guide.md`
+**Usage Examples**: See `examples/example-usage.md`

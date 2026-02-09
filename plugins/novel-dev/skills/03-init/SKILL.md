@@ -143,6 +143,46 @@ See `templates/recipes/README.md` for full recipe schema and customization guide
 
 Simple 선택 시, init 완료 후 자동으로 `/quickstart` Step 2로 안내합니다.
 
+### 집필 모드 선택
+
+모드 선택 후, AskUserQuestion으로 집필 모드를 선택받습니다:
+
+| 옵션 | 설명 |
+|------|------|
+| **Grok (성인소설)** | 모든 회차를 xAI Grok API로 집필. 콘텐츠 제한 없음. |
+| **Claude (일반)** | 모든 회차를 Claude novelist 에이전트로 집필 (기본값) |
+| **Hybrid (혼합)** | 성인 키워드 감지 시 Grok, 나머지 Claude |
+
+선택에 따라 `meta/project.json`에 설정:
+
+```json
+{
+  "writer_mode": "grok",
+  "grok_config": {
+    "model": "grok-4-1-fast-reasoning",
+    "temperature": 0.85,
+    "max_tokens": 8192
+  }
+}
+```
+
+- `"claude"` 선택 시 `writer_mode: "claude"`, `grok_config` 생략
+- `"hybrid"` 선택 시 `writer_mode: "hybrid"`, `grok_config` 포함
+
+**Grok 모드 선택 시** API 키 존재 확인:
+
+```bash
+node novel-dev/scripts/grok-writer.mjs --help 2>&1 | head -1
+```
+
+API 키가 없으면 설정 방법을 안내:
+```
+~/.env 파일에 다음을 추가하세요:
+XAI_API_KEY=xai-xxxxxxxxxxxx
+
+API 키는 https://console.x.ai 에서 발급받을 수 있습니다.
+```
+
 ## Error Handling
 
 ### Missing BLUEPRINT.md

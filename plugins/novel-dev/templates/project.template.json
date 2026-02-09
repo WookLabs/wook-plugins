@@ -14,5 +14,11 @@
   "current_chapter": 0,
   "status": "planning",
   "created_at": "",
-  "updated_at": ""
+  "updated_at": "",
+  "writer_mode": "claude",
+  "grok_config": {
+    "model": "grok-4-1-fast-reasoning",
+    "temperature": 0.85,
+    "max_tokens": 8192
+  }
 }
