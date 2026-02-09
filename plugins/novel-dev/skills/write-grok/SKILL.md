@@ -56,7 +56,7 @@ API 키가 없으면 사용자에게 설정 방법을 안내합니다.
 node novel-dev/scripts/grok-writer.mjs \
   --prompt "프롬프트 내용" \
   --system "시스템 프롬프트" \
-  --model "grok-3" \
+  --model "grok-4-1-fast-reasoning" \
   --max-tokens 4096 \
   --temperature 0.85
 ```
@@ -71,7 +71,7 @@ node novel-dev/scripts/grok-writer.mjs \
 
 | 옵션 | 설명 | 기본값 |
 |------|------|--------|
-| --model | Grok 모델 | grok-3 |
+| --model | Grok 모델 | grok-4-1-fast-reasoning |
 | --max-tokens | 최대 토큰 | 4096 |
 | --temperature | 창의성 (0~1) | 0.85 |
 | --output | 출력 파일 | (stdout) |
