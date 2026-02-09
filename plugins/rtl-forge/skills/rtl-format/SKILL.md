@@ -36,7 +36,7 @@ Verilog/SystemVerilog 파일을 RTL 코딩 표준에 맞게 자동 포매팅한�
 
 ## Formatting Rules
 
-아래 10가지 규칙을 **번호 순서대로** 적용한다. 모든 규칙은 로직을 변경하지 않는다.
+아래 18가지 규칙을 **번호 순서대로** 적용한다. 모든 규칙은 로직을 변경하지 않는다.
 
 ---
 
@@ -303,6 +303,246 @@ wire trigger = en & valid & ~busy;
 
 ---
 
+### Rule 11: Variable Declaration Near First Use
+
+변수(wire/reg)를 최초 사용 블럭 바로 위에 선언한다. 파일 상단에 모아놓지 않는다.
+wire/reg 선언과 always 블럭 사이에 빈 줄을 넣지 않는다.
+
+```verilog
+// BEFORE (파일 상단에 모아놓음)
+wire w_some_condition;
+wire w_next_phase;
+// ... 100줄 뒤에서 사용 ...
+always @(posedge clk or negedge rstn) begin
+  if(~rstn) r_data <= 8'd0;
+  else      r_data <= i_data;
+end
+
+always @(posedge clk or negedge rstn) begin
+  if(~rstn) r_phase <= 1'b0;
+  else      r_phase <= w_next_phase;
+end
+
+// AFTER (최초 사용 블럭 바로 위에 선언, 빈 줄 없이 붙임)
+wire w_some_condition = i_enable & i_valid;
+always @(posedge clk or negedge rstn) begin
+  if(~rstn) r_data <= 8'd0;
+  else      r_data <= i_data;
+end
+
+wire w_next_phase = r_data[7] & r_enable;
+always @(posedge clk or negedge rstn) begin
+  if(~rstn) r_phase <= 1'b0;
+  else      r_phase <= w_next_phase;
+end
+```
+
+**규칙:**
+- wire 선언은 그것을 사용하는 always/assign 블럭 바로 위에 위치
+- 선언과 사용 블럭 사이에 빈 줄 없음
+- 블럭 간에는 빈 줄 1개로 구분
+- 여러 곳에서 사용되는 wire는 첫 사용처 위에 선언
+
+**Why?**
+- 변수의 용도를 즉시 파악 가능
+- 사용하지 않는 변수를 빠르게 발견
+- 코드 리뷰 시 위아래 스크롤 최소화
+
+---
+
+### Rule 12: Signal Naming Convention — i_/o_/r_/w_ Prefix
+
+신호 명명 규칙을 검사하고 위반 시 경고한다.
+
+| Prefix | 의미 | 예시 |
+|--------|------|------|
+| `i_` | Input port | `i_pixel_valid` |
+| `o_` | Output port | `o_byte_data` |
+| `r_` | Register (FF) | `r_state`, `r_count` |
+| `w_` | Wire (combinational) | `w_next_state` |
+
+```verilog
+// BEFORE
+input  wire        valid,
+output wire        result,
+reg  [7:0]  state;
+wire [3:0]  next_state;
+
+// AFTER
+input  wire        i_valid,
+output wire        o_result,
+reg  [7:0]  r_state;
+wire [3:0]  w_next_state;
+```
+
+**규칙:**
+- input port는 `i_` prefix
+- output port는 `o_` prefix
+- `always @(posedge ...)` 에서 할당되는 reg는 `r_` prefix
+- combinational wire/assign은 `w_` prefix
+- 위반 시 자동 rename 대신 **경고만 출력** (rename은 영향 범위가 넓으므로)
+
+---
+
+### Rule 13: CDC Signal Naming — `_{src}2{dst}`
+
+CDC(Clock Domain Crossing) 동기화 신호는 `{signal}_{src}2{dst}` 형식으로 명명한다.
+
+```verilog
+// BEFORE
+wire init_seq_done_sync;
+wire frame_active_sync;
+
+// AFTER (경고 + 제안)
+wire init_seq_done_word2pix;    // word_clk → pix_clk
+wire frame_active_pix2word;     // pix_clk → word_clk
+```
+
+**규칙:**
+- synchronizer 출력 신호에 `_{src}2{dst}` suffix가 없으면 경고
+- 자동 rename 대신 **올바른 이름을 제안**만 한다
+- `_sync` suffix는 도메인 정보가 없으므로 부적절
+
+---
+
+### Rule 14: FSM Control Signal Naming — set_/clr_/inc_
+
+FSM에서 생성하는 내부 컨트롤 신호는 동작을 나타내는 prefix를 사용한다.
+
+| Prefix | 동작 | 예시 |
+|--------|------|------|
+| `set_` | 레지스터를 1로 설정 | `set_frame_active` |
+| `clr_` | 레지스터를 0으로 클리어 | `clr_frame_active` |
+| `inc_` | 카운터 증가 | `inc_frame_num` |
+
+```verilog
+// BEFORE (FSM 내 컨트롤 신호에 prefix 없음)
+reg frame_active_en;
+reg frame_active_rst;
+reg frame_num_next;
+
+// AFTER (경고 + 제안)
+reg set_frame_active;
+reg clr_frame_active;
+reg inc_frame_num;
+```
+
+**규칙:**
+- FSM combinational block 내에서 default 0으로 초기화되고 조건부로 1이 되는 신호 → `set_` 제안
+- `set_`과 쌍을 이루는 클리어 신호 → `clr_` 제안
+- 카운터 증가 용도 → `inc_` 제안
+- 자동 rename 대신 **경고 + 제안**
+
+---
+
+### Rule 15: One Variable Per Always Block
+
+한 always 블록에는 한 변수만 할당한다.
+
+```verilog
+// BEFORE (한 always에 여러 변수)
+always @(posedge clk or negedge rstn) begin
+  if(~rstn) begin
+    r_signal_a <= 1'b0;
+    r_signal_b <= 1'b0;
+  end else begin
+    r_signal_a <= some_logic;
+    r_signal_b <= other_logic;
+  end
+end
+
+// AFTER (분리)
+always @(posedge clk or negedge rstn) begin
+  if(~rstn) r_signal_a <= 1'b0;
+  else      r_signal_a <= some_logic;
+end
+
+always @(posedge clk or negedge rstn) begin
+  if(~rstn) r_signal_b <= 1'b0;
+  else      r_signal_b <= other_logic;
+end
+```
+
+**규칙:**
+- sequential always 블록에서 2개 이상의 reg에 할당하면 **경고**
+- 단순한 경우 자동 분리를 제안
+- FSM의 combinational always (`always @(*)`)는 예외 (여러 신호 할당 허용)
+
+---
+
+### Rule 16: Combinational Logic Extracted to Wire
+
+always 블록의 if-else 조건에 조합식을 직접 넣지 않는다. 바로 위에 wire로 선언한다.
+
+```verilog
+// BEFORE (조합식을 if 조건에 직접)
+always @(posedge clk or negedge rstn) begin
+  if(~rstn)                              r_state <= IDLE;
+  else if(i_valid & i_ready & ~i_busy)   r_state <= ACTIVE;
+end
+
+// AFTER (wire로 분리)
+wire w_valid_and_ready = i_valid & i_ready & ~i_busy;
+always @(posedge clk or negedge rstn) begin
+  if(~rstn)                  r_state <= IDLE;
+  else if(w_valid_and_ready) r_state <= ACTIVE;
+end
+```
+
+**규칙:**
+- `if`/`else if` 조건에 2개 이상의 연산자가 있으면 wire 분리를 **제안**
+- 단순 조건 (`~rstn`, 단일 신호)은 그대로 유지
+- reset 조건 (`~rstn`, `!rstn`)은 항상 예외
+
+**Why?**
+- 파형 분석 시 조합식 결과를 직접 확인 가능
+- 같은 조건을 여러 곳에서 재사용 가능
+
+---
+
+### Rule 17: Self-clearing One-shot Pattern
+
+one-shot 펄스 패턴에서 set 조건이 auto-clear보다 우선하도록 정렬한다.
+
+```verilog
+// CORRECT pattern
+always @(posedge clk or negedge rstn) begin
+  if(~rstn)          r_pulse <= 1'b0;
+  else if(trigger_a) r_pulse <= 1'b1;  // trigger (priority)
+  else if(trigger_b) r_pulse <= 1'b1;  // trigger (priority)
+  else if(r_pulse)   r_pulse <= 1'b0;  // auto-clear (last)
+end
+```
+
+**규칙:**
+- `r_xxx <= 1'b1` (set) 조건이 `r_xxx <= 1'b0` (clear) 조건보다 위에 있는지 검사
+- self-reference로 클리어하는 패턴 (`else if(r_pulse) r_pulse <= 1'b0`)이 마지막에 위치하는지 검사
+- 순서가 잘못되면 **경고**
+
+---
+
+### Rule 18: Parameter/Localparam Uppercase
+
+parameter와 localparam은 전부 대문자로 명명한다.
+
+```verilog
+// BEFORE
+parameter data_width = 8;
+localparam max_count = 255;
+localparam st_idle = 3'b001;
+
+// AFTER (경고 + 제안)
+parameter DATA_WIDTH = 8;
+localparam MAX_COUNT = 255;
+localparam ST_IDLE = 3'b001;
+```
+
+**규칙:**
+- parameter/localparam 이름에 소문자가 포함되면 **경고 + UPPERCASE 제안**
+- 대문자 + 언더스코어(`_`) 조합만 허용
+
+---
+
 ## Output
 
 포매팅 완료 후 아래 형식으로 요약을 출력한다:
@@ -319,9 +559,19 @@ RTL Format Complete
 
 변경이 없는 파일은 목록에서 제외한다.
 
+## Rule Classification
+
+| 구분 | 규칙 | 동작 |
+|------|------|------|
+| **자동 적용** | Rule 1~11 | 코드를 직접 수정한다 (공백, 정렬, 연산자, 배치) |
+| **경고 + 제안** | Rule 12~18 | 위반을 감지하면 경고를 출력하고 수정을 제안한다. 자동 rename/리팩토링은 하지 않는다 |
+
+Rule 12~18은 이름 변경이나 코드 구조 변경을 수반하므로 영향 범위가 넓다. 자동 적용 대신 경고로 알려주고, 수정은 사용자가 `/rtl-plan` → `/rtl-apply` 워크플로우로 진행한다.
+
 ## Safety
 
-- **로직 변경 금지**: 포매팅은 공백, 정렬, 연산자 치환만 수행한다
+- **로직 변경 금지**: 포매팅은 공백, 정렬, 연산자 치환, 배치 변경만 수행한다
 - **문자열 보호**: `$display("...")` 등 문자열 리터럴 내부는 건드리지 않는다
 - **주석 보존**: `//` 및 `/* */` 주석 내용은 변경하지 않는다 (정렬만)
+- **경고 규칙은 읽기 전용**: Rule 12~18은 코드를 수정하지 않고 경고만 출력한다
 - **승인 불필요**: 로직 변경이 아니므로 RTL 협의 프로토콜을 적용하지 않는다
