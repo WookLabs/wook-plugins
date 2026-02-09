@@ -82,9 +82,9 @@ node novel-dev/scripts/grok-writer.mjs \
 
 | 모델 | 설명 |
 |------|------|
-| grok-3 | 기본 모델, 균형잡힌 성능 |
+| grok-4-1-fast-reasoning | 추론 강화 모델 **(기본값, 권장)** |
 | grok-4-1-fast | 최신 모델, 빠른 응답 |
-| grok-4-1-fast-reasoning | 추론 강화 모델 (기본값) |
+| grok-3 | 레거시 모델 |
 
 ## 프로젝트 전체 Grok 모드
 
@@ -103,6 +103,22 @@ node novel-dev/scripts/grok-writer.mjs \
 ```
 
 이후 `/write 5`만으로 자동으로 Grok이 사용됩니다.
+
+## 품질 검증
+
+> **주의**: Grok이 생성한 콘텐츠도 Claude가 품질 검증을 수행합니다.
+> 성인 장면 자체가 아닌 **서사 구조, 캐릭터 일관성, 플롯 정합성**만 평가합니다.
+
+검증 에이전트: critic, beta-reader, genre-validator (모두 Claude)
+
+## Hybrid 모드 키워드
+
+`writer_mode: "hybrid"` 시 아래 키워드가 플롯에 포함되면 자동으로 Grok 전환:
+
+- **Korean**: 야한, 19금, 베드신, 관능, 정사, 밀애, 섹시, 에로, R-18, NC-17, 수위
+- **English**: nsfw, explicit, adult, erotic, intimate scene, love scene, 18+
+
+검색 대상: 플롯 파일(`chapters/chapter_XXX.json`), 씬 설명, 캐릭터 상호작용 태그
 
 ## Error Handling
 

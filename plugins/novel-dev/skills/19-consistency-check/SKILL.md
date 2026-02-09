@@ -41,7 +41,7 @@ For projects with > 20 chapters:
    ```
 
 3. **파일 저장**
-   - `reviews/consistency_report.json`
+   - `reviews/consistency-report.json`
 
 ## 출력 예시
 

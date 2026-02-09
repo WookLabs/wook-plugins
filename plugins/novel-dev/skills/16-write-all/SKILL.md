@@ -21,7 +21,7 @@ user-invocable: true
 
 `meta/project.json`의 `writer_mode`에 따라 집필 엔진이 결정됩니다:
 - `"grok"`: 모든 회차를 Grok API로 생성 (성인소설 모드)
-- `"hybrid"`: 성인 키워드 감지 시 Grok, 나머지 Claude
+- `"hybrid"`: 성인 키워드 감지 시 Grok, 나머지 Claude (키워드: 야한, 19금, 베드신, 관능, 정사, 밀애, 에로, R-18, nsfw, explicit, adult 등 — 전체 목록은 `/write` 참조)
 - `"claude"`: 기본 — Claude novelist 에이전트로 생성
 
 > Grok 모드에서도 품질 검증(critic, beta-reader, genre-validator)과 퇴고(editor)는 **Claude가 수행**합니다.
