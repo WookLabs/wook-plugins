@@ -1,9 +1,0 @@
-{
-  "name": "rtl-forge",
-  "version": "2.1.0",
-  "description": "Logic-First Verilog/SystemVerilog RTL Design & Verification Plugin",
-  "author": {
-    "name": "WookLabs"
-  },
-  "skills": "./skills/"
-}
