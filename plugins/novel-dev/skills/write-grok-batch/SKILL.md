@@ -51,7 +51,7 @@ node novel-dev/scripts/grok-batch-writer.mjs \
 - `N-M` 형식: start=N, end=M (예: `1-15`)
 - `--parallel N`: 병렬 배치 수 (기본 3)
 - `--model MODEL`: Grok 모델 지정
-- `--max-tokens N`: 최대 토큰 (기본 16000)
+- `--max-tokens N`: 최대 토큰 (기본 30000)
 - `--temperature N`: Temperature (기본 0.85)
 
 ## /write-grok-act과의 차이

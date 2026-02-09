@@ -11,7 +11,7 @@
  *   --system      시스템 프롬프트 (선택)
  *   --system-file 시스템 프롬프트를 파일에서 읽기 (--system 대신 사용)
  *   --model       모델 선택 (기본: grok-4-1-fast-reasoning)
- *   --max-tokens  최대 토큰 (기본: 8192)
+ *   --max-tokens  최대 토큰 (기본: 30000)
  *   --output      출력 파일 경로 (선택, 없으면 stdout)
  */
 
@@ -91,7 +91,7 @@ async function callGrokAPI(options) {
     prompt,
     systemPrompt,
     model = 'grok-4-1-fast-reasoning',
-    maxTokens = 8192,
+    maxTokens = 30000,
     temperature = 0.8
   } = options;
 
@@ -143,7 +143,7 @@ function parseArgs(args) {
     prompt: null,
     system: null,
     model: 'grok-4-1-fast-reasoning',
-    maxTokens: 8192,
+    maxTokens: 30000,
     output: null,
     temperature: 0.8
   };
@@ -180,7 +180,7 @@ ${colors.yellow}옵션:${colors.reset}
   --system       시스템 프롬프트 (선택)
   --system-file  시스템 프롬프트를 파일에서 읽기 (--system 대신 사용)
   --model        모델 (기본: grok-4-1-fast-reasoning)
-  --max-tokens   최대 토큰 (기본: 8192)
+  --max-tokens   최대 토큰 (기본: 30000)
   --temperature  창의성 (기본: 0.8)
   --output       출력 파일 경로 (선택)
   --help, -h     도움말

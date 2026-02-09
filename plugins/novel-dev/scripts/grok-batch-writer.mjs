@@ -12,7 +12,7 @@
  *   --project PATH   소설 프로젝트 경로 (필수)
  *   --parallel N     병렬 배치 수 (기본: 3)
  *   --model MODEL    Grok 모델 (기본: grok-4-1-fast-reasoning)
- *   --max-tokens N   최대 토큰 (기본: 16000)
+ *   --max-tokens N   최대 토큰 (기본: 30000)
  *   --temperature N  Temperature (기본: 0.85)
  *   --help, -h       도움말
  */
@@ -45,7 +45,7 @@ function parseArgs(argv) {
     project: null,
     parallel: 3,
     model: 'grok-4-1-fast-reasoning',
-    maxTokens: 16000,
+    maxTokens: 30000,
     temperature: 0.85
   };
 
@@ -87,7 +87,7 @@ ${colors.yellow}옵션:${colors.reset}
   --project PATH   소설 프로젝트 경로 (필수)
   --parallel N     병렬 배치 수 (기본: 3)
   --model MODEL    Grok 모델 (기본: grok-4-1-fast-reasoning)
-  --max-tokens N   최대 토큰 (기본: 16000)
+  --max-tokens N   최대 토큰 (기본: 30000)
   --temperature N  Temperature (기본: 0.85)
   --help, -h       도움말
 
