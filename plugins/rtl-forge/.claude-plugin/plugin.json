@@ -2,11 +2,5 @@
   "name": "rtl-forge",
   "version": "3.0.0",
   "description": "RTL design assistant — formatting, review, and verification tools for Verilog/SystemVerilog",
-  "author": {
-    "name": "WookLabs"
-  },
-  "license": "MIT",
-  "engines": {
-    "claude-code": ">=1.0.0"
-  }
+  "skills": "./skills/"
 }
