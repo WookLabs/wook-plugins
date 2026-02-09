@@ -1,0 +1,7 @@
+{
+  "name": "rtl-forge",
+  "version": "3.0.0",
+  "description": "RTL design assistant plugin",
+  "type": "module",
+  "license": "MIT"
+}
