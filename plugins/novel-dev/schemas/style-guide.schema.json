@@ -161,7 +161,7 @@
     },
     "adult_writing": {
       "type": "object",
-      "description": "성인 장면 작성 스타일 설정 (writer_mode: grok 시 활용)",
+      "description": "성인 장면 작성 스타일 설정 (2-Pass 파이프라인에서 Grok 리라이트 시 활용)",
       "properties": {
         "explicitness": {
           "type": "string",

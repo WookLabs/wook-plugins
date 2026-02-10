@@ -149,30 +149,34 @@ Simple 선택 시, init 완료 후 자동으로 `/quickstart` Step 2로 안내�
 
 | 옵션 | 설명 |
 |------|------|
-| **Grok (성인소설)** | 모든 회차를 xAI Grok API로 집필. 콘텐츠 제한 없음. |
 | **Claude (일반)** | 모든 회차를 Claude novelist 에이전트로 집필 (기본값) |
-| **Hybrid (혼합, deprecated)** | 성인 키워드 감지 시 Grok, 나머지 Claude. 성인소설은 Grok 권장 |
+| **2-Pass (성인소설)** | Pass 1: Claude가 ADULT 마커와 함께 집필, Pass 2: `adult-rewriter.mjs`가 Grok API로 마커 구간 대체 |
 
 선택에 따라 `meta/project.json`에 설정:
 
+- **Claude** 선택 시:
 ```json
 {
-  "writer_mode": "grok",
+  "writer_mode": "claude"
+}
+```
+
+- **2-Pass** 선택 시:
+```json
+{
+  "writer_mode": "2pass",
   "grok_config": {
     "model": "grok-4-1-fast-reasoning",
     "temperature": 0.85,
-    "max_tokens": 8192
+    "max_tokens": 30000
   }
 }
 ```
 
-- `"claude"` 선택 시 `writer_mode: "claude"`, `grok_config` 생략
-- `"hybrid"` 선택 시 `writer_mode: "hybrid"`, `grok_config` 포함
-
-**Grok 모드 선택 시** API 키 존재 확인:
+**2-Pass 모드 선택 시** API 키 존재 확인:
 
 ```bash
-node novel-dev/scripts/grok-writer.mjs --help 2>&1 | head -1
+node novel-dev/scripts/adult-rewriter.mjs --help 2>&1 | head -1
 ```
 
 API 키가 없으면 설정 방법을 안내:
@@ -183,7 +187,7 @@ XAI_API_KEY=xai-xxxxxxxxxxxx
 API 키는 https://console.x.ai 에서 발급받을 수 있습니다.
 ```
 
-**Grok 모드 선택 시** `meta/style-guide.json`에 `adult_writing` 섹션도 함께 설정합니다:
+**2-Pass 모드 선택 시** `meta/style-guide.json`에 `adult_writing` 섹션도 함께 설정합니다:
 
 ```json
 {
@@ -198,8 +202,8 @@ API 키는 https://console.x.ai 에서 발급받을 수 있습니다.
 ```
 
 AskUserQuestion으로 사용자에게 커스터마이징 여부 확인:
-- "기본값 사용" — 위 설정 그대로 적용
-- "커스터마이징" — 각 항목별 선택
+- "기본값 사용" -- 위 설정 그대로 적용
+- "커스터마이징" -- 각 항목별 선택
   - 수위: low(암시적) / medium(은유적) / high(직접적)
   - 감각: visual / tactile / emotional / all
   - 페이싱: quick / gradual / slow-burn

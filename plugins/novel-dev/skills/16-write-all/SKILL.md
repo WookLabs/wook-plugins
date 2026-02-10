@@ -20,11 +20,12 @@ user-invocable: true
 ## Writer Mode
 
 `meta/project.json`의 `writer_mode`에 따라 집필 엔진이 결정됩니다:
-- `"grok"`: 모든 회차를 Grok API로 생성 (성인소설 모드)
-- `"hybrid"`: (deprecated) 성인 키워드 감지 시 Grok, 나머지 Claude. **성인소설은 `"grok"` 권장**
-- `"claude"`: 기본 — Claude novelist 에이전트로 생성
+- `"claude"`: 기본 -- Claude novelist 에이전트로 생성
+- `"grok"`: **(deprecated)** 2-Pass 파이프라인으로 대체됨
+- `"hybrid"`: **(removed)** v6.0.0에서 제거됨
 
-> Grok 모드에서도 품질 검증(critic, beta-reader, genre-validator)과 퇴고(editor)는 **Claude가 수행**합니다.
+> **성인소설**: `/write-act-2pass`를 사용하세요. Pass 1(Claude)이 ADULT 마커와 함께 집필하고, Pass 2(`adult-rewriter.mjs`)가 Grok API로 마커 구간을 대체합니다.
+> 품질 검증(critic, beta-reader, genre-validator)과 퇴고(editor)는 항상 **Claude가 수행**합니다.
 
 ## Masterpiece Mode
 
@@ -93,10 +94,6 @@ user-invocable: true
 > 예상 토큰 사용량: 회차당 ~80K 입력 + ~20K 출력
 > 총 예상: N × 100K 토큰
 
-**Grok 모드 추가 비용:**
-> Grok API 비용: 회차당 ~$0.10-0.20
-> 검증은 Claude가 수행하므로 검증 비용은 동일
-
 AskUserQuestion으로 사용자 확인:
 - "전체 진행" — 모든 회차 연속 집필
 - "1막만" — 첫 번째 막만 집필
@@ -119,19 +116,9 @@ AskUserQuestion으로 사용자 확인:
 ```
 for act in acts:
     for chapter in act.chapters:
-        # writer_mode에 따라 분기
-        if writer_mode == "grok":
-            assemble_context(chapter)   # assemble-grok-prompt.mjs
-            grok_write(chapter)          # grok-writer.mjs
-            save_chapter(chapter)
-        elif writer_mode == "hybrid" and has_adult_keywords(chapter):
-            assemble_context(chapter)
-            grok_write(chapter)
-            save_chapter(chapter)
-        else:
-            /write {chapter}             # Claude novelist
+        /write {chapter}             # Claude novelist
 
-        # 공통 사후 처리
+        # 사후 처리
         generate_summary(chapter)
         update_state(chapter)
 

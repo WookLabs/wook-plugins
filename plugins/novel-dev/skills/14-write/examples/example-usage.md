@@ -87,8 +87,6 @@ Writing chapters 5-10...
 ✓ Summary generated
 
 [3/6] Chapter 7...
-🔞 Adult content detected in plot!
-Switching to Grok API...
 ✓ Written (5,891 chars)
 ✓ Summary generated
 
@@ -98,60 +96,34 @@ All chapters 5-10 completed!
 Ready for evaluation.
 ```
 
-## Adult Content Writing
+## Adult Content Writing (2-Pass Pipeline)
 
-### Auto-Detection
+### 2-Pass 단일 챕터
 
 ```
-/write 5
+/write-2pass 5
 ```
-
-If chapter 5 plot contains keywords like "베드신", "밀애", etc:
 
 **Expected output:**
 ```
-Writing Chapter 5...
+Writing Chapter 5 (2-Pass mode)...
 
-🔞 Adult content keywords detected: [베드신, 관능적]
-Switching to xAI Grok API for unrestricted content...
+[Pass 1] Claude novelist 집필 중...
+✓ Pass 1 완료: ADULT 마커 3개 포함 (5,678 chars)
 
-Grok API parameters:
-- Model: grok-4-1-fast-reasoning
-- Temperature: 0.85
-- Max tokens: 8192
-
-Generating...
-✓ Chapter written: 5,678 characters
-✓ Adult content preserved
+[Pass 2] adult-rewriter.mjs 실행 중...
+✓ Grok API로 마커 구간 대체 완료
 
 Saved to: chapters/chapter_005.md
-
-Note: This chapter was generated with Grok API.
-Editing with Claude may censor content.
-Use /revise-grok for adult content edits.
 ```
 
-### Manual Grok Override
+### 2-Pass 막 단위
 
 ```
-/write 5 --grok
+/write-act-2pass 1
 ```
 
-Force Grok API even without keywords:
-- Useful for potentially sensitive content
-- Bypasses censorship preemptively
-- Same quality as Claude for regular content
-
-### Direct Grok Prompt
-
-```
-/write-grok "민준과 서연의 첫 키스 장면. 감정이 폭발하는 순간을 섬세하게."
-```
-
-Directly call Grok with custom prompt:
-- Bypasses plot loading
-- Full creative control
-- Output saved to current chapter
+Act 1의 모든 챕터를 순차적으로 2-Pass 집필합니다.
 
 ## Advanced Options
 
@@ -338,25 +310,25 @@ New total: 119K / 120K
 Continue with reduced context? [Y/n]
 ```
 
-### Grok API Failure
+### 2-Pass Grok API Failure
 
 ```
-/write 5
+/write-2pass 5
 ```
 
-Adult content detected but Grok fails:
+Pass 2에서 Grok API 오류 발생 시:
 
 ```
-🔞 Adult content detected: [베드신]
-Attempting Grok API...
+[Pass 1] Claude novelist 집필 완료
+[Pass 2] adult-rewriter.mjs 실행 중...
 
 ERROR: Grok API request failed
-Reason: API key not configured
+Reason: API key not configured (XAI_API_KEY)
 
 Fallback options:
-1. Configure XAI_API_KEY in .env
-2. Continue with Claude (may censor content)
-3. Cancel and revise plot to remove adult content
+1. XAI_API_KEY 설정 후 Pass 2만 재실행
+2. Pass 1 결과(ADULT 마커 포함)를 그대로 저장
+3. 취소
 
 Choose [1/2/3]:
 ```
@@ -388,8 +360,7 @@ Ralph Loop: Writing all chapters (1-50)
 
 [Chapter 3/50]
 /write 3
-🔞 Adult content detected
-✓ Written (Grok API)
+✓ Written
 ✓ Quality: 78/100 (B)
 <promise>CHAPTER_3_DONE</promise>
 

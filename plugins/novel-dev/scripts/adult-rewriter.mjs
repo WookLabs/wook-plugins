@@ -167,7 +167,7 @@ function getApiKey() {
  */
 function parseMarkers(text) {
   const markers = [];
-  const regex = /<!-- ADULT_(\d+)_START -->\n?([\s\S]*?)<!-- ADULT_\1_END -->/g;
+  const regex = /<!-- ADULT_(\d+)_START -->[\r\n]*([\s\S]*?)<!-- ADULT_\1_END -->/g;
 
   let match;
   while ((match = regex.exec(text)) !== null) {
@@ -363,7 +363,15 @@ function parseGrokResponse(content) {
   const jsonBlockMatch = content.match(/```(?:json)?\s*\n?([\s\S]*?)```/);
   const jsonStr = jsonBlockMatch ? jsonBlockMatch[1].trim() : content.trim();
 
-  return JSON.parse(jsonStr);
+  try {
+    return JSON.parse(jsonStr);
+  } catch (err) {
+    const preview = content.slice(0, 500);
+    throw new Error(
+      `JSON 파싱 실패: ${err.message}\n` +
+      `응답 미리보기 (처음 500자):\n${preview}`
+    );
+  }
 }
 
 // ─── Main ────────────────────────────────────────────────────────────────────
@@ -515,6 +523,13 @@ API 키는 https://console.x.ai 에서 발급받을 수 있습니다.
         process.exit(1);
       }
     }
+  }
+
+  // 리라이트 결과 null 체크
+  if (!rewrites) {
+    console.error(`${colors.red}[ERROR]${colors.reset} 리라이트 결과가 없습니다.`);
+    fs.unlinkSync(backupPath);
+    process.exit(1);
   }
 
   // 마커 교체

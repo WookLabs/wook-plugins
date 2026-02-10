@@ -8,6 +8,8 @@
 ## Writing Flow
 ```
 /08-plot → /09-write N → /13-evaluate N → [/12-revise N if score < 85]
+/08-plot → /write-2pass N → (Claude 집필 + Grok 리라이트)
+/08-plot → /write-act-2pass N → (막 단위 2-Pass 순차 실행)
 ```
 
 ## Full Project Flow
@@ -29,6 +31,9 @@
 /11-write-all (Ralph Loop)
   ├── /09-write → /13-evaluate → [/12-revise]
   └── repeat until complete
+  ↓ (또는 2-Pass 파이프라인)
+/write-2pass N (Claude + Grok 리라이트)
+/write-act-2pass N (막 단위 2-Pass)
   ↓
 /14-check
   ↓
@@ -57,6 +62,8 @@
 | /09-write N | chapters/chapter_N.json, context/summaries/chapter_N-1_summary.md (if N>1), meta/style-guide.json, characters/*.json, world/locations.json | chapters/chapter_N.md, chapters/chapter_N_draft.md |
 | /10-write-act N | plot/structure.json, chapter plot files for act | chapters/chapter_*.md (for act) |
 | /11-write-all | All chapter plot files | All chapters in sequence |
+| /write-2pass N | chapters/chapter_N.json, meta/style-guide.json (adult_writing), XAI_API_KEY | chapters/chapter_N.md (Claude + Grok rewritten) |
+| /write-act-2pass N | plot/structure.json, chapter plot files for act, meta/style-guide.json (adult_writing), XAI_API_KEY | chapters/chapter_*.md (for act, 2-Pass) |
 | /12-revise N | chapters/chapter_N.md, reviews/chapter_N_review.json | chapters/chapter_N.md (updated) |
 | /13-evaluate N | chapters/chapter_N.md | reviews/chapter_N_review.json, reviews/history/chapter_N.json |
 | /14-check | world/*.json, characters/*.json, plot/*.json, chapters/*.md | reviews/consistency-report.json |

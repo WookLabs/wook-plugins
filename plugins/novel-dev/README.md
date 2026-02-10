@@ -128,7 +128,8 @@ Claude Code 재시작 후 자동으로 새로 로드됩니다.
 ```bash
 /novel-autopilot     # 아이디어→완성 원고 전체 자동화
 /write-all           # 1화부터 끝까지 Ralph Loop 집필
-/write-grok          # Grok API로 생성 (Claude 제한 우회)
+/write-2pass         # 2-Pass 파이프라인 (Claude 집필 + Grok 리라이트)
+/write-act-2pass     # 막 단위 2-Pass 파이프라인
 ```
 
 ## 에이전트 (14개)

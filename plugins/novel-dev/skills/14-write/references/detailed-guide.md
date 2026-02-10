@@ -34,77 +34,25 @@ The system dynamically adjusts based on:
 - Complexity of current scene
 - Available token budget
 
-## Grok API Integration
+## Adult Content: 2-Pass Pipeline
 
-### Auto-Trigger System
+v6.0.0부터 성인 콘텐츠는 2-Pass 파이프라인으로 처리합니다.
 
-The write skill automatically detects adult content requests and switches to xAI Grok API for unrestricted content generation.
+### 2-Pass 워크플로우
 
-#### Detection Mechanism
+1. **Pass 1 (Claude)**: Claude novelist가 ADULT 마커(`<!-- ADULT_N_START -->` / `<!-- ADULT_N_END -->`)와 함께 전체 챕터를 집필
+2. **Pass 2 (Grok)**: `adult-rewriter.mjs`가 마커 구간만 추출하여 Grok API로 전송, 응답으로 대체
 
-**Korean Keywords:**
-- 야한, 야해, 야하게
-- 19금, 성인, 어덜트
-- 베드신, 정사, 밀애
-- 섹시, 관능, 에로
-- 검열, 수위 높은, 수위높은
-- R-18, R18, NC-17
+### 관련 스킬
 
-**English Keywords:**
-- nsfw, explicit, adult
-- erotic, sensual, steamy
-- intimate scene, love scene
-- mature content, 18+
+- `/write-2pass N` -- 단일 챕터 2-Pass 집필
+- `/write-act-2pass N` -- 막 단위 2-Pass 순차 집필
 
-#### Detection Locations
+### /write 스킬과의 관계
 
-Keywords are checked in:
-1. User's direct command/prompt
-2. Current chapter plot (`chapters/chapter_XXX.json`)
-3. Scene descriptions in plot
-4. Character interactions marked as intimate
+`/write` 스킬은 Claude-only 경로입니다. 성인 콘텐츠가 필요한 경우 `/write-2pass`를 직접 사용하세요.
 
-#### Grok API Call
-
-When adult content is detected:
-
-Context is auto-assembled by `assemble-grok-prompt.mjs`, which applies the priority-based context budget system and outputs system/prompt files ready for the API call.
-
-```bash
-node novel-dev/scripts/grok-writer.mjs \
-  --prompt "[Plot + Context + Writing Instructions]" \
-  --system "당신은 한국어 로맨스/성인 소설 작가입니다. 감각적이고 몰입감 있는 장면을 써주세요." \
-  --model "grok-4-1-fast-reasoning" \
-  --max-tokens 8192 \
-  --temperature 0.85
-```
-
-**Parameters:**
-- `model`: grok-4-1-fast-reasoning (latest model for creative writing)
-- `temperature`: 0.85 (higher for creative, sensual content)
-- `max-tokens`: 8192 (sufficient for extended chapter generation)
-- `system`: Korean romance/adult fiction specialist prompt
-
-#### Output Handling
-
-1. Grok generates raw chapter text
-2. Output saved to `chapters/chapter_XXX.md`
-3. User notified: "🔞 성인 콘텐츠 키워드가 감지되어 xAI Grok API로 생성했습니다."
-4. Optional: Run `editor` agent for light editing (maintaining adult content)
-
-### Manual Override
-
-Force Grok usage without keyword detection:
-
-```
-/write 5 --grok
-```
-
-Or use dedicated Grok writing command:
-
-```
-/write-grok "직접 작성할 프롬프트"
-```
+> **Note**: `writer_mode: "grok"`과 `--grok` 플래그는 deprecated되었습니다. 2-Pass 파이프라인으로 마이그레이션하세요.
 
 ## Writing Process
 
@@ -120,39 +68,16 @@ Or use dedicated Grok writing command:
    - Parse scenes, character arcs, plot points
    - Identify key moments
 
-3. **Adult Content Detection**
-   - Scan plot for trigger keywords
-   - Check user command for flags
-   - Decide: Grok API vs. novelist agent
-
-4. **Context Assembly**
+3. **Context Assembly**
    - Apply budget system
    - Load contexts by priority
    - Build composite prompt
 
 ### Phase 2: Writing
 
-#### Option A: Grok API (Adult Content)
+Claude novelist 에이전트를 호출하여 챕터를 작성합니다.
 
-```javascript
-const grokPrompt = `
-${currentPlot}
-
-이전 장면 요약:
-${previousSummaries}
-
-캐릭터 정보:
-${characterProfiles}
-
-다음 장면을 감각적이고 몰입감 있게 작성해주세요.
-목표 분량: 5000자
-`;
-
-// Execute Grok API
-const result = await executeGrokWriter(grokPrompt);
-```
-
-#### Option B: novelist Agent (Regular Content)
+> **성인소설**: `/write-2pass`를 사용하세요. 이 스킬(`/write`)은 Claude-only 경로입니다.
 
 ```javascript
 Task({
@@ -382,17 +307,17 @@ Run: /outline 5
 Then retry: /write 5
 ```
 
-### Adult Content Without Grok
+### Adult Content Handling
 
-If adult keywords detected but Grok API unavailable:
+성인 콘텐츠가 필요한 챕터에서 `/write`를 실행한 경우:
 
 ```
-WARNING: Adult content keywords detected but Grok API not configured.
+INFO: 이 챕터에 성인 콘텐츠가 포함될 수 있습니다.
 
 Options:
-1. Configure Grok API (XAI_API_KEY in .env)
-2. Continue with Claude (content may be censored)
-3. Cancel and revise plot
+1. /write-2pass로 전환 (2-Pass 파이프라인)
+2. Claude로 계속 진행 (콘텐츠 제한 있음)
+3. 취소
 
 Choose [1/2/3]:
 ```
