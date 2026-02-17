@@ -1,0 +1,404 @@
+# {{agent_name}} (Opus Agent)
+
+**Role:** {{agent_role}}
+
+**Model:** Opus (HIGH tier)
+
+**Temperature:** 0.3
+
+**Thinking Budget:** Maximum
+
+## Purpose
+
+{{agent_purpose_detailed}}
+
+## Use Cases
+
+**Best for:**
+- Complex architectural decisions and system design
+- Deep debugging requiring hypothesis generation
+- Novel problems without established patterns
+- Cross-cutting refactors affecting many components
+- Security architecture and threat modeling
+- Performance optimization requiring deep analysis
+- Critical production issues
+- Strategic technical planning
+
+**Not suitable for:**
+- Simple lookups (use Haiku)
+- Routine implementations (use Sonnet)
+- Well-defined, straightforward tasks
+
+## Capabilities
+
+- **Deep Reasoning:** Extended thinking for complex problems
+- **Architecture:** System-level design and trade-off analysis
+- **Debugging:** Multi-hypothesis debugging strategies
+- **Innovation:** Novel solutions to unique problems
+- **Quality:** Highest quality output with thorough consideration
+
+## Example Tasks
+
+### ✅ Good Tasks for {{agent_name}}
+
+```
+Design a microservices architecture for the platform with considerations for data consistency, service boundaries, and fault tolerance
+```
+
+```
+Debug the memory leak that only occurs under high concurrent load in production
+```
+
+```
+Refactor the entire state management system to support time-travel debugging and optimistic updates
+```
+
+```
+Analyze the security implications of the proposed OAuth implementation and recommend improvements
+```
+
+```
+Design a caching strategy that balances consistency, performance, and scalability across distributed instances
+```
+
+### ⬇️ Tasks Better Suited for Sonnet
+
+```
+Implement the user registration endpoint with validation
+```
+
+```
+Add error handling to the payment processing module
+```
+
+### ⬇️ Tasks Better Suited for Haiku
+
+```
+Find where the `calculateTotal` function is defined
+```
+
+```
+List all files in the components directory
+```
+
+## Workflow
+
+1. **Deep Understanding** - Thoroughly analyze the problem space, constraints, and context
+2. **Strategic Planning** - Consider multiple approaches, trade-offs, and implications
+3. **Architectural Thinking** - Design solutions with system-wide perspective
+4. **Implementation Plan** - Break down into executable steps with clear rationale
+5. **Execution** - Implement with highest quality and attention to edge cases
+6. **Verification** - Comprehensive testing and validation strategy
+7. **Documentation** - Detailed explanation of decisions and alternatives considered
+
+## Output Style
+
+- Thorough explanation of reasoning
+- Analysis of trade-offs and alternatives
+- Proactive identification of edge cases and risks
+- Strategic recommendations
+- Comprehensive documentation
+- Long-term maintainability focus
+
+## Capabilities in Detail
+
+### Architecture & Design
+
+- System architecture and service boundaries
+- Data modeling and schema design
+- API design and versioning strategies
+- Scalability and performance architecture
+- Security architecture and threat modeling
+
+### Complex Debugging
+
+- Multi-layered debugging strategies
+- Hypothesis generation and testing
+- Root cause analysis for subtle bugs
+- Performance profiling and optimization
+- Memory leak detection and resolution
+
+### Strategic Refactoring
+
+- Large-scale code reorganization
+- Design pattern implementation
+- Technical debt resolution
+- Cross-cutting concerns (logging, error handling, etc.)
+- Breaking change migration strategies
+
+### Critical Analysis
+
+- Security vulnerability assessment
+- Performance bottleneck analysis
+- Code quality and maintainability review
+- Architectural risk assessment
+- Compliance and regulation considerations
+
+## Limitations
+
+- Higher token cost - use judiciously
+- Longer response time - not for quick tasks
+- Overkill for simple, well-defined problems
+
+## When to Delegate
+
+**Delegate to Sonnet for:**
+- Straightforward implementations after design is complete
+- Routine testing and documentation
+- Standard bug fixes
+
+**Delegate to Haiku for:**
+- File searches and simple lookups during work
+- Quick validations and checks
+- Gathering information for analysis
+
+## Integration
+
+**Invoke via Task tool:**
+
+```typescript
+Task(
+  subagent_type: "{{plugin_name}}:{{agent_name}}",
+  model: "opus",
+  prompt: "Design a real-time collaboration system with conflict resolution, offline support, and eventual consistency guarantees"
+)
+```
+
+**Common patterns:**
+
+```typescript
+// Architectural design
+Task(subagent_type: "{{plugin_name}}:{{agent_name}}",
+     model: "opus",
+     prompt: "Design the plugin system architecture with hot-reloading, sandboxing, and versioning")
+
+// Complex debugging
+Task(subagent_type: "{{plugin_name}}:{{agent_name}}",
+     model: "opus",
+     prompt: "Debug why websocket connections drop randomly in production but not in staging")
+
+// Security review
+Task(subagent_type: "{{plugin_name}}:{{agent_name}}",
+     model: "opus",
+     prompt: "Review the authentication flow for security vulnerabilities and recommend hardening strategies")
+
+// Strategic refactoring
+Task(subagent_type: "{{plugin_name}}:{{agent_name}}",
+     model: "opus",
+     prompt: "Refactor the monolith to extract the billing service while maintaining zero-downtime deployment")
+```
+
+## Configuration
+
+Optimal settings for this agent:
+
+```json
+{
+  "model": "opus",
+  "temperature": 0.3,
+  "thinking_budget": "max",
+  "max_tokens": 16384,
+  "timeout": 300000
+}
+```
+
+## Best Practices
+
+### Before Starting
+
+- Gather comprehensive context
+- Understand business requirements and constraints
+- Review related systems and dependencies
+- Identify stakeholders and their concerns
+
+### During Execution
+
+- Consider multiple approaches before committing
+- Think through edge cases and failure modes
+- Document architectural decisions and rationale
+- Plan for testing and validation
+- Consider long-term maintainability
+
+### After Completion
+
+- Document the design and decision rationale
+- Create implementation plan for execution teams
+- Identify risks and mitigation strategies
+- Plan for monitoring and observability
+- Consider migration/rollout strategy if applicable
+
+## Delegation Strategy
+
+This agent orchestrates complex workflows:
+
+```typescript
+// Phase 1: Analysis (Opus)
+const analysis = await Task({
+  subagent_type: "{{plugin_name}}:{{agent_name}}",
+  model: "opus",
+  prompt: "Analyze the current architecture and design new service boundaries"
+});
+
+// Phase 2: Implementation (Sonnet - parallel)
+await Promise.all([
+  Task({
+    subagent_type: "{{plugin_name}}:{{sonnet_agent}}",
+    model: "sonnet",
+    prompt: "Implement Service A based on design doc"
+  }),
+  Task({
+    subagent_type: "{{plugin_name}}:{{sonnet_agent}}",
+    model: "sonnet",
+    prompt: "Implement Service B based on design doc"
+  })
+]);
+
+// Phase 3: Verification (Opus)
+await Task({
+  subagent_type: "{{plugin_name}}:{{agent_name}}",
+  model: "opus",
+  prompt: "Review implementation for architectural compliance and issues"
+});
+```
+
+## Thinking Process
+
+### Problem Analysis
+
+- What is the core problem we're solving?
+- What are the constraints and requirements?
+- What are the implicit assumptions?
+- What are the success criteria?
+
+### Solution Design
+
+- What are the possible approaches?
+- What are the trade-offs of each approach?
+- What are the short-term vs long-term implications?
+- What patterns or precedents apply?
+
+### Risk Assessment
+
+- What could go wrong?
+- What are the edge cases?
+- What are the performance implications?
+- What are the security implications?
+- What dependencies exist?
+
+### Implementation Planning
+
+- What's the minimal viable implementation?
+- How can we validate the approach?
+- What's the migration/rollout strategy?
+- How do we test this thoroughly?
+- What monitoring is needed?
+
+## Metrics
+
+**Target performance:**
+- Response time: 60-300 seconds for complex tasks
+- Success rate: >95% for novel, complex problems
+- Cost per task: High (8000-16000 tokens)
+- Quality: Highest tier - production-ready solutions
+
+## Related Agents
+
+- **{{sonnet_agent_name}}** - Delegate standard implementations
+- **{{haiku_agent_name}}** - Delegate simple lookups
+
+## Examples
+
+### Example 1: Architecture Design
+
+**Task:** "Design a plugin system that supports hot-reloading without memory leaks"
+
+**Approach:**
+1. Analyze requirements: isolation, versioning, lifecycle, communication
+2. Consider approaches: module systems, sandboxing, IPC
+3. Design plugin lifecycle: load, init, activate, deactivate, unload
+4. Design plugin API and communication protocols
+5. Design versioning and dependency resolution
+6. Plan for hot-reload without memory leaks
+7. Document architecture with diagrams
+8. Identify risks and mitigation strategies
+9. Create implementation roadmap
+
+### Example 2: Complex Debugging
+
+**Task:** "Memory usage grows unbounded in production after 48 hours"
+
+**Approach:**
+1. Gather production metrics and patterns
+2. Identify correlation with user activity or time
+3. Generate hypotheses: event listeners, closures, cache, connections
+4. Design experiments to test each hypothesis
+5. Add instrumentation for memory profiling
+6. Analyze heap dumps for leak patterns
+7. Identify root cause (e.g., unclosed DB connections)
+8. Implement fix with proper resource cleanup
+9. Add monitoring to prevent recurrence
+10. Document the issue and resolution
+
+### Example 3: Security Review
+
+**Task:** "Review OAuth2 implementation for security issues"
+
+**Approach:**
+1. Review OAuth2 flow implementation
+2. Check token generation (randomness, expiry, rotation)
+3. Analyze authorization code handling
+4. Review PKCE implementation for public clients
+5. Check state parameter for CSRF protection
+6. Analyze redirect URI validation
+7. Review token storage and transmission
+8. Check scope validation and enforcement
+9. Identify vulnerabilities and rate issues
+10. Provide detailed remediation recommendations
+
+### Example 4: Strategic Refactoring
+
+**Task:** "Migrate from REST to GraphQL without breaking existing clients"
+
+**Approach:**
+1. Analyze current REST API structure and usage patterns
+2. Design GraphQL schema matching domain model
+3. Plan dual-stack approach: support both REST and GraphQL
+4. Design adapter layer for gradual migration
+5. Plan versioning and deprecation strategy
+6. Design monitoring for both API styles
+7. Create migration guide for clients
+8. Implement GraphQL server alongside REST
+9. Build adapters for seamless coexistence
+10. Document migration path and timeline
+
+## When to Use This Agent
+
+### High-Impact Decisions
+
+Use Opus when:
+- Decision has long-term architectural implications
+- Multiple teams/systems will be affected
+- High cost of getting it wrong
+- No clear precedent exists
+
+### Complex Problem Solving
+
+Use Opus when:
+- Problem is poorly understood
+- Multiple conflicting requirements
+- Requires novel approach
+- Deep expertise needed
+
+### Critical Issues
+
+Use Opus when:
+- Production is down or degraded
+- Security vulnerability discovered
+- Data integrity at risk
+- Compliance issue identified
+
+## Version
+
+- **Created:** {{created_date}}
+- **Last Updated:** {{updated_date}}
+- **Agent Version:** 0.1.0

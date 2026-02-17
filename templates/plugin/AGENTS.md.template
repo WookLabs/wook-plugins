@@ -1,0 +1,232 @@
+# {{name}} - AI Navigation Guide
+
+This file helps AI assistants understand and navigate the {{name}} plugin effectively.
+
+## Overview
+
+{{plugin_overview}}
+
+**Purpose:** {{plugin_purpose}}
+
+**Domain:** {{plugin_domain}}
+
+## Plugin Structure
+
+### Agents
+
+Specialized AI agents for different task complexities:
+
+#### {{agent_name_1}} ({{agent_model_1}})
+
+**Purpose:** {{agent_purpose_1}}
+
+**Tier:** {{agent_tier_1}}
+
+**Use for:**
+- {{agent_use_1a}}
+- {{agent_use_1b}}
+- {{agent_use_1c}}
+
+**Avoid for:**
+- {{agent_avoid_1a}}
+- {{agent_avoid_1b}}
+
+#### {{agent_name_2}} ({{agent_model_2}})
+
+**Purpose:** {{agent_purpose_2}}
+
+**Tier:** {{agent_tier_2}}
+
+**Use for:**
+- {{agent_use_2a}}
+- {{agent_use_2b}}
+- {{agent_use_2c}}
+
+**Avoid for:**
+- {{agent_avoid_2a}}
+- {{agent_avoid_2b}}
+
+### Skills
+
+Invokable capabilities:
+
+#### `{{skill_name_1}}`
+
+**Trigger:** `/{{name}}:{{skill_name_1}}`
+
+**Purpose:** {{skill_purpose_1}}
+
+**Parameters:**
+- `{{param_1}}` - {{param_1_description}}
+- `{{param_2}}` - {{param_2_description}}
+
+**Auto-activates when:**
+- {{trigger_condition_1}}
+- {{trigger_condition_2}}
+
+#### `{{skill_name_2}}`
+
+**Trigger:** `/{{name}}:{{skill_name_2}}`
+
+**Purpose:** {{skill_purpose_2}}
+
+**Parameters:**
+- `{{param_3}}` - {{param_3_description}}
+- `{{param_4}}` - {{param_4_description}}
+
+**Auto-activates when:**
+- {{trigger_condition_3}}
+- {{trigger_condition_4}}
+
+### Commands
+
+CLI utilities:
+
+#### `{{command_name_1}}`
+
+**Usage:** `claude-code {{name}} {{command_name_1}} [options]`
+
+**Purpose:** {{command_purpose_1}}
+
+#### `{{command_name_2}}`
+
+**Usage:** `claude-code {{name}} {{command_name_2}} [options]`
+
+**Purpose:** {{command_purpose_2}}
+
+## Configuration
+
+Default configuration location: `.{{name}}/config.json`
+
+```json
+{
+  "{{config_option_1}}": {{config_default_1}},
+  "{{config_option_2}}": "{{config_default_2}}",
+  "{{config_option_3}}": {{config_default_3}}
+}
+```
+
+## Key Files
+
+| File | Purpose | When to Modify |
+|------|---------|----------------|
+| `.claude-plugin/plugin.json` | Plugin metadata | Version updates, metadata changes |
+| `.claude-plugin/agents/` | Agent definitions | Adding/modifying AI agents |
+| `.claude-plugin/skills/` | Skill definitions | Adding/modifying invokable skills |
+| `.claude-plugin/commands/` | CLI commands | Adding command-line utilities |
+| `.claude-plugin/hooks/` | Lifecycle hooks | Event-driven behaviors |
+| `AGENTS.md` | This file | Improving AI navigation |
+
+## Workflows
+
+### Workflow: {{workflow_name_1}}
+
+**Scenario:** {{workflow_scenario_1}}
+
+**Steps:**
+1. {{workflow_step_1a}}
+2. {{workflow_step_1b}}
+3. {{workflow_step_1c}}
+
+**Agents used:**
+- `{{workflow_agent_1}}` for {{workflow_agent_1_role}}
+- `{{workflow_agent_2}}` for {{workflow_agent_2_role}}
+
+### Workflow: {{workflow_name_2}}
+
+**Scenario:** {{workflow_scenario_2}}
+
+**Steps:**
+1. {{workflow_step_2a}}
+2. {{workflow_step_2b}}
+3. {{workflow_step_2c}}
+
+**Skills invoked:**
+- `{{workflow_skill_1}}` to {{workflow_skill_1_purpose}}
+- `{{workflow_skill_2}}` to {{workflow_skill_2_purpose}}
+
+## Patterns and Conventions
+
+### Naming Conventions
+
+- **Agents:** `{{agent_naming_pattern}}`
+- **Skills:** `{{skill_naming_pattern}}`
+- **Commands:** `{{command_naming_pattern}}`
+
+### Code Organization
+
+{{code_organization_guidelines}}
+
+### Best Practices
+
+1. **{{best_practice_1_title}}**: {{best_practice_1_description}}
+2. **{{best_practice_2_title}}**: {{best_practice_2_description}}
+3. **{{best_practice_3_title}}**: {{best_practice_3_description}}
+
+## Integration Points
+
+### With Other Plugins
+
+- **{{integration_plugin_1}}**: {{integration_description_1}}
+- **{{integration_plugin_2}}**: {{integration_description_2}}
+
+### Hooks
+
+- `{{hook_name_1}}`: {{hook_description_1}}
+- `{{hook_name_2}}`: {{hook_description_2}}
+
+## Troubleshooting
+
+### Common Issues
+
+#### {{issue_1_title}}
+
+**Symptoms:** {{issue_1_symptoms}}
+
+**Solution:** {{issue_1_solution}}
+
+#### {{issue_2_title}}
+
+**Symptoms:** {{issue_2_symptoms}}
+
+**Solution:** {{issue_2_solution}}
+
+## Development Guide
+
+### Adding a New Agent
+
+1. Create `.claude-plugin/agents/{{new_agent_name}}.md`
+2. Define role, tier, and model
+3. Update this AGENTS.md with agent description
+4. Test with sample tasks
+
+### Adding a New Skill
+
+1. Create `.claude-plugin/skills/{{new_skill_name}}.md`
+2. Add YAML frontmatter with metadata
+3. Define trigger conditions and parameters
+4. Update this AGENTS.md with skill documentation
+5. Test invocation
+
+### Adding a New Command
+
+1. Create `.claude-plugin/commands/{{new_command_name}}.md`
+2. Define command interface and options
+3. Implement command logic
+4. Update this AGENTS.md with command documentation
+5. Test CLI execution
+
+## Version History
+
+### 0.1.0 - {{release_date}}
+
+- Initial release
+- {{feature_list_item_1}}
+- {{feature_list_item_2}}
+- {{feature_list_item_3}}
+
+## References
+
+- [Plugin Documentation]({{docs_url}})
+- [Issue Tracker]({{issues_url}})
+- [Changelog]({{changelog_url}})

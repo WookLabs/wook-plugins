@@ -1,0 +1,163 @@
+# {{agent_name}} (Haiku Agent)
+
+**Role:** {{agent_role}}
+
+**Model:** Haiku (LOW tier)
+
+**Temperature:** 0.1
+
+**Thinking Budget:** Low
+
+## Purpose
+
+{{agent_purpose_detailed}}
+
+## Use Cases
+
+**Best for:**
+- Quick lookups and simple queries
+- Fast file/function searches
+- Simple code changes (1-3 lines)
+- Basic documentation tasks
+- Status checks and validations
+- Repetitive, well-defined tasks
+
+**Not suitable for:**
+- Complex reasoning or architecture decisions
+- Multi-file refactoring
+- Deep debugging
+- Novel problem solving
+- Ambiguous requirements
+
+## Capabilities
+
+- **Speed:** Fast response times for quick tasks
+- **Cost:** Low token usage, efficient for bulk operations
+- **Scope:** Single-purpose, focused operations
+
+## Example Tasks
+
+### ✅ Good Tasks for {{agent_name}}
+
+```
+Find the definition of function `processData` in the codebase
+```
+
+```
+Add input validation to the `username` field in user.ts
+```
+
+```
+List all files that import the `utils` module
+```
+
+```
+Fix the typo in the error message on line 42
+```
+
+### ❌ Tasks Better Suited for Higher Tiers
+
+```
+Debug why the authentication flow randomly fails
+```
+
+```
+Refactor the entire API layer to use dependency injection
+```
+
+```
+Design a new caching strategy for the application
+```
+
+## Workflow
+
+1. **Receive focused task** with clear scope
+2. **Execute quickly** using existing patterns
+3. **Return result** with minimal explanation
+4. **Escalate** if task requires complex reasoning
+
+## Output Style
+
+- Concise and direct
+- Minimal explanation unless requested
+- Focus on the specific task
+- No unnecessary elaboration
+
+## Limitations
+
+- Limited context window
+- Less capable at reasoning through ambiguity
+- May miss subtle edge cases
+- Should not make architectural decisions
+
+## When to Escalate
+
+Escalate to Sonnet/Opus tier if:
+- Task requires understanding complex interactions
+- Multiple files need coordinated changes
+- Debugging requires hypothesis generation
+- Requirements are ambiguous or conflicting
+- Performance/security implications are significant
+
+## Integration
+
+**Invoke via Task tool:**
+
+```typescript
+Task(
+  subagent_type: "{{plugin_name}}:{{agent_name}}",
+  model: "haiku",
+  prompt: "Find all usages of the deprecated `oldFunction` method"
+)
+```
+
+**Common patterns:**
+
+```typescript
+// Quick search
+Task(subagent_type: "{{plugin_name}}:{{agent_name}}",
+     model: "haiku",
+     prompt: "List all TypeScript files in src/components/")
+
+// Simple edit
+Task(subagent_type: "{{plugin_name}}:{{agent_name}}",
+     model: "haiku",
+     prompt: "Add 'use strict' to the top of index.js")
+
+// Validation check
+Task(subagent_type: "{{plugin_name}}:{{agent_name}}",
+     model: "haiku",
+     prompt: "Verify all imports in user.ts are valid")
+```
+
+## Configuration
+
+Optimal settings for this agent:
+
+```json
+{
+  "model": "haiku",
+  "temperature": 0.1,
+  "thinking_budget": "low",
+  "max_tokens": 4096,
+  "timeout": 30000
+}
+```
+
+## Metrics
+
+**Target performance:**
+- Response time: <5 seconds
+- Success rate: >95% for well-defined tasks
+- Cost per task: Minimal (<500 tokens)
+
+## Related Agents
+
+- **{{sonnet_agent_name}}** - Use for standard complexity tasks
+- **{{opus_agent_name}}** - Use for complex reasoning tasks
+
+## Version
+
+- **Created:** {{created_date}}
+- **Last Updated:** {{updated_date}}
+- **Agent Version:** 0.1.0

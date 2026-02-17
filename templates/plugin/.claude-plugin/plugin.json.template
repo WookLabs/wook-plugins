@@ -1,0 +1,22 @@
+{
+  "name": "{{name}}",
+  "version": "0.1.0",
+  "description": "{{description}}",
+  "author": {
+    "name": "{{author}}",
+    "email": "{{email}}"
+  },
+  "license": "MIT",
+  "keywords": [],
+  "repository": {
+    "type": "git",
+    "url": "{{repository_url}}"
+  },
+  "bugs": {
+    "url": "{{repository_url}}/issues"
+  },
+  "homepage": "{{repository_url}}#readme",
+  "engines": {
+    "claude-code": ">=1.0.0"
+  }
+}

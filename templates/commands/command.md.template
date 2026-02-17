@@ -1,0 +1,518 @@
+---
+name: {{command_name}}
+description: {{command_description}}
+version: 0.1.0
+author: {{author}}
+category: {{category}}
+usage: "claude-code {{plugin_name}} {{command_name}} [options]"
+options:
+  - flag: "{{flag_1}}"
+    alias: "{{alias_1}}"
+    type: {{type_1}}
+    required: {{required_1}}
+    description: {{flag_1_description}}
+  - flag: "{{flag_2}}"
+    alias: "{{alias_2}}"
+    type: {{type_2}}
+    required: {{required_2}}
+    description: {{flag_2_description}}
+examples:
+  - "claude-code {{plugin_name}} {{command_name}} {{example_1}}"
+  - "claude-code {{plugin_name}} {{command_name}} {{example_2}}"
+---
+
+# {{command_name}}
+
+## Overview
+
+{{command_overview}}
+
+## Description
+
+{{command_description_detailed}}
+
+## Usage
+
+```bash
+claude-code {{plugin_name}} {{command_name}} [options]
+```
+
+### Basic Usage
+
+```bash
+# {{basic_usage_description}}
+claude-code {{plugin_name}} {{command_name}}
+```
+
+### With Options
+
+```bash
+# {{advanced_usage_description}}
+claude-code {{plugin_name}} {{command_name}} --{{flag_1}} <value> --{{flag_2}}
+```
+
+## Options
+
+### `--{{flag_1}}`, `-{{alias_1}}`
+
+**Type:** {{type_1}}
+
+**Required:** {{required_1}}
+
+**Description:** {{flag_1_description_detailed}}
+
+**Default:** `{{flag_1_default}}`
+
+**Example:**
+```bash
+claude-code {{plugin_name}} {{command_name}} --{{flag_1}} {{flag_1_example_value}}
+```
+
+### `--{{flag_2}}`, `-{{alias_2}}`
+
+**Type:** {{type_2}}
+
+**Required:** {{required_2}}
+
+**Description:** {{flag_2_description_detailed}}
+
+**Default:** `{{flag_2_default}}`
+
+**Example:**
+```bash
+claude-code {{plugin_name}} {{command_name}} --{{flag_2}} {{flag_2_example_value}}
+```
+
+### `--{{flag_3}}`, `-{{alias_3}}` (Optional)
+
+**Type:** {{type_3}}
+
+**Required:** false
+
+**Description:** {{flag_3_description_detailed}}
+
+**Default:** `{{flag_3_default}}`
+
+**Example:**
+```bash
+claude-code {{plugin_name}} {{command_name}} --{{flag_3}}
+```
+
+## Examples
+
+### Example 1: {{example_1_name}}
+
+{{example_1_description}}
+
+```bash
+claude-code {{plugin_name}} {{command_name}} {{example_1_command}}
+```
+
+**Output:**
+```
+{{example_1_output}}
+```
+
+### Example 2: {{example_2_name}}
+
+{{example_2_description}}
+
+```bash
+claude-code {{plugin_name}} {{command_name}} {{example_2_command}}
+```
+
+**Output:**
+```
+{{example_2_output}}
+```
+
+### Example 3: {{example_3_name}}
+
+{{example_3_description}}
+
+```bash
+claude-code {{plugin_name}} {{command_name}} {{example_3_command}}
+```
+
+**Output:**
+```
+{{example_3_output}}
+```
+
+### Example 4: {{example_4_name}} (Advanced)
+
+{{example_4_description}}
+
+```bash
+claude-code {{plugin_name}} {{command_name}} {{example_4_command}}
+```
+
+**Output:**
+```
+{{example_4_output}}
+```
+
+## Behavior
+
+### What It Does
+
+1. {{behavior_step_1}}
+2. {{behavior_step_2}}
+3. {{behavior_step_3}}
+4. {{behavior_step_4}}
+
+### Exit Codes
+
+| Code | Meaning | Description |
+|------|---------|-------------|
+| 0 | Success | {{exit_0_description}} |
+| 1 | Error | {{exit_1_description}} |
+| 2 | Invalid Input | {{exit_2_description}} |
+| 3 | Not Found | {{exit_3_description}} |
+| {{exit_custom}} | {{exit_custom_name}} | {{exit_custom_description}} |
+
+## Output Formats
+
+### Default (Human-Readable)
+
+```bash
+claude-code {{plugin_name}} {{command_name}}
+```
+
+**Example Output:**
+```
+{{default_output_example}}
+```
+
+### JSON Format
+
+```bash
+claude-code {{plugin_name}} {{command_name}} --format json
+```
+
+**Example Output:**
+```json
+{{json_output_example}}
+```
+
+### CSV Format
+
+```bash
+claude-code {{plugin_name}} {{command_name}} --format csv
+```
+
+**Example Output:**
+```csv
+{{csv_output_example}}
+```
+
+## Configuration
+
+### Command-Specific Config
+
+Create `.{{plugin_name}}/commands/{{command_name}}.json`:
+
+```json
+{
+  "{{config_option_1}}": {{config_value_1}},
+  "{{config_option_2}}": "{{config_value_2}}",
+  "{{config_option_3}}": {{config_value_3}}
+}
+```
+
+### Global Config
+
+Settings in `.{{plugin_name}}/config.json` also apply:
+
+```json
+{
+  "commands": {
+    "{{command_name}}": {
+      "{{global_config_1}}": {{global_value_1}}
+    }
+  }
+}
+```
+
+## Environment Variables
+
+### `{{env_var_1}}`
+
+**Description:** {{env_var_1_description}}
+
+**Default:** `{{env_var_1_default}}`
+
+**Example:**
+```bash
+{{env_var_1}}={{env_var_1_example}} claude-code {{plugin_name}} {{command_name}}
+```
+
+### `{{env_var_2}}`
+
+**Description:** {{env_var_2_description}}
+
+**Default:** `{{env_var_2_default}}`
+
+**Example:**
+```bash
+{{env_var_2}}={{env_var_2_example}} claude-code {{plugin_name}} {{command_name}}
+```
+
+## Integration
+
+### In Scripts
+
+```bash
+#!/bin/bash
+
+# {{script_usage_description}}
+result=$(claude-code {{plugin_name}} {{command_name}} --format json)
+
+if [ $? -eq 0 ]; then
+  echo "Success: $result"
+else
+  echo "Failed: $result"
+  exit 1
+fi
+```
+
+### In CI/CD
+
+```yaml
+# {{ci_cd_example_platform}} example
+{{ci_cd_job_name}}:
+  runs-on: {{ci_cd_runner}}
+  steps:
+    - name: {{ci_cd_step_name}}
+      run: |
+        claude-code {{plugin_name}} {{command_name}} {{ci_cd_options}}
+```
+
+### With Other Commands
+
+```bash
+# {{piping_example_description}}
+claude-code {{plugin_name}} {{command_name}} | {{pipe_destination}}
+```
+
+## Error Handling
+
+### Common Errors
+
+#### {{error_1_name}}
+
+**Error Message:**
+```
+{{error_1_message}}
+```
+
+**Cause:** {{error_1_cause}}
+
+**Solution:** {{error_1_solution}}
+
+#### {{error_2_name}}
+
+**Error Message:**
+```
+{{error_2_message}}
+```
+
+**Cause:** {{error_2_cause}}
+
+**Solution:** {{error_2_solution}}
+
+#### {{error_3_name}}
+
+**Error Message:**
+```
+{{error_3_message}}
+```
+
+**Cause:** {{error_3_cause}}
+
+**Solution:** {{error_3_solution}}
+
+### Debug Mode
+
+Enable verbose output for troubleshooting:
+
+```bash
+claude-code {{plugin_name}} {{command_name}} --verbose
+```
+
+Or set debug environment variable:
+
+```bash
+DEBUG={{plugin_name}}:{{command_name}} claude-code {{plugin_name}} {{command_name}}
+```
+
+## Performance
+
+### Execution Time
+
+- **Typical:** {{typical_execution_time}}
+- **Large datasets:** {{large_dataset_execution_time}}
+- **Worst case:** {{worst_case_execution_time}}
+
+### Resource Usage
+
+- **Memory:** {{memory_usage}}
+- **CPU:** {{cpu_usage}}
+- **Disk I/O:** {{disk_io_usage}}
+
+### Optimization Tips
+
+1. **{{optimization_tip_1_title}}**: {{optimization_tip_1_description}}
+2. **{{optimization_tip_2_title}}**: {{optimization_tip_2_description}}
+3. **{{optimization_tip_3_title}}**: {{optimization_tip_3_description}}
+
+## Security Considerations
+
+### Permissions Required
+
+- {{permission_1}}
+- {{permission_2}}
+- {{permission_3}}
+
+### Sensitive Data
+
+{{sensitive_data_handling}}
+
+### Best Practices
+
+1. **{{security_practice_1}}**: {{security_practice_1_detail}}
+2. **{{security_practice_2}}**: {{security_practice_2_detail}}
+3. **{{security_practice_3}}**: {{security_practice_3_detail}}
+
+## Dependencies
+
+### System Requirements
+
+- {{system_requirement_1}}
+- {{system_requirement_2}}
+- {{system_requirement_3}}
+
+### External Tools
+
+- **{{external_tool_1}}** - {{external_tool_1_reason}}
+- **{{external_tool_2}}** - {{external_tool_2_reason}}
+
+### Plugin Dependencies
+
+- {{plugin_dependency_1}}
+- {{plugin_dependency_2}}
+
+## Testing
+
+### Manual Testing
+
+```bash
+# {{test_scenario_1}}
+claude-code {{plugin_name}} {{command_name}} {{test_1_args}}
+
+# {{test_scenario_2}}
+claude-code {{plugin_name}} {{command_name}} {{test_2_args}}
+
+# {{test_scenario_3}}
+claude-code {{plugin_name}} {{command_name}} {{test_3_args}}
+```
+
+### Automated Testing
+
+```bash
+# Run command tests
+npm test -- {{command_name}}
+
+# Or
+pytest tests/test_{{command_name}}.py
+```
+
+## Troubleshooting
+
+### Issue: {{troubleshoot_issue_1}}
+
+**Symptoms:** {{troubleshoot_symptoms_1}}
+
+**Diagnosis:**
+```bash
+# {{troubleshoot_diagnosis_1_command_desc}}
+claude-code {{plugin_name}} {{command_name}} --verbose --{{flag_1}} test
+```
+
+**Solution:** {{troubleshoot_solution_1}}
+
+### Issue: {{troubleshoot_issue_2}}
+
+**Symptoms:** {{troubleshoot_symptoms_2}}
+
+**Diagnosis:**
+```bash
+# {{troubleshoot_diagnosis_2_command_desc}}
+{{troubleshoot_diagnosis_2_command}}
+```
+
+**Solution:** {{troubleshoot_solution_2}}
+
+## Related Commands
+
+### `{{related_command_1}}`
+
+{{related_command_1_description}}
+
+**Use together:**
+```bash
+claude-code {{plugin_name}} {{related_command_1}} | claude-code {{plugin_name}} {{command_name}}
+```
+
+### `{{related_command_2}}`
+
+{{related_command_2_description}}
+
+**Use together:**
+```bash
+claude-code {{plugin_name}} {{command_name}} && claude-code {{plugin_name}} {{related_command_2}}
+```
+
+## Version History
+
+### 0.1.0 - {{release_date}}
+
+- Initial release
+- {{changelog_item_1}}
+- {{changelog_item_2}}
+
+### {{next_version}} - {{next_release_date}}
+
+- {{future_feature_1}}
+- {{future_feature_2}}
+
+## See Also
+
+- [{{see_also_1_title}}]({{see_also_1_link}})
+- [{{see_also_2_title}}]({{see_also_2_link}})
+- [{{see_also_3_title}}]({{see_also_3_link}})
+
+## Support
+
+Report issues or get help:
+
+- **Issues:** {{issues_url}}
+- **Discussions:** {{discussions_url}}
+- **Email:** {{support_email}}
+
+## Contributing
+
+Contributions welcome! To improve this command:
+
+1. Review the implementation in `{{implementation_file}}`
+2. Check tests in `{{tests_file}}`
+3. Submit PR with improvements
+4. Update this documentation
+
+## License
+
+{{license}}
+
+## Author
+
+{{author}} <{{email}}>

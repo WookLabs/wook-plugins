@@ -1,0 +1,135 @@
+{
+  "hooks": {
+    "plugin:loaded": {
+      "description": "Triggered when plugin is loaded",
+      "handler": "{{handler_file}}",
+      "enabled": true,
+      "priority": 10
+    },
+    "plugin:activated": {
+      "description": "Triggered when plugin is activated",
+      "handler": "{{handler_file}}",
+      "enabled": true,
+      "priority": 10
+    },
+    "plugin:deactivated": {
+      "description": "Triggered when plugin is deactivated",
+      "handler": "{{handler_file}}",
+      "enabled": true,
+      "priority": 10
+    },
+    "before:{{skill_name}}": {
+      "description": "Triggered before skill execution",
+      "handler": "{{handler_file}}",
+      "enabled": true,
+      "priority": 10,
+      "filters": {
+        "skill": "{{skill_name}}"
+      }
+    },
+    "after:{{skill_name}}": {
+      "description": "Triggered after skill execution",
+      "handler": "{{handler_file}}",
+      "enabled": true,
+      "priority": 10,
+      "filters": {
+        "skill": "{{skill_name}}",
+        "success": true
+      }
+    },
+    "agent:spawn": {
+      "description": "Triggered when agent is spawned",
+      "handler": "{{handler_file}}",
+      "enabled": true,
+      "priority": 10,
+      "filters": {
+        "agent": "{{agent_name}}"
+      }
+    },
+    "agent:complete": {
+      "description": "Triggered when agent completes task",
+      "handler": "{{handler_file}}",
+      "enabled": true,
+      "priority": 10
+    },
+    "command:execute": {
+      "description": "Triggered before command execution",
+      "handler": "{{handler_file}}",
+      "enabled": true,
+      "priority": 10,
+      "filters": {
+        "command": "{{command_name}}"
+      }
+    },
+    "file:read": {
+      "description": "Triggered when file is read",
+      "handler": "{{handler_file}}",
+      "enabled": false,
+      "priority": 10,
+      "filters": {
+        "pattern": "{{file_pattern}}"
+      }
+    },
+    "file:write": {
+      "description": "Triggered when file is written",
+      "handler": "{{handler_file}}",
+      "enabled": false,
+      "priority": 10,
+      "filters": {
+        "pattern": "{{file_pattern}}"
+      }
+    },
+    "git:commit": {
+      "description": "Triggered before git commit",
+      "handler": "{{handler_file}}",
+      "enabled": false,
+      "priority": 10
+    },
+    "error:occurred": {
+      "description": "Triggered when error occurs",
+      "handler": "{{handler_file}}",
+      "enabled": true,
+      "priority": 10,
+      "filters": {
+        "severity": ["error", "critical"]
+      }
+    },
+    "session:start": {
+      "description": "Triggered at session start",
+      "handler": "{{handler_file}}",
+      "enabled": true,
+      "priority": 10
+    },
+    "session:end": {
+      "description": "Triggered at session end",
+      "handler": "{{handler_file}}",
+      "enabled": true,
+      "priority": 10
+    },
+    "custom:{{custom_hook_name}}": {
+      "description": "{{custom_hook_description}}",
+      "handler": "{{handler_file}}",
+      "enabled": true,
+      "priority": 10,
+      "filters": {}
+    }
+  },
+  "handlers": {
+    "{{handler_file}}": {
+      "type": "{{handler_type}}",
+      "path": "{{handler_path}}",
+      "timeout": {{handler_timeout}},
+      "retry": {{handler_retry}}
+    }
+  },
+  "config": {
+    "max_concurrent_hooks": {{max_concurrent}},
+    "hook_timeout": {{default_timeout}},
+    "error_handling": "{{error_handling_strategy}}",
+    "logging": {
+      "enabled": true,
+      "level": "{{log_level}}",
+      "file": "{{log_file}}"
+    }
+  }
+}

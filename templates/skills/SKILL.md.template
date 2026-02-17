@@ -1,0 +1,387 @@
+---
+name: {{skill_name}}
+description: {{skill_description}}
+version: 0.1.0
+author: {{author}}
+trigger_patterns:
+  - "{{trigger_pattern_1}}"
+  - "{{trigger_pattern_2}}"
+auto_activate: {{auto_activate}}
+parameters:
+  - name: {{param_1_name}}
+    type: {{param_1_type}}
+    required: {{param_1_required}}
+    description: {{param_1_description}}
+  - name: {{param_2_name}}
+    type: {{param_2_type}}
+    required: {{param_2_required}}
+    description: {{param_2_description}}
+agents_used:
+  - {{agent_1}}
+  - {{agent_2}}
+model_preference: {{model_preference}}
+temperature: {{temperature}}
+thinking_budget: {{thinking_budget}}
+---
+
+# {{skill_name}}
+
+## Overview
+
+{{skill_overview}}
+
+## Purpose
+
+{{skill_purpose_detailed}}
+
+## When to Use
+
+This skill should be invoked when:
+
+- {{use_case_1}}
+- {{use_case_2}}
+- {{use_case_3}}
+
+## Auto-Activation
+
+This skill auto-activates when it detects:
+
+- User mentions: `{{trigger_keyword_1}}`, `{{trigger_keyword_2}}`, `{{trigger_keyword_3}}`
+- Pattern detected: {{trigger_pattern_description}}
+- Context matches: {{context_match_description}}
+
+## Parameters
+
+### `{{param_1_name}}`
+
+- **Type:** `{{param_1_type}}`
+- **Required:** {{param_1_required}}
+- **Default:** `{{param_1_default}}`
+- **Description:** {{param_1_description}}
+
+**Example:**
+```
+{{param_1_example}}
+```
+
+### `{{param_2_name}}`
+
+- **Type:** `{{param_2_type}}`
+- **Required:** {{param_2_required}}
+- **Default:** `{{param_2_default}}`
+- **Description:** {{param_2_description}}
+
+**Example:**
+```
+{{param_2_example}}
+```
+
+### `{{param_3_name}}` (Optional)
+
+- **Type:** `{{param_3_type}}`
+- **Required:** false
+- **Default:** `{{param_3_default}}`
+- **Description:** {{param_3_description}}
+
+## Workflow
+
+### Phase 1: {{phase_1_name}}
+
+{{phase_1_description}}
+
+**Steps:**
+1. {{phase_1_step_1}}
+2. {{phase_1_step_2}}
+3. {{phase_1_step_3}}
+
+**Agent:** `{{phase_1_agent}}` ({{phase_1_model}})
+
+### Phase 2: {{phase_2_name}}
+
+{{phase_2_description}}
+
+**Steps:**
+1. {{phase_2_step_1}}
+2. {{phase_2_step_2}}
+3. {{phase_2_step_3}}
+
+**Agent:** `{{phase_2_agent}}` ({{phase_2_model}})
+
+### Phase 3: {{phase_3_name}}
+
+{{phase_3_description}}
+
+**Steps:**
+1. {{phase_3_step_1}}
+2. {{phase_3_step_2}}
+3. {{phase_3_step_3}}
+
+**Agent:** `{{phase_3_agent}}` ({{phase_3_model}})
+
+## Agents Used
+
+### {{agent_1_name}}
+
+**Role:** {{agent_1_role}}
+
+**Model:** {{agent_1_model}}
+
+**Used for:** {{agent_1_usage}}
+
+### {{agent_2_name}}
+
+**Role:** {{agent_2_role}}
+
+**Model:** {{agent_2_model}}
+
+**Used for:** {{agent_2_usage}}
+
+## Configuration
+
+### Default Settings
+
+```json
+{
+  "{{config_key_1}}": {{config_value_1}},
+  "{{config_key_2}}": "{{config_value_2}}",
+  "{{config_key_3}}": {{config_value_3}}
+}
+```
+
+### User Overrides
+
+Users can override settings in `.{{plugin_name}}/config.json`:
+
+```json
+{
+  "skills": {
+    "{{skill_name}}": {
+      "{{override_key_1}}": {{override_value_1}},
+      "{{override_key_2}}": "{{override_value_2}}"
+    }
+  }
+}
+```
+
+## Examples
+
+### Example 1: {{example_1_name}}
+
+**User Input:**
+```
+{{example_1_user_input}}
+```
+
+**Skill Invocation:**
+```
+/{{plugin_name}}:{{skill_name}} {{example_1_params}}
+```
+
+**Workflow:**
+1. {{example_1_step_1}}
+2. {{example_1_step_2}}
+3. {{example_1_step_3}}
+
+**Output:**
+```
+{{example_1_output}}
+```
+
+### Example 2: {{example_2_name}}
+
+**User Input:**
+```
+{{example_2_user_input}}
+```
+
+**Skill Invocation:**
+```
+/{{plugin_name}}:{{skill_name}} {{example_2_params}}
+```
+
+**Workflow:**
+1. {{example_2_step_1}}
+2. {{example_2_step_2}}
+3. {{example_2_step_3}}
+
+**Output:**
+```
+{{example_2_output}}
+```
+
+### Example 3: {{example_3_name}} (Advanced)
+
+**User Input:**
+```
+{{example_3_user_input}}
+```
+
+**Skill Invocation:**
+```
+/{{plugin_name}}:{{skill_name}} {{example_3_params}}
+```
+
+**Workflow:**
+1. {{example_3_step_1}}
+2. {{example_3_step_2}}
+3. {{example_3_step_3}}
+4. {{example_3_step_4}}
+
+**Output:**
+```
+{{example_3_output}}
+```
+
+## Error Handling
+
+### Common Errors
+
+#### {{error_1_name}}
+
+**Cause:** {{error_1_cause}}
+
+**Error Message:** `{{error_1_message}}`
+
+**Resolution:** {{error_1_resolution}}
+
+#### {{error_2_name}}
+
+**Cause:** {{error_2_cause}}
+
+**Error Message:** `{{error_2_message}}`
+
+**Resolution:** {{error_2_resolution}}
+
+### Validation
+
+The skill validates:
+- {{validation_1}}
+- {{validation_2}}
+- {{validation_3}}
+
+## Success Criteria
+
+The skill completes successfully when:
+
+- ✅ {{success_criterion_1}}
+- ✅ {{success_criterion_2}}
+- ✅ {{success_criterion_3}}
+
+## Dependencies
+
+### Required Plugins
+
+- {{required_plugin_1}} - {{required_plugin_1_reason}}
+- {{required_plugin_2}} - {{required_plugin_2_reason}}
+
+### Optional Plugins
+
+- {{optional_plugin_1}} - {{optional_plugin_1_benefit}}
+- {{optional_plugin_2}} - {{optional_plugin_2_benefit}}
+
+### External Tools
+
+- {{external_tool_1}} - {{external_tool_1_purpose}}
+- {{external_tool_2}} - {{external_tool_2_purpose}}
+
+## Hooks Integration
+
+### Pre-Execution Hook
+
+**Hook:** `before:{{skill_name}}`
+
+**Payload:**
+```json
+{
+  "skill": "{{skill_name}}",
+  "parameters": {},
+  "context": {}
+}
+```
+
+**Use for:** {{pre_hook_usage}}
+
+### Post-Execution Hook
+
+**Hook:** `after:{{skill_name}}`
+
+**Payload:**
+```json
+{
+  "skill": "{{skill_name}}",
+  "parameters": {},
+  "result": {},
+  "success": true
+}
+```
+
+**Use for:** {{post_hook_usage}}
+
+## Metrics
+
+**Performance targets:**
+- Execution time: {{target_execution_time}}
+- Success rate: {{target_success_rate}}
+- Agent calls: {{target_agent_calls}}
+
+**Actual metrics tracked:**
+- Total invocations
+- Success/failure rate
+- Average execution time
+- Agent distribution
+
+## Best Practices
+
+### For Users
+
+1. **{{user_best_practice_1_title}}**: {{user_best_practice_1_description}}
+2. **{{user_best_practice_2_title}}**: {{user_best_practice_2_description}}
+3. **{{user_best_practice_3_title}}**: {{user_best_practice_3_description}}
+
+### For Developers
+
+1. **{{dev_best_practice_1_title}}**: {{dev_best_practice_1_description}}
+2. **{{dev_best_practice_2_title}}**: {{dev_best_practice_2_description}}
+3. **{{dev_best_practice_3_title}}**: {{dev_best_practice_3_description}}
+
+## Troubleshooting
+
+### Debug Mode
+
+Enable debug mode to see detailed execution:
+
+```
+/{{plugin_name}}:{{skill_name}} --debug {{params}}
+```
+
+### Common Issues
+
+**Issue:** {{common_issue_1}}
+**Solution:** {{common_issue_1_solution}}
+
+**Issue:** {{common_issue_2}}
+**Solution:** {{common_issue_2_solution}}
+
+## Related Skills
+
+- **{{related_skill_1}}** - {{related_skill_1_relationship}}
+- **{{related_skill_2}}** - {{related_skill_2_relationship}}
+
+## Version History
+
+### 0.1.0 - {{release_date}}
+
+- Initial release
+- {{changelog_item_1}}
+- {{changelog_item_2}}
+
+## References
+
+- [{{reference_1_title}}]({{reference_1_url}})
+- [{{reference_2_title}}]({{reference_2_url}})
+
+## Feedback
+
+Report issues or suggest improvements:
+- {{feedback_channel_1}}
+- {{feedback_channel_2}}

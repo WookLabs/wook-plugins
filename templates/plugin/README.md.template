@@ -1,0 +1,131 @@
+# {{name}}
+
+{{description}}
+
+## Installation
+
+Install this plugin for Claude Code:
+
+```bash
+claude-code plugin install {{repository_url}}
+```
+
+Or install from local directory:
+
+```bash
+claude-code plugin install /path/to/{{name}}
+```
+
+## Features
+
+- **{{feature_1}}** - {{feature_1_description}}
+- **{{feature_2}}** - {{feature_2_description}}
+- **{{feature_3}}** - {{feature_3_description}}
+
+## Usage
+
+### Skills
+
+#### `{{skill_name}}`
+
+{{skill_description}}
+
+```
+/{{name}}:{{skill_name}}
+```
+
+### Agents
+
+#### `{{agent_name}}`
+
+{{agent_description}}
+
+**Model:** {{agent_model}} ({{agent_tier}})
+
+**Use for:**
+- {{agent_use_case_1}}
+- {{agent_use_case_2}}
+
+### Commands
+
+#### `{{command_name}}`
+
+{{command_description}}
+
+```bash
+claude-code {{name}} {{command_name}} [options]
+```
+
+## Configuration
+
+Create a configuration file at `.{{name}}/config.json`:
+
+```json
+{
+  "{{config_key}}": "{{config_value}}"
+}
+```
+
+## Examples
+
+### Example 1: {{example_1_name}}
+
+```
+{{example_1_usage}}
+```
+
+### Example 2: {{example_2_name}}
+
+```
+{{example_2_usage}}
+```
+
+## Development
+
+### Project Structure
+
+```
+.claude-plugin/
+├── plugin.json          # Plugin metadata
+├── agents/             # AI agents
+├── skills/             # Invokable skills
+├── commands/           # CLI commands
+└── hooks/              # Lifecycle hooks
+
+AGENTS.md               # AI navigation guide
+```
+
+### Testing
+
+```bash
+# Test locally
+claude-code plugin link .
+
+# Run tests (if applicable)
+{{test_command}}
+```
+
+## Contributing
+
+Contributions are welcome! Please:
+
+1. Fork the repository
+2. Create a feature branch
+3. Make your changes
+4. Submit a pull request
+
+## License
+
+{{license}}
+
+## Author
+
+{{author}} <{{email}}>
+
+## Changelog
+
+### 0.1.0 - {{date}}
+
+- Initial release
+- {{changelog_item_1}}
+- {{changelog_item_2}}
