@@ -4,10 +4,10 @@
 
 ## Purpose
 
-Novel-Sisyphus is a Claude Code plugin for AI-powered Korean novel writing. It provides a multi-agent orchestration system specifically designed for creative writing workflows, featuring 7 specialized agents and 18 commands that support the complete novel creation lifecycle from initial concept to final export.
+Novel-Sisyphus is a Claude Code plugin for AI-powered Korean novel writing. It provides a multi-agent orchestration system specifically designed for creative writing workflows, featuring 15 specialized agents and 45+ skills that support the complete novel creation lifecycle from initial concept to final export.
 
 This plugin adapts the oh-my-claude-sisyphus orchestration framework for creative writing, implementing:
-- Agent-based workflow with specialized roles (novelist, editor, critic, lore-keeper, plot-architect, proofreader, summarizer)
+- Agent-based workflow with specialized roles (novelist, editor, critic, lore-keeper, plot-architect, proofreader, summarizer, beta-reader, genre-validator, chapter-verifier, consistency-verifier, engagement-optimizer, character-voice-analyzer, prose-quality-analyzer, team-orchestrator)
 - Ralph Loop for automated chapter writing with quality gates
 - Comprehensive project structure with JSON schemas
 - Korean-language literary conventions and best practices
@@ -26,9 +26,10 @@ This plugin adapts the oh-my-claude-sisyphus orchestration framework for creativ
 
 | Directory | Purpose | Details |
 |-----------|---------|---------|
-| `agents/` | Agent prompt files | 7 specialized agent definitions (.md files) |
+| `agents/` | Agent prompt files | 19 specialized agent definitions (15 functional + 4 deprecated stubs) |
 | `commands/` | Command implementations | 18 slash commands for writing workflow (.md files) |
 | `schemas/` | JSON schemas | Data validation schemas for all project files |
+| `teams/` | Team presets | 6 preset team definitions + custom teams (.team.json files) |
 | `templates/` | JSON templates | Default templates for project initialization |
 | `scripts/` | Utility scripts | Helper scripts for workflow automation (.mjs files) |
 | `hooks/` | Plugin hooks | Hook configuration for Claude Code integration |
@@ -49,7 +50,38 @@ The plugin implements a multi-agent system with specialized roles:
 | plot-architect | opus | Plot structure design |
 | proofreader | haiku | Grammar and spelling |
 | summarizer | haiku | Chapter summarization |
+| beta-reader | sonnet | Reader engagement simulation |
+| genre-validator | sonnet | Genre compliance validation |
+| consistency-verifier | sonnet | 5-domain consistency checking |
+| engagement-optimizer | sonnet | 7-domain engagement analysis |
+| character-voice-analyzer | sonnet | Voice and dialogue analysis |
+| prose-quality-analyzer | sonnet | Prose quality analysis |
 | chapter-verifier | sonnet | Automated chapter verification with parallel validators |
+| team-orchestrator | sonnet | Team orchestration - loads team definitions, spawns agent teams, coordinates workflows |
+
+### Team System
+
+에이전트를 역할 기반 팀으로 조직화하여 병렬/순차/파이프라인/협업 실행을 지원합니다.
+
+**6개 프리셋 팀:**
+
+| Team | Category | Agents | Workflow | 용도 |
+|------|----------|--------|----------|------|
+| planning-team | planning | plot-architect, lore-keeper, style-curator | collaborative | 소설 기획/설계 |
+| writing-team | writing | novelist, proofreader, summarizer | sequential | 회차 집필 |
+| writing-team-2pass | writing | scene-drafter, assembly-agent, critic, prose-surgeon, proofreader | pipeline | 2-Pass 정밀 집필 |
+| verification-team | verification | critic, beta-reader, genre-validator | parallel | 품질 검증 |
+| deep-review-team | verification | 6 agents | parallel | 심층 다관점 리뷰 |
+| revision-team | revision | critic, editor, proofreader, consistency-verifier | pipeline | 피드백 기반 퇴고 |
+
+**사용법:** `/team run <team-name> [chapter]`
+
+**관련 파일:**
+- `teams/*.team.json` — 팀 정의 프리셋
+- `schemas/team.schema.json` — 팀 정의 스키마
+- `schemas/team-state.schema.json` — 팀 실행 상태 스키마
+- `agents/team-orchestrator.md` — 범용 오케스트레이터
+- `skills/team/SKILL.md` — `/team` 스킬
 
 ### Command Categories
 

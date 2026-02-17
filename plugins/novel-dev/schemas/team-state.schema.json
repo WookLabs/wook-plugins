@@ -1,0 +1,223 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "team-state.schema.json",
+  "title": "Team Execution State",
+  "description": "팀 실행 인스턴스 런타임 상태 추적",
+  "type": "object",
+  "required": ["team_id", "team_definition", "status", "members", "workflow_progress"],
+  "properties": {
+    "$schema": {
+      "type": "string"
+    },
+    "schema_version": {
+      "type": "string",
+      "const": "1.0"
+    },
+    "team_id": {
+      "type": "string",
+      "pattern": "^team_[a-z0-9-]+_\\d{8}_\\d{6}$",
+      "description": "팀 실행 인스턴스 고유 ID (예: team_verification-team_20260217_143000)"
+    },
+    "team_definition": {
+      "type": "string",
+      "description": "참조하는 팀 정의 파일명 (예: verification-team.team.json)"
+    },
+    "status": {
+      "type": "string",
+      "enum": ["initializing", "running", "completed", "failed", "cancelled"],
+      "default": "initializing",
+      "description": "팀 실행 상태"
+    },
+    "context": {
+      "type": "object",
+      "properties": {
+        "novel_id": {
+          "type": "string",
+          "description": "대상 소설 프로젝트 ID"
+        },
+        "chapter": {
+          "type": "integer",
+          "minimum": 1,
+          "description": "대상 챕터 번호"
+        },
+        "target_files": {
+          "type": "array",
+          "items": { "type": "string" },
+          "description": "대상 파일 경로 목록"
+        },
+        "args": {
+          "type": "object",
+          "additionalProperties": true,
+          "description": "추가 실행 인자"
+        }
+      },
+      "description": "실행 컨텍스트"
+    },
+    "members": {
+      "type": "array",
+      "items": {
+        "$ref": "#/definitions/memberState"
+      },
+      "description": "팀원 실행 상태 목록"
+    },
+    "workflow_progress": {
+      "type": "object",
+      "required": ["total_steps", "completed_steps", "current_step"],
+      "properties": {
+        "total_steps": {
+          "type": "integer",
+          "minimum": 1,
+          "description": "전체 단계 수"
+        },
+        "completed_steps": {
+          "type": "integer",
+          "minimum": 0,
+          "description": "완료된 단계 수"
+        },
+        "current_step": {
+          "type": "string",
+          "description": "현재 진행 중인 단계 이름"
+        }
+      },
+      "description": "워크플로우 진행 상태"
+    },
+    "quality_gate": {
+      "type": "object",
+      "properties": {
+        "enabled": {
+          "type": "boolean",
+          "default": false
+        },
+        "results": {
+          "type": "object",
+          "additionalProperties": {
+            "$ref": "#/definitions/gateResult"
+          },
+          "description": "에이전트별 품질 게이트 결과"
+        },
+        "overall_pass": {
+          "type": "boolean",
+          "description": "전체 품질 게이트 통과 여부"
+        },
+        "composite_score": {
+          "type": "number",
+          "minimum": 0,
+          "maximum": 100,
+          "description": "가중 종합 점수"
+        }
+      },
+      "description": "품질 게이트 결과"
+    },
+    "started_at": {
+      "type": "string",
+      "format": "date-time",
+      "description": "팀 실행 시작 시간"
+    },
+    "completed_at": {
+      "type": "string",
+      "format": "date-time",
+      "description": "팀 실행 완료 시간"
+    },
+    "last_updated": {
+      "type": "string",
+      "format": "date-time",
+      "description": "마지막 상태 업데이트 시간"
+    },
+    "last_error": {
+      "type": "string",
+      "description": "마지막 에러 메시지",
+      "maxLength": 1000
+    }
+  },
+  "definitions": {
+    "memberState": {
+      "type": "object",
+      "required": ["agent", "status"],
+      "properties": {
+        "agent": {
+          "type": "string",
+          "description": "에이전트 이름"
+        },
+        "status": {
+          "type": "string",
+          "enum": ["pending", "running", "completed", "failed", "skipped"],
+          "default": "pending",
+          "description": "에이전트 실행 상태"
+        },
+        "task_id": {
+          "type": "string",
+          "description": "할당된 TaskCreate ID"
+        },
+        "started_at": {
+          "type": "string",
+          "format": "date-time"
+        },
+        "completed_at": {
+          "type": "string",
+          "format": "date-time"
+        },
+        "result": {
+          "type": "object",
+          "additionalProperties": true,
+          "description": "에이전트 실행 결과 (JSON)"
+        },
+        "error": {
+          "type": "string",
+          "description": "실패 시 에러 메시지",
+          "maxLength": 500
+        }
+      }
+    },
+    "gateResult": {
+      "type": "object",
+      "properties": {
+        "score": {
+          "type": "number",
+          "minimum": 0,
+          "maximum": 100
+        },
+        "threshold": {
+          "type": "integer",
+          "minimum": 0,
+          "maximum": 100
+        },
+        "pass": {
+          "type": "boolean"
+        },
+        "verdict": {
+          "type": "string"
+        }
+      }
+    }
+  },
+  "examples": [
+    {
+      "team_id": "team_verification-team_20260217_143000",
+      "team_definition": "verification-team.team.json",
+      "status": "running",
+      "context": {
+        "novel_id": "novel_20260217_100000",
+        "chapter": 5,
+        "target_files": ["chapters/chapter_005.md"]
+      },
+      "members": [
+        { "agent": "critic", "status": "running", "task_id": "t1", "started_at": "2026-02-17T14:30:05Z" },
+        { "agent": "beta-reader", "status": "running", "task_id": "t2", "started_at": "2026-02-17T14:30:05Z" },
+        { "agent": "genre-validator", "status": "completed", "task_id": "t3", "started_at": "2026-02-17T14:30:05Z", "completed_at": "2026-02-17T14:31:20Z", "result": { "score": 92, "verdict": "GENRE_COMPLIANT" } }
+      ],
+      "workflow_progress": {
+        "total_steps": 1,
+        "completed_steps": 0,
+        "current_step": "validate"
+      },
+      "quality_gate": {
+        "enabled": true,
+        "results": {
+          "genre-validator": { "score": 92, "threshold": 90, "pass": true, "verdict": "GENRE_COMPLIANT" }
+        }
+      },
+      "started_at": "2026-02-17T14:30:00Z",
+      "last_updated": "2026-02-17T14:31:20Z"
+    }
+  ]
+}

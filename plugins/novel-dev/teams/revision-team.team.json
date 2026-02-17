@@ -1,0 +1,84 @@
+{
+  "$schema": "../schemas/team.schema.json",
+  "schema_version": "1.0",
+  "name": "revision-team",
+  "display_name": "퇴고 팀",
+  "description": "피드백 기반 퇴고 파이프라인: 진단 → 수정 → 교정 → 검증의 순차 처리 팀",
+  "category": "revision",
+  "agents": [
+    {
+      "agent": "critic",
+      "role": "validator",
+      "responsibility": "현재 챕터 품질 진단, 구체적 개선 지점 식별",
+      "model": "opus"
+    },
+    {
+      "agent": "editor",
+      "role": "lead",
+      "responsibility": "critic 피드백 기반 챕터 수정 (페이싱, 문체, 대화, 구조)",
+      "model": "sonnet"
+    },
+    {
+      "agent": "proofreader",
+      "role": "support",
+      "responsibility": "수정된 챕터의 최종 맞춤법/문법 교정",
+      "model": "haiku"
+    },
+    {
+      "agent": "consistency-verifier",
+      "role": "validator",
+      "responsibility": "수정 후 설정 일관성 재검증 (수정 과정에서 발생한 모순 탐지)",
+      "model": "sonnet"
+    }
+  ],
+  "workflow": {
+    "type": "pipeline",
+    "steps": [
+      {
+        "name": "diagnose",
+        "agents": ["critic"],
+        "execution": "sequential",
+        "output": "품질 진단 리포트 (점수 + 구체적 이슈 + 권장 수정사항)"
+      },
+      {
+        "name": "revise",
+        "agents": ["editor"],
+        "execution": "sequential",
+        "depends_on": ["diagnose"],
+        "output": "수정된 챕터 원고"
+      },
+      {
+        "name": "proofread",
+        "agents": ["proofreader"],
+        "execution": "sequential",
+        "depends_on": ["revise"],
+        "output": "교정 완료된 챕터"
+      },
+      {
+        "name": "verify",
+        "agents": ["consistency-verifier"],
+        "execution": "sequential",
+        "depends_on": ["proofread"],
+        "output": "일관성 검증 결과 (수정으로 인한 새 모순 탐지)"
+      }
+    ],
+    "max_iterations": 3
+  },
+  "coordination": {
+    "mode": "orchestrated",
+    "lead": "editor",
+    "communication": "task-based"
+  },
+  "quality_gates": {
+    "enabled": true,
+    "consensus": "all_pass",
+    "thresholds": {
+      "critic": 85,
+      "consistency-verifier": 85
+    }
+  },
+  "cost_estimate": {
+    "tokens_per_agent": 35000,
+    "warning_message": "퇴고 팀은 4개 에이전트 파이프라인을 사용합니다. 약 140K 토큰이 소요될 수 있습니다."
+  }
+}

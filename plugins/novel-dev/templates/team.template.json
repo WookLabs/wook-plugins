@@ -1,0 +1,42 @@
+{
+  "$schema": "../schemas/team.schema.json",
+  "schema_version": "1.0",
+  "name": "",
+  "display_name": "",
+  "description": "",
+  "category": "verification",
+  "agents": [
+    {
+      "agent": "",
+      "role": "lead",
+      "responsibility": ""
+    },
+    {
+      "agent": "",
+      "role": "worker",
+      "responsibility": ""
+    }
+  ],
+  "workflow": {
+    "type": "parallel",
+    "steps": [
+      {
+        "name": "step-1",
+        "agents": [],
+        "execution": "parallel",
+        "output": ""
+      }
+    ]
+  },
+  "coordination": {
+    "mode": "orchestrated",
+    "communication": "task-based"
+  },
+  "quality_gates": {
+    "enabled": false
+  },
+  "cost_estimate": {
+    "tokens_per_agent": 30000,
+    "warning_message": ""
+  }
+}

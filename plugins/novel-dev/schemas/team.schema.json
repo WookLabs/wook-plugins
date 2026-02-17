@@ -1,0 +1,242 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "team.schema.json",
+  "title": "Team Definition",
+  "description": "에이전트 팀 정의 스키마 - 역할 기반 팀 조직 및 워크플로우 설정",
+  "type": "object",
+  "required": ["name", "display_name", "description", "category", "agents", "workflow", "coordination"],
+  "properties": {
+    "$schema": {
+      "type": "string"
+    },
+    "schema_version": {
+      "type": "string",
+      "const": "1.0"
+    },
+    "name": {
+      "type": "string",
+      "pattern": "^[a-z][a-z0-9-]*$",
+      "description": "팀 고유 ID (kebab-case)"
+    },
+    "display_name": {
+      "type": "string",
+      "description": "팀 표시 이름 (한국어)"
+    },
+    "description": {
+      "type": "string",
+      "description": "팀 역할 및 용도 설명"
+    },
+    "category": {
+      "type": "string",
+      "enum": ["planning", "writing", "verification", "revision", "analysis", "custom"],
+      "description": "팀 카테고리: planning(기획), writing(집필), verification(검증), revision(퇴고), analysis(분석), custom(사용자 정의)"
+    },
+    "agents": {
+      "type": "array",
+      "minItems": 2,
+      "items": {
+        "$ref": "#/definitions/teamMember"
+      },
+      "description": "팀원 목록"
+    },
+    "workflow": {
+      "$ref": "#/definitions/workflow",
+      "description": "팀 워크플로우 정의"
+    },
+    "coordination": {
+      "$ref": "#/definitions/coordination",
+      "description": "팀 조율 방식"
+    },
+    "quality_gates": {
+      "$ref": "#/definitions/qualityGates",
+      "description": "품질 게이트 설정"
+    },
+    "cost_estimate": {
+      "type": "object",
+      "properties": {
+        "tokens_per_agent": {
+          "type": "integer",
+          "description": "에이전트당 예상 토큰 사용량"
+        },
+        "warning_message": {
+          "type": "string",
+          "description": "비용 경고 메시지"
+        }
+      },
+      "description": "비용 추정 정보"
+    }
+  },
+  "definitions": {
+    "teamMember": {
+      "type": "object",
+      "required": ["agent", "role", "responsibility"],
+      "properties": {
+        "agent": {
+          "type": "string",
+          "description": "에이전트 이름 (agents/ 디렉토리의 에이전트 ID)"
+        },
+        "role": {
+          "type": "string",
+          "enum": ["lead", "worker", "support", "validator"],
+          "description": "팀 내 역할: lead(리더), worker(실행자), support(보조), validator(검증자)"
+        },
+        "responsibility": {
+          "type": "string",
+          "description": "이 팀에서의 구체적 담당 업무"
+        },
+        "model": {
+          "type": "string",
+          "enum": ["opus", "sonnet", "haiku"],
+          "description": "사용할 모델 (미지정 시 에이전트 기본 모델 사용)"
+        },
+        "optional": {
+          "type": "boolean",
+          "default": false,
+          "description": "선택적 팀원 여부 (false면 필수)"
+        }
+      }
+    },
+    "workflow": {
+      "type": "object",
+      "required": ["type", "steps"],
+      "properties": {
+        "type": {
+          "type": "string",
+          "enum": ["sequential", "parallel", "pipeline", "collaborative"],
+          "description": "워크플로우 유형: sequential(순차), parallel(병렬), pipeline(파이프라인), collaborative(자율 협업)"
+        },
+        "steps": {
+          "type": "array",
+          "minItems": 1,
+          "items": {
+            "$ref": "#/definitions/workflowStep"
+          },
+          "description": "워크플로우 단계 목록"
+        },
+        "max_iterations": {
+          "type": "integer",
+          "minimum": 1,
+          "default": 1,
+          "description": "최대 반복 횟수 (pipeline에서 재시도 시)"
+        }
+      }
+    },
+    "workflowStep": {
+      "type": "object",
+      "required": ["name", "agents"],
+      "properties": {
+        "name": {
+          "type": "string",
+          "description": "단계 이름"
+        },
+        "agents": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          },
+          "description": "이 단계에 참여하는 에이전트 목록"
+        },
+        "execution": {
+          "type": "string",
+          "enum": ["parallel", "sequential"],
+          "default": "parallel",
+          "description": "단계 내 에이전트 실행 방식"
+        },
+        "depends_on": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          },
+          "description": "이 단계가 의존하는 이전 단계 이름 목록"
+        },
+        "output": {
+          "type": "string",
+          "description": "이 단계의 출력 설명 (다음 단계 입력으로 전달)"
+        }
+      }
+    },
+    "coordination": {
+      "type": "object",
+      "required": ["mode"],
+      "properties": {
+        "mode": {
+          "type": "string",
+          "enum": ["orchestrated", "autonomous"],
+          "description": "조율 모드: orchestrated(오케스트레이터 주도), autonomous(에이전트 자율)"
+        },
+        "lead": {
+          "type": "string",
+          "description": "팀 리더 에이전트 (orchestrated 모드에서 필수)"
+        },
+        "communication": {
+          "type": "string",
+          "enum": ["task-based", "message-based", "hybrid"],
+          "default": "task-based",
+          "description": "소통 방식: task-based(작업 할당), message-based(메시지 교환), hybrid(혼합)"
+        }
+      }
+    },
+    "qualityGates": {
+      "type": "object",
+      "properties": {
+        "enabled": {
+          "type": "boolean",
+          "default": false,
+          "description": "품질 게이트 활성화 여부"
+        },
+        "consensus": {
+          "type": "string",
+          "enum": ["all_pass", "majority", "weighted"],
+          "default": "all_pass",
+          "description": "합의 방식: all_pass(전원 통과), majority(과반), weighted(가중치)"
+        },
+        "thresholds": {
+          "type": "object",
+          "additionalProperties": {
+            "type": "integer",
+            "minimum": 0,
+            "maximum": 100
+          },
+          "description": "에이전트별 통과 기준 점수 (예: { \"critic\": 85, \"beta-reader\": 75 })"
+        }
+      }
+    }
+  },
+  "examples": [
+    {
+      "name": "verification-team",
+      "display_name": "검증 팀",
+      "description": "3개 검증 에이전트를 병렬 실행하여 챕터 품질을 다관점으로 평가",
+      "category": "verification",
+      "agents": [
+        { "agent": "critic", "role": "validator", "responsibility": "문학 품질 평가 (구조, 문체, 깊이)" },
+        { "agent": "beta-reader", "role": "validator", "responsibility": "독자 경험 분석 (몰입, 감정, 후킹)" },
+        { "agent": "genre-validator", "role": "validator", "responsibility": "장르 적합성 검증 (필수 요소, 상업성)" }
+      ],
+      "workflow": {
+        "type": "parallel",
+        "steps": [
+          {
+            "name": "validate",
+            "agents": ["critic", "beta-reader", "genre-validator"],
+            "execution": "parallel",
+            "output": "각 검증자의 점수 + 피드백 JSON"
+          }
+        ]
+      },
+      "coordination": {
+        "mode": "orchestrated",
+        "communication": "task-based"
+      },
+      "quality_gates": {
+        "enabled": true,
+        "consensus": "all_pass",
+        "thresholds": {
+          "critic": 85,
+          "beta-reader": 75,
+          "genre-validator": 90
+        }
+      }
+    }
+  ]
+}

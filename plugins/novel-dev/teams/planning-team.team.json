@@ -1,0 +1,71 @@
+{
+  "$schema": "../schemas/team.schema.json",
+  "schema_version": "1.0",
+  "name": "planning-team",
+  "display_name": "설계 팀",
+  "description": "소설 기획 및 설계 단계에서 플롯 구조, 세계관, 문체를 협업 설계하는 팀",
+  "category": "planning",
+  "agents": [
+    {
+      "agent": "plot-architect",
+      "role": "lead",
+      "responsibility": "전체 스토리 구조 설계, 아크 분배, 극적 비트 배치",
+      "model": "opus"
+    },
+    {
+      "agent": "lore-keeper",
+      "role": "worker",
+      "responsibility": "세계관 구축, 캐릭터 프로필 설계, 설정 일관성 관리"
+    },
+    {
+      "agent": "style-curator",
+      "role": "support",
+      "responsibility": "문체 예시 큐레이션 및 스타일 가이드 보강",
+      "model": "sonnet"
+    }
+  ],
+  "workflow": {
+    "type": "collaborative",
+    "steps": [
+      {
+        "name": "structure-design",
+        "agents": ["plot-architect"],
+        "execution": "sequential",
+        "output": "전체 구조안 (막 구성, 아크 분배, 주요 전환점)"
+      },
+      {
+        "name": "world-character-design",
+        "agents": ["lore-keeper"],
+        "execution": "sequential",
+        "depends_on": ["structure-design"],
+        "output": "세계관 설정, 캐릭터 프로필, 관계도"
+      },
+      {
+        "name": "integration-review",
+        "agents": ["plot-architect", "lore-keeper"],
+        "execution": "parallel",
+        "depends_on": ["world-character-design"],
+        "output": "구조 ↔ 설정 정합성 검증 및 조율"
+      },
+      {
+        "name": "style-curation",
+        "agents": ["style-curator"],
+        "execution": "sequential",
+        "depends_on": ["integration-review"],
+        "output": "문체 가이드 + 참조 예시 정리"
+      }
+    ]
+  },
+  "coordination": {
+    "mode": "orchestrated",
+    "lead": "plot-architect",
+    "communication": "message-based"
+  },
+  "quality_gates": {
+    "enabled": false
+  },
+  "cost_estimate": {
+    "tokens_per_agent": 40000,
+    "warning_message": "설계 팀은 plot-architect, lore-keeper, style-curator 3개 에이전트를 사용합니다. 약 120K 토큰이 소요될 수 있습니다."
+  }
+}

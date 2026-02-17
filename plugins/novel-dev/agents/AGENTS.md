@@ -21,7 +21,7 @@ The following merges were performed to reduce overlap:
 | `dialogue-analyzer` | `character-voice-analyzer` | Naturalness, subtext, tags/beats, dialogue ratio, info dump detection, conflict/tension, purpose verification |
 | `plot-consistency-analyzer` | `consistency-verifier` | Plot hole detection, cause-effect logic chains, foreshadowing setup/payoff tracking |
 
-## Key Files - Functional Agents (14)
+## Key Files - Functional Agents (15)
 
 | File | Agent | Model | Role |
 |------|-------|-------|------|
@@ -39,6 +39,7 @@ The following merges were performed to reduce overlap:
 | `engagement-optimizer.md` | engagement-optimizer | sonnet | **EXPANDED** - Engagement analysis (7 domains): pacing, tension curves, emotional beats with Korean keyword detection, hook density, drop-off risk, cliffhanger analysis, arc compliance (absorbed pacing-analyzer + tension-tracker) |
 | `character-voice-analyzer.md` | character-voice-analyzer | sonnet | **EXPANDED** - Voice and dialogue analysis: speech patterns, OOC detection, relationship dynamics, naturalness, subtext, tags/beats, info dump detection, dialogue purpose (absorbed dialogue-analyzer) |
 | `prose-quality-analyzer.md` | prose-quality-analyzer | sonnet | Prose analysis - show vs tell, sensory detail, filter words, specificity |
+| `team-orchestrator.md` | team-orchestrator | sonnet | Team orchestration - loads team definitions, spawns agents, coordinates workflows (parallel/sequential/pipeline/collaborative), applies quality gates |
 
 ## Deprecated Agent Stubs (4)
 

@@ -1,0 +1,65 @@
+{
+  "$schema": "../schemas/team.schema.json",
+  "schema_version": "1.0",
+  "name": "writing-team",
+  "display_name": "집필 팀",
+  "description": "회차 집필 후 교정 및 요약까지 순차적으로 처리하는 기본 집필 팀",
+  "category": "writing",
+  "agents": [
+    {
+      "agent": "novelist",
+      "role": "lead",
+      "responsibility": "플롯 기반 챕터 산문 작성 (복선, 캐릭터 보이스, 페이싱 포함)",
+      "model": "opus"
+    },
+    {
+      "agent": "proofreader",
+      "role": "support",
+      "responsibility": "맞춤법, 문법, 한국어 어법 교정",
+      "model": "haiku"
+    },
+    {
+      "agent": "summarizer",
+      "role": "support",
+      "responsibility": "완성된 챕터 요약 생성 (후속 챕터 컨텍스트용)",
+      "model": "haiku"
+    }
+  ],
+  "workflow": {
+    "type": "sequential",
+    "steps": [
+      {
+        "name": "draft",
+        "agents": ["novelist"],
+        "execution": "sequential",
+        "output": "챕터 초고 (chapters/chapter_XXX.md)"
+      },
+      {
+        "name": "proofread",
+        "agents": ["proofreader"],
+        "execution": "sequential",
+        "depends_on": ["draft"],
+        "output": "교정된 챕터"
+      },
+      {
+        "name": "summarize",
+        "agents": ["summarizer"],
+        "execution": "sequential",
+        "depends_on": ["proofread"],
+        "output": "챕터 요약 (context/summaries/chapter_XXX_summary.md)"
+      }
+    ]
+  },
+  "coordination": {
+    "mode": "orchestrated",
+    "lead": "novelist",
+    "communication": "task-based"
+  },
+  "quality_gates": {
+    "enabled": false
+  },
+  "cost_estimate": {
+    "tokens_per_agent": 50000,
+    "warning_message": "집필 팀은 novelist(opus)를 포함하여 약 100K 토큰이 소요될 수 있습니다."
+  }
+}

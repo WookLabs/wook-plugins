@@ -1,0 +1,96 @@
+{
+  "$schema": "../schemas/team.schema.json",
+  "schema_version": "1.0",
+  "name": "writing-team-2pass",
+  "display_name": "2-Pass 집필 팀",
+  "description": "초안 작성 → 조립 → 품질 진단 → 문체 수술 → 교정의 5단계 파이프라인으로 정밀 집필하는 팀",
+  "category": "writing",
+  "agents": [
+    {
+      "agent": "scene-drafter",
+      "role": "lead",
+      "responsibility": "Pass 1: 씬 단위 초안 작성 (ADULT 마커 포함 가능)",
+      "model": "opus"
+    },
+    {
+      "agent": "assembly-agent",
+      "role": "worker",
+      "responsibility": "씬 조립 및 전체 챕터 통합",
+      "model": "sonnet"
+    },
+    {
+      "agent": "critic",
+      "role": "validator",
+      "responsibility": "품질 진단: 서사, 플롯, 캐릭터, 설정 점수 산출",
+      "model": "opus"
+    },
+    {
+      "agent": "prose-surgeon",
+      "role": "worker",
+      "responsibility": "정밀 문장 수술: 진단 결과 기반 문장 수준 개선",
+      "model": "opus"
+    },
+    {
+      "agent": "proofreader",
+      "role": "support",
+      "responsibility": "최종 맞춤법/문법 교정",
+      "model": "haiku"
+    }
+  ],
+  "workflow": {
+    "type": "pipeline",
+    "steps": [
+      {
+        "name": "scene-draft",
+        "agents": ["scene-drafter"],
+        "execution": "sequential",
+        "output": "씬별 초안 조각들"
+      },
+      {
+        "name": "assembly",
+        "agents": ["assembly-agent"],
+        "execution": "sequential",
+        "depends_on": ["scene-draft"],
+        "output": "통합된 챕터 전문"
+      },
+      {
+        "name": "quality-diagnosis",
+        "agents": ["critic"],
+        "execution": "sequential",
+        "depends_on": ["assembly"],
+        "output": "품질 진단 리포트 (점수 + 구체적 개선 지점)"
+      },
+      {
+        "name": "prose-surgery",
+        "agents": ["prose-surgeon"],
+        "execution": "sequential",
+        "depends_on": ["quality-diagnosis"],
+        "output": "문체 개선된 챕터"
+      },
+      {
+        "name": "final-proofread",
+        "agents": ["proofreader"],
+        "execution": "sequential",
+        "depends_on": ["prose-surgery"],
+        "output": "교정 완료된 최종 챕터"
+      }
+    ],
+    "max_iterations": 2
+  },
+  "coordination": {
+    "mode": "orchestrated",
+    "lead": "scene-drafter",
+    "communication": "task-based"
+  },
+  "quality_gates": {
+    "enabled": true,
+    "consensus": "all_pass",
+    "thresholds": {
+      "critic": 80
+    }
+  },
+  "cost_estimate": {
+    "tokens_per_agent": 40000,
+    "warning_message": "2-Pass 집필 팀은 scene-drafter, assembly-agent, critic, prose-surgeon, proofreader 5개 에이전트 파이프라인을 사용합니다. 약 200K 토큰이 소요될 수 있습니다."
+  }
+}
