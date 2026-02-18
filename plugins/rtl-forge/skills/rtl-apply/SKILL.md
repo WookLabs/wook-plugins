@@ -9,6 +9,7 @@ allowed-tools:
   - Glob
   - Grep
   - Bash
+  - Task
 ---
 
 # RTL Apply
@@ -40,17 +41,11 @@ allowed-tools:
 
 1. 대상 파일을 Read로 읽는다
 2. Edit으로 수정을 적용한다
-3. 수정 직후 해당 파일에 rtl-format 규칙을 적용한다:
-   - 2-space 들여쓰기
-   - `if(` 붙여쓰기
-   - 2의 배수 정렬 그리드
-   - 포트 선언 세로정렬 (인스턴스 파생)
-   - 신호 선언 세로정렬
-   - 인스턴스 포트 연결 세로정렬
-   - one-liner if-else 세로정렬
-   - `||` `&&` → `|` `&`
-   - trailing whitespace 제거
-   - 파일 끝 빈 줄 1개
+3. 수정 직후 **sonnet 에이전트로 rtl-format을 위임**하여 포매팅한다:
+   - `rtl-format/rules.md`를 Read로 읽는다
+   - Task(subagent_type="oh-my-claudecode:executor", model="sonnet")로 spawn
+   - 에이전트가 rules.md의 Phase 1→2→3 규칙을 적용 (Phase 4 경고는 생략)
+   - 포매팅된 파일을 Write로 저장
 
 ### Phase 3: 검증
 
