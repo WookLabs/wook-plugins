@@ -56,6 +56,7 @@
   },
   "coordination": {
     "mode": "orchestrated",
+    "lead": "critic",
     "communication": "task-based"
   },
   "quality_gates": {

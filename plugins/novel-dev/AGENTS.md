@@ -7,7 +7,7 @@
 Novel-Sisyphus is a Claude Code plugin for AI-powered Korean novel writing. It provides a multi-agent orchestration system specifically designed for creative writing workflows, featuring 15 specialized agents and 45+ skills that support the complete novel creation lifecycle from initial concept to final export.
 
 This plugin adapts the oh-my-claude-sisyphus orchestration framework for creative writing, implementing:
-- Agent-based workflow with specialized roles (novelist, editor, critic, lore-keeper, plot-architect, proofreader, summarizer, beta-reader, genre-validator, chapter-verifier, consistency-verifier, engagement-optimizer, character-voice-analyzer, prose-quality-analyzer, team-orchestrator)
+- Agent-based workflow with specialized roles (novelist, editor, critic, lore-keeper, plot-architect, proofreader, summarizer, beta-reader, genre-validator, chapter-verifier, consistency-verifier, engagement-optimizer, character-voice-analyzer, prose-quality-analyzer, scene-drafter, assembly-agent, quality-oracle, prose-surgeon, style-curator, team-orchestrator)
 - Ralph Loop for automated chapter writing with quality gates
 - Comprehensive project structure with JSON schemas
 - Korean-language literary conventions and best practices
@@ -26,7 +26,7 @@ This plugin adapts the oh-my-claude-sisyphus orchestration framework for creativ
 
 | Directory | Purpose | Details |
 |-----------|---------|---------|
-| `agents/` | Agent prompt files | 19 specialized agent definitions (15 functional + 4 deprecated stubs) |
+| `agents/` | Agent prompt files | 24 specialized agent definitions (20 functional + 4 deprecated stubs) |
 | `commands/` | Command implementations | 18 slash commands for writing workflow (.md files) |
 | `schemas/` | JSON schemas | Data validation schemas for all project files |
 | `teams/` | Team presets | 6 preset team definitions + custom teams (.team.json files) |
@@ -56,6 +56,11 @@ The plugin implements a multi-agent system with specialized roles:
 | engagement-optimizer | sonnet | 7-domain engagement analysis |
 | character-voice-analyzer | sonnet | Voice and dialogue analysis |
 | prose-quality-analyzer | sonnet | Prose quality analysis |
+| scene-drafter | opus | Scene-level drafting for 2-Pass pipeline (Pass 1) |
+| assembly-agent | sonnet | Scene assembly into cohesive chapters |
+| quality-oracle | opus | Quality evaluation + surgical directive generation (2-Pass) |
+| prose-surgeon | opus | Surgical prose revision per quality-oracle directives (2-Pass) |
+| style-curator | sonnet | Style exemplar curation and library management |
 | chapter-verifier | sonnet | Automated chapter verification with parallel validators |
 | team-orchestrator | sonnet | Team orchestration - loads team definitions, spawns agent teams, coordinates workflows |
 
@@ -69,7 +74,7 @@ The plugin implements a multi-agent system with specialized roles:
 |------|----------|--------|----------|------|
 | planning-team | planning | plot-architect, lore-keeper, style-curator | collaborative | 소설 기획/설계 |
 | writing-team | writing | novelist, proofreader, summarizer | sequential | 회차 집필 |
-| writing-team-2pass | writing | scene-drafter, assembly-agent, critic, prose-surgeon, proofreader | pipeline | 2-Pass 정밀 집필 |
+| writing-team-2pass | writing | scene-drafter, assembly-agent, quality-oracle, prose-surgeon, proofreader | pipeline | 2-Pass 정밀 집필 |
 | verification-team | verification | critic, beta-reader, genre-validator | parallel | 품질 검증 |
 | deep-review-team | verification | 6 agents | parallel | 심층 다관점 리뷰 |
 | revision-team | revision | critic, editor, proofreader, consistency-verifier | pipeline | 피드백 기반 퇴고 |

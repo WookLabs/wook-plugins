@@ -6,7 +6,7 @@
 
 ## Purpose
 
-Contains prompt definitions for the specialized agents used in the novel writing workflow. After consolidation, the plugin has **14 functional agents** and **4 deprecated stubs** (kept for backward compatibility). Each agent is defined in a Markdown file with frontmatter specifying the agent name, description, Claude model tier (opus/sonnet/haiku), and a comprehensive prompt that defines their role, constraints, guidelines, and output format.
+Contains prompt definitions for the specialized agents used in the novel writing workflow. After consolidation, the plugin has **20 functional agents** and **4 deprecated stubs** (kept for backward compatibility). Each agent is defined in a Markdown file with frontmatter specifying the agent name, description, Claude model tier (opus/sonnet/haiku), and a comprehensive prompt that defines their role, constraints, guidelines, and output format.
 
 Agents are invoked via the Task tool by commands and orchestration workflows. They operate with specific domain expertise while maintaining consistency with the overall project structure.
 
@@ -21,7 +21,7 @@ The following merges were performed to reduce overlap:
 | `dialogue-analyzer` | `character-voice-analyzer` | Naturalness, subtext, tags/beats, dialogue ratio, info dump detection, conflict/tension, purpose verification |
 | `plot-consistency-analyzer` | `consistency-verifier` | Plot hole detection, cause-effect logic chains, foreshadowing setup/payoff tracking |
 
-## Key Files - Functional Agents (15)
+## Key Files - Functional Agents (20)
 
 | File | Agent | Model | Role |
 |------|-------|-------|------|
@@ -39,6 +39,11 @@ The following merges were performed to reduce overlap:
 | `engagement-optimizer.md` | engagement-optimizer | sonnet | **EXPANDED** - Engagement analysis (7 domains): pacing, tension curves, emotional beats with Korean keyword detection, hook density, drop-off risk, cliffhanger analysis, arc compliance (absorbed pacing-analyzer + tension-tracker) |
 | `character-voice-analyzer.md` | character-voice-analyzer | sonnet | **EXPANDED** - Voice and dialogue analysis: speech patterns, OOC detection, relationship dynamics, naturalness, subtext, tags/beats, info dump detection, dialogue purpose (absorbed dialogue-analyzer) |
 | `prose-quality-analyzer.md` | prose-quality-analyzer | sonnet | Prose analysis - show vs tell, sensory detail, filter words, specificity |
+| `scene-drafter.md` | scene-drafter | opus | Scene-level drafting - SceneV5 plan → 800-1500자 장면 산문 생성 (2-Pass pipeline Pass 1) |
+| `assembly-agent.md` | assembly-agent | sonnet | Scene assembly - 개별 장면을 하나의 챕터로 조합, 전환부 매끄럽게 처리 |
+| `quality-oracle.md` | quality-oracle | opus | Quality evaluation + surgical directives - 구절 수준 품질 분석 후 prose-surgeon용 수술 지시 생성 (critic 대체, 2-Pass pipeline용) |
+| `prose-surgeon.md` | prose-surgeon | opus | Surgical prose revision - quality-oracle 지시에 따른 정밀 문장 수술 (editor 대체, 2-Pass pipeline용) |
+| `style-curator.md` | style-curator | sonnet | Style exemplar curation - 문체 라이브러리 예시 문장 수집, 분류, 관리 (5차원 분류 체계) |
 | `team-orchestrator.md` | team-orchestrator | sonnet | Team orchestration - loads team definitions, spawns agents, coordinates workflows (parallel/sequential/pipeline/collaborative), applies quality gates |
 
 ## Deprecated Agent Stubs (4)
@@ -56,8 +61,8 @@ These files are kept for backward compatibility. They redirect to their merged t
 
 ### Model Selection Rationale
 
-- **Opus (novelist, critic, plot-architect)**: Complex creative tasks requiring deep reasoning, narrative understanding, and quality judgment
-- **Sonnet (editor, lore-keeper, beta-reader, genre-validator, chapter-verifier, consistency-verifier, engagement-optimizer, character-voice-analyzer, prose-quality-analyzer)**: Balanced tasks needing both creativity and analytical skills, fast validation workflows
+- **Opus (novelist, critic, plot-architect, scene-drafter, quality-oracle, prose-surgeon)**: Complex creative tasks requiring deep reasoning, narrative understanding, and quality judgment
+- **Sonnet (editor, lore-keeper, beta-reader, genre-validator, chapter-verifier, consistency-verifier, engagement-optimizer, character-voice-analyzer, prose-quality-analyzer, assembly-agent, style-curator, team-orchestrator)**: Balanced tasks needing both creativity and analytical skills, fast validation workflows
 - **Haiku (proofreader, summarizer)**: Fast, focused tasks with clear criteria and limited scope
 
 ### Agent Interaction Patterns
@@ -367,30 +372,38 @@ novel-dev can leverage external strategic agents:
 
 ---
 
-## Magic Keywords (Auto-Command Triggers)
+## Magic Keywords (Auto-Routing via novel-skill-router)
 
-Novel-dev recognizes natural language keywords and automatically executes corresponding commands.
+novel-dev는 `novel-skill-router.mjs`를 통해 자연어 입력을 자동 라우팅합니다.
+전체 매핑 규칙은 `scripts/routing-rules.json`에 정의되어 있습니다.
 
-### Keyword-Command Mapping
+### 라우팅 동작 (2-tier 신뢰도)
 
-| Keyword Pattern | Trigger Command | Example |
-|-----------------|----------------|---------|
-| "집필", "써줘", "작성해" | `/novel-dev:write [chapter]` | "15화 집필해줘" |
-| "퇴고", "수정", "다듬어" | `/novel-dev:revise` | "이 장면 퇴고해줘" |
-| "평가", "점수", "품질" | `/novel-dev:evaluate` | "품질 평가해봐" |
-| "전체 집필", "다 써줘", "끝까지" | `/novel-dev:write-all` | "1막 전체 집필" |
-| "일관성", "설정 체크" | `/novel-dev:consistency-check` | "설정 일관성 확인" |
-| "통계", "현황" | `/novel-dev:stats` | "진행 통계 보여줘" |
-| "내보내기", "출력" | `/novel-dev:export` | "원고 내보내기" |
+| 신뢰도 | 동작 | 예시 |
+|--------|------|------|
+| >= 0.8 | 자동 실행 (MAGIC KEYWORD) | "5화 집필해줘" -> `/write` |
+| 0.6-0.8 | 후보 목록 제시 (suggest) | "이거 좀 고쳐줘" -> 후보 3개 |
+| < 0.6 | 무개입 (passthrough) | "오늘 날씨 어때?" |
 
-### Usage Rules
+### 주요 라우팅 예시 (v1: 핵심 20개 스킬)
 
-1. **Explicit commands take priority**: `/write 15` overrides keyword detection.
-2. **Context-aware**: Keywords only trigger when a novel project is active.
-3. **Combinable**: "15화 집필하고 퇴고까지 해줘" -> `/write 15` + `/revise`
+| 자연어 입력 | 라우팅 대상 | 추출 인자 |
+|-------------|-----------|----------|
+| "5화 집필해줘" | `/write` | chapter=5 |
+| "전체 집필해" | `/write-all` | - |
+| "1막 집필 시작" | `/write-act` | act=1 |
+| "캐릭터 설계해줘" | `/design-character` | - |
+| "일관성 체크" | `/consistency-check` | - |
+| "새 소설 시작하자" | `/init` | - |
+| "퇴고 좀 해줘" | `/revise` | - |
+| "품질 평가해봐" | `/evaluate` | - |
 
-### Deactivation
+### 라우팅 규칙
 
-Use explicit commands to bypass keyword auto-triggers:
-- `/novel-dev:write 15` (explicit)
-- "15화 작성해줘" (keyword - auto-triggered)
+1. **명시적 커맨드 우선**: `/write 5`는 라우터를 무시하고 직접 실행
+2. **프로젝트 상태 인식**: planning/writing/editing/complete별 필터링
+3. **OMC 충돌 해소**: 소설 컨텍스트 없는 범용 키워드(autopilot, team 등)는 OMC에 위임
+4. **프로젝트 필수**: init/brainstorm/help 외 스킬은 프로젝트 존재 필요
+5. **Ralph 활성 시 비활성**: Ralph Loop 진행 중에는 라우터가 개입하지 않음
+
+전체 규칙: `scripts/routing-rules.json`

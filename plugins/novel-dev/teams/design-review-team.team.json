@@ -1,0 +1,64 @@
+{
+  "$schema": "../schemas/team.schema.json",
+  "schema_version": "1.0",
+  "name": "design-review-team",
+  "display_name": "설계 리뷰 팀",
+  "description": "전체 설계 산출물을 문학성, 일관성, 장르 적합성, 구조 관점에서 병렬 검증하는 팀",
+  "category": "verification",
+  "agents": [
+    {
+      "agent": "critic",
+      "role": "validator",
+      "responsibility": "설계의 문학적 깊이, 구조적 완성도, 테마 일관성 평가",
+      "model": "opus"
+    },
+    {
+      "agent": "lore-keeper",
+      "role": "validator",
+      "responsibility": "세계관/캐릭터 일관성 검증, 설정 간 충돌 탐지, 참조 무결성 확인",
+      "model": "sonnet"
+    },
+    {
+      "agent": "genre-validator",
+      "role": "validator",
+      "responsibility": "장르 필수 요소 충족 검증, 필수 트로프 포함률, 상업성 지표 평가",
+      "model": "sonnet"
+    },
+    {
+      "agent": "plot-architect",
+      "role": "validator",
+      "responsibility": "아크 구조 완성도, 복선/훅 배치 적절성, 페이싱 밸런스 검증",
+      "model": "opus"
+    }
+  ],
+  "workflow": {
+    "type": "parallel",
+    "steps": [
+      {
+        "name": "design-review",
+        "agents": ["critic", "lore-keeper", "genre-validator", "plot-architect"],
+        "execution": "parallel",
+        "output": "각 리뷰어의 점수 + 피드백 JSON"
+      }
+    ]
+  },
+  "coordination": {
+    "mode": "orchestrated",
+    "lead": "critic",
+    "communication": "task-based"
+  },
+  "quality_gates": {
+    "enabled": true,
+    "consensus": "all_pass",
+    "thresholds": {
+      "critic": 80,
+      "lore-keeper": 85,
+      "genre-validator": 85,
+      "plot-architect": 80
+    }
+  },
+  "cost_estimate": {
+    "tokens_per_agent": 40000,
+    "warning_message": "설계 리뷰 팀은 critic, lore-keeper, genre-validator, plot-architect 4개 에이전트를 병렬 실행합니다. 약 160K 토큰이 소요될 수 있습니다."
+  }
+}

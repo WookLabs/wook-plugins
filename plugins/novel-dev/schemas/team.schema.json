@@ -152,6 +152,16 @@
         "output": {
           "type": "string",
           "description": "이 단계의 출력 설명 (다음 단계 입력으로 전달)"
+        },
+        "skill_ref": {
+          "oneOf": [
+            { "type": "string" },
+            {
+              "type": "object",
+              "additionalProperties": { "type": "string" }
+            }
+          ],
+          "description": "스킬 ID(문자열) 또는 에이전트별 스킬 매핑(객체). 문자열: 모든 에이전트에 동일 스킬 주입. 객체: {\"agent-name\": \"skill-id\"} 형태로 에이전트별 개별 스킬 주입"
         }
       }
     },

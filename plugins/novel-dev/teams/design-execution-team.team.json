@@ -1,0 +1,107 @@
+{
+  "$schema": "../schemas/team.schema.json",
+  "schema_version": "1.0",
+  "name": "design-execution-team",
+  "display_name": "설계 실행 팀",
+  "description": "9개 설계 스킬을 의존 그래프 기반으로 병렬/순차 실행하는 파이프라인 팀. 03-init 완료 필수 (plot/structure.json, meta/project.json 존재).",
+  "category": "planning",
+  "agents": [
+    {
+      "agent": "style-curator",
+      "role": "support",
+      "responsibility": "문체 및 서술 스타일 설계 (style-guide.json 생성)",
+      "model": "sonnet"
+    },
+    {
+      "agent": "lore-keeper",
+      "role": "worker",
+      "responsibility": "세계관 구축, 캐릭터 프로필 설계, 관계 네트워크 설계",
+      "model": "sonnet"
+    },
+    {
+      "agent": "plot-architect",
+      "role": "lead",
+      "responsibility": "타임라인, 메인/서브 아크, 복선, 훅 설계 총괄",
+      "model": "opus"
+    }
+  ],
+  "workflow": {
+    "type": "pipeline",
+    "steps": [
+      {
+        "name": "style-and-world",
+        "agents": ["style-curator", "lore-keeper"],
+        "execution": "parallel",
+        "skill_ref": {
+          "style-curator": "04-design-style",
+          "lore-keeper": "05-design-world"
+        },
+        "output": "style-guide.json + world.json + locations.json + terms.json"
+      },
+      {
+        "name": "character-design",
+        "agents": ["lore-keeper"],
+        "execution": "sequential",
+        "skill_ref": "06-design-character",
+        "depends_on": ["style-and-world"],
+        "output": "characters/*.json + index.json"
+      },
+      {
+        "name": "timeline-and-structure",
+        "agents": ["lore-keeper", "plot-architect"],
+        "execution": "parallel",
+        "skill_ref": {
+          "lore-keeper": "07-design-relationship",
+          "plot-architect": "08-design-timeline"
+        },
+        "depends_on": ["character-design"],
+        "output": "relationships.json + timeline.json"
+      },
+      {
+        "name": "main-arc-design",
+        "agents": ["plot-architect"],
+        "execution": "sequential",
+        "skill_ref": "09-design-main-arc",
+        "depends_on": ["timeline-and-structure"],
+        "output": "main-arc.json"
+      },
+      {
+        "name": "arc-details",
+        "agents": ["plot-architect"],
+        "execution": "sequential",
+        "skill_ref": "10-design-sub-arc",
+        "depends_on": ["main-arc-design"],
+        "output": "sub-arcs/*.json"
+      },
+      {
+        "name": "foreshadow-design",
+        "agents": ["plot-architect"],
+        "execution": "sequential",
+        "skill_ref": "11-design-foreshadow",
+        "depends_on": ["arc-details"],
+        "output": "foreshadowing.json"
+      },
+      {
+        "name": "hook-design",
+        "agents": ["plot-architect"],
+        "execution": "sequential",
+        "skill_ref": "12-design-hook",
+        "depends_on": ["foreshadow-design"],
+        "output": "hooks.json"
+      }
+    ],
+    "max_iterations": 1
+  },
+  "coordination": {
+    "mode": "orchestrated",
+    "lead": "plot-architect",
+    "communication": "task-based"
+  },
+  "quality_gates": {
+    "enabled": false
+  },
+  "cost_estimate": {
+    "tokens_per_agent": 83000,
+    "warning_message": "설계 실행 팀은 style-curator, lore-keeper, plot-architect 3개 에이전트 파이프라인을 사용합니다. 약 250K 토큰이 소요될 수 있습니다."
+  }
+}

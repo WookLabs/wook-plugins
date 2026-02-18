@@ -19,9 +19,9 @@
       "model": "sonnet"
     },
     {
-      "agent": "critic",
+      "agent": "quality-oracle",
       "role": "validator",
-      "responsibility": "품질 진단: 서사, 플롯, 캐릭터, 설정 점수 산출",
+      "responsibility": "품질 진단: 구절 수준 분석 + prose-surgeon용 수술 지시 생성",
       "model": "opus"
     },
     {
@@ -55,7 +55,7 @@
       },
       {
         "name": "quality-diagnosis",
-        "agents": ["critic"],
+        "agents": ["quality-oracle"],
         "execution": "sequential",
         "depends_on": ["assembly"],
         "output": "품질 진단 리포트 (점수 + 구체적 개선 지점)"
@@ -86,11 +86,11 @@
     "enabled": true,
     "consensus": "all_pass",
     "thresholds": {
-      "critic": 80
+      "quality-oracle": 80
     }
   },
   "cost_estimate": {
     "tokens_per_agent": 40000,
-    "warning_message": "2-Pass 집필 팀은 scene-drafter, assembly-agent, critic, prose-surgeon, proofreader 5개 에이전트 파이프라인을 사용합니다. 약 200K 토큰이 소요될 수 있습니다."
+    "warning_message": "2-Pass 집필 팀은 scene-drafter, assembly-agent, quality-oracle, prose-surgeon, proofreader 5개 에이전트 파이프라인을 사용합니다. 약 200K 토큰이 소요될 수 있습니다."
   }
 }

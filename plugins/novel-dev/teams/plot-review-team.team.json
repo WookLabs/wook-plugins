@@ -1,0 +1,64 @@
+{
+  "$schema": "../schemas/team.schema.json",
+  "schema_version": "1.0",
+  "name": "plot-review-team",
+  "display_name": "플롯 리뷰 팀",
+  "description": "회차별 플롯 파일을 극적 구조, 연속성, 장르 비트, 아크 밸런스 관점에서 병렬 검증하는 팀",
+  "category": "verification",
+  "agents": [
+    {
+      "agent": "critic",
+      "role": "validator",
+      "responsibility": "회차별 극적 긴장, 전환점 배치, 페이싱 평가",
+      "model": "opus"
+    },
+    {
+      "agent": "consistency-verifier",
+      "role": "validator",
+      "responsibility": "회차 간 연속성, 캐릭터 동선, 시간 정합성 검증",
+      "model": "sonnet"
+    },
+    {
+      "agent": "genre-validator",
+      "role": "validator",
+      "responsibility": "장르 비트 배치, 클리프행어 밀도, 상업성 지표 검증",
+      "model": "sonnet"
+    },
+    {
+      "agent": "plot-architect",
+      "role": "validator",
+      "responsibility": "아크 진행률, 복선 심기/회수 타이밍, 서브플롯 밸런스 검증",
+      "model": "opus"
+    }
+  ],
+  "workflow": {
+    "type": "parallel",
+    "steps": [
+      {
+        "name": "plot-review",
+        "agents": ["critic", "consistency-verifier", "genre-validator", "plot-architect"],
+        "execution": "parallel",
+        "output": "각 리뷰어의 점수 + 피드백 JSON"
+      }
+    ]
+  },
+  "coordination": {
+    "mode": "orchestrated",
+    "lead": "critic",
+    "communication": "task-based"
+  },
+  "quality_gates": {
+    "enabled": true,
+    "consensus": "all_pass",
+    "thresholds": {
+      "critic": 80,
+      "consistency-verifier": 85,
+      "genre-validator": 85,
+      "plot-architect": 80
+    }
+  },
+  "cost_estimate": {
+    "tokens_per_agent": 45000,
+    "warning_message": "플롯 리뷰 팀은 critic, consistency-verifier, genre-validator, plot-architect 4개 에이전트를 병렬 실행합니다. 약 180K 토큰이 소요될 수 있습니다."
+  }
+}

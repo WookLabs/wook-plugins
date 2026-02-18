@@ -1,11 +1,11 @@
-# /team 사용 예시
+# /novel-dev:team-nov 사용 예시
 
 ## 시나리오 1: 챕터 검증
 
 집필 완료된 5화를 검증 팀으로 품질 확인:
 
 ```bash
-/team run verification-team 5
+/novel-dev:team-nov run verification-team 5
 ```
 
 **실행 과정:**
@@ -44,7 +44,7 @@
 1화 작성 후 심층 리뷰 팀으로 다관점 분석:
 
 ```bash
-/team run deep-review-team 1
+/novel-dev:team-nov run deep-review-team 1
 ```
 
 **실행 과정:**
@@ -90,7 +90,7 @@
 critic 점수가 낮은 7화를 퇴고 팀으로 개선:
 
 ```bash
-/team run revision-team 7
+/novel-dev:team-nov run revision-team 7
 ```
 
 **실행 과정:**
@@ -138,7 +138,7 @@ critic 점수가 낮은 7화를 퇴고 팀으로 개선:
 특정 요구에 맞는 커스텀 팀 생성:
 
 ```bash
-/team create voice-check-team
+/novel-dev:team-nov create voice-check-team
 ```
 
 **대화형 위자드:**
@@ -157,7 +157,7 @@ Q5: 품질 게이트 활성화?
 
 이후 사용:
 ```bash
-/team run voice-check-team 3
+/novel-dev:team-nov run voice-check-team 3
 ```
 
 ---
@@ -166,25 +166,70 @@ Q5: 품질 게이트 활성화?
 
 ```bash
 # 사용 가능한 팀 확인
-/team list
+/novel-dev:team-nov list
 
 # 특정 팀 상세 정보
-/team info writing-team-2pass
+/novel-dev:team-nov info writing-team-2pass
 
 # 실행 중인 팀 세션 확인
-/team status
+/novel-dev:team-nov status
 ```
+
+---
+
+## 시나리오 6: 설계 실행 + 리뷰
+
+초기 설정(init) 완료 후 전체 설계를 팀으로 실행하고 리뷰:
+
+```bash
+# 1. 9개 설계 스킬을 의존 그래프 기반으로 자동 실행
+/novel-dev:team-nov run design-execution-team
+
+# 2. 설계 산출물을 4에이전트가 병렬 리뷰
+/novel-dev:team-nov run design-review-team
+```
+
+**실행 과정:**
+1. `design-execution-team` 7단계 파이프라인:
+   - Step 1: style-curator + lore-keeper 병렬 (문체 + 세계관)
+   - Step 2: lore-keeper (캐릭터 설계)
+   - Step 3: lore-keeper + plot-architect 병렬 (관계 + 타임라인)
+   - Step 4: plot-architect (메인 아크)
+   - Step 5: plot-architect (서브 아크)
+   - Step 6: plot-architect (복선)
+   - Step 7: plot-architect (훅)
+2. `design-review-team` 4에이전트 병렬 리뷰:
+   - critic (문학적 깊이), lore-keeper (일관성), genre-validator (장르), plot-architect (구조)
+   - 품질 게이트: all_pass (critic>=80, lore-keeper>=85, genre-validator>=85, plot-architect>=80)
+
+---
+
+## 시나리오 7: 플롯 리뷰
+
+gen-plot 완료 후 회차별 플롯을 팀으로 검증:
+
+```bash
+# 플롯 생성
+/13-gen-plot
+
+# 플롯 리뷰
+/novel-dev:team-nov run plot-review-team
+```
+
+**실행 과정:**
+1. critic + consistency-verifier + genre-validator + plot-architect 병렬 실행
+2. 품질 게이트: all_pass (critic>=80, consistency-verifier>=85, genre-validator>=85, plot-architect>=80)
+3. PASS → 집필 진행 가능, FAIL → 피드백 기반 플롯 수정 후 재실행
 
 ---
 
 ## 기존 명령어와의 관계
 
-| 기존 명령어 | 팀 시스템 대응 |
-|-------------|---------------|
-| chapter-verifier 자동 호출 | `/team run verification-team {N}` |
-| `/swarm review {N}` | `/team run deep-review-team {N}` |
-| `/swarm verify 1-12` | (별도 배치 실행 — swarm과 병행 사용) |
-| `/revise {N}` | `/team run revision-team {N}` (팀 기반 퇴고) |
+| 비교 | 기존 스킬 | /novel-dev:team-nov 대응 | 차이 |
+|------|-----------|-----------|------|
+| 검증 | `/verify-chapter N` | `/novel-dev:team-nov run verification-team N` | verify-chapter = 경량 자동 호출, 더 엄격. verification-team = 팀 인프라 기반, 확장 가능. |
+| 퇴고 | `/revise-pipeline N` | `/novel-dev:team-nov run revision-team N` | revise-pipeline = 최소 3단계 순차. revision-team = 4단계 + consistency-verifier + max 3회 재시도. |
+| 배치 | `/swarm review N` | `/novel-dev:team-nov run deep-review-team N` | /swarm = 배치 병렬 (같은 작업 × 여러 대상). /novel-dev:team-nov = 팀 협업 (여러 역할 × 하나의 대상). 공존. |
 
-> **참고**: 기존 `/swarm`과 `/team`은 공존합니다.
-> `/swarm`은 배치 병렬 실행(같은 작업을 여러 대상에), `/team`은 팀 기반 협업(여러 역할이 하나의 대상에)에 적합합니다.
+> **참고**: 기존 `/swarm`과 `/novel-dev:team-nov`은 공존합니다.
+> `/swarm`은 배치 병렬 실행(같은 작업을 여러 대상에), `/novel-dev:team-nov`은 팀 기반 협업(여러 역할이 하나의 대상에)에 적합합니다.

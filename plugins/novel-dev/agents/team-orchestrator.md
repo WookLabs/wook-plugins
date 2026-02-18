@@ -56,6 +56,21 @@ const summaries = Glob('context/summaries/*.md');
 
 Context loading follows the existing Context Budget System priorities.
 
+**Non-Chapter Task Context Loading:**
+
+If `args.chapter` is not provided (e.g., planning-team), load project-level context instead:
+
+```spec
+// For project-based tasks (no chapter number)
+if (!args.chapter) {
+  const meta = Glob('meta/*.json').map(Read);
+  const characters = Glob('characters/*.json').map(Read);
+  const world = Read('world/world.json');
+  const plot = Read('plot/structure.json');
+  // Skip chapter-specific files
+}
+```
+
 ### Step 3: Initialize Team State
 
 Create team state file at `.omc/state/team-{id}.json`:
@@ -100,6 +115,8 @@ const results = await Promise.all(
 
 Wait for all to complete, then collect results.
 
+**주의:** Parallel 실행 시 모든 에이전트가 동시에 토큰을 소모합니다. 팀 정의의 `cost_estimate`를 참조하여 사전 비용 안내를 제공하세요.
+
 #### 4-B: Sequential Workflow
 
 Each step runs after the previous completes, passing output forward:
@@ -118,14 +135,60 @@ for (const step of workflow.steps) {
 }
 ```
 
+**주의:** Sequential 워크플로우에서는 단일 에이전트 실패 시 전체 체인이 중단됩니다. 실패한 단계의 에러를 포함하여 부분 결과를 리포트하세요.
+
 #### 4-C: Pipeline Workflow
 
-Sequential steps with quality gates between stages:
+Sequential steps with quality gates between stages. Each step respects `execution` field for internal parallel/sequential dispatch:
 
 ```spec
 for (const step of workflow.steps) {
-  // Execute step
-  const result = await executeStep(step, context);
+  // Load skill instructions — supports string or per-agent object
+  let skillMap = {};  // { agentName: skillInstructions | null }
+  if (step.skill_ref) {
+    if (typeof step.skill_ref === 'object') {
+      // Per-agent skill mapping: { "style-curator": "04-design-style", "lore-keeper": "05-design-world" }
+      for (const [agentName, skillId] of Object.entries(step.skill_ref)) {
+        const path = `skills/${skillId}/SKILL.md`;
+        if (exists(path)) {
+          skillMap[agentName] = Read(path);
+        } else {
+          warn(`skill_ref '${skillId}' not found at ${path}. Using responsibility-based prompt for ${agentName}.`);
+          skillMap[agentName] = null;
+        }
+      }
+    } else {
+      // Single skill for all agents (backward compatible)
+      const path = `skills/${step.skill_ref}/SKILL.md`;
+      if (exists(path)) {
+        const instructions = Read(path);
+        for (const agentName of step.agents) {
+          skillMap[agentName] = instructions;
+        }
+      } else {
+        warn(`skill_ref '${step.skill_ref}' not found at ${path}. Falling back to responsibility-based prompts.`);
+      }
+    }
+  }
+
+  // Execute step — dispatch based on step.execution
+  let result;
+  if (step.agents.length > 1 && step.execution === 'parallel') {
+    // Step 내 병렬 실행 (예: style-curator + lore-keeper 동시, 각자 다른 스킬 지시)
+    result = await Promise.all(
+      step.agents.map(agentName =>
+        Task({
+          subagent_type: `novel-dev:${agentName}`,
+          model: teamDef.agents.find(a => a.agent === agentName).model,
+          prompt: buildPrompt(agentName, context, null, skillMap[agentName] || null)
+        })
+      )
+    );
+  } else {
+    // 단일 에이전트 또는 순차 실행
+    const agentName = step.agents[0];
+    result = await executeStep(step, context, skillMap[agentName] || null);
+  }
 
   // Check quality gate if validator step
   if (quality_gates.enabled && isValidatorStep(step)) {
@@ -140,6 +203,12 @@ for (const step of workflow.steps) {
   context.previousStepOutput = result;
 }
 ```
+
+**skill_ref 프롬프트 로딩**: `step.skill_ref`는 두 가지 형태를 지원합니다:
+- **문자열** (`"04-design-style"`): 해당 step의 모든 에이전트에게 동일한 스킬 지시를 주입합니다. 단일 에이전트 step에 적합합니다.
+- **객체** (`{"style-curator": "04-design-style", "lore-keeper": "05-design-world"}`): 에이전트별로 다른 스킬 지시를 주입합니다. 병렬 실행 step에서 각 에이전트가 서로 다른 도메인 작업을 수행할 때 사용합니다.
+
+skill_ref가 없으면 기존 방식(`responsibility` 기반)으로 프롬프트를 구성합니다. skill_ref 경로가 존재하지 않으면 경고 로그를 남기고 responsibility 기반으로 fallback합니다. 이를 통해 기존 팀과의 하위 호환성을 완전히 유지합니다.
 
 #### 4-D: Collaborative Workflow
 
@@ -187,6 +256,19 @@ const overallPass = evaluateConsensus(gateResults, quality_gates.consensus);
 //            "weighted" → weighted score above threshold
 ```
 
+### Step 5-1: Chapter 1 Enhanced Thresholds
+
+1화(`chapter === 1`)인 경우, 일반 thresholds 대신 강화된 기준을 적용합니다:
+
+| Agent | 일반 기준 | 1화 기준 | 근거 |
+|-------|----------|---------|------|
+| critic | 85 | 90 | 첫인상이 독자 유지를 결정 |
+| beta-reader | 75 | 80 | 첫 챕터의 몰입도가 더 중요 |
+| genre-validator | 90 | 95 | 장르 기대치 충족이 필수적 |
+| consistency-verifier | 80 | 85 | 세계관/설정 기반 확립 |
+
+자동 감지: `context.chapter === 1`이면 팀 정의의 thresholds를 위 테이블로 오버라이드합니다. 팀 정의에 `chapter_1_overrides`가 명시되어 있으면 해당 값을 우선 사용합니다.
+
 ### Step 6: Generate Report
 
 Produce a structured report combining all agent results:
@@ -221,7 +303,8 @@ Produce a structured report combining all agent results:
 
 1. Update team state to `completed` (or `failed`)
 2. Save final report to `.omc/state/team-{id}.json`
-3. Clean up team resources (if using TeamCreate)
+3. Save permanent result to `reviews/team/{team-name}_ch{N}_{timestamp}.json`
+4. Clean up team resources (if using TeamCreate)
 
 ## Prompt Building
 
@@ -286,6 +369,11 @@ Each agent receives a tailored prompt based on their role:
 - Return clear error with expected path
 - Do NOT proceed with missing context
 
+**Skill Ref Not Found:**
+- `skills/{skill_ref}/SKILL.md`가 존재하지 않으면 경고 로그 출력
+- `responsibility` 기반 프롬프트로 fallback (에이전트 실행은 계속)
+- 팀 실행을 중단하지 않음 — skill_ref는 보강 정보이며 필수가 아님
+
 ## Integration Points
 
 **Called By:**
@@ -293,7 +381,7 @@ Each agent receives a tailored prompt based on their role:
 - Other skills that need team execution
 
 **Calls:**
-- All 14 functional agents via Task tool
+- All team-defined agents via Task tool
 - TeamCreate/SendMessage for collaborative workflows
 - TaskCreate/TaskUpdate for work distribution
 
