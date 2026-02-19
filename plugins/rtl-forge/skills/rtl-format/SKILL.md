@@ -80,6 +80,11 @@ Warnings:
   ⚠ Rule 17: r_pulse — auto-clear/set 순서 뒤바뀜
 ```
 
+## Superpowers Compatibility
+
+이 스킬은 `dispatching-parallel-agents`와 병행 가능하다:
+- 여러 `.v` 파일 동시 포매팅 시 병렬 에이전트로 각 파일을 독립 처리 가능
+
 ## Notes
 
 - 포매팅은 로직을 변경하지 않으므로 RTL 협의 프로토콜(승인) 없이 바로 적용한다

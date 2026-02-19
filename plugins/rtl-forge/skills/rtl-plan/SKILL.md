@@ -149,6 +149,11 @@ AskUserQuestion으로 승인을 받는다.
 | 다중 수정 동시 적용 | 문제 발생 시 원인 추적 불가 |
 | 사용자 미승인 수정 | 설계 의도 훼손 |
 
+## Superpowers Compatibility
+
+이 스킬은 `.v`/`.sv` 파일 작업 시 아래 superpowers 스킬을 대체한다:
+- **writing-plans** → RTL 수정 계획은 타이밍 다이어그램 + Top-Down 수정 순서가 필수
+
 ## Constraints
 
 - **수정하지 않는다** — 계획과 제안만 한다

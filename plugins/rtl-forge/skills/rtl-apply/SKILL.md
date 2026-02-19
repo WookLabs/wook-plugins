@@ -88,6 +88,11 @@ RTL Apply Complete
 ═══════════════════════════════════════════════════
 ```
 
+## Superpowers Compatibility
+
+이 스킬은 `.v`/`.sv` 파일 작업 시 아래 superpowers 스킬을 포함한다:
+- **verification-before-completion** → Phase 3의 Syntax/일관성 검사가 이 역할을 수행. 추가로 verification 스킬을 병행 가능
+
 ## Safety Rules
 
 | 규칙 | 설명 |

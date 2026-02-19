@@ -121,6 +121,12 @@ RTL Analysis: <모듈명>
 | Blocking/Non-blocking | sequential에서 `=` 사용, combinational에서 `<=` 사용 |
 | Combinational loop | 조합 로직 피드백 루프 |
 
+## Superpowers Compatibility
+
+이 스킬은 `.v`/`.sv` 파일 작업 시 아래 superpowers 스킬을 대체한다:
+- **brainstorming** → RTL 분석은 신호 역추적 + CDC + FSM 등 구조화된 Phase 필요
+- **systematic-debugging** → RTL 디버깅은 파형 분석, sensitivity list 등 HW 고유 체크리스트 사용
+
 ## Constraints
 
 - **수정하지 않는다** — 분석과 설명만 한다

@@ -1,6 +1,6 @@
 {
   "name": "rtl-forge",
-  "version": "3.1.0",
+  "version": "3.2.0",
   "description": "RTL design assistant — formatting, review, and verification tools for Verilog/SystemVerilog",
   "skills": "./skills/"
 }
