@@ -1,0 +1,15 @@
+{
+  "name": "verible-verilog-ls",
+  "description": "Verilog/SystemVerilog language server (Verible)",
+  "version": "1.0.0",
+  "author": {
+    "name": "WookLabs",
+    "email": "contact@wooklabs.com"
+  },
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/WookLabs/wook-plugins"
+  },
+  "homepage": "https://github.com/chipsalliance/verible"
+}

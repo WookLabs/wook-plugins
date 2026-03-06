@@ -27,6 +27,17 @@
       },
       "keywords": ["rtl", "verilog", "systemverilog", "formatting", "hardware"],
       "category": "development"
+    },
+    {
+      "name": "verible-verilog-ls",
+      "version": "1.0.0",
+      "source": "./plugins/verible-verilog-ls",
+      "description": "Verilog/SystemVerilog language server (Verible) - diagnostics, go-to-definition, find-references, formatting",
+      "author": {
+        "name": "WookLabs"
+      },
+      "keywords": ["development", "lsp", "verilog", "systemverilog"],
+      "category": "development"
     }
   ]
 }
