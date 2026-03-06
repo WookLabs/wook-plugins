@@ -33,12 +33,12 @@ async function main() {
     let data = {};
     try { data = JSON.parse(input); } catch {}
 
-    const directory = data.directory || process.cwd();
+    const directory = data.directory || data.cwd || process.cwd();
     const novelsDir = join(directory, 'novels');
 
     // novels 폴더가 없으면 통과
     if (!existsSync(novelsDir)) {
-      console.log(JSON.stringify({ continue: true }));
+      console.log(JSON.stringify({ decision: "approve" }));
       return;
     }
 
@@ -48,12 +48,12 @@ async function main() {
       projects = readdirSync(novelsDir)
         .filter(f => existsSync(join(novelsDir, f, 'meta', 'project.json')));
     } catch {
-      console.log(JSON.stringify({ continue: true }));
+      console.log(JSON.stringify({ decision: "approve" }));
       return;
     }
 
     if (projects.length === 0) {
-      console.log(JSON.stringify({ continue: true }));
+      console.log(JSON.stringify({ decision: "approve" }));
       return;
     }
 
@@ -82,7 +82,7 @@ async function main() {
     const project = readJsonFile(projectJsonPath);
 
     if (!project) {
-      console.log(JSON.stringify({ continue: true }));
+      console.log(JSON.stringify({ decision: "approve" }));
       return;
     }
 
@@ -143,10 +143,10 @@ ${hasRecovery ? formatRecoveryMessage(recoveryState) : ''}
 ---
 `;
 
-    console.log(JSON.stringify({ continue: true, message }));
+    console.log(JSON.stringify({ decision: "approve", message }));
   } catch (error) {
     // 에러 시 조용히 통과
-    console.log(JSON.stringify({ continue: true }));
+    console.log(JSON.stringify({ decision: "approve" }));
   }
 }
 

@@ -1,12 +1,12 @@
 <!-- Parent: ../AGENTS.md -->
 <!-- Generated: 2026-01-29 -->
-<!-- Updated: Agent consolidation - 18 agents reduced to 14 functional + 4 deprecated -->
+<!-- Updated: Agent consolidation complete - 20 functional agents, deprecated stubs removed -->
 
 # agents
 
 ## Purpose
 
-Contains prompt definitions for the specialized agents used in the novel writing workflow. After consolidation, the plugin has **20 functional agents** and **4 deprecated stubs** (kept for backward compatibility). Each agent is defined in a Markdown file with frontmatter specifying the agent name, description, Claude model tier (opus/sonnet/haiku), and a comprehensive prompt that defines their role, constraints, guidelines, and output format.
+Contains prompt definitions for the specialized agents used in the novel writing workflow. After consolidation, the plugin has **20 functional agents**. Each agent is defined in a Markdown file with frontmatter specifying the agent name, description, Claude model tier (opus/sonnet/haiku), and a comprehensive prompt that defines their role, constraints, guidelines, and output format.
 
 Agents are invoked via the Task tool by commands and orchestration workflows. They operate with specific domain expertise while maintaining consistency with the overall project structure.
 
@@ -46,16 +46,16 @@ The following merges were performed to reduce overlap:
 | `style-curator.md` | style-curator | sonnet | Style exemplar curation - 문체 라이브러리 예시 문장 수집, 분류, 관리 (5차원 분류 체계) |
 | `team-orchestrator.md` | team-orchestrator | sonnet | Team orchestration - loads team definitions, spawns agents, coordinates workflows (parallel/sequential/pipeline/collaborative), applies quality gates |
 
-## Deprecated Agent Stubs (4)
+## Agent Consolidation History
 
-These files are kept for backward compatibility. They redirect to their merged target.
+The following agents were merged and their stub files removed:
 
-| File | Original Role | Redirects To |
-|------|---------------|--------------|
-| `pacing-analyzer.md` | Pacing analysis - tension curves, scene rhythm, beat timing | `engagement-optimizer` |
-| `tension-tracker.md` | Emotional arc tracking - tension curves, beat counting, cliffhanger analysis | `engagement-optimizer` |
-| `dialogue-analyzer.md` | Dialogue analysis - naturalness, subtext, info dump detection | `character-voice-analyzer` |
-| `plot-consistency-analyzer.md` | Plot hole detection - timeline errors, causality issues, foreshadowing tracking | `consistency-verifier` |
+| Removed Agent | Merged Into | Capabilities Transferred |
+|---------------|-------------|--------------------------|
+| `pacing-analyzer` | `engagement-optimizer` | Scene length analysis, beat timing, rhythm/variety, genre-specific pacing |
+| `tension-tracker` | `engagement-optimizer` | Korean emotion keyword detection, cross-chapter state, arc compliance, cliffhanger analysis |
+| `dialogue-analyzer` | `character-voice-analyzer` | Naturalness, subtext, tags/beats, dialogue ratio, info dump detection |
+| `plot-consistency-analyzer` | `consistency-verifier` | Plot hole detection, cause-effect logic chains, foreshadowing tracking |
 
 ## Agent Characteristics
 

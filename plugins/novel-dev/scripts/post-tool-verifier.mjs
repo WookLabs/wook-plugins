@@ -211,7 +211,7 @@ async function main() {
     const toolName = data.toolName || '';
     const toolOutput = data.toolOutput || '';
     const toolInput = data.toolInput || {};
-    const directory = data.directory || process.cwd();
+    const directory = data.directory || data.cwd || process.cwd();
 
     // Find novel project
     const projectPath = findNovelProject(directory);
@@ -238,7 +238,7 @@ async function main() {
     // Generate message
     const message = generateMessage(toolName, toolOutput, toolInput);
 
-    const response = { continue: true };
+    const response = { decision: "approve" };
     if (message) {
       response.message = `[Novel-Sisyphus] ${message}`;
     }
@@ -246,7 +246,7 @@ async function main() {
     console.log(JSON.stringify(response, null, 2));
   } catch (error) {
     // On error, always continue
-    console.log(JSON.stringify({ continue: true }));
+    console.log(JSON.stringify({ decision: "approve" }));
   }
 }
 

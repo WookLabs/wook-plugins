@@ -26,13 +26,29 @@ You are the universal team orchestrator for novel-dev. Your job is to load team 
 
 ## Execution Protocol
 
-### Step 1: Load Team Definition
+### Step 1: Load Team Definition and Model Config
 
-Read the team definition file from `teams/{team-name}.team.json`:
+Read the team definition and central model configuration:
 
 ```spec
 const teamDef = Read(`teams/${teamName}.team.json`);
+const modelTiers = Read('config/model-tiers.json');
 const { agents, workflow, coordination, quality_gates } = teamDef;
+```
+
+**Model Resolution**: When determining which model to use for an agent, follow this priority:
+1. Team definition's per-agent `model` field (highest priority, allows team-specific overrides)
+2. `config/model-tiers.json` agent mapping (central default)
+3. Agent `.md` frontmatter `model` field (fallback)
+
+```spec
+function resolveModel(agentName, teamDef, modelTiers) {
+  const teamAgent = teamDef.agents.find(a => a.agent === agentName);
+  if (teamAgent?.model) return teamAgent.model;
+  const tier = modelTiers.agents[agentName];
+  if (tier) return modelTiers.tiers[tier].model;
+  return 'sonnet'; // safe default
+}
 ```
 
 Validate:
@@ -73,11 +89,11 @@ if (!args.chapter) {
 
 ### Step 3: Initialize Team State
 
-Create team state file at `.omc/state/team-{id}.json`:
+Create team state file at `.omc/state/novel-team-{id}.json` (prefixed with `novel-` to avoid collision with OMC's own team state):
 
 ```json
 {
-  "team_id": "team_{name}_{timestamp}",
+  "team_id": "novel-team_{name}_{timestamp}",
   "team_definition": "{name}.team.json",
   "status": "initializing",
   "context": { "chapter": N, "target_files": [...] },
@@ -302,7 +318,7 @@ Produce a structured report combining all agent results:
 ### Step 7: Finalize
 
 1. Update team state to `completed` (or `failed`)
-2. Save final report to `.omc/state/team-{id}.json`
+2. Save final report to `.omc/state/novel-team-{id}.json`
 3. Save permanent result to `reviews/team/{team-name}_ch{N}_{timestamp}.json`
 4. Clean up team resources (if using TeamCreate)
 

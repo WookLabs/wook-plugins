@@ -105,8 +105,23 @@ async function gatherProjectState(projectPath) {
   // Gather foreshadowing alerts
   state.foreshadowingAlerts = await gatherForeshadowingAlerts(projectPath, state.currentChapter);
 
-  // Calculate act progress
-  const chaptersPerAct = Math.ceil(state.totalChapters / 3); // Assume 3 acts
+  // Calculate act progress using plot structure or ralph state
+  let totalActs = 3; // default fallback
+  const structurePath = join(projectPath, 'plot', 'structure.json');
+  if (existsSync(structurePath)) {
+    try {
+      const structure = JSON.parse(readFileSync(structurePath, 'utf-8'));
+      totalActs = structure.total_acts || structure.acts?.length || 3;
+    } catch {}
+  }
+  // Ralph state may also carry total_acts
+  if (existsSync(statePath)) {
+    try {
+      const ralphState = JSON.parse(readFileSync(statePath, 'utf-8'));
+      if (ralphState.total_acts) totalActs = ralphState.total_acts;
+    } catch {}
+  }
+  const chaptersPerAct = Math.ceil(state.totalChapters / totalActs);
   const actStart = (state.currentAct - 1) * chaptersPerAct + 1;
   const actEnd = Math.min(state.currentAct * chaptersPerAct, state.totalChapters);
   const actCompleted = state.completedChapters - actStart + 1;

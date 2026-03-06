@@ -35,7 +35,7 @@ export interface NovelProject {
   target_chapters: number;
   target_words_per_chapter: number;
   current_chapter: number;
-  status: "planning" | "writing" | "editing" | "complete" | "paused"; // SYNC: schemas/project.schema.json
+  status: ProjectStatus;
   created_at: string; // ISO 8601 format
   updated_at: string; // ISO 8601 format
 }
@@ -476,7 +476,7 @@ export interface NovelState {
 export interface ProjectStats {
   project_id: string;
   title: string;
-  status: "planning" | "writing" | "editing" | "complete";
+  status: ProjectStatus;
   progress: {
     completed_chapters: number;
     target_chapters: number;

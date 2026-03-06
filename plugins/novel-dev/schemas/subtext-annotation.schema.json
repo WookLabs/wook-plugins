@@ -1,5 +1,5 @@
 {
-  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$schema": "http://json-schema.org/draft-07/schema#",
   "$id": "https://novel-dev.wook.io/schemas/subtext-annotation.schema.json",
   "title": "SubtextAnnotation",
   "description": "Complete subtext annotation for a dialogue exchange, capturing hidden emotions and physical manifestations",
@@ -52,11 +52,11 @@
       "minItems": 1,
       "maxItems": 3,
       "items": {
-        "$ref": "#/$defs/EmotionLayer"
+        "$ref": "#/definitions/EmotionLayer"
       }
     },
     "physicalManifestations": {
-      "$ref": "#/$defs/PhysicalManifestations"
+      "$ref": "#/definitions/PhysicalManifestations"
     },
     "narrativeFunction": {
       "type": "string",
@@ -65,7 +65,7 @@
     }
   },
   "additionalProperties": false,
-  "$defs": {
+  "definitions": {
     "EmotionLayer": {
       "type": "object",
       "description": "A layer of hidden emotion beneath the surface dialogue",

@@ -1,0 +1,40 @@
+{
+  "$schema": "../schemas/model-tiers.schema.json",
+  "description": "Central model tier configuration for novel-dev agents. Team definitions and orchestrator reference this file as the single source of truth for model assignments.",
+  "tiers": {
+    "HIGH": {
+      "model": "opus",
+      "description": "Complex creative tasks requiring deep reasoning, narrative understanding, and quality judgment"
+    },
+    "MEDIUM": {
+      "model": "sonnet",
+      "description": "Balanced tasks needing both creativity and analytical skills, fast validation workflows"
+    },
+    "LOW": {
+      "model": "haiku",
+      "description": "Fast, focused tasks with clear criteria and limited scope"
+    }
+  },
+  "agents": {
+    "novelist": "HIGH",
+    "critic": "HIGH",
+    "plot-architect": "HIGH",
+    "scene-drafter": "HIGH",
+    "quality-oracle": "HIGH",
+    "prose-surgeon": "HIGH",
+    "editor": "MEDIUM",
+    "lore-keeper": "MEDIUM",
+    "beta-reader": "MEDIUM",
+    "genre-validator": "MEDIUM",
+    "chapter-verifier": "MEDIUM",
+    "consistency-verifier": "MEDIUM",
+    "engagement-optimizer": "MEDIUM",
+    "character-voice-analyzer": "MEDIUM",
+    "prose-quality-analyzer": "MEDIUM",
+    "assembly-agent": "MEDIUM",
+    "style-curator": "MEDIUM",
+    "team-orchestrator": "MEDIUM",
+    "proofreader": "LOW",
+    "summarizer": "LOW"
+  }
+}

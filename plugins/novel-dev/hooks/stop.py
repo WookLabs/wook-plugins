@@ -85,7 +85,7 @@ def main():
     except json.JSONDecodeError:
         hook_input = {}
 
-    directory = hook_input.get('directory', os.getcwd())
+    directory = hook_input.get('directory', hook_input.get('cwd', os.getcwd()))
 
     # Find active Ralph project (we only need state, not path)
     _, state = find_active_ralph_project(directory)

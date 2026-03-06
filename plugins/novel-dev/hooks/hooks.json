@@ -22,6 +22,11 @@
             "type": "command",
             "command": "node \"${CLAUDE_PLUGIN_ROOT}/scripts/novel-state-detector.mjs\"",
             "timeout": 5000
+          },
+          {
+            "type": "command",
+            "command": "node \"${CLAUDE_PLUGIN_ROOT}/scripts/novel-skill-router.mjs\"",
+            "timeout": 5000
           }
         ]
       }

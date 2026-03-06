@@ -86,7 +86,7 @@ async function main() {
     let data = {};
     try { data = JSON.parse(input); } catch {}
 
-    const directory = data.directory || process.cwd();
+    const directory = data.directory || data.cwd || process.cwd();
     const novelsDir = join(directory, 'novels');
 
     // Find and read state file from active project (not workspace root)
@@ -114,13 +114,13 @@ async function main() {
     }
 
     if (!state) {
-      console.log(JSON.stringify({ continue: true }));
+      console.log(JSON.stringify({ decision: "approve" }));
       return;
     }
 
     // Ralph Loop가 비활성이면 통과
     if (!state.ralph_active) {
-      console.log(JSON.stringify({ continue: true }));
+      console.log(JSON.stringify({ decision: "approve" }));
       return;
     }
 
@@ -137,7 +137,7 @@ async function main() {
       writeState(activeProjectPath, state);
       // Update notepad
       await updateNotepad(activeProjectPath);
-      console.log(JSON.stringify({ continue: true }));
+      console.log(JSON.stringify({ decision: "approve", reason: "Novel completion detected." }));
       return;
     }
 
@@ -148,6 +148,8 @@ async function main() {
         writeState(activeProjectPath, state);
         // Update notepad after act completion
         await updateNotepad(activeProjectPath);
+        console.log(JSON.stringify({ decision: "approve", reason: `Act ${completedAct} completion detected.` }));
+        return;
       }
     }
 
@@ -163,7 +165,7 @@ async function main() {
       await updateNotepad(activeProjectPath);
 
       console.log(JSON.stringify({
-        continue: true,
+        decision: "approve",
         reason: `[NOVEL RALPH LOOP - MAX ITERATIONS] 최대 반복 횟수(${maxIterations})에 도달했습니다. 루프를 종료합니다.`
       }));
       return;
@@ -175,8 +177,8 @@ async function main() {
       if (state.current_act >= state.total_acts) {
         // 전체 완료
         console.log(JSON.stringify({
-          continue: true,
-          message: `<novel-complete>
+          decision: "approve",
+          reason: `<novel-complete>
 
 ✅ **소설 집필이 완료되었습니다!**
 
@@ -210,7 +212,7 @@ async function main() {
       await saveCheckpoint(activeProjectPath, state);
       await updateNotepad(activeProjectPath);
 
-      console.log(JSON.stringify({ continue: true }));
+      console.log(JSON.stringify({ decision: "approve", reason: `Next act ${state.current_act} starting.` }));
       return;
     }
 
@@ -222,7 +224,7 @@ async function main() {
     await updateNotepad(activeProjectPath);
 
     console.log(JSON.stringify({
-      continue: false,
+      decision: "block",
       reason: `<novel-ralph-continuation>
 
 [NOVEL RALPH LOOP - 막 ${currentAct} 진행 중 (반복 ${iteration + 1}/${maxIterations})]
@@ -249,7 +251,7 @@ async function main() {
     }));
   } catch (error) {
     // 에러 시 통과
-    console.log(JSON.stringify({ continue: true }));
+    console.log(JSON.stringify({ decision: "approve" }));
   }
 }
 

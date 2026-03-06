@@ -1,5 +1,5 @@
 {
-  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$schema": "http://json-schema.org/draft-07/schema#",
   "$id": "https://novel-dev.wook.io/schemas/voice-profile.schema.json",
   "title": "VoiceProfile",
   "description": "Complete voice profile for a character, capturing speech patterns, habits, and linguistic markers",
@@ -24,36 +24,36 @@
       "minLength": 1
     },
     "speechPatterns": {
-      "$ref": "#/$defs/SpeechPatterns"
+      "$ref": "#/definitions/SpeechPatterns"
     },
     "internalMonologue": {
-      "$ref": "#/$defs/InternalMonologue"
+      "$ref": "#/definitions/InternalMonologue"
     },
     "linguisticMarkers": {
-      "$ref": "#/$defs/LinguisticMarkers"
+      "$ref": "#/definitions/LinguisticMarkers"
     },
     "voiceFingerprint": {
-      "$ref": "#/$defs/VoiceFingerprint"
+      "$ref": "#/definitions/VoiceFingerprint"
     }
   },
   "additionalProperties": false,
-  "$defs": {
+  "definitions": {
     "SpeechPatterns": {
       "type": "object",
       "description": "Complete speech patterns for a character",
       "required": ["sentenceStructure", "vocabulary", "verbalHabits", "rhythm"],
       "properties": {
         "sentenceStructure": {
-          "$ref": "#/$defs/SentenceStructure"
+          "$ref": "#/definitions/SentenceStructure"
         },
         "vocabulary": {
-          "$ref": "#/$defs/VocabularyProfile"
+          "$ref": "#/definitions/VocabularyProfile"
         },
         "verbalHabits": {
-          "$ref": "#/$defs/VerbalHabits"
+          "$ref": "#/definitions/VerbalHabits"
         },
         "rhythm": {
-          "$ref": "#/$defs/SpeechRhythm"
+          "$ref": "#/definitions/SpeechRhythm"
         }
       },
       "additionalProperties": false
