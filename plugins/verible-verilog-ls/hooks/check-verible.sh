@@ -143,13 +143,7 @@ write_lsp_json() {
   local abs_path
   abs_path="$(resolve_abs_path "$BINARY_PATH")"
 
-  if [[ -z "${CLAUDE_PLUGIN_ROOT:-}" ]]; then
-    echo "WARNING: CLAUDE_PLUGIN_ROOT not set. Skipping .lsp.json rewrite."
-    echo "Binary is installed at: $abs_path"
-    return
-  fi
-
-  local lsp_json="$CLAUDE_PLUGIN_ROOT/.lsp.json"
+  local lsp_json="$PLUGIN_ROOT/.lsp.json"
 
   cat > "$lsp_json" <<ENDJSON
 {
@@ -170,6 +164,9 @@ ENDJSON
 }
 
 # === Main ===
+SCRIPT_DIR="$(cd "$(dirname "$0")" && pwd)"
+PLUGIN_ROOT="${CLAUDE_PLUGIN_ROOT:-$(cd "$SCRIPT_DIR/.." && pwd)}"
+
 detect_platform
 
 if find_binary; then

@@ -1,7 +1,7 @@
 {
   "name": "verible-verilog-ls",
   "description": "Verilog/SystemVerilog language server (Verible)",
-  "version": "1.0.1",
+  "version": "1.0.2",
   "author": {
     "name": "WookLabs",
     "email": "contact@wooklabs.com"
