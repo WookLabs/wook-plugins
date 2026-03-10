@@ -13,38 +13,11 @@ import { join, dirname } from 'path';
 import { fileURLToPath } from 'url';
 import { findActiveProject } from './lib/project-finder.mjs';
 import { findStateFile, readState } from './lib/state-utils.mjs';
+import { readStdinSafe, extractPrompt, removeCodeBlocks } from './lib/hook-utils.mjs';
+export { extractPrompt, removeCodeBlocks } from './lib/hook-utils.mjs';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
-
-// ── stdin ──────────────────────────────────────────────────────────
-
-async function readStdin() {
-  const chunks = [];
-  for await (const chunk of process.stdin) {
-    chunks.push(chunk);
-  }
-  return Buffer.concat(chunks).toString('utf-8');
-}
-
-function extractPrompt(input) {
-  try {
-    const data = JSON.parse(input);
-    if (data.prompt) return data.prompt;
-    if (data.message?.content) return data.message.content;
-    if (Array.isArray(data.parts)) {
-      return data.parts.filter(p => p.type === 'text').map(p => p.text).join(' ');
-    }
-    return '';
-  } catch {
-    const match = input.match(/"(?:prompt|content|text)"\s*:\s*"([^"]+)"/);
-    return match ? match[1] : '';
-  }
-}
-
-function removeCodeBlocks(text) {
-  return text.replace(/```[\s\S]*?```/g, '').replace(/`[^`]+`/g, '');
-}
 
 // ── routing rules ──────────────────────────────────────────────────
 
@@ -278,7 +251,7 @@ ${lines}
 
 async function main() {
   try {
-    const input = await readStdin();
+    const input = await readStdinSafe();
     if (!input.trim()) {
       console.log(JSON.stringify(passthrough()));
       return;

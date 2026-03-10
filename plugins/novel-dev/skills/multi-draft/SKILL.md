@@ -1,6 +1,6 @@
 ---
 name: multi-draft
-description: 같은 장면을 여러 접근법으로 작성 및 비교
+description: "Use this skill when writing the same scene from multiple approaches for side-by-side comparison. Triggers on: '멀티 드래프트', '다중 초안', 'multi draft'."
 user-invocable: true
 allowed-tools:
   - Read

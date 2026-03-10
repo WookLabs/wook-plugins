@@ -1,6 +1,6 @@
 ---
 name: stats
-description: 프로젝트 통계 표시 (글자수, 진행률, 현황)
+description: "Use this skill when viewing project statistics including word count, progress, and current status. Triggers on: '통계', '현황', 'stats'."
 user-invocable: true
 ---
 

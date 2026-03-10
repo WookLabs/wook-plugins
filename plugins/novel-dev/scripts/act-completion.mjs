@@ -10,14 +10,7 @@ import { join } from 'path';
 import { findStateFile, readState, writeState } from './lib/state-utils.mjs';
 import { saveCheckpoint, markChapterComplete } from './checkpoint.mjs';
 import { updateNotepad } from './notepad-manager.mjs';
-
-async function readStdin() {
-  const chunks = [];
-  for await (const chunk of process.stdin) {
-    chunks.push(chunk);
-  }
-  return Buffer.concat(chunks).toString('utf-8');
-}
+import { readStdinSafe } from './lib/hook-utils.mjs';
 
 function readJsonFile(path) {
   try {
@@ -82,7 +75,7 @@ function getLastAssistantMessage(transcriptPath) {
 
 async function main() {
   try {
-    const input = await readStdin();
+    const input = await readStdinSafe();
     let data = {};
     try { data = JSON.parse(input); } catch {}
 

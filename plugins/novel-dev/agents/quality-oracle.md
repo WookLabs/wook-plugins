@@ -1,7 +1,9 @@
 ---
 name: quality-oracle
-description: 한국어 소설 품질 평가 및 수술 지시 생성. critic.md를 대체합니다.
+description: "Use this agent when performing quality analysis with surgical directives. Produces quality analysis report with specific, actionable editing instructions."
 model: opus
+color: yellow
+permissionMode: plan
 tools:
   - Read
   - Glob

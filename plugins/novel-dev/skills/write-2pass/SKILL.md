@@ -1,6 +1,6 @@
 ---
 name: write-2pass
-description: Claude 집필 + Grok 성인 장면 리라이트 2-Pass 집필
+description: "Use this skill when writing with 2-pass pipeline (Claude draft plus Grok adult scene rewrite). Triggers on: '2패스', '2-pass', 'write 2pass'."
 user-invocable: true
 ---
 

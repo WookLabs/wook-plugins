@@ -69,7 +69,7 @@
 |  consistency-verifier     |  93   | PASS (>=90)   |
 |  engagement-optimizer     |  78   | WARNING(>=80) |
 |  character-voice-analyzer |  86   | PASS (>=85)   |
-|  prose-quality-analyzer   |  79   | PASS (>=75)   |
+|  quality-oracle   |  79   | PASS (>=75)   |
 |                                                   |
 |  종합 판정: APPROVED WITH NOTES (5/6 PASS)         |
 |                                                   |

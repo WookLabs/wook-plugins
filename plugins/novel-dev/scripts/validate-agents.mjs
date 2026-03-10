@@ -4,12 +4,12 @@
  * Agent Validation Script
  *
  * Validates:
- * 1. Only allowed agents exist (20 agents)
+ * 1. Only allowed agents exist (17 agents)
  * 2. No duplicate agents
  * 3. All required agents are present
  */
 
-import { readdirSync, existsSync } from 'fs';
+import { readdirSync, existsSync, readFileSync } from 'fs';
 import { join, dirname } from 'path';
 import { fileURLToPath } from 'url';
 
@@ -18,7 +18,82 @@ const __dirname = dirname(__filename);
 
 const agentsDir = join(__dirname, '..', 'agents');
 
-// Canonical list of allowed agents (v6.3.0)
+// Parse YAML-like frontmatter from markdown
+function parseFrontmatter(filePath) {
+  const content = readFileSync(filePath, 'utf-8');
+  const match = content.match(/^---\r?\n([\s\S]*?)\r?\n---/);
+  if (!match) return null;
+
+  const fm = {};
+  for (const line of match[1].split(/\r?\n/)) {
+    const colonIdx = line.indexOf(':');
+    if (colonIdx === -1) continue;
+    const key = line.substring(0, colonIdx).trim();
+    let value = line.substring(colonIdx + 1).trim();
+    // Remove quotes
+    if ((value.startsWith('"') && value.endsWith('"')) ||
+        (value.startsWith("'") && value.endsWith("'"))) {
+      value = value.slice(1, -1);
+    }
+    fm[key] = value;
+  }
+  return fm;
+}
+
+// Validate frontmatter fields
+function validateFrontmatter(filePath, agentName) {
+  const fm = parseFrontmatter(filePath);
+  const warnings = [];
+  const errors = [];
+
+  if (!fm) {
+    errors.push(`${agentName}: Missing frontmatter (--- block)`);
+    return { errors, warnings };
+  }
+
+  // name: required, kebab-case, 3-50 chars
+  if (!fm.name) {
+    errors.push(`${agentName}: Missing required field 'name'`);
+  } else {
+    if (!/^[a-z][a-z0-9-]{2,49}$/.test(fm.name)) {
+      errors.push(`${agentName}: 'name' must be kebab-case, 3-50 chars (got: "${fm.name}")`);
+    }
+    const expectedName = agentName.replace('.md', '');
+    if (fm.name !== expectedName) {
+      warnings.push(`${agentName}: 'name' (${fm.name}) doesn't match filename (${expectedName})`);
+    }
+  }
+
+  // description: required, 50+ chars recommended
+  if (!fm.description) {
+    errors.push(`${agentName}: Missing required field 'description'`);
+  } else if (fm.description.length < 50) {
+    warnings.push(`${agentName}: 'description' is short (${fm.description.length} chars, recommend 50+)`);
+  }
+
+  // model: must be opus/sonnet/haiku
+  if (!fm.model) {
+    errors.push(`${agentName}: Missing required field 'model'`);
+  } else if (!['opus', 'sonnet', 'haiku'].includes(fm.model)) {
+    errors.push(`${agentName}: Invalid 'model' value "${fm.model}" (must be opus/sonnet/haiku)`);
+  }
+
+  // color: optional, must be valid if present
+  const validColors = ['blue', 'cyan', 'green', 'yellow', 'magenta', 'red'];
+  if (fm.color && !validColors.includes(fm.color)) {
+    errors.push(`${agentName}: Invalid 'color' value "${fm.color}" (must be one of: ${validColors.join(', ')})`);
+  }
+
+  // permissionMode: optional, must be valid if present
+  const validModes = ['default', 'plan', 'bypassPermissions'];
+  if (fm.permissionMode && !validModes.includes(fm.permissionMode)) {
+    errors.push(`${agentName}: Invalid 'permissionMode' value "${fm.permissionMode}" (must be one of: ${validModes.join(', ')})`);
+  }
+
+  return { errors, warnings };
+}
+
+// Canonical list of allowed agents (v7.0)
 const ALLOWED_AGENTS = new Set([
   // Core agents
   'novelist.md',               // opus - 본문 집필
@@ -29,8 +104,6 @@ const ALLOWED_AGENTS = new Set([
   'proofreader.md',            // haiku - 맞춤법 검사
   'summarizer.md',             // haiku - 회차 요약
   // Pipeline agents
-  'assembly-agent.md',         // sonnet - 원고 조립
-  'scene-drafter.md',          // sonnet - 씬 초고 작성
   'prose-surgeon.md',          // opus - 문장 수술
   'quality-oracle.md',         // opus - 품질 게이트
   // Specialized agents
@@ -40,7 +113,6 @@ const ALLOWED_AGENTS = new Set([
   'consistency-verifier.md',   // sonnet - 일관성 검증
   'engagement-optimizer.md',   // sonnet - 몰입도 최적화
   'genre-validator.md',        // sonnet - 장르 검증
-  'prose-quality-analyzer.md', // sonnet - 산문 품질 분석
   'style-curator.md',          // sonnet - 문체 큐레이션
   // Orchestration
   'team-orchestrator.md',      // opus - 팀 오케스트레이터
@@ -99,6 +171,34 @@ if (validAgents.length > 0) {
   for (const agent of validAgents) {
     console.log(`  - ${agent}`);
   }
+}
+
+// === Frontmatter Validation ===
+console.log('\n=== Validating Agent Frontmatter ===\n');
+
+let fmErrors = [];
+let fmWarnings = [];
+
+for (const agent of validAgents) {
+  const agentPath = join(agentsDir, agent);
+  const result = validateFrontmatter(agentPath, agent);
+  fmErrors.push(...result.errors);
+  fmWarnings.push(...result.warnings);
+}
+
+if (fmWarnings.length > 0) {
+  console.log(`⚠️  Warnings (${fmWarnings.length}):`);
+  for (const w of fmWarnings) {
+    console.log(`  ⚠️  ${w}`);
+  }
+}
+
+if (fmErrors.length > 0) {
+  for (const e of fmErrors) {
+    error(e);
+  }
+} else {
+  success('All agent frontmatter validated');
 }
 
 // Summary

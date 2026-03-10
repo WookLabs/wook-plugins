@@ -16,9 +16,9 @@
 | `planning-team.team.json` | 설계 팀 | planning | plot-architect, lore-keeper, style-curator | collaborative | 소설 기획/설계 |
 | `design-execution-team.team.json` | 설계 실행 팀 | planning | style-curator, lore-keeper, plot-architect | pipeline | 9개 설계 스킬 의존 그래프 실행 |
 | `writing-team.team.json` | 집필 팀 | writing | novelist, proofreader, summarizer | sequential | 회차 집필 |
-| `writing-team-2pass.team.json` | 2-Pass 집필 팀 | writing | scene-drafter, assembly-agent, quality-oracle, prose-surgeon, proofreader | pipeline | 정밀 집필 |
+| `writing-team-2pass.team.json` | 2-Pass 집필 팀 | writing | novelist, quality-oracle, prose-surgeon, proofreader | pipeline | 정밀 집필 |
 | `verification-team.team.json` | 검증 팀 | verification | critic, beta-reader, genre-validator | parallel | 품질 검증 |
-| `deep-review-team.team.json` | 심층 리뷰 팀 | verification | critic, beta-reader, consistency-verifier, engagement-optimizer, character-voice-analyzer, prose-quality-analyzer | parallel | 심층 다관점 리뷰 |
+| `deep-review-team.team.json` | 심층 리뷰 팀 | verification | critic, beta-reader, consistency-verifier, engagement-optimizer, character-voice-analyzer, quality-oracle | parallel | 심층 다관점 리뷰 |
 | `design-review-team.team.json` | 설계 리뷰 팀 | verification | critic, lore-keeper, genre-validator, plot-architect | parallel | 설계 산출물 다관점 리뷰 |
 | `plot-review-team.team.json` | 플롯 리뷰 팀 | verification | critic, consistency-verifier, genre-validator, plot-architect | parallel | 플롯 파일 다관점 검증 |
 | `revision-team.team.json` | 퇴고 팀 | revision | critic, editor, proofreader, consistency-verifier | pipeline | 피드백 기반 퇴고 |

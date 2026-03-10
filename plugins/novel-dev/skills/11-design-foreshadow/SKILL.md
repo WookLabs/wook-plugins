@@ -1,6 +1,6 @@
 ---
 name: 11-design-foreshadow
-description: 복선 요소 설계 및 배치 계획
+description: "Use this skill when designing foreshadowing elements and placement plans. Triggers on: '복선', '떡밥', 'foreshadow'."
 user-invocable: true
 ---
 

@@ -1,6 +1,6 @@
 ---
 name: 07-design-relationship
-description: 캐릭터 간 관계 네트워크 설계
+description: "Use this skill when designing character relationship networks. Triggers on: '관계도', '인물 관계', 'relationship'."
 user-invocable: true
 ---
 

@@ -1,3 +1,9 @@
+---
+name: verify-chapter
+description: "This skill should be used when running parallel chapter verification with 3 validators and confidence filtering. Internal verification pipeline."
+user-invocable: false
+---
+
 # verify-chapter
 
 Run parallel validation on a chapter with 3 validators and confidence filtering.

@@ -1,16 +1,9 @@
 ---
 name: consistency-verifier
-description: |
-  Automated consistency verification agent that detects setting, character, world-building, factual,
-  and plot logic contradictions. Validates timeline continuity, character trait consistency, setting accuracy,
-  cause-effect chains, foreshadowing, and plot holes across all chapters.
-  Absorbs plot-consistency-analyzer capabilities for comprehensive narrative coherence checking.
-
-  <example>챕터 완료 시 설정 모순 자동 검증</example>
-  <example>캐릭터 성격 변화 추적 및 일관성 확인</example>
-  <example>플롯 홀 탐지 및 인과관계 검증</example>
+description: "Use this agent when checking 5-domain consistency (setting, character, world, causality, foreshadowing). Produces consistency verification result."
 model: sonnet
-color: cyan
+color: red
+permissionMode: plan
 tools:
   - Read
   - Glob

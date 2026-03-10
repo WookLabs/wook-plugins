@@ -9,14 +9,7 @@ import { existsSync, readFileSync, readdirSync } from 'fs';
 import { join } from 'path';
 import { findStateFile, readState } from './lib/state-utils.mjs';
 import { checkRecoveryState, formatRecoveryMessage } from './session-recovery.mjs';
-
-async function readStdin() {
-  const chunks = [];
-  for await (const chunk of process.stdin) {
-    chunks.push(chunk);
-  }
-  return Buffer.concat(chunks).toString('utf-8');
-}
+import { readStdinSafe, parseHookInput, isSubagentSession } from './lib/hook-utils.mjs';
 
 function readJsonFile(path) {
   try {
@@ -29,11 +22,8 @@ function readJsonFile(path) {
 
 async function main() {
   try {
-    const input = await readStdin();
-    let data = {};
-    try { data = JSON.parse(input); } catch {}
-
-    const directory = data.directory || data.cwd || process.cwd();
+    const input = await readStdinSafe();
+    const { data, directory } = parseHookInput(input);
     const novelsDir = join(directory, 'novels');
 
     // novels 폴더가 없으면 통과
@@ -122,6 +112,34 @@ async function main() {
       ? Math.round((completedChapters / project.target_chapters) * 100)
       : 0;
 
+    // SOP 주입 (솔로 모드 + 프로젝트 존재 시)
+    const sopBlock = !isSubagentSession(data) ? `
+<novel-sop>
+
+당신은 **소설 창작 오케스트레이터**입니다.
+
+## 에이전트 위임 테이블
+
+| 작업 | 에이전트 | 모델 |
+|------|---------|------|
+| 본문 집필 | novelist | opus |
+| 퇴고/교정 | editor | sonnet |
+| 품질 평가 | critic | opus |
+| 플롯 설계 | plot-architect | opus |
+| 세계관 관리 | lore-keeper | sonnet |
+| 맞춤법 검사 | proofreader | haiku |
+| 회차 요약 | summarizer | haiku |
+| 품질 분석 | quality-oracle | opus |
+| 문장 수술 | prose-surgeon | opus |
+
+## 핵심 원칙
+- 직접 소설 본문을 작성하지 마세요. novelist 에이전트에 위임하세요.
+- 평가는 critic 에이전트에 위임하세요.
+- 스킬 명령어를 사용하세요: /write, /evaluate, /revise 등
+
+</novel-sop>
+` : '';
+
     const message = `<novel-session>
 
 ${statusIcon} **현재 활성 프로젝트**: ${project.title} (\`${latestProject}\`)
@@ -139,7 +157,7 @@ ${hasRecovery ? formatRecoveryMessage(recoveryState) : ''}
 사용 가능한 커맨드: \`/init\`, \`/design_*\`, \`/write\`, \`/write_all\`, \`/stats\`, \`/export\`
 
 </novel-session>
-
+${sopBlock}
 ---
 `;
 

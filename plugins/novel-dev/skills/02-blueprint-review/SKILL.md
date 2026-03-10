@@ -1,6 +1,6 @@
 ---
 name: 02-blueprint-review
-description: BLUEPRINT.md 기획서 검토 및 개선
+description: "Use this skill when reviewing and improving an existing BLUEPRINT.md. Triggers on: '기획서 리뷰', '블루프린트 검토'."
 user-invocable: true
 allowed-tools:
   - Read

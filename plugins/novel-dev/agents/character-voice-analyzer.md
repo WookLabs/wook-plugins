@@ -1,10 +1,9 @@
 ---
 name: character-voice-analyzer
-description: |
-  캐릭터 목소리 및 대화 전문 분석가. 말투 일관성, 성격 표현, 대화 패턴, 대화 자연스러움, 서브텍스트,
-  정보 전달, 갈등 표현을 분석하고 캐릭터 붕괴를 탐지합니다.
-  dialogue-analyzer의 기능을 통합하여 대화 품질까지 종합 분석합니다.
+description: "Use this agent when analyzing character voice consistency across dialogue. Produces character voice consistency report with speech pattern analysis."
 model: sonnet
+color: yellow
+permissionMode: plan
 tools:
   - Read
   - Glob

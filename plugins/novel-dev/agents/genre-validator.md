@@ -1,10 +1,13 @@
 ---
 name: genre-validator
-description: 장르별 필수 요소와 클리셰를 검증하고 상업성을 평가합니다.
+description: "Use this agent when validating genre compliance and commercial viability. Produces genre fitness assessment."
 model: sonnet
+color: yellow
+permissionMode: plan
 tools:
   - Read
   - Glob
+  - Grep
 ---
 
 <Role>

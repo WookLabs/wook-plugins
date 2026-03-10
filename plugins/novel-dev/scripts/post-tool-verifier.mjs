@@ -7,15 +7,7 @@
 
 import { existsSync, readFileSync, writeFileSync, mkdirSync, readdirSync } from 'fs';
 import { join } from 'path';
-
-// Read all stdin
-async function readStdin() {
-  const chunks = [];
-  for await (const chunk of process.stdin) {
-    chunks.push(chunk);
-  }
-  return Buffer.concat(chunks).toString('utf-8');
-}
+import { readStdinSafe } from './lib/hook-utils.mjs';
 
 // Find active novel project
 function findNovelProject(directory) {
@@ -205,7 +197,7 @@ function generateMessage(toolName, toolOutput, toolInput) {
 
 async function main() {
   try {
-    const input = await readStdin();
+    const input = await readStdinSafe();
     const data = JSON.parse(input);
 
     const toolName = data.toolName || '';

@@ -1,6 +1,6 @@
 ---
 name: 16-write-all
-description: Ralph Loop으로 1화부터 완결까지 전체 자동 집필
+description: "Use this skill when auto-writing the entire novel from chapter 1 to completion via Ralph Loop. Triggers on: '전체 집필', '처음부터 끝까지', 'write all'."
 user-invocable: true
 ---
 

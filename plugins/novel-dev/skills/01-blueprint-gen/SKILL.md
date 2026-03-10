@@ -1,6 +1,6 @@
 ---
 name: 01-blueprint-gen
-description: 아이디어로 BLUEPRINT.md 작품 기획서 생성
+description: "Use this skill when generating a BLUEPRINT.md novel planning document from an idea. Triggers on: '기획서', '블루프린트', 'blueprint'."
 user-invocable: true
 allowed-tools:
   - Read

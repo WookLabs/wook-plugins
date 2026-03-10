@@ -3,20 +3,14 @@
   "schema_version": "1.0",
   "name": "writing-team-2pass",
   "display_name": "2-Pass 집필 팀",
-  "description": "초안 작성 → 조립 → 품질 진단 → 문체 수술 → 교정의 5단계 파이프라인으로 정밀 집필하는 팀",
+  "description": "초안 작성 → 품질 진단 → 문체 수술 → 교정의 4단계 파이프라인으로 정밀 집필하는 팀",
   "category": "writing",
   "agents": [
     {
-      "agent": "scene-drafter",
+      "agent": "novelist",
       "role": "lead",
-      "responsibility": "Pass 1: 씬 단위 초안 작성 (ADULT 마커 포함 가능)",
+      "responsibility": "Pass 1: 챕터 초안 작성 (Scene-by-Scene Mode)",
       "model": "opus"
-    },
-    {
-      "agent": "assembly-agent",
-      "role": "worker",
-      "responsibility": "씬 조립 및 전체 챕터 통합",
-      "model": "sonnet"
     },
     {
       "agent": "quality-oracle",
@@ -41,23 +35,16 @@
     "type": "pipeline",
     "steps": [
       {
-        "name": "scene-draft",
-        "agents": ["scene-drafter"],
+        "name": "draft",
+        "agents": ["novelist"],
         "execution": "sequential",
-        "output": "씬별 초안 조각들"
-      },
-      {
-        "name": "assembly",
-        "agents": ["assembly-agent"],
-        "execution": "sequential",
-        "depends_on": ["scene-draft"],
-        "output": "통합된 챕터 전문"
+        "output": "완성된 챕터 초안"
       },
       {
         "name": "quality-diagnosis",
         "agents": ["quality-oracle"],
         "execution": "sequential",
-        "depends_on": ["assembly"],
+        "depends_on": ["draft"],
         "output": "품질 진단 리포트 (점수 + 구체적 개선 지점)"
       },
       {
@@ -79,7 +66,7 @@
   },
   "coordination": {
     "mode": "orchestrated",
-    "lead": "scene-drafter",
+    "lead": "novelist",
     "communication": "task-based"
   },
   "quality_gates": {
@@ -91,6 +78,6 @@
   },
   "cost_estimate": {
     "tokens_per_agent": 40000,
-    "warning_message": "2-Pass 집필 팀은 scene-drafter, assembly-agent, quality-oracle, prose-surgeon, proofreader 5개 에이전트 파이프라인을 사용합니다. 약 200K 토큰이 소요될 수 있습니다."
+    "warning_message": "2-Pass 집필 팀은 novelist, quality-oracle, prose-surgeon, proofreader 4개 에이전트 파이프라인을 사용합니다. 약 160K 토큰이 소요될 수 있습니다."
   }
 }

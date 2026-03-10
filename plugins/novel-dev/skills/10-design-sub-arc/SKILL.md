@@ -1,6 +1,6 @@
 ---
 name: 10-design-sub-arc
-description: 서브플롯 아크 설계
+description: "Use this skill when designing subplot arcs for a novel project. Triggers on: '서브플롯', '부플롯', 'sub arc'."
 user-invocable: true
 ---
 

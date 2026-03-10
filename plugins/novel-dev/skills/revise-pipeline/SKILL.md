@@ -1,3 +1,9 @@
+---
+name: revise-pipeline
+description: "This skill should be used when running the full revision pipeline (critic then editor then proofreader). Internal pipeline skill, not directly user-invocable."
+user-invocable: false
+---
+
 # revise-pipeline
 
 퇴고 파이프라인 - critic → editor → proofreader 순차 실행

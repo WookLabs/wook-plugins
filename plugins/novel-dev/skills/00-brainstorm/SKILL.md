@@ -1,6 +1,6 @@
 ---
 name: 00-brainstorm
-description: 소크라틱 대화로 소설 아이디어 체계적 정제
+description: "Use this skill when the user wants to brainstorm novel ideas through Socratic dialogue. Triggers on: '브레인스톰', '아이디어', '소설 구상'."
 user-invocable: true
 allowed-tools:
   - Read

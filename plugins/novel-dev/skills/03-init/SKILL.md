@@ -1,6 +1,6 @@
 ---
 name: 03-init
-description: BLUEPRINT.md 기반 소설 프로젝트 초기화
+description: "Use this skill when initializing a novel project from BLUEPRINT.md. Triggers on: '초기화', 'init', '프로젝트 생성'."
 user-invocable: true
 ---
 

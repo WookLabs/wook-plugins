@@ -35,7 +35,7 @@ export const NOVEL_CHECKS = {
     description: 'Show vs Tell, 감각 묘사, 필터 워드 검사',
     evidenceType: 'prose_quality_verified',
     required: true,
-    agent: 'prose-quality-analyzer',
+    agent: 'quality-oracle',
     threshold: 75,
     completed: false
   },

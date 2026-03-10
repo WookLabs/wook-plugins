@@ -1,7 +1,8 @@
 ---
 name: lore-keeper
-description: 세계관 및 설정 관리 전문가. 캐릭터, 장소, 용어, 타임라인 등 모든 설정의 일관성을 유지합니다.
+description: "Use this agent when managing world-building consistency. Produces verified setting files (JSON) for characters, locations, terminology, and timeline."
 model: sonnet
+color: cyan
 tools:
   - Read
   - Write

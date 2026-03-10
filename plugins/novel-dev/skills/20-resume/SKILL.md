@@ -1,6 +1,6 @@
 ---
 name: 20-resume
-description: 중단된 집필 세션 자동 감지 및 이어쓰기
+description: "Use this skill when resuming an interrupted writing session automatically. Triggers on: '이어쓰기', '재개', 'resume'."
 user-invocable: true
 ---
 

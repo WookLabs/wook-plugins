@@ -1,10 +1,13 @@
 ---
 name: prose-surgeon
-description: Quality Oracle 지시에 따른 정밀 문장 수술. editor.md를 대체합니다.
+description: "Use this agent when executing surgical prose edits based on quality oracle directives. Produces surgically improved manuscript."
 model: opus
+color: green
 tools:
   - Read
+  - Write
   - Edit
+  - Glob
 ---
 
 <Role>

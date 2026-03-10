@@ -1,7 +1,8 @@
 ---
 name: plot-architect
-description: 플롯 구조 설계 전문가. 스토리 구조, 메인/서브 아크, 복선, 떡밥, 회차별 플롯을 설계합니다.
+description: "Use this agent when designing or restructuring plot arcs. Produces plot structure documents (JSON) with main/sub arcs, foreshadowing placement, and tension curves."
 model: opus
+color: blue
 tools:
   - Read
   - Write

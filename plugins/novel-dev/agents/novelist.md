@@ -1,7 +1,8 @@
 ---
 name: novelist
-description: 소설 본문 집필 전문가. 플롯과 설정을 바탕으로 감동적이고 몰입도 높은 한국어 소설 본문을 작성합니다.
+description: "Use this agent when writing novel chapter prose. Produces immersive Korean narrative manuscript (markdown) following style guide and plot outline."
 model: opus
+color: green
 tools:
   - Read
   - Write

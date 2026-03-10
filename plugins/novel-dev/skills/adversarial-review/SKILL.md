@@ -1,6 +1,6 @@
 ---
 name: adversarial-review
-description: 적대적 관점(악마의 변호인)에서 챕터 검증
+description: "Use this skill when performing devil's advocate chapter verification from hostile perspectives. Triggers on: '적대적 리뷰', '악마의 변호인'."
 user-invocable: true
 allowed-tools:
   - Read

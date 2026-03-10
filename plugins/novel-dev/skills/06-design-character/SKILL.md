@@ -1,6 +1,6 @@
 ---
 name: 06-design-character
-description: 소설 캐릭터 프로필 설계
+description: "Use this skill when designing character profiles for a novel project. Triggers on: '캐릭터', '등장인물', 'character design'."
 user-invocable: true
 ---
 

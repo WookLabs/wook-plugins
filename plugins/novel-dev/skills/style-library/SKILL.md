@@ -1,6 +1,6 @@
 ---
 name: style-library
-description: Few-shot 스타일 학습용 예시 문장 라이브러리 관리
+description: "Use this skill when managing the few-shot style learning exemplar sentence library. Triggers on: '스타일 라이브러리', '예시 문장'."
 user-invocable: true
 allowed-tools:
   - Read

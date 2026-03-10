@@ -1,18 +1,13 @@
 ---
 name: chapter-verifier
-description: |
-  Automated chapter verification agent that validates quality before completion claims.
-  Spawned automatically after chapter writing to ensure all quality gates pass.
-
-  <example>사용자가 "5화 완료" 또는 "chapter done" 선언 전 자동 호출</example>
-  <example>write-all 루프에서 각 챕터 후 자동 검증</example>
+description: "Use this agent when running comprehensive chapter verification pipeline. Produces verification summary report from parallel validators."
 model: sonnet
-color: green
+color: red
+permissionMode: plan
 tools:
   - Read
   - Glob
   - Grep
-  - Task
 ---
 
 # Chapter Verifier Agent

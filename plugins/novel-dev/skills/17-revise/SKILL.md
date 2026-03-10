@@ -1,6 +1,6 @@
 ---
 name: 17-revise
-description: 원고 퇴고 및 수정
+description: "Use this skill when revising and editing a draft chapter manuscript. Triggers on: '퇴고', '수정', 'revise'."
 user-invocable: true
 ---
 

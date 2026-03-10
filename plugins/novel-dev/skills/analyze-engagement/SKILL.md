@@ -1,6 +1,6 @@
 ---
 name: analyze-engagement
-description: 회차별 몰입도 분석 및 독자 이탈 위험 구간 탐지
+description: "Use this skill when analyzing per-chapter engagement and detecting reader drop-off risk. Triggers on: '몰입도 분석', 'engagement analysis'."
 user-invocable: true
 ---
 
@@ -63,6 +63,27 @@ Analyzes chapter-by-chapter reader engagement and identifies drop-off risk zones
 - Works with `/write` - auto-analyze after writing
 - Works with `/revise` - measure improvement after revision
 - Works with `/evaluate` - engagement score included in quality metrics
+
+## Retention Analysis (integrated from /check-retention)
+
+회차 간 독자 유지율을 예측합니다:
+
+| 구간 | 목표 유지율 | 설명 |
+|------|-----------|------|
+| 1→2화 | 75%+ | 첫 인상 → 지속 판단 |
+| 2→10화 | 65%+ | 초기 정착 구간 |
+| 10화+ | 60%+ | 안정 구간 |
+
+- **Genre Compliance 가중치**: 15% (장르별 필수 요소 충족이 유지율에 직접 영향)
+- **Chapter 1 특별 분석**: 1화는 강화된 기준 적용 (첫인상 최적화)
+
+## Emotion Arc Analysis (integrated from /emotion-arc)
+
+감정 곡선을 분석하여 emotional beats를 최적화합니다:
+- 6가지 기본 아크 패턴 비교 (상승, 하강, 상승-하강, 하강-상승, 롤러코스터, 평탄)
+- 장면별 감정 강도 매핑
+- 감정 전환점(emotional turning points) 식별
+- 감정 곡선과 긴장 곡선의 상관관계 분석
 
 ## Learn More
 

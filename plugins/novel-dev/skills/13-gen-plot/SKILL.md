@@ -1,6 +1,6 @@
 ---
 name: 13-gen-plot
-description: 전체 회차별 플롯 파일 생성
+description: "Use this skill when generating per-chapter plot files from completed designs. Triggers on: '플롯 생성', '회차별 플롯', 'gen plot'."
 user-invocable: true
 ---
 

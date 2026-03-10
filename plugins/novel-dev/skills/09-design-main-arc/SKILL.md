@@ -1,6 +1,6 @@
 ---
 name: 09-design-main-arc
-description: 메인 플롯 아크 및 중심 갈등 설계
+description: "Use this skill when designing main plot arc and central conflict. Triggers on: '메인 아크', '중심 갈등', 'main arc'."
 user-invocable: true
 ---
 

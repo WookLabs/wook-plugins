@@ -37,10 +37,10 @@
       "model": "sonnet"
     },
     {
-      "agent": "prose-quality-analyzer",
+      "agent": "quality-oracle",
       "role": "validator",
-      "responsibility": "산문 품질 분석: show vs tell, 감각 묘사, 필터 단어, 구체성",
-      "model": "sonnet"
+      "responsibility": "산문 품질 분석: show vs tell, 감각 묘사, 필터 단어, 구체성 + 수술 지시",
+      "model": "opus"
     }
   ],
   "workflow": {
@@ -48,7 +48,7 @@
     "steps": [
       {
         "name": "deep-review",
-        "agents": ["critic", "beta-reader", "consistency-verifier", "engagement-optimizer", "character-voice-analyzer", "prose-quality-analyzer"],
+        "agents": ["critic", "beta-reader", "consistency-verifier", "engagement-optimizer", "character-voice-analyzer", "quality-oracle"],
         "execution": "parallel",
         "output": "6개 관점의 상세 리뷰 JSON"
       }
@@ -68,7 +68,7 @@
       "consistency-verifier": 85,
       "engagement-optimizer": 70,
       "character-voice-analyzer": 80,
-      "prose-quality-analyzer": 75
+      "quality-oracle": 75
     }
   },
   "cost_estimate": {

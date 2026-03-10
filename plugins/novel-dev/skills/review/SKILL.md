@@ -1,6 +1,6 @@
 ---
 name: review
-description: 설계 결과물(캐릭터, 플롯, 세계관) 다각도 검토 및 승인 판정
+description: "Use this skill when reviewing design artifacts (characters, plot, world) from multiple angles. Triggers on: '설계 리뷰', '검토', 'review design'."
 user-invocable: true
 allowed-tools:
   - Read

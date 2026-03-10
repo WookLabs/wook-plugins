@@ -1,12 +1,34 @@
 <!-- Parent: ../AGENTS.md -->
 <!-- Generated: 2026-01-29 -->
-<!-- Updated: Agent consolidation complete - 20 functional agents, deprecated stubs removed -->
+<!-- Updated: v7.0 - 3 agents removed (prose-quality-analyzer, scene-drafter, assembly-agent) -->
 
-# agents
+# Novel-Dev 에이전트 카탈로그 (v7.0)
+
+## 산출물 기반 에이전트 매핑
+
+| 에이전트 | 산출물 | 모델 | 권한 | 색상 |
+|---------|--------|------|------|------|
+| novelist | 본문 원고 (markdown) | opus | default | green |
+| editor | 퇴고된 원고 + 변경 사유 | sonnet | default | cyan |
+| critic | 4차원 품질 평가 리포트 (0-100) | opus | plan (READ-ONLY) | yellow |
+| plot-architect | 플롯 구조 문서 (JSON) + 아크/복선/텐션 곡선 | opus | default | blue |
+| lore-keeper | 검증된 설정 파일 (JSON) - 캐릭터/장소/용어/타임라인 | sonnet | default | cyan |
+| proofreader | 교정 리포트 + 수정 목록 | haiku | plan (READ-ONLY) | magenta |
+| summarizer | 챕터 요약 (markdown) - 다음 회차 컨텍스트용 | haiku | default | magenta |
+| quality-oracle | 품질 분석 리포트 + 수술 지시서 | opus | plan (READ-ONLY) | yellow |
+| prose-surgeon | 수술적 개선 원고 | opus | default | green |
+| beta-reader | 독자 몰입도 분석 리포트 | sonnet | plan (READ-ONLY) | yellow |
+| chapter-verifier | 챕터 검증 요약 리포트 (병렬 검증기 결과) | sonnet | plan (READ-ONLY) | red |
+| character-voice-analyzer | 캐릭터 목소리 일관성 리포트 | sonnet | plan (READ-ONLY) | yellow |
+| consistency-verifier | 5도메인 일관성 검증 결과 | sonnet | plan (READ-ONLY) | red |
+| engagement-optimizer | 7도메인 몰입도 최적화 리포트 | sonnet | plan (READ-ONLY) | yellow |
+| genre-validator | 장르 적합성 평가서 | sonnet | plan (READ-ONLY) | yellow |
+| style-curator | 분류된 스타일 예시 컬렉션 | sonnet | default | cyan |
+| team-orchestrator | 팀 실행 계획 + 병렬/순차 에이전트 조율 | sonnet | default | blue |
 
 ## Purpose
 
-Contains prompt definitions for the specialized agents used in the novel writing workflow. After consolidation, the plugin has **20 functional agents**. Each agent is defined in a Markdown file with frontmatter specifying the agent name, description, Claude model tier (opus/sonnet/haiku), and a comprehensive prompt that defines their role, constraints, guidelines, and output format.
+Contains prompt definitions for the specialized agents used in the novel writing workflow. After consolidation, the plugin has **17 functional agents**. Each agent is defined in a Markdown file with frontmatter specifying the agent name, description, Claude model tier (opus/sonnet/haiku), color, permissionMode, and a comprehensive prompt that defines their role, constraints, guidelines, and output format.
 
 Agents are invoked via the Task tool by commands and orchestration workflows. They operate with specific domain expertise while maintaining consistency with the overall project structure.
 
@@ -20,31 +42,9 @@ The following merges were performed to reduce overlap:
 | `tension-tracker` | `engagement-optimizer` | Korean emotion keyword detection, cross-chapter state, arc compliance, cliffhanger analysis, fatigue detection |
 | `dialogue-analyzer` | `character-voice-analyzer` | Naturalness, subtext, tags/beats, dialogue ratio, info dump detection, conflict/tension, purpose verification |
 | `plot-consistency-analyzer` | `consistency-verifier` | Plot hole detection, cause-effect logic chains, foreshadowing setup/payoff tracking |
-
-## Key Files - Functional Agents (20)
-
-| File | Agent | Model | Role |
-|------|-------|-------|------|
-| `novelist.md` | novelist | opus | Main prose writing - transforms plot outlines into immersive Korean narrative with proper pacing, character voice, and foreshadowing |
-| `editor.md` | editor | sonnet | Revision and editing - improves pacing, style, dialogue, and structural flow while maintaining author's voice |
-| `critic.md` | critic | opus | Quality evaluation - provides scores (0-100) across 4 dimensions, identifies issues, READ-ONLY (does not modify) |
-| `lore-keeper.md` | lore-keeper | sonnet | Worldbuilding and consistency management - designs settings, manages character profiles, validates consistency |
-| `plot-architect.md` | plot-architect | opus | Plot structure design - creates story arcs, dramatic beats, episode-level plots using proven structures (3-act, 5-act, Hero's Journey, Save the Cat) |
-| `proofreader.md` | proofreader | haiku | Grammar and spelling - checks Korean language correctness, typos, formatting issues |
-| `summarizer.md` | summarizer | haiku | Chapter summarization - creates concise summaries for context in subsequent chapters |
-| `beta-reader.md` | beta-reader | sonnet | Reader simulation - predicts engagement, drop-off risk, emotional beats from reader perspective |
-| `genre-validator.md` | genre-validator | sonnet | Genre compliance - validates genre-specific requirements, cliches, commercial factors |
-| `chapter-verifier.md` | chapter-verifier | sonnet | Verification orchestrator - coordinates parallel validation before completion claims |
-| `consistency-verifier.md` | consistency-verifier | sonnet | **EXPANDED** - Consistency checker (5 domains): character, timeline, setting, factual, and plot logic (absorbed plot-consistency-analyzer) |
-| `engagement-optimizer.md` | engagement-optimizer | sonnet | **EXPANDED** - Engagement analysis (7 domains): pacing, tension curves, emotional beats with Korean keyword detection, hook density, drop-off risk, cliffhanger analysis, arc compliance (absorbed pacing-analyzer + tension-tracker) |
-| `character-voice-analyzer.md` | character-voice-analyzer | sonnet | **EXPANDED** - Voice and dialogue analysis: speech patterns, OOC detection, relationship dynamics, naturalness, subtext, tags/beats, info dump detection, dialogue purpose (absorbed dialogue-analyzer) |
-| `prose-quality-analyzer.md` | prose-quality-analyzer | sonnet | Prose analysis - show vs tell, sensory detail, filter words, specificity |
-| `scene-drafter.md` | scene-drafter | opus | Scene-level drafting - SceneV5 plan → 800-1500자 장면 산문 생성 (2-Pass pipeline Pass 1) |
-| `assembly-agent.md` | assembly-agent | sonnet | Scene assembly - 개별 장면을 하나의 챕터로 조합, 전환부 매끄럽게 처리 |
-| `quality-oracle.md` | quality-oracle | opus | Quality evaluation + surgical directives - 구절 수준 품질 분석 후 prose-surgeon용 수술 지시 생성 (critic 대체, 2-Pass pipeline용) |
-| `prose-surgeon.md` | prose-surgeon | opus | Surgical prose revision - quality-oracle 지시에 따른 정밀 문장 수술 (editor 대체, 2-Pass pipeline용) |
-| `style-curator.md` | style-curator | sonnet | Style exemplar curation - 문체 라이브러리 예시 문장 수집, 분류, 관리 (5차원 분류 체계) |
-| `team-orchestrator.md` | team-orchestrator | sonnet | Team orchestration - loads team definitions, spawns agents, coordinates workflows (parallel/sequential/pipeline/collaborative), applies quality gates |
+| `prose-quality-analyzer` | `quality-oracle` | Show-vs-tell analysis, sensory density, filter word detection (v7.0) |
+| `scene-drafter` | `novelist` | Scene-by-Scene Mode already covers this functionality (v7.0) |
+| `assembly-agent` | `novelist` | Chapter assembly integrated into novelist workflow (v7.0) |
 
 ## Agent Consolidation History
 
@@ -61,8 +61,8 @@ The following agents were merged and their stub files removed:
 
 ### Model Selection Rationale
 
-- **Opus (novelist, critic, plot-architect, scene-drafter, quality-oracle, prose-surgeon)**: Complex creative tasks requiring deep reasoning, narrative understanding, and quality judgment
-- **Sonnet (editor, lore-keeper, beta-reader, genre-validator, chapter-verifier, consistency-verifier, engagement-optimizer, character-voice-analyzer, prose-quality-analyzer, assembly-agent, style-curator, team-orchestrator)**: Balanced tasks needing both creativity and analytical skills, fast validation workflows
+- **Opus (novelist, critic, plot-architect, quality-oracle, prose-surgeon)**: Complex creative tasks requiring deep reasoning, narrative understanding, and quality judgment
+- **Sonnet (editor, lore-keeper, beta-reader, genre-validator, chapter-verifier, consistency-verifier, engagement-optimizer, character-voice-analyzer, style-curator, team-orchestrator)**: Balanced tasks needing both creativity and analytical skills, fast validation workflows
 - **Haiku (proofreader, summarizer)**: Fast, focused tasks with clear criteria and limited scope
 
 ### Agent Interaction Patterns
@@ -84,8 +84,13 @@ All agent prompts follow this pattern:
 ```markdown
 ---
 name: agent-name
-description: Brief role description
+description: "Use this agent when <trigger>. Produces <output>."
 model: opus|sonnet|haiku
+color: green|cyan|yellow|blue|magenta|red
+permissionMode: default|plan
+tools:
+  - Read
+  - Write
 ---
 
 <Role>
@@ -321,19 +326,26 @@ Failed validators provide:
 To add a new agent:
 
 1. Create `agent-name.md` in this directory
-2. Add frontmatter with `name`, `description`, `model`
+2. Add frontmatter with `name`, `description`, `model`, `color`, `permissionMode`, `tools`
 3. Define Role, Critical_Constraints, Guidelines sections
 4. Specify Input/Output formats
 5. Document workflow steps
 6. Update parent `../AGENTS.md` to reference new agent
-7. Update relevant commands to invoke the agent
+7. Update `config/model-tiers.json` permissionModes + colors sections
+8. Update relevant commands to invoke the agent
 
 **Example frontmatter:**
 ```yaml
 ---
 name: beta-reader
-description: Provides reader perspective feedback on chapters
+description: "Use this agent when simulating reader experience and predicting engagement drop-off. Produces reader immersion analysis report."
 model: sonnet
+color: yellow
+permissionMode: plan
+tools:
+  - Read
+  - Glob
+  - Grep
 ---
 ```
 

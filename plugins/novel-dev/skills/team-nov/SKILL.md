@@ -1,6 +1,6 @@
 ---
 name: team-nov
-description: 에이전트 팀 관리 및 실행
+description: "Use this skill when managing and executing coordinated agent teams for novel workflows. Triggers on: '팀', '팀 실행', 'team'."
 user-invocable: true
 ---
 

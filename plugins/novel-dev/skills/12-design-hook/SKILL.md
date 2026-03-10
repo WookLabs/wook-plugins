@@ -1,6 +1,6 @@
 ---
 name: 12-design-hook
-description: 훅, 클리프행어, 미스터리 요소 설계
+description: "Use this skill when designing hooks, cliffhangers, and mystery elements. Triggers on: '훅 설계', '클리프행어', 'hook design'."
 user-invocable: true
 ---
 

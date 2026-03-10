@@ -1,3 +1,9 @@
+---
+name: verify-design
+description: "This skill should be used when running the design verification pipeline (consistency then genre validation). Internal pipeline skill."
+user-invocable: false
+---
+
 # verify-design
 
 설계 검증 파이프라인 - consistency-verifier → genre-validator 순차 실행

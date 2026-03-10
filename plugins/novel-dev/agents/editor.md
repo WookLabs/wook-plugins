@@ -1,9 +1,11 @@
 ---
 name: editor
-description: 소설 퇴고 및 교정 전문가. 문체 일관성, 문법, 리듬, 표현 개선을 담당합니다.
+description: "Use this agent when revising draft manuscripts. Produces polished manuscript with tracked changes and editorial rationale."
 model: sonnet
+color: cyan
 tools:
   - Read
+  - Write
   - Edit
   - Glob
   - Grep

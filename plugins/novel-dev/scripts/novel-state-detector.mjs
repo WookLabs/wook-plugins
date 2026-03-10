@@ -10,50 +10,17 @@
 import { existsSync } from 'fs';
 import { join } from 'path';
 import { findStateFile, readState } from './lib/state-utils.mjs';
-
-async function readStdin() {
-  const chunks = [];
-  for await (const chunk of process.stdin) {
-    chunks.push(chunk);
-  }
-  return Buffer.concat(chunks).toString('utf-8');
-}
-
-function extractPrompt(input) {
-  try {
-    const data = JSON.parse(input);
-    if (data.prompt) return data.prompt;
-    if (data.message?.content) return data.message.content;
-    if (Array.isArray(data.parts)) {
-      return data.parts
-        .filter(p => p.type === 'text')
-        .map(p => p.text)
-        .join(' ');
-    }
-    return '';
-  } catch {
-    const match = input.match(/"(?:prompt|content|text)"\s*:\s*"([^"]+)"/);
-    return match ? match[1] : '';
-  }
-}
-
-function removeCodeBlocks(text) {
-  return text
-    .replace(/```[\s\S]*?```/g, '')
-    .replace(/`[^`]+`/g, '');
-}
+import { readStdinSafe, parseHookInput, extractPrompt, removeCodeBlocks } from './lib/hook-utils.mjs';
 
 async function main() {
   try {
-    const input = await readStdin();
+    const input = await readStdinSafe();
     if (!input.trim()) {
       console.log(JSON.stringify({ decision: "approve" }));
       return;
     }
 
-    let data = {};
-    try { data = JSON.parse(input); } catch {}
-    const directory = data.directory || data.cwd || process.cwd();
+    const { data, directory } = parseHookInput(input);
 
     const prompt = extractPrompt(input);
     if (!prompt) {

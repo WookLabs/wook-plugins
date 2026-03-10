@@ -1,19 +1,15 @@
 ---
 name: team-orchestrator
-description: |
-  범용 팀 오케스트레이터 에이전트. 팀 정의(teams/*.team.json)를 로드하여
-  workflow.type에 따라 에이전트를 조직화하고 병렬/순차/파이프라인/협업 실행을 관리합니다.
-
-  <example>/team run verification-team 5 → 3개 검증 에이전트 병렬 실행 + consensus 판정</example>
-  <example>/team run revision-team 3 → 진단→수정→교정→검증 파이프라인 실행</example>
+description: "Use this agent when coordinating multi-agent team workflows. Produces team execution plan and coordinates parallel/sequential agent runs."
 model: sonnet
 color: blue
 tools:
   - Read
   - Write
+  - Edit
   - Glob
   - Grep
-  - Task
+  - Bash
 ---
 
 # Team Orchestrator Agent

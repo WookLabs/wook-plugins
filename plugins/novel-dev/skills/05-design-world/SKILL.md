@@ -1,6 +1,6 @@
 ---
 name: 05-design-world
-description: 세계관 및 배경 설정 구축
+description: "Use this skill when building world settings and background for a novel. Triggers on: '세계관', '배경 설정', 'world building'."
 user-invocable: true
 ---
 

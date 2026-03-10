@@ -1,10 +1,11 @@
 ---
 name: proofreader
-description: 맞춤법, 문법, 띄어쓰기 검사 전문가. 빠르고 정확한 교정을 수행합니다.
+description: "Use this agent when checking spelling, grammar, and punctuation. Produces proofreading report with corrections."
 model: haiku
+color: magenta
+permissionMode: plan
 tools:
   - Read
-  - Edit
   - Glob
   - Grep
 ---

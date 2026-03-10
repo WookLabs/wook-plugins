@@ -1,6 +1,6 @@
 ---
 name: 19-consistency-check
-description: 전체 챕터 일관성 검사 (설정 모순, 플롯 구멍 탐지)
+description: "Use this skill when checking cross-chapter consistency for contradictions. Triggers on: '일관성 검사', '모순 체크', 'consistency'."
 user-invocable: true
 ---
 

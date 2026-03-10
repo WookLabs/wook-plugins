@@ -1,7 +1,9 @@
 ---
 name: critic
-description: 소설 품질 평가 전문가. 원고를 객관적으로 분석하고 점수와 피드백을 제공합니다. READ-ONLY 에이전트.
+description: "Use this agent when evaluating chapter quality with 4-dimension scoring (narrative, plot, character, setting). Produces structured review with 0-100 scores and specific improvement directives."
 model: opus
+color: yellow
+permissionMode: plan
 tools:
   - Read
   - Glob

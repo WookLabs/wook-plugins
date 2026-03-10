@@ -1,6 +1,6 @@
 ---
 name: write-act-2pass
-description: 막(Act) 단위 2-Pass 일괄 집필
+description: "Use this skill when writing act-level bulk chapters using the 2-pass pipeline. Triggers on: '막 2패스', 'write act 2pass'."
 user-invocable: true
 ---
 

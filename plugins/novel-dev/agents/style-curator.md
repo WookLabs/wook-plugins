@@ -1,12 +1,13 @@
 ---
 name: style-curator
-description: 스타일 예시 문장 큐레이션 전문가. 문체 라이브러리의 예시 문장(exemplar)을 수집, 분류, 관리합니다.
+description: "Use this agent when curating style exemplar sentences for few-shot learning. Produces categorized style exemplar collection."
 model: sonnet
+color: cyan
 tools:
   - Read
   - Write
+  - Edit
   - Glob
-  - Grep
 ---
 
 <Role>

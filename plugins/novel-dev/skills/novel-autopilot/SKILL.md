@@ -1,6 +1,6 @@
 ---
 name: novel-autopilot
-description: 아이디어부터 완성 원고까지 전체 자동 집필
+description: "Use this skill when running full automated novel writing pipeline from idea to completed manuscript. Triggers on: '자동 집필', 'autopilot', '알아서 써줘'."
 user-invocable: true
 ---
 
@@ -147,7 +147,6 @@ NOVEL COMPLETE
 ## Cancellation
 
 중단 방법:
-- `/cancel-novel-autopilot`
 - "중단", "취소", "stop"
 
 중단 시:

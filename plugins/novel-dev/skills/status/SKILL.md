@@ -1,6 +1,6 @@
 ---
 name: status
-description: 워크플로우 진행 상황 표시
+description: "Use this skill when displaying current workflow progress and session status. Triggers on: '상태', '진행상황', 'status'."
 user-invocable: true
 ---
 

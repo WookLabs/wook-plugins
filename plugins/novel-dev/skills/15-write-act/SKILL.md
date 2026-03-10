@@ -1,6 +1,6 @@
 ---
 name: 15-write-act
-description: 막(Act) 단위 일괄 집필
+description: "Use this skill when writing chapters in bulk by act unit. Triggers on: 'N막 써줘', '막 집필', 'write act'."
 user-invocable: true
 ---
 

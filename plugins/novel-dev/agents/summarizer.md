@@ -1,7 +1,8 @@
 ---
 name: summarizer
-description: 회차 요약 전문가. 다음 회차를 위한 컨텍스트 요약을 빠르게 생성합니다.
+description: "Use this agent when generating chapter summaries for context continuity. Produces concise chapter summary (markdown) for next-chapter context."
 model: haiku
+color: magenta
 tools:
   - Read
   - Write

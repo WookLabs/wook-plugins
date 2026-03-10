@@ -1,6 +1,6 @@
 ---
 name: 04-design-style
-description: 작품 문체 및 서술 스타일 설계
+description: "Use this skill when designing writing style and narrative voice for a novel project. Triggers on: '문체 설계', '스타일', 'design style'."
 user-invocable: true
 ---
 

@@ -1,6 +1,6 @@
 ---
 name: 18-evaluate
-description: 챕터/막 단위 다차원 품질 평가
+description: "Use this skill when performing multi-dimensional quality evaluation on chapters. Triggers on: '평가', '점수', 'evaluate'."
 user-invocable: true
 ---
 
@@ -93,7 +93,17 @@ When `--deep` flag is passed, the evaluation delegates to the LongStoryEval 8-ax
 - **Radar chart visualization** of all 8 dimensions
 - **Actionable improvement items** with file:line references
 
-For full details on the 8-axis framework, see `skills/deep-evaluate/SKILL.md`.
+For full details on the 8-axis framework rubric, see `references/evaluation-rubric.md`.
+
+### AI Slop Detection (integrated from /ai-slop-detector)
+- AI 문체 감지 패턴 자동 체크
+- 반복적 구문, 과도한 수식어, 기계적 문장 구조 식별
+- 평가 결과에 AI 문체 위험도 포함
+
+### Genre Validation (integrated from /validate-genre)
+- genre-validator 에이전트를 기본 평가 모드에서 자동 호출
+- 장르 필수 요소 충족 여부 확인
+- 상업적 요소 (훅 밀도, 대화 비율, 회차 길이) 검증
 
 ## Documentation
 

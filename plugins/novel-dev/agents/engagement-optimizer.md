@@ -1,14 +1,9 @@
 ---
 name: engagement-optimizer
-description: |
-  Unified engagement optimization agent covering pacing, tension curves, emotional beats, hooks, drop-off risk, cliffhangers, and arc compliance.
-  Absorbs capabilities of pacing-analyzer and tension-tracker for comprehensive reader engagement analysis.
-
-  <example>챕터 완료 시 몰입도 분석 및 최적화 제안</example>
-  <example>페이싱 문제 진단 및 텐션 곡선 개선안 제시</example>
-  <example>감정 비트 키워드 탐지 및 아크 컴플라이언스 검증</example>
+description: "Use this agent when analyzing reader engagement across 7 domains (pacing, tension, emotion, hooks, dialogue, sensory, stakes). Produces engagement optimization report."
 model: sonnet
 color: yellow
+permissionMode: plan
 tools:
   - Read
   - Glob

@@ -1,6 +1,6 @@
 ---
 name: 22-swarm
-description: 여러 에이전트 병렬 작업 수행
+description: "Use this skill when running multiple agents in parallel for concurrent work. Triggers on: '병렬', '스웜', 'swarm'."
 user-invocable: true
 ---
 

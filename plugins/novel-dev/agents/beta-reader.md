@@ -1,10 +1,13 @@
 ---
 name: beta-reader
-description: 독자 시점에서 원고를 평가하고 이탈 위험을 예측합니다.
+description: "Use this agent when simulating reader experience and predicting engagement drop-off. Produces reader immersion analysis report."
 model: sonnet
+color: yellow
+permissionMode: plan
 tools:
   - Read
   - Glob
+  - Grep
 ---
 
 <Role>
