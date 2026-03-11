@@ -10,7 +10,7 @@
     ]
   },
   "omcConflictKeywords": [
-    "autopilot", "ralph", "team", "swarm", "ultrawork", "ulw",
+    "ralph", "team", "swarm", "ultrawork", "ulw",
     "plan", "ultrapilot", "pipeline"
   ],
   "novelContextIndicators": [
@@ -209,18 +209,6 @@
       "requiredState": ["writing", "editing", "planning"],
       "requireNovelContext": false,
       "priority": 8
-    },
-    {
-      "id": "novel-autopilot",
-      "name": "novel-autopilot",
-      "keywords": ["자동 집필", "풀자동", "자동으로 써", "auto write"],
-      "keywordVariants": ["자동 집필해", "풀자동으로", "자동으로 집필"],
-      "argPattern": null,
-      "argType": null,
-      "excludeKeywords": ["취소", "중단", "cancel", "stop"],
-      "requiredState": ["writing", "planning"],
-      "requireNovelContext": true,
-      "priority": 10
     },
     {
       "id": "20-resume",

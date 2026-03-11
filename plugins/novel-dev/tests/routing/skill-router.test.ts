@@ -179,13 +179,12 @@ describe('routing-rules.json structure', () => {
   it('should have omcConflictKeywords defined', () => {
     expect(rules.omcConflictKeywords).toBeInstanceOf(Array);
     expect(rules.omcConflictKeywords.length).toBeGreaterThan(0);
-    expect(rules.omcConflictKeywords).toContain('autopilot');
     expect(rules.omcConflictKeywords).toContain('ralph');
     expect(rules.omcConflictKeywords).toContain('team');
   });
 
-  it('should have 20 core skills', () => {
-    expect(rules.skills.length).toBe(20);
+  it('should have 19 core skills', () => {
+    expect(rules.skills.length).toBe(19);
   });
 
   it('should have projectRequiredExceptions', () => {
@@ -302,19 +301,11 @@ describe('matchSkills - excludeKeywords', () => {
     expect(result).toBeNull();
   });
 
-  it('"자동 집필 취소"가 novel-autopilot으로 매칭되지 않음', () => {
-    const skill = rules.skills.find(s => s.id === 'novel-autopilot')!;
-    const result = matchSingleSkill('자동 집필 취소', skill);
-    expect(result).toBeNull();
-  });
 });
 
 // ── OMC 충돌 해소 ──────────────────────────────────────────────────
 
 describe('OMC conflict resolution', () => {
-  it('hasOmcConflict: "autopilot" 감지', () => {
-    expect(hasOmcConflict('autopilot mode', rules)).toBe(true);
-  });
 
   it('hasOmcConflict: "plan" 감지', () => {
     expect(hasOmcConflict('plan this task', rules)).toBe(true);
@@ -336,17 +327,6 @@ describe('OMC conflict resolution', () => {
     expect(hasNovelContext('이것 좀 해줘', rules)).toBe(false);
   });
 
-  it('"자동 집필해줘" (소설 컨텍스트 있음) -> novel-autopilot', () => {
-    const candidates = matchSkills('자동 집필해줘', rules, projectState());
-    expect(candidates.length).toBeGreaterThan(0);
-    expect(candidates[0].id).toBe('novel-autopilot');
-  });
-
-  it('"자동으로 해줘" (키워드 미매칭) -> empty', () => {
-    const skill = rules.skills.find(s => s.id === 'novel-autopilot')!;
-    const result = matchSingleSkill('자동으로 해줘', skill);
-    expect(result).toBeNull();
-  });
 });
 
 // ── 프로젝트 상태 필터링 ──────────────────────────────────────────
