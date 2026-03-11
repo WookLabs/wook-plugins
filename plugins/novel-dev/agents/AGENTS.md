@@ -1,8 +1,8 @@
 <!-- Parent: ../AGENTS.md -->
 <!-- Generated: 2026-01-29 -->
-<!-- Updated: v7.0 - 3 agents removed (prose-quality-analyzer, scene-drafter, assembly-agent) -->
+<!-- Updated: v8.0 - novel-autopilot removed, structural AI patterns added -->
 
-# Novel-Dev 에이전트 카탈로그 (v7.0)
+# Novel-Dev 에이전트 카탈로그 (v8.0)
 
 ## 산출물 기반 에이전트 매핑
 

@@ -302,7 +302,19 @@ novels/{novel_id}/
 
 레시피는 장르에 적합한 플롯 구조, 템포, 필수 씬 등을 자동 설정합니다.
 
-## What's New in v7.0
+## What's New in v8.0
+
+### novel-autopilot 제거
+- `/novel-autopilot` 스킬, `autopilot-state.schema.json` 삭제
+- 라우팅 규칙, 테스트, 도움말에서 autopilot 참조 제거
+- 스킬 수: 38→37
+
+### ai-slop-patterns 구조적 패턴 추가
+- 섹션 4: 구조적 AI 패턴 16개 (문장/문단/톤/구성 수준)
+- 구조적 패턴 빈도 기준 테이블 추가
+- 어휘+구조 양면 탐지 완성
+
+## What Was New in v7.0
 
 ### 에이전트 정리 (20→17)
 - `prose-quality-analyzer` 제거 → `quality-oracle`로 기능 통합
