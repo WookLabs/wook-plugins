@@ -54,6 +54,7 @@ export const AVERAGE_TOKENS_BY_TYPE: Record<ContextType, number> = {
   scene_plan: 800,           // Current scene plan
   emotional_directive: 300,  // Emotional arc directives
   relationship_state: 500,   // Relationship dynamics
+  style_directive: 150,      // Style dice hint
 };
 
 // ============================================================================

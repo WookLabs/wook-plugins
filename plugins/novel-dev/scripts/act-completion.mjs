@@ -138,6 +138,12 @@ async function main() {
       const completedAct = parseInt(actPromiseMatch[1]);
       if (completedAct === state.current_act) {
         state.act_complete = true;
+
+        // Style Dice: rotate seed for next act
+        const currentSeed = state.style_seed || 42;
+        state.style_seed = (currentSeed * 1103515245 + 12345) & 0x7fffffff;
+        console.error(`[style-dice] Seed rotated: ${currentSeed} -> ${state.style_seed}`);
+
         writeState(activeProjectPath, state);
         // Update notepad after act completion
         await updateNotepad(activeProjectPath);

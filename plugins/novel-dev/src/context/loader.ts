@@ -607,6 +607,7 @@ export async function loadContextWithStats(
     scene_plan: 0,
     emotional_directive: 0,
     relationship_state: 0,
+    style_directive: 0,
   };
 
   for (const item of budget.items) {

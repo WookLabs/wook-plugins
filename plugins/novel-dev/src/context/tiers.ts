@@ -64,6 +64,7 @@ export function assignTier(type: ContextType, metadata: ItemMetadata): ContextTi
   if (type === 'exemplar') return 'hot';
   if (type === 'scene_plan') return 'hot';
   if (type === 'emotional_directive') return 'hot';
+  if (type === 'style_directive') return 'hot';
 
   // Character: hot if in current scene, cold otherwise
   if (type === 'character') {
@@ -210,11 +211,14 @@ function enforceHotBudget(items: TieredItem[], budget: number): TieredItem[] {
 
   // Separate items by type for selective dropping
   const result: TieredItem[] = [];
+  const styleDirectives: TieredItem[] = [];
   const emotionalDirectives: TieredItem[] = [];
   const relationshipStates: TieredItem[] = [];
 
   for (const ti of items) {
-    if (ti.item.type === 'emotional_directive') {
+    if (ti.item.type === 'style_directive') {
+      styleDirectives.push(ti);
+    } else if (ti.item.type === 'emotional_directive') {
       emotionalDirectives.push(ti);
     } else if (ti.item.type === 'relationship_state') {
       relationshipStates.push(ti);
@@ -225,10 +229,26 @@ function enforceHotBudget(items: TieredItem[], budget: number): TieredItem[] {
   }
 
   // Sort droppables by priority ascending (drop lowest first)
+  styleDirectives.sort((a, b) => a.priority - b.priority);
   emotionalDirectives.sort((a, b) => a.priority - b.priority);
   relationshipStates.sort((a, b) => a.priority - b.priority);
 
-  // Drop emotional_directives first (lowest priority first)
+  // Drop style_directives first (soft hints, lowest priority among droppables)
+  for (const ti of styleDirectives) {
+    currentTokens = calculateTierTokens(result) +
+      calculateTierTokens(styleDirectives.filter((sd) => sd !== ti)) +
+      calculateTierTokens(emotionalDirectives) +
+      calculateTierTokens(relationshipStates);
+
+    if (currentTokens <= budget) {
+      result.push(...styleDirectives.filter((sd) => sd !== ti));
+      result.push(...emotionalDirectives);
+      result.push(...relationshipStates);
+      return result.sort((a, b) => b.priority - a.priority);
+    }
+  }
+
+  // All style_directives dropped, now try emotional_directives
   for (const ti of emotionalDirectives) {
     currentTokens = calculateTierTokens(result) +
       calculateTierTokens(emotionalDirectives.filter((ed) => ed !== ti)) +
@@ -361,6 +381,12 @@ function buildSandwichSplit(hotItems: TieredItem[]): SandwichSplit {
   // Remaining exemplars go to suffix (for end sandwich)
   for (let i = 1; i < exemplars.length; i++) {
     hotSuffix.push(exemplars[i].item);
+  }
+
+  // Style directives go to suffix (before emotional directives for attention ordering)
+  const styleDirectives = hotItems.filter((ti) => ti.item.type === 'style_directive');
+  for (const ti of styleDirectives) {
+    hotSuffix.push(ti.item);
   }
 
   // Emotional directives go to suffix

@@ -24,7 +24,8 @@ export type ContextType =
   | 'exemplar'            // style exemplars (hot tier)
   | 'scene_plan'          // current scene plan (hot tier)
   | 'emotional_directive' // emotional arc directives (hot tier)
-  | 'relationship_state'; // active relationship dynamics (warm tier)
+  | 'relationship_state'  // active relationship dynamics (warm tier)
+  | 'style_directive';    // style dice hint (hot tier, droppable)
 
 /**
  * Content type for token estimation

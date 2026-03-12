@@ -28,6 +28,7 @@ export const basePriority: Record<ContextType, number> = {
   scene_plan: 10,          // Current scene plan (always required in hot tier)
   emotional_directive: 8,  // Emotional arc directives
   relationship_state: 6,   // Active relationship dynamics
+  style_directive: 7,      // Style dice hint (between character and emotional)
 };
 
 /**
@@ -47,6 +48,7 @@ export const requiredByType: Record<ContextType, boolean> = {
   scene_plan: true,          // Scene plan always required
   emotional_directive: false,// Can be dropped if budget tight
   relationship_state: false, // Can be dropped if budget tight
+  style_directive: false,    // Droppable soft hint
 };
 
 // ============================================================================

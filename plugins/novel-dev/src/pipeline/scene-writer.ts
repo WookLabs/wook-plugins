@@ -13,7 +13,8 @@
 
 import type { SceneV5 } from '../scene/types.js';
 import type { SceneType, ExemplarResult, StyleLibrary, ExemplarQuery } from '../style-library/types.js';
-import type { ContextItem, TieredContextBundle, ItemMetadata } from '../context/types.js';
+import type { ContextItem, ContextType, TieredContextBundle, ItemMetadata } from '../context/types.js';
+import { generateStyleDirective } from '../style-dice/index.js';
 import { queryExemplars } from '../style-library/index.js';
 import { assembleTieredContext } from '../context/index.js';
 import type {
@@ -276,6 +277,20 @@ export function prepareSceneDraft(
 
   // Build scene-specific context items
   const sceneItems = buildSceneContextItems(scene, sceneNumber, exemplars);
+
+  // Style Dice: inject style directive if seed is provided
+  if (metadata.styleSeed !== undefined) {
+    const styleVariance = (metadata.styleVariance as number) ?? 0.3;
+    sceneItems.push({
+      id: 'style_directive',
+      type: 'style_directive' as ContextType,
+      path: 'virtual://style_directive',
+      content: generateStyleDirective(metadata.styleSeed as number, styleVariance),
+      estimatedTokens: 150,
+      priority: 7,
+      required: false,
+    });
+  }
 
   // Merge with base context items
   const allItems = [...baseContextItems, ...sceneItems];
