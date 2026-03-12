@@ -26,13 +26,31 @@ $ARGUMENTS
    - 요약 생성 (`context/summaries/`)
    - 상태 업데이트 (`meta/ralph-state.json`)
 
-4. **막 완료 후 자동 트리거**
+4. **막 완료 후 검증** (`--team` 여부에 따라 분기)
+
+   **`--team` 없음** (기존 동작):
    - `/revise` (막 전체) — Claude editor 수행
    - `/evaluate` (막 전체) — Claude critic/beta-reader 수행
    - `/consistency-check` — Claude consistency-verifier 수행
 
+   **`--team` 있음** (revision-team 대체):
+   - 기존 `/revise` + `/evaluate` + `/consistency-check` 대신 revision-team이 실행됩니다.
+   - 해당 막의 각 챕터에 대해 순차적으로 `revision-team-gate` 호출:
+     ```
+     for chapter in act_chapters:
+         revision-team-gate {chapter}
+     ```
+   - 개별 챕터 검증 실패가 나머지 챕터 검증을 중단하지 않습니다.
+   - 결과: `reviews/team/revision-team_ch{N}_{timestamp}.json`
+
 > **Note**: 2-Pass 모드에서도 검증/퇴고는 Claude가 수행합니다.
 > 성인 콘텐츠 평가 시 서사 구조와 일관성만 검토합니다.
+
+## Quick Reference
+```bash
+/write-act 1          # 1막 집필 (기존 검증)
+/write-act 1 --team   # 1막 집필 + revision-team 최종 검증
+```
 
 ## Documentation
 

@@ -15,6 +15,8 @@ user-invocable: true
 /write-all          # 1화부터 끝까지 자동 집필
 /write-all --resume # 중단된 지점부터 재개
 /write-all --restart # 처음부터 다시 시작
+/write-all --team          # 전체 집필 + 막 완료마다 revision-team 검증
+/write-all --resume --team # 재개 + revision-team 검증
 ```
 
 ## Writer Mode
@@ -146,9 +148,15 @@ for act in acts:
 
         <promise>CHAPTER_{chapter}_DONE</promise>
 
-    # 막 단위 검증
-    /revise (막 전체)
-    /consistency-check
+    # 막 단위 검증 (--team 여부에 따라 분기)
+    if --team:
+        # revision-team이 기존 /revise + /consistency-check를 대체
+        for chapter in act.chapters:
+            revision-team-gate {chapter}
+            # 실패 시: 경고 표시, 원고 보존, 집필 계속
+    else:
+        /revise (막 전체)
+        /consistency-check
 
     # 막 완료
     <promise>ACT_{act}_DONE</promise>

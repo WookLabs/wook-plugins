@@ -13,6 +13,7 @@ user-invocable: true
 /write           # 다음 챕터 작성
 /write 5         # 5화 작성
 /write 5-10      # 5~10화 연속 작성
+/write 5 --team  # 5화 작성 + revision-team 최종 검증
 ```
 
 ## Writer Mode
@@ -120,6 +121,23 @@ Chapter {N} 평가:
 | 8 (시스템) | 응답 예약 | 10K | 버퍼 |
 
 > 2-Pass 모드에서도 Pass 1(Claude)이 이 우선순위에 따라 컨텍스트를 로드합니다.
+
+## Phase 4: Revision Team 최종 검증 (`--team` 플래그 시)
+
+`$ARGUMENTS`에 `--team` 플래그가 있을 때만 실행합니다.
+Phase 3까지 완료된 챕터에 대해 revision-team 파이프라인을 최종 검증 단계로 실행합니다.
+
+**호출**: `revision-team-gate` 내부 스킬에 위임합니다.
+
+```
+revision-team-gate {chapterNumber}
+```
+
+- **성공 시**: editor 수정본이 최종본으로 저장됩니다.
+- **실패 시**: 원고 보존 + 경고 리포트 표시. 집필 흐름은 중단되지 않습니다.
+- **결과 저장**: `reviews/team/revision-team_ch{N}_{timestamp}.json`
+
+> `--team` 없이 실행하면 이 Phase는 건너뜁니다. 기존 동작과 100% 동일합니다.
 
 ## Documentation
 
