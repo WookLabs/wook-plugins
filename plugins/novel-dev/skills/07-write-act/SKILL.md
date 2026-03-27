@@ -1,5 +1,5 @@
 ---
-name: 15-write-act
+name: 07-write-act
 description: "Use this skill when writing chapters in bulk by act unit. Triggers on: 'N막 써줘', '막 집필', 'write act'."
 user-invocable: true
 ---
@@ -43,12 +43,10 @@ $ARGUMENTS
 4. **막 완료 후 검증** (`--team` 여부에 따라 분기)
 
    **`--team` 없음** (기존 동작):
-   - `/revise` (막 전체) — Claude editor 수행
-   - `/evaluate` (막 전체) — Claude critic/beta-reader 수행
-   - `/consistency-check` — Claude consistency-verifier 수행
+   - `/review` (막 전체) — editor/critic/consistency 검증 수행
 
    **`--team` 있음** (revision-team 대체):
-   - 기존 `/revise` + `/evaluate` + `/consistency-check` 대신 revision-team이 실행됩니다.
+   - 기존 `/review` 대신 revision-team이 실행됩니다.
    - 해당 막의 각 챕터에 대해 순차적으로 `revision-team-gate` 호출:
      ```
      for chapter in act_chapters:

@@ -1,5 +1,5 @@
 ---
-name: 13-gen-plot
+name: 05-gen-plot
 description: "Use this skill when generating per-chapter plot files from completed designs. Triggers on: '플롯 생성', '회차별 플롯', 'gen plot'."
 user-invocable: true
 ---

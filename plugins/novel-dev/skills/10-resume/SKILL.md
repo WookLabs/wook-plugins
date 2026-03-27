@@ -1,5 +1,5 @@
 ---
-name: 20-resume
+name: 10-resume
 description: "Use this skill when resuming an interrupted writing session automatically. Triggers on: '이어쓰기', '재개', 'resume'."
 user-invocable: true
 ---

@@ -1,5 +1,5 @@
 ---
-name: 16-write-all
+name: 08-write-all
 description: "Use this skill when auto-writing the entire novel from chapter 1 to completion via Ralph Loop. Triggers on: '전체 집필', '처음부터 끝까지', 'write all'."
 user-invocable: true
 ---
@@ -150,7 +150,7 @@ for act in acts:
         # Diagnostic 기반 수정 루프
         for retry in range(3):
             diagnostic = generate_diagnostic(results)
-            /revise {chapter} with diagnostic
+            /review {chapter} with diagnostic
             results = parallel_validate(...)
 
             if all_passed(results):
@@ -166,14 +166,12 @@ for act in acts:
 
     # 막 단위 검증 (--team 여부에 따라 분기)
     if --team:
-        # revision-team이 기존 /revise + /evaluate + /consistency-check를 대체
+        # revision-team이 기존 /review를 대체
         for chapter in act.chapters:
             revision-team-gate {chapter}
             # 실패 시: 경고 표시, 원고 보존, 집필 계속
     else:
-        /revise (막 전체)
-        /evaluate (막 전체)
-        /consistency-check
+        /review (막 전체)
 
     # 막 완료
     <promise>ACT_{act}_DONE</promise>
@@ -336,7 +334,7 @@ for each chapter:
 
   if verification.verdict == "FAIL":
     diagnostic = generate_diagnostic(verification.high_confidence_issues)
-    /revise {N} with diagnostic
+    /review {N} with diagnostic
     verification = /verify-chapter {N}  # retry
 
     if still failing after 3 retries:

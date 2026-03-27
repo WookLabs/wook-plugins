@@ -1,5 +1,5 @@
 ---
-name: 14-write
+name: 06-write
 description: "Use this skill when the user wants to write a specific chapter. Triggers on: '집필', '써줘', 'N화 써줘', 'write chapter N'."
 user-invocable: true
 ---
