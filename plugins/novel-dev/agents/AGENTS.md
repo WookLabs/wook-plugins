@@ -2,7 +2,7 @@
 <!-- Generated: 2026-01-29 -->
 <!-- Updated: v8.0 - novel-autopilot removed, structural AI patterns added -->
 
-# Novel-Dev 에이전트 카탈로그 (v8.0)
+# Novel-Dev 에이전트 카탈로그 (v1.2)
 
 ## 산출물 기반 에이전트 매핑
 
@@ -25,6 +25,9 @@
 | genre-validator | 장르 적합성 평가서 | sonnet | plan (READ-ONLY) | yellow |
 | style-curator | 분류된 스타일 예시 컬렉션 | sonnet | default | cyan |
 | team-orchestrator | 팀 실행 계획 + 병렬/순차 에이전트 조율 | sonnet | default | blue |
+| narrator | 협업 집필 리더 — 씬 브리핑 + 캐릭터 출력 통합 산문 직조 | opus | default | cyan |
+| character-designer | 캐릭터 프로필 설계 + collaborative용 에이전트 파일 생성 | opus | default | pink |
+| arc-designer | 서브아크/복선/훅 설계 전문 | sonnet | default | blue |
 
 ## Purpose
 

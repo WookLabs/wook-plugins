@@ -14,7 +14,7 @@
 | File | Name | Category | Agents | Workflow | 용도 |
 |------|------|----------|--------|----------|------|
 | `planning-team.team.json` | 설계 팀 | planning | plot-architect, lore-keeper, style-curator | collaborative | 소설 기획/설계 |
-| `design-execution-team.team.json` | 설계 실행 팀 | planning | style-curator, lore-keeper, plot-architect | pipeline | 9개 설계 스킬 의존 그래프 실행 |
+| `design-execution-team.team.json` | 설계 실행 팀 | planning | style-curator, lore-keeper, character-designer, plot-architect, arc-designer | pipeline | 전체 설계 파이프라인 (5명) |
 | `writing-team.team.json` | 집필 팀 | writing | novelist, proofreader, summarizer | sequential | 회차 집필 |
 | `writing-team-2pass.team.json` | 2-Pass 집필 팀 | writing | novelist, quality-oracle, prose-surgeon, proofreader | pipeline | 정밀 집필 |
 | `verification-team.team.json` | 검증 팀 | verification | critic, beta-reader, genre-validator | parallel | 품질 검증 |
