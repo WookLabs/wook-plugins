@@ -3,7 +3,7 @@
   "schema_version": "1.0",
   "name": "design-execution-team",
   "display_name": "설계 실행 팀",
-  "description": "9개 설계 스킬을 의존 그래프 기반으로 병렬/순차 실행하는 파이프라인 팀. 03-init 완료 필수 (plot/structure.json, meta/project.json 존재).",
+  "description": "5명 에이전트가 문체→세계관→캐릭터→관계→타임라인→아크→복선→훅까지 전체 설계를 파이프라인으로 실행하는 팀. 03-init 완료 필수.",
   "category": "planning",
   "agents": [
     {
@@ -15,14 +15,26 @@
     {
       "agent": "lore-keeper",
       "role": "worker",
-      "responsibility": "세계관 구축, 캐릭터 프로필 설계, 관계 네트워크 설계",
+      "responsibility": "세계관 구축 (world.json, locations.json, terms.json) + 캐릭터 관계 네트워크 설계 (relationships.json)",
       "model": "sonnet"
+    },
+    {
+      "agent": "character-designer",
+      "role": "worker",
+      "responsibility": "캐릭터 프로필 설계 (characters/*.json, index.json) + collaborative용 에이전트 파일 생성 (agents/characters/*.md)",
+      "model": "opus"
     },
     {
       "agent": "plot-architect",
       "role": "lead",
-      "responsibility": "타임라인, 메인/서브 아크, 복선, 훅 설계 총괄",
+      "responsibility": "타임라인 설계 (timeline.json) + 메인 아크 설계 (main-arc.json)",
       "model": "opus"
+    },
+    {
+      "agent": "arc-designer",
+      "role": "worker",
+      "responsibility": "서브아크 (sub-arcs/*.json), 복선 (foreshadowing.json), 훅 (hooks.json) 설계",
+      "model": "sonnet"
     }
   ],
   "workflow": {
@@ -32,61 +44,48 @@
         "name": "style-and-world",
         "agents": ["style-curator", "lore-keeper"],
         "execution": "parallel",
-        "skill_ref": {
-          "style-curator": "04-design-style",
-          "lore-keeper": "05-design-world"
-        },
         "output": "style-guide.json + world.json + locations.json + terms.json"
       },
       {
         "name": "character-design",
-        "agents": ["lore-keeper"],
+        "agents": ["character-designer"],
         "execution": "sequential",
-        "skill_ref": "06-design-character",
         "depends_on": ["style-and-world"],
-        "output": "characters/*.json + index.json"
+        "output": "characters/*.json + index.json + agents/characters/*.md"
       },
       {
-        "name": "timeline-and-structure",
+        "name": "relationship-and-timeline",
         "agents": ["lore-keeper", "plot-architect"],
         "execution": "parallel",
-        "skill_ref": {
-          "lore-keeper": "07-design-relationship",
-          "plot-architect": "08-design-timeline"
-        },
         "depends_on": ["character-design"],
         "output": "relationships.json + timeline.json"
       },
       {
-        "name": "main-arc-design",
+        "name": "main-arc",
         "agents": ["plot-architect"],
         "execution": "sequential",
-        "skill_ref": "09-design-main-arc",
-        "depends_on": ["timeline-and-structure"],
+        "depends_on": ["relationship-and-timeline"],
         "output": "main-arc.json"
       },
       {
-        "name": "arc-details",
-        "agents": ["plot-architect"],
+        "name": "sub-arcs",
+        "agents": ["arc-designer"],
         "execution": "sequential",
-        "skill_ref": "10-design-sub-arc",
-        "depends_on": ["main-arc-design"],
+        "depends_on": ["main-arc"],
         "output": "sub-arcs/*.json"
       },
       {
-        "name": "foreshadow-design",
-        "agents": ["plot-architect"],
+        "name": "foreshadow",
+        "agents": ["arc-designer"],
         "execution": "sequential",
-        "skill_ref": "11-design-foreshadow",
-        "depends_on": ["arc-details"],
+        "depends_on": ["sub-arcs"],
         "output": "foreshadowing.json"
       },
       {
-        "name": "hook-design",
-        "agents": ["plot-architect"],
+        "name": "hooks",
+        "agents": ["arc-designer"],
         "execution": "sequential",
-        "skill_ref": "12-design-hook",
-        "depends_on": ["foreshadow-design"],
+        "depends_on": ["foreshadow"],
         "output": "hooks.json"
       }
     ],
@@ -101,7 +100,7 @@
     "enabled": false
   },
   "cost_estimate": {
-    "tokens_per_agent": 83000,
-    "warning_message": "설계 실행 팀은 style-curator, lore-keeper, plot-architect 3개 에이전트 파이프라인을 사용합니다. 약 250K 토큰이 소요될 수 있습니다."
+    "tokens_per_agent": 60000,
+    "warning_message": "설계 실행 팀은 5개 에이전트 (character-designer, plot-architect = opus / style-curator, lore-keeper, arc-designer = sonnet) 파이프라인을 사용합니다. 약 300K 토큰이 소요될 수 있습니다."
   }
 }

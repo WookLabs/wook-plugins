@@ -18,9 +18,11 @@
   "agents": {
     "novelist": "HIGH",
     "critic": "HIGH",
+    "character-designer": "HIGH",
     "plot-architect": "HIGH",
     "quality-oracle": "HIGH",
     "prose-surgeon": "HIGH",
+    "arc-designer": "MEDIUM",
     "editor": "MEDIUM",
     "lore-keeper": "MEDIUM",
     "beta-reader": "MEDIUM",
@@ -36,6 +38,8 @@
   },
   "permissionModes": {
     "novelist": "default",
+    "arc-designer": "default",
+    "character-designer": "default",
     "editor": "default",
     "critic": "plan",
     "plot-architect": "default",
@@ -55,6 +59,8 @@
   },
   "colors": {
     "novelist": "green",
+    "arc-designer": "blue",
+    "character-designer": "pink",
     "editor": "cyan",
     "critic": "yellow",
     "plot-architect": "blue",

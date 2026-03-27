@@ -67,55 +67,31 @@
       "priority": 9
     },
     {
-      "id": "05-design-world",
-      "name": "design-world",
-      "keywords": ["세계관", "배경", "설정", "world", "setting", "월드빌딩", "worldbuilding"],
-      "keywordVariants": ["세계관 설계", "세계관 만들", "배경 설계", "설정 만들", "설정해"],
+      "id": "04-design",
+      "name": "design",
+      "keywords": ["설계", "디자인", "design", "전체 설계", "세계관", "캐릭터", "아크"],
+      "keywordVariants": ["설계해", "설계하자", "디자인해", "설계 시작"],
       "argPattern": null,
       "argType": null,
-      "excludeKeywords": ["검증", "verify"],
+      "excludeKeywords": ["리뷰", "검토", "review"],
       "requiredState": ["planning"],
       "requireNovelContext": false,
-      "priority": 7
+      "priority": 8
     },
     {
-      "id": "06-design-character",
-      "name": "design-character",
-      "keywords": ["캐릭터", "인물", "등장인물", "character"],
-      "keywordVariants": ["캐릭터 설계", "캐릭터 만들", "인물 설계", "인물 만들", "캐릭터 추가"],
-      "argPattern": null,
-      "argType": null,
-      "excludeKeywords": ["보이스", "voice", "분석", "대사"],
-      "requiredState": ["planning"],
-      "requireNovelContext": false,
-      "priority": 7
-    },
-    {
-      "id": "09-design-main-arc",
-      "name": "design-main-arc",
-      "keywords": ["메인아크", "메인 아크", "주요 서사", "메인 스토리", "main arc"],
-      "keywordVariants": ["메인 아크 설계", "주요 서사 설계", "메인 스토리 만들"],
-      "argPattern": null,
-      "argType": null,
-      "excludeKeywords": ["서브"],
-      "requiredState": ["planning"],
-      "requireNovelContext": false,
-      "priority": 7
-    },
-    {
-      "id": "11-design-foreshadow",
-      "name": "design-foreshadow",
-      "keywords": ["복선", "떡밥", "foreshadow", "hint", "foreshadowing"],
-      "keywordVariants": ["복선 설계", "복선 깔", "떡밥 깔", "복선 만들"],
+      "id": "04-design-review",
+      "name": "design-review",
+      "keywords": ["설계 리뷰", "설계 검토", "design review", "설계 확인"],
+      "keywordVariants": ["설계 리뷰해", "설계 검토해", "설계 확인해"],
       "argPattern": null,
       "argType": null,
       "excludeKeywords": [],
-      "requiredState": ["planning", "writing"],
+      "requiredState": ["planning"],
       "requireNovelContext": false,
-      "priority": 7
+      "priority": 8
     },
     {
-      "id": "13-gen-plot",
+      "id": "05-gen-plot",
       "name": "gen-plot",
       "keywords": ["플롯", "줄거리", "plot", "generate plot", "스토리 라인"],
       "keywordVariants": ["플롯 생성", "줄거리 만들", "플롯 짜", "줄거리 짜"],
@@ -127,7 +103,7 @@
       "priority": 8
     },
     {
-      "id": "14-write",
+      "id": "06-write",
       "name": "write",
       "keywords": ["집필", "써줘", "작성", "써", "write"],
       "keywordVariants": ["집필해", "집필해줘", "써줘", "작성해", "작성해줘", "집필하", "써봐"],
@@ -139,7 +115,7 @@
       "priority": 10
     },
     {
-      "id": "15-write-act",
+      "id": "07-write-act",
       "name": "write-act",
       "keywords": ["막 집필", "막 전체", "막 써", "write act"],
       "keywordVariants": ["막 집필해", "막 전체 써", "막 작성"],
@@ -151,7 +127,7 @@
       "priority": 11
     },
     {
-      "id": "16-write-all",
+      "id": "08-write-all",
       "name": "write-all",
       "keywords": ["전체 집필", "다 써줘", "다 써", "끝까지 써", "전부 집필", "write all", "전체 작성"],
       "keywordVariants": ["전체 써줘", "전부 써", "다 작성", "전체 써"],
@@ -175,43 +151,19 @@
       "priority": 11
     },
     {
-      "id": "17-revise",
-      "name": "revise",
-      "keywords": ["퇴고", "수정", "다듬", "revise", "edit"],
-      "keywordVariants": ["퇴고해", "퇴고해줘", "수정해", "다듬어", "다듬어줘", "수정해줘"],
-      "argPattern": "([0-9]+)\\s*(?:화|회|장|ch(?:apter)?)",
-      "argType": "chapter",
-      "excludeKeywords": ["파이프라인", "pipeline"],
+      "id": "09-review",
+      "name": "review",
+      "keywords": ["리뷰", "퇴고", "평가", "검증", "수정", "review", "revise", "evaluate"],
+      "keywordVariants": ["리뷰해", "퇴고해", "평가해", "검증해", "수정해", "리뷰해줘"],
+      "argPattern": "^(\\d+)(?:[-~](\\d+))?",
+      "argType": "chapterRange",
+      "excludeKeywords": ["설계", "design", "파이프라인"],
       "requiredState": ["writing", "editing"],
       "requireNovelContext": false,
       "priority": 9
     },
     {
-      "id": "18-evaluate",
-      "name": "evaluate",
-      "keywords": ["평가", "점수", "품질", "evaluate", "score"],
-      "keywordVariants": ["평가해", "평가해줘", "평가해봐", "점수 매겨", "품질 확인"],
-      "argPattern": "([0-9]+)\\s*(?:화|회|장|ch(?:apter)?)",
-      "argType": "chapter",
-      "excludeKeywords": ["심층", "deep", "장르"],
-      "requiredState": ["writing", "editing"],
-      "requireNovelContext": false,
-      "priority": 8
-    },
-    {
-      "id": "19-consistency-check",
-      "name": "consistency-check",
-      "keywords": ["일관성", "모순", "설정오류", "consistency", "설정 체크"],
-      "keywordVariants": ["일관성 체크", "일관성 검사", "모순 확인", "설정 확인"],
-      "argPattern": null,
-      "argType": null,
-      "excludeKeywords": [],
-      "requiredState": ["writing", "editing", "planning"],
-      "requireNovelContext": false,
-      "priority": 8
-    },
-    {
-      "id": "20-resume",
+      "id": "10-resume",
       "name": "resume",
       "keywords": ["이어쓰기", "재개", "복구", "resume", "이어서"],
       "keywordVariants": ["이어서 써", "이어서 집필", "재개해", "복구해"],
