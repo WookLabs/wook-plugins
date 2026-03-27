@@ -9,7 +9,7 @@
 
 `/novel-dev:team-nov run <name>` 명령으로 실행하면 `team-orchestrator` 에이전트가 팀 정의를 로드하여 자동으로 에이전트를 조직화하고 워크플로우를 실행합니다.
 
-## Preset Teams (9개)
+## Preset Teams (11개)
 
 | File | Name | Category | Agents | Workflow | 용도 |
 |------|------|----------|--------|----------|------|
@@ -22,6 +22,8 @@
 | `design-review-team.team.json` | 설계 리뷰 팀 | verification | critic, lore-keeper, genre-validator, plot-architect | parallel | 설계 산출물 다관점 리뷰 |
 | `plot-review-team.team.json` | 플롯 리뷰 팀 | verification | critic, consistency-verifier, genre-validator, plot-architect | parallel | 플롯 파일 다관점 검증 |
 | `revision-team.team.json` | 퇴고 팀 | revision | critic, editor, proofreader, consistency-verifier | pipeline | 피드백 기반 퇴고 |
+| `writing-team-collab.team.json` | 캐릭터 협업 집필 팀 | writing | narrator, characters/*, proofreader, summarizer | collaborative (hybrid) | 캐릭터 에이전트 co-write |
+| `writing-team-collab-2pass.team.json` | 캐릭터 협업 2-Pass 집필 팀 | writing | narrator, characters/*, proofreader, summarizer | collaborative (hybrid) | 캐릭터 co-write + Grok 리라이트 |
 
 ## Workflow Types
 
@@ -30,7 +32,7 @@
 | `parallel` | 모든 에이전트 동시 실행 + 결과 집계 | verification-team, deep-review-team, design-review-team, plot-review-team |
 | `sequential` | 순차 체인 (이전 출력 → 다음 입력) | writing-team |
 | `pipeline` | 단계별 순차 + 품질 게이트 + 재시도 | writing-team-2pass, revision-team, design-execution-team |
-| `collaborative` | 자율 협업 (lead가 SendMessage로 조율) | planning-team |
+| `collaborative` | 자율 협업 (lead가 SendMessage로 조율) | planning-team, writing-team-collab, writing-team-collab-2pass |
 
 ## Quality Gates
 
