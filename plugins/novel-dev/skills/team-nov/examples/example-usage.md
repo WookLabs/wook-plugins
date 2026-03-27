@@ -210,7 +210,7 @@ gen-plot 완료 후 회차별 플롯을 팀으로 검증:
 
 ```bash
 # 플롯 생성
-/13-gen-plot
+/gen-plot
 
 # 플롯 리뷰
 /novel-dev:team-nov run plot-review-team

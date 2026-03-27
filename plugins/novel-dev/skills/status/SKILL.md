@@ -21,14 +21,14 @@ user-invocable: true
 - **완료 조건**: `meta/project.json` 존재
 - **표시**: `[x] init`
 
-### Phase 2: 설계
+### Phase 2: 설계 (/design)
 - **완료 조건**:
-  - `world/world.json` 존재 → `[x] design-world`
-  - `characters/*.json` 1개 이상 → `[x] design-character`
-  - `plot/main-arc.json` 존재 → `[x] design-main-arc`
-  - `plot/sub-arcs/*.json` 1개 이상 (선택) → `[x] design-sub-arc`
-  - `plot/foreshadowing.json` 존재 → `[x] design-foreshadow`
-  - `plot/hooks.json` 존재 → `[x] design-hook`
+  - `world/world.json` 존재 → `[x] world`
+  - `characters/*.json` 1개 이상 → `[x] characters`
+  - `plot/main-arc.json` 존재 → `[x] main-arc`
+  - `plot/sub-arcs/*.json` 1개 이상 (선택) → `[x] sub-arcs`
+  - `plot/foreshadowing.json` 존재 → `[x] foreshadowing`
+  - `plot/hooks.json` 존재 → `[x] hooks`
 
 ### Phase 3: 플롯 생성
 - **완료 조건**: `chapters/chapter_001.json` 존재
@@ -43,8 +43,8 @@ user-invocable: true
 
 ### Phase 5: 퇴고/검증
 - **완료 조건**:
-  - 모든 `reviews/chapter_*_review.json` 존재 → `[x] evaluate`
-  - `reviews/consistency-report.json` 존재 → `[x] consistency-check`
+  - 모든 `reviews/chapter_*_review.json` 존재 → `[x] review (evaluate)`
+  - `reviews/consistency-report.json` 존재 → `[x] review (consistency-check)`
 
 ### Phase 6: 내보내기
 - **완료 조건**: `exports/` 폴더에 출력 파일 존재
@@ -63,13 +63,13 @@ user-invocable: true
   -- Phase 1: 초기화 ------------------------------------------
   [x] init           프로젝트 초기화
 
-  -- Phase 2: 설계 --------------------------------------------
-  [x] design-world       세계관 설계
-  [x] design-character   캐릭터 설계 (4명)
-  [x] design-main-arc    메인 아크 설계
-  [ ] design-sub-arc     서브 아크 설계 (선택)
-  [x] design-foreshadow  복선 설계 (8개)
-  [x] design-hook        훅/떡밥 설계 (12개)
+  -- Phase 2: 설계 (/design) ----------------------------------
+  [x] world              세계관 설계 (world/world.json)
+  [x] characters         캐릭터 설계 (4명)
+  [x] main-arc           메인 아크 설계 (plot/main-arc.json)
+  [ ] sub-arcs           서브 아크 설계 (선택)
+  [x] foreshadowing      복선 설계 (8개)
+  [x] hooks              훅/떡밥 설계 (12개)
 
   -- Phase 3: 플롯 --------------------------------------------
   [x] gen-plot       플롯 생성 (50화)
@@ -80,9 +80,7 @@ user-invocable: true
   [~] write-all      전체 집필 (Ralph Loop 활성)
 
   -- Phase 5: 퇴고/검증 ---------------------------------------
-  [ ] revise         퇴고
-  [ ] evaluate       평가
-  [ ] consistency-check   일관성 검사
+  [ ] review         퇴고/평가/일관성 검사 (/review 통합)
 
   -- Phase 6: 완료 --------------------------------------------
   [ ] export         내보내기

@@ -130,10 +130,10 @@ Generating chapters 1-15 (Act 1)...
 ERROR: Cannot generate plots
 
 Missing required files:
-- plot/main-arc.json (run /design-main-arc)
-- characters/char_001.json (run /design-character)
+- plot/main-arc.json (run /design)
+- characters/char_001.json (run /design)
 
-Workflow: /design-character → /design-main-arc → /gen-plot
+Workflow: /design → /gen-plot
 ```
 
 ### Foreshadowing Conflicts

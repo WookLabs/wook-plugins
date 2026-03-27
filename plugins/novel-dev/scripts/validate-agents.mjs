@@ -4,7 +4,7 @@
  * Agent Validation Script
  *
  * Validates:
- * 1. Only allowed agents exist (17 agents)
+ * 1. Only allowed agents exist (20 agents)
  * 2. No duplicate agents
  * 3. All required agents are present
  */
@@ -116,6 +116,10 @@ const ALLOWED_AGENTS = new Set([
   'style-curator.md',          // sonnet - 문체 큐레이션
   // Orchestration
   'team-orchestrator.md',      // opus - 팀 오케스트레이터
+  // Additional agents
+  'narrator.md',
+  'character-designer.md',
+  'arc-designer.md',
 ]);
 
 // Files to ignore (not agents)

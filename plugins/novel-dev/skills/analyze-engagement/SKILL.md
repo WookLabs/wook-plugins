@@ -61,8 +61,7 @@ Analyzes chapter-by-chapter reader engagement and identifies drop-off risk zones
 ## Integration Points
 
 - Works with `/write` - auto-analyze after writing
-- Works with `/revise` - measure improvement after revision
-- Works with `/evaluate` - engagement score included in quality metrics
+- Works with `/review` - measure improvement after revision and evaluate quality metrics
 
 ## Retention Analysis (integrated from /check-retention)
 

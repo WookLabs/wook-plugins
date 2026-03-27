@@ -248,8 +248,8 @@
 세계관 설계가 승인되었습니다. 다음 단계로 진행하세요:
 
 ### 다음 단계
-1. ✅ **캐릭터 설계**: `/design-character`
-2. ✅ **플롯 설계**: `/design-main-arc`
+1. ✅ **캐릭터 설계**: `/design`
+2. ✅ **플롯 설계**: `/design`
 3. ✅ **회차 플롯 생성**: `/gen-plot`
 
 ### 강점 유지
@@ -458,7 +458,7 @@
 - **상업성을 중시한다면 Beta-Reader 피드백 수용 권장**
 
 수정 후 다시 검토: `/review --target=characters/char_001.json`
-또는 현재 상태로 진행: `/design-main-arc` (권장하지 않음)
+또는 현재 상태로 진행: `/design` (권장하지 않음)
 ```
 
 ---
@@ -760,7 +760,7 @@
 
 다음 단계:
 ```
-/design-character --improve char_001
+/design --improve char_001
 ```
 또는
 ```

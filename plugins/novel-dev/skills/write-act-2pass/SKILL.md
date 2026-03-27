@@ -63,9 +63,7 @@ XAI_API_KEY=xai-xxxxxxxxxxxx
    - 서사 구조, 캐릭터 일관성, 플롯 정합성 평가
 
 4. **막 완료 후 자동 트리거**
-   - `/consistency-check` — 연결성 검토
-   - `/revise` (막 전체) — Claude editor 수행
-   - `/evaluate` (막 전체) — Claude critic/beta-reader 수행
+   - `/review` — 연결성 검토, 퇴고, 평가 (통합)
 
 ## /write-act과의 차이
 
