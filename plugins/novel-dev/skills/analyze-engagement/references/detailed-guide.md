@@ -237,4 +237,4 @@ Recommendations:
 - Genre-specific tension curve patterns are considered
 - Cliffhangers are critical for web novels - weighted heavily
 - Drop-off risk 15%+ requires immediate attention
-- Integration with `/write`, `/revise`, and `/evaluate` workflows
+- Integration with `/write`, `/review` workflows

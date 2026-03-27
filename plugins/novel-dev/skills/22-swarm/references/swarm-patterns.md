@@ -301,7 +301,7 @@ Task({
 4. 개별 커맨드로 대체 제안:
    - verify 실패 → /verify-chapter N 개별 실행
    - review 실패 → /verify-chapter N (기본 3 검증)
-   - design 실패 → /design-character, /design-world 개별 실행
+   - design 실패 → /design 재실행 (개별 아티팩트 지정 가능)
 ```
 
 ### 4.4 부분 완료 재개
@@ -340,5 +340,5 @@ Task({
 |------------|-----------|--------|
 | verify | verify-chapter | verify-chapter는 단일 챕터 3검증, swarm verify는 다수 챕터 동시 검증 |
 | review | verify-chapter | verify-chapter는 3관점, swarm review는 5관점 심층 리뷰 |
-| design | design-character | design-character는 순차, swarm design은 다수 캐릭터 동시 설계 |
+| design | design | design은 순차 전체 파이프라인, swarm design은 다수 캐릭터 동시 설계 |
 | verify | consistency-check | consistency-check는 전체 일괄, swarm verify는 챕터별 병렬 |

@@ -78,7 +78,7 @@
 |  → 5~7번째 문단 사이 페이싱 개선 권장              |
 |                                                   |
 |  권장 조치:                                       |
-|  - /revise 1 --focus pacing                       |
+|  - /review 1 --focus pacing                       |
 |                                                   |
 +==================================================+
 ```
@@ -228,7 +228,7 @@ gen-plot 완료 후 회차별 플롯을 팀으로 검증:
 | 비교 | 기존 스킬 | /novel-dev:team-nov 대응 | 차이 |
 |------|-----------|-----------|------|
 | 검증 | `/verify-chapter N` | `/novel-dev:team-nov run verification-team N` | verify-chapter = 경량 자동 호출, 더 엄격. verification-team = 팀 인프라 기반, 확장 가능. |
-| 퇴고 | `/revise-pipeline N` | `/novel-dev:team-nov run revision-team N` | revise-pipeline = 최소 3단계 순차. revision-team = 4단계 + consistency-verifier + max 3회 재시도. |
+| 퇴고 | `/revise-pipeline N` | `/novel-dev:team-nov run revision-team N` | revise-pipeline = 내부 파이프라인 3단계 순차. revision-team = 4단계 + consistency-verifier + max 3회 재시도. |
 | 배치 | `/swarm review N` | `/novel-dev:team-nov run deep-review-team N` | /swarm = 배치 병렬 (같은 작업 × 여러 대상). /novel-dev:team-nov = 팀 협업 (여러 역할 × 하나의 대상). 공존. |
 
 > **참고**: 기존 `/swarm`과 `/novel-dev:team-nov`은 공존합니다.

@@ -19,12 +19,12 @@ The skill automatically detects completion based on file existence:
 **Check**: `meta/project.json` exists → [x] init
 
 ### Phase 2: Design
-- `world/world.json` → [x] design-world
-- `characters/*.json` → [x] design-character (N chars)
-- `plot/main-arc.json` → [x] design-main-arc
-- `plot/foreshadowing.json` → [x] design-foreshadow (N elements)
-- `plot/hooks.json` → [x] design-hook (N hooks)
-- `meta/style-guide.json` → [x] design-style
+- `world/world.json` → [x] design: world
+- `characters/*.json` → [x] design: character (N chars)
+- `plot/main-arc.json` → [x] design: main-arc
+- `plot/foreshadowing.json` → [x] design: foreshadow (N elements)
+- `plot/hooks.json` → [x] design: hook (N hooks)
+- `meta/style-guide.json` → [x] design: style
 
 ### Phase 3: Plot Generation
 **Check**: `chapters/chapter_001.json` → [x] gen-plot
@@ -33,8 +33,8 @@ The skill automatically detects completion based on file existence:
 **Progress**: Counts `chapters/chapter_*.md` files → [~] write (12/50)
 
 ### Phase 5: Review
-- `reviews/*_review.json` → [x] evaluate
-- `reviews/consistency-report.json` → [x] consistency-check
+- `reviews/*_review.json` → [x] review
+- `reviews/consistency-report.json` → [x] review: consistency
 
 ## Output Format
 

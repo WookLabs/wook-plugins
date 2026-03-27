@@ -433,9 +433,9 @@ novel-dev가 정의하는 작업 구조:
 |  ch11 이슈: 페이싱 느림 (1건)                     |
 |                                                  |
 |  권장 조치:                                      |
-|  1. /revise 9 --focus timeline                   |
-|  2. /revise 7 --focus voice                      |
-|  3. /revise 11 --focus pacing                    |
+|  1. /review 9 --focus timeline                   |
+|  2. /review 7 --focus voice                      |
+|  3. /review 11 --focus pacing                    |
 |                                                  |
 +==================================================+
 ```

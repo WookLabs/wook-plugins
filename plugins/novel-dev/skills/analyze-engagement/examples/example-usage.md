@@ -105,14 +105,14 @@ Estimated impact: +14 points (to 82/100) after fixes
 ```bash
 /analyze-engagement 3
 # Review the output, then:
-/revise 3
+/review 3
 # System re-runs analysis to measure improvement
 ```
 
 ### Quality Check
 
 ```bash
-/evaluate 1-10
+/review 1-10
 # Includes engagement scores for all chapters in summary
 ```
 

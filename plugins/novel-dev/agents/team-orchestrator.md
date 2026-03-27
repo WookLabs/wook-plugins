@@ -258,7 +258,7 @@ for (const step of workflow.steps) {
   let skillMap = {};  // { agentName: skillInstructions | null }
   if (step.skill_ref) {
     if (typeof step.skill_ref === 'object') {
-      // Per-agent skill mapping: { "style-curator": "04-design-style", "lore-keeper": "05-design-world" }
+      // Per-agent skill mapping: { "critic": "05-evaluate", "editor": "06-revise-pipeline" }
       for (const [agentName, skillId] of Object.entries(step.skill_ref)) {
         const path = `skills/${skillId}/SKILL.md`;
         if (exists(path)) {
@@ -316,8 +316,8 @@ for (const step of workflow.steps) {
 ```
 
 **skill_ref 프롬프트 로딩**: `step.skill_ref`는 두 가지 형태를 지원합니다:
-- **문자열** (`"04-design-style"`): 해당 step의 모든 에이전트에게 동일한 스킬 지시를 주입합니다. 단일 에이전트 step에 적합합니다.
-- **객체** (`{"style-curator": "04-design-style", "lore-keeper": "05-design-world"}`): 에이전트별로 다른 스킬 지시를 주입합니다. 병렬 실행 step에서 각 에이전트가 서로 다른 도메인 작업을 수행할 때 사용합니다.
+- **문자열** (`"05-evaluate"`): 해당 step의 모든 에이전트에게 동일한 스킬 지시를 주입합니다. 단일 에이전트 step에 적합합니다.
+- **객체** (`{"critic": "05-evaluate", "editor": "06-revise-pipeline"}`): 에이전트별로 다른 스킬 지시를 주입합니다. 병렬 실행 step에서 각 에이전트가 서로 다른 도메인 작업을 수행할 때 사용합니다.
 
 skill_ref가 없으면 기존 방식(`responsibility` 기반)으로 프롬프트를 구성합니다. skill_ref 경로가 존재하지 않으면 경고 로그를 남기고 responsibility 기반으로 fallback합니다. 이를 통해 기존 팀과의 하위 호환성을 완전히 유지합니다.
 

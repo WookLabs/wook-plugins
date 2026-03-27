@@ -47,21 +47,16 @@
 ## 현재 상태
 
 - **마지막 작업**: 프로젝트 초기화 완료
-- **다음 할 일**: `/design-world` 로 세계관 설계
+- **다음 할 일**: `/design` 으로 전체 설계 파이프라인 실행
 - **미해결 이슈**: 없음
 
 ## 워크플로우 가이드
 
 ### 설계 단계 (현재)
 ```bash
-/design-style      # 문체/서술 스타일 설계
-/world             # 세계관 설계
-/character         # 캐릭터 설계
-/main-arc          # 메인 플롯 아크
-/sub-arc           # 서브플롯
-/foreshadow        # 복선 배치
-/hook              # 떡밥 설계
-/plot              # 회차별 플롯 생성
+/design            # 전체 설계 파이프라인 실행
+                   # (문체·세계관·캐릭터·관계·타임라인·메인아크·서브아크·복선·훅)
+/gen-plot          # 회차별 플롯 생성
 ```
 
 ### 설계 검토
@@ -79,8 +74,7 @@
 
 ### 검토/수정 단계
 ```bash
-/evaluate 1        # 1화 품질 평가
-/revise 1          # 1화 퇴고
+/review 1          # 1화 퇴고·품질 평가·일관성 검사
 /check             # 전체 일관성 검사
 ```
 
@@ -114,9 +108,9 @@
 | plot-architect | 플롯 설계 | /plot, /main-arc |
 | lore-keeper | 설정 관리 | /world, /character |
 | novelist | 본문 집필 | /write |
-| editor | 퇴고 | /revise |
-| critic | 품질 평가 | /evaluate |
-| beta-reader | 몰입도 분석 | /evaluate, /analyze-engagement |
+| editor | 퇴고 | /review |
+| critic | 품질 평가 | /review |
+| beta-reader | 몰입도 분석 | /review, /analyze-engagement |
 
 ## 주의사항
 
