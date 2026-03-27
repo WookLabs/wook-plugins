@@ -83,6 +83,105 @@ if (!args.chapter) {
 }
 ```
 
+### Step 2-A: Resolve Dynamic Character Agents (from_scene_cast)
+
+팀 정의에 `"resolve": "from_scene_cast"`가 지정된 에이전트 항목이 있으면, 고정 에이전트 목록 대신 챕터의 씬 캐스트에서 동적으로 캐릭터 에이전트를 결정합니다.
+
+#### 동작 흐름
+
+```spec
+for (const agentEntry of teamDef.agents) {
+  if (agentEntry.resolve !== 'from_scene_cast') continue;
+
+  // 1. chapter_{N}.json에서 씬 캐스트 추출
+  const chapterJson = Read(`chapters/chapter_${pad(chapterNum)}.json`);
+  const castIds = chapterJson.scene_cast ?? [];  // e.g. ["char_aria", "char_kael", "char_innkeeper"]
+
+  // 2. 각 캐릭터에 대해 에이전트 파일 존재 여부 확인
+  const resolvedAgents = [];
+  for (const charId of castIds) {
+    const charName = charId.replace(/^char_/, '');           // "char_aria" → "aria"
+    const agentPath = `agents/characters/${charName}.md`;
+
+    let agentDef;
+    if (exists(agentPath)) {
+      // 기존 캐릭터 에이전트 파일 사용
+      agentDef = { agent: charName, source: 'file', path: agentPath };
+    } else {
+      // 템플릿으로 동적 생성 (Step 2-A-1 참조)
+      agentDef = buildCharacterAgentFromTemplate(charId, chapterJson);
+    }
+
+    // 3. 역할 기반 모델 결정
+    const charData = Read(`characters/${charName}.json`);
+    agentDef.model = resolveCharacterModel(charData.role);
+
+    resolvedAgents.push(agentDef);
+  }
+
+  // 팀 에이전트 목록에서 resolve 항목을 resolved 목록으로 교체
+  teamDef.agents = [
+    ...teamDef.agents.filter(a => a.resolve !== 'from_scene_cast'),
+    ...resolvedAgents
+  ];
+}
+```
+
+#### 역할(role) 기반 모델 매핑
+
+```spec
+function resolveCharacterModel(role) {
+  switch (role) {
+    case 'protagonist':
+    case 'deuteragonist':
+    case 'antagonist':
+      return 'opus';      // 주요 캐릭터 — 높은 표현력 필요
+    case 'supporting':
+      return 'sonnet';    // 조연 — 균형 잡힌 성능
+    case 'minor':
+    case 'cameo':
+    default:
+      return 'haiku';     // 단역/카메오 — 경량 모델로 비용 절감
+  }
+}
+```
+
+#### Step 2-A-1: 에이전트 파일이 없을 때 — 템플릿에서 동적 생성
+
+`agents/characters/{name}.md`가 존재하지 않으면 `agents/characters/_template.md`의 Part 2(캐릭터 행동 지침 섹션)를 읽어 플레이스홀더를 캐릭터 데이터로 치환합니다:
+
+```spec
+function buildCharacterAgentFromTemplate(charId, chapterJson) {
+  const charName = charId.replace(/^char_/, '');
+  const charData = Read(`characters/${charName}.json`);
+  const templateRaw = Read('agents/characters/_template.md');
+
+  // _template.md에서 Part 2 섹션만 추출 (## Part 2 이후)
+  const part2 = templateRaw.split(/^## Part 2/m)[1] ?? templateRaw;
+
+  // 플레이스홀더 치환
+  const agentContent = part2
+    .replace(/\{\{char_name\}\}/g, charData.name ?? charName)
+    .replace(/\{\{char_role\}\}/g, charData.role ?? 'minor')
+    .replace(/\{\{char_personality\}\}/g, charData.personality ?? '')
+    .replace(/\{\{char_speech_style\}\}/g, charData.speech_style ?? '')
+    .replace(/\{\{char_goals\}\}/g, charData.goals ?? '')
+    .replace(/\{\{char_backstory\}\}/g, charData.backstory ?? '');
+
+  // 런타임 전용 — 파일로 저장하지 않음, 메모리에서 프롬프트에 직접 주입
+  return {
+    agent: charName,
+    source: 'template',
+    inlineContent: agentContent
+  };
+}
+```
+
+**주의사항:**
+- 동적 생성된 에이전트 내용은 파일로 저장하지 않습니다 (런타임 전용).
+- `scene_cast`가 비어있거나 없으면 해당 `resolve` 항목을 건너뜁니다.
+- 동적 해석된 캐릭터 수가 많으면 비용 추정을 사용자에게 사전 안내합니다.
+
 ### Step 3: Initialize Team State
 
 Create team state file at `.omc/state/novel-team-{id}.json` (prefixed with `novel-` to avoid collision with OMC's own team state):
@@ -244,6 +343,93 @@ for (const member of teamDef.agents) {
 // Members communicate autonomously
 // Orchestrator monitors via TaskList
 ```
+
+#### 4-E: Hybrid Workflow (Collaborative + Sequential)
+
+`workflow.type === "hybrid"`인 경우, 스텝별로 `execution` 타입을 확인하여 collaborative 실행과 sequential 실행을 혼합합니다. 또한 `type: "orchestrator_action"` 스텝으로 ADULT 마커 감지 및 adult-rewriter 실행을 처리합니다.
+
+```spec
+for (const step of workflow.steps) {
+
+  // ── Case A: Collaborative 스텝 ──────────────────────────────────
+  if (step.execution === 'collaborative') {
+    // TeamCreate로 팀 공간 생성
+    TeamCreate({ team_name: teamId });
+
+    // narrator 에이전트를 리더로 먼저 스폰
+    const narratorEntry = teamDef.agents.find(a => a.agent === 'narrator');
+    Task({
+      subagent_type: `novel-dev:narrator`,
+      team_name: teamId,
+      name: 'narrator',
+      prompt: buildCollaborativeLeadPrompt(narratorEntry, context, step)
+    });
+
+    // 나머지 캐릭터 에이전트 스폰 (step.agents에서 narrator 제외)
+    for (const agentName of step.agents.filter(a => a !== 'narrator')) {
+      const entry = teamDef.agents.find(a => a.agent === agentName);
+      Task({
+        subagent_type: `novel-dev:${agentName}`,
+        team_name: teamId,
+        name: agentName,
+        prompt: buildCollaborativeMemberPrompt(entry, context, step)
+      });
+    }
+
+    // narrator가 SendMessage로 장면 작성을 주도
+    // 오케스트레이터는 TaskList로 완료 상태를 모니터링
+    const collaborativeResult = await waitForTeamCompletion(teamId);
+    context.previousStepOutput = collaborativeResult;
+    updateTeamState(step.name, 'completed');
+  }
+
+  // ── Case B: Orchestrator Action — adult-rewriter ────────────────
+  else if (step.type === 'orchestrator_action' && step.action === 'adult-rewriter') {
+    const chapterPath = `chapters/chapter_${pad(chapterNum)}.md`;
+    const chapterContent = Read(chapterPath);
+
+    // ADULT 마커 감지: <!-- ADULT --> 또는 [ADULT] 패턴
+    const hasAdultMarkers = /<!--\s*ADULT\s*-->|\[ADULT\]/i.test(chapterContent);
+
+    if (hasAdultMarkers) {
+      // adult-rewriter.mjs 실행 — 마커가 있을 때만 실행
+      const result = Bash(
+        `node scripts/adult-rewriter.mjs --chapter ${chapterNum} --input "${chapterPath}"`
+      );
+      if (result.exitCode !== 0) {
+        throw new Error(`adult-rewriter failed: ${result.stderr}`);
+      }
+      context.adultRewriterOutput = result.stdout;
+      updateTeamState(step.name, 'completed');
+    } else {
+      // 마커 없음 — 이 스텝 건너뜀
+      log(`Step '${step.name}' skipped: no ADULT markers found in ${chapterPath}`);
+      updateTeamState(step.name, 'skipped');
+    }
+  }
+
+  // ── Case C: 일반 Sequential 스텝 ───────────────────────────────
+  else {
+    // 기존 sequential/pipeline 실행 로직 그대로 사용 (4-B / 4-C 참조)
+    let previousOutput = context.previousStepOutput ?? null;
+    const agentName = step.agents[0];
+    const result = await Task({
+      subagent_type: `novel-dev:${agentName}`,
+      model: resolveModel(agentName, teamDef, modelTiers),
+      prompt: buildPrompt(agentName, context, previousOutput)
+    });
+    context.previousStepOutput = result;
+    updateTeamState(step.name, 'completed');
+  }
+}
+```
+
+**Hybrid 워크플로우 사용 지침:**
+- `execution: "collaborative"` 스텝은 반드시 `narrator` 에이전트가 팀에 포함되어 있어야 합니다.
+- `type: "orchestrator_action"` + `action: "adult-rewriter"` 스텝은 오케스트레이터가 직접 처리합니다 (서브에이전트 불필요).
+- ADULT 마커는 두 가지 형식을 인식합니다: `<!-- ADULT -->` (HTML 주석), `[ADULT]` (대괄호 태그).
+- adult-rewriter가 실패(exitCode !== 0)하면 팀 실행을 중단하고 에러를 리포트합니다.
+- skipped 스텝은 팀 상태 파일에 기록되며 최종 리포트에 표시됩니다.
 
 ### Step 5: Apply Quality Gates
 

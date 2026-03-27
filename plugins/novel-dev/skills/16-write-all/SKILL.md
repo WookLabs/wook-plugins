@@ -17,6 +17,8 @@ user-invocable: true
 /write-all --restart # 처음부터 다시 시작
 /write-all --team          # 전체 집필 + 막 완료마다 revision-team 검증
 /write-all --resume --team # 재개 + revision-team 검증
+/write-all --team collab          # 전체 집필 + 캐릭터 협업
+/write-all --team collab --team   # 전체 집필 + 캐릭터 협업 + revision-team 검증
 ```
 
 ## Writer Mode
@@ -112,6 +114,20 @@ AskUserQuestion으로 사용자 확인:
 | 회차 완료 | `<promise>CHAPTER_{N}_DONE</promise>` |
 | 막 완료 | `<promise>ACT_{N}_DONE</promise>` |
 | 전체 완료 | `<promise>NOVEL_DONE</promise>` |
+
+### --team collab 분기
+
+`--team collab`이 활성화되면 각 회차 집필 시 `writing-team-collab`을 사용합니다:
+
+```python
+for act in acts:
+    for chapter in act.chapters:
+        if --team collab:
+            # 캐릭터 협업 팀으로 집필
+            team-orchestrator run writing-team-collab {chapter}
+        else:
+            /write {chapter}  # 기존 novelist 단독
+```
 
 ## 실행 흐름 (v2)
 

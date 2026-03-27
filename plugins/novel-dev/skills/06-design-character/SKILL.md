@@ -64,6 +64,51 @@ If output file already exists:
    - `characters/index.json` - 캐릭터 목록
    - `characters/relationships.json` - 관계 매트릭스
 
+4. **캐릭터 에이전트 자동 생성**
+
+   캐릭터 파일 저장 후, collaborative 집필용 에이전트 파일을 생성합니다.
+
+   **조건 확인:**
+   - `agents/characters/{name}.md` 파일이 이미 존재하면 SKIP:
+     ```
+     [SKIP] agents/characters/{name}.md가 이미 존재합니다. 재생성하려면 --force를 사용하세요.
+     ```
+   - `--force` 플래그가 있으면 기존 파일을 `.bak`으로 백업 후 재생성
+
+   **파일명 규칙:**
+   - `characters/char_yuna.json` → `agents/characters/yuna.md`
+   - character ID에서 `char_` prefix 제거
+
+   **생성 방법:**
+   sonnet 에이전트를 호출하여 에이전트 프롬프트를 작성합니다:
+
+   ```spec
+   Task(model="sonnet", prompt="
+   다음 두 파일을 읽고, 캐릭터 에이전트 .md 파일을 생성해주세요:
+
+   1. 구조 가이드: agents/characters/_template.md (Part 1 참조)
+   2. 캐릭터 데이터: characters/{char_id}.json
+
+   생성 규칙:
+   - Frontmatter의 model은 role 기반:
+     protagonist/deuteragonist/antagonist → opus
+     supporting → sonnet
+     minor → haiku
+   - Voice 섹션은 characters/{char_id}.json의 basic.voice + inner 필드를 분석하여 작성
+   - Behavioral Rules는 inner.fatal_flaw, behavior.stress_response, behavior.lying_tell 등을 반영
+   - Collaborative Protocol은 _template.md의 형식 그대로 사용
+
+   결과를 agents/characters/{name}.md에 저장해주세요.
+   ")
+   ```
+
+   **생성 후 안내:**
+   ```
+   [OK] agents/characters/{name}.md 생성 완료 ({model} 모델)
+   자동 생성된 파일은 시작점입니다. 캐릭터의 고유한 사고 패턴,
+   트라우마 반응, 관계별 태도 차이 등을 직접 편집하는 것을 권장합니다.
+   ```
+
 ## 출력 예시
 
 ### characters/char_001_yuna.json

@@ -14,6 +14,7 @@ user-invocable: true
 /write 5         # 5화 작성
 /write 5-10      # 5~10화 연속 작성
 /write 5 --team  # 5화 작성 + revision-team 최종 검증
+/write 5 --team collab  # 5화 작성 + 캐릭터 협업 집필
 ```
 
 ## Writer Mode
@@ -36,6 +37,28 @@ user-invocable: true
 1. `meta/ralph-state.json` 읽어 현재 챕터 번호 확인 (인자 없으면)
 2. `meta/project.json` 읽어 `writer_mode` 확인
 3. `chapters/chapter_XXX.json` (플롯 파일) 존재 확인
+
+### Phase 2 분기: --team collab
+
+`$ARGUMENTS`에 `--team collab`이 있으면 기존 novelist 단독 집필 대신 캐릭터 협업 팀을 사용합니다.
+
+**호출:**
+```spec
+Task(subagent_type="novel-dev:team-orchestrator", model="sonnet", prompt="
+팀 실행: writing-team-collab
+대상: Chapter {chapterNumber}
+프로젝트: {projectPath}
+")
+```
+
+- team-orchestrator가 `writing-team-collab.team.json`을 로드
+- `from_scene_cast`로 등장 캐릭터 에이전트를 동적 해석
+- narrator + 캐릭터 에이전트들이 collaborative 워크플로우로 집필
+- proofreader → summarizer 순차 실행
+- 이후 Phase 3 사후 처리는 기존과 동일
+
+> `--team collab` 없이 `--team`만 사용하면 기존 revision-team 검증 (Phase 4).
+> `--team collab --team`은 collab 집필 + revision-team 검증 모두 활성화.
 
 ### Phase 2: Claude 집필
 

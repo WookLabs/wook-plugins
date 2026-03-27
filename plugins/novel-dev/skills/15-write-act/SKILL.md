@@ -14,6 +14,20 @@ $ARGUMENTS
    - `plot/structure.json`에서 해당 막의 회차 범위 확인
    - 예: Act 1 = 1-15화
 
+1-A. **--team collab 분기 확인**
+
+   `$ARGUMENTS`에 `--team collab`이 있으면 각 회차를 collab 팀으로 집필합니다:
+   ```
+   for chapter in act_chapters:
+       # writing-team-collab 사용
+       Task(subagent_type="novel-dev:team-orchestrator", model="sonnet", prompt="
+       팀 실행: writing-team-collab
+       대상: Chapter {chapter}
+       프로젝트: {projectPath}
+       ")
+   ```
+   이 경우 `2. 순차 집필` 단계를 건너뜁니다.
+
 2. **순차 집필**
    ```
    for chapter in act_chapters:
