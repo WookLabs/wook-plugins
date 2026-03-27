@@ -20,7 +20,7 @@ $ARGUMENTS (챕터 번호)
 - revision-loop 실행 기록에서 `executionRecords` 참조
 - 적용된 directive 타입, 위치, 수정 내용 요약
 
-이력이 없으면 빈 컨텍스트로 진행합니다 (첫 실행 등).
+이력이 없으면 다음 메시지로 대체합니다: "이전 단계에서 적용된 정밀 수정 이력이 없습니다. editor는 자유롭게 수정할 수 있습니다."
 
 ### Step 2: team-orchestrator에 위임
 
@@ -51,6 +51,10 @@ Chapter {N} (chapters/chapter_{pad(N, 3)}.md)
 ## 실패 시
 - 원고 파일(chapters/chapter_{pad(N, 3)}.md)을 변경하지 마세요
 - 경고 리포트를 반환하세요
+
+## 에러 처리
+- team-orchestrator Task 호출 자체가 실패하면 quality gate 미통과와 동일하게 처리합니다 (원고 보존, 경고 리포트)
+- 파이프라인 부분 완료(예: critic 성공, editor 실패)도 동일하게 원고 보존
 ")
 ```
 
@@ -61,7 +65,7 @@ Chapter {N} (chapters/chapter_{pad(N, 3)}.md)
 - 결과를 `reviews/team/revision-team_ch{N}_{timestamp}.json`에 저장
 - 성공 메시지 표시:
   ```
-  [OK] revision-team 검증 통과 (critic: {score}/85, consistency: {score}/85)
+  [OK] revision-team 검증 통과 (critic: {score} >= 85, consistency: {score} >= 85)
   수정본이 저장되었습니다.
   ```
 
@@ -70,7 +74,7 @@ Chapter {N} (chapters/chapter_{pad(N, 3)}.md)
 - 결과를 `reviews/team/revision-team_ch{N}_{timestamp}.json`에 저장
 - 경고 리포트 표시:
   ```
-  [WARN] revision-team 검증 미통과 (critic: {score}/85, consistency: {score}/85)
+  [WARN] revision-team 검증 미통과 (critic: {score} < 85, consistency: {score} < 85)
   원고는 그대로 저장되었습니다. 수동 퇴고를 권장합니다:
     /novel-dev:team-nov run revision-team {N}
   상세: reviews/team/revision-team_ch{N}_{timestamp}.json
@@ -83,7 +87,7 @@ Chapter {N} (chapters/chapter_{pad(N, 3)}.md)
 | 유형 | 경로 |
 |------|------|
 | 팀 실행 결과 | `reviews/team/revision-team_ch{N}_{timestamp}.json` |
-| 팀 실행 상태 | `.omc/state/novel-team-{id}.json` (team-orchestrator 관리) |
+| 팀 실행 상태 | `.omc/state/team-{id}.json` (team-orchestrator 관리) |
 
 ## Dependencies
 

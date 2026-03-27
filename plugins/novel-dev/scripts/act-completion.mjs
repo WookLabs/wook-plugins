@@ -140,8 +140,8 @@ async function main() {
         state.act_complete = true;
 
         // Style Dice: rotate seed for next act
-        const currentSeed = state.style_seed || 42;
-        state.style_seed = (currentSeed * 1103515245 + 12345) & 0x7fffffff;
+        const currentSeed = state.style_seed ?? 42;
+        state.style_seed = (Math.imul(currentSeed, 1103515245) + 12345) & 0x7fffffff;
         console.error(`[style-dice] Seed rotated: ${currentSeed} -> ${state.style_seed}`);
 
         writeState(activeProjectPath, state);

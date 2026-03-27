@@ -279,13 +279,13 @@ export function prepareSceneDraft(
   const sceneItems = buildSceneContextItems(scene, sceneNumber, exemplars);
 
   // Style Dice: inject style directive if seed is provided
-  if (metadata.styleSeed !== undefined) {
-    const styleVariance = (metadata.styleVariance as number) ?? 0.3;
+  if (typeof metadata.styleSeed === 'number') {
+    const styleVariance = typeof metadata.styleVariance === 'number' ? metadata.styleVariance : 0.3;
     sceneItems.push({
-      id: 'style_directive',
-      type: 'style_directive' as ContextType,
+      id: `style_directive_${sceneNumber}`,
+      type: 'style_directive',
       path: 'virtual://style_directive',
-      content: generateStyleDirective(metadata.styleSeed as number, styleVariance),
+      content: generateStyleDirective(metadata.styleSeed, styleVariance),
       estimatedTokens: 150,
       priority: 7,
       required: false,
