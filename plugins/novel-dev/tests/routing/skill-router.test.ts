@@ -183,8 +183,8 @@ describe('routing-rules.json structure', () => {
     expect(rules.omcConflictKeywords).toContain('team');
   });
 
-  it('should have 19 core skills', () => {
-    expect(rules.skills.length).toBe(19);
+  it('should have 15 core skills', () => {
+    expect(rules.skills.length).toBe(15);
   });
 
   it('should have projectRequiredExceptions', () => {
@@ -208,49 +208,49 @@ describe('routing-rules.json structure', () => {
 // ── 기본 키워드 매칭 (auto-execute, score >= 0.8) ──────────────────
 
 describe('matchSkills - auto-execute (score >= 0.8)', () => {
-  it('"5화 집필해줘" -> 14-write, chapter=5', () => {
+  it('"5화 집필해줘" -> 06-write, chapter=5', () => {
     const candidates = matchSkills('5화 집필해줘', rules, projectState());
     expect(candidates.length).toBeGreaterThan(0);
-    expect(candidates[0].id).toBe('14-write');
+    expect(candidates[0].id).toBe('06-write');
     expect(candidates[0].args).toEqual({ type: 'chapter', value: '5' });
     expect(candidates[0].score).toBeGreaterThanOrEqual(rules.config.autoThreshold);
   });
 
-  it('"전체 집필해" -> 16-write-all', () => {
+  it('"전체 집필해" -> 08-write-all', () => {
     const candidates = matchSkills('전체 집필해', rules, projectState());
     expect(candidates.length).toBeGreaterThan(0);
-    expect(candidates[0].id).toBe('16-write-all');
+    expect(candidates[0].id).toBe('08-write-all');
   });
 
-  it('"1막 집필 시작" -> 15-write-act, act=1', () => {
+  it('"1막 집필 시작" -> 07-write-act, act=1', () => {
     const candidates = matchSkills('1막 집필 시작', rules, projectState());
     expect(candidates.length).toBeGreaterThan(0);
-    expect(candidates[0].id).toBe('15-write-act');
+    expect(candidates[0].id).toBe('07-write-act');
     expect(candidates[0].args).toEqual({ type: 'act', value: '1' });
   });
 
-  it('"캐릭터 설계해줘" -> 06-design-character', () => {
+  it('"캐릭터 설계해줘" -> 04-design', () => {
     const candidates = matchSkills('캐릭터 설계해줘', rules, projectState({ status: 'planning' }));
     expect(candidates.length).toBeGreaterThan(0);
-    expect(candidates[0].id).toBe('06-design-character');
+    expect(candidates[0].id).toBe('04-design');
   });
 
-  it('"일관성 체크" -> 19-consistency-check', () => {
-    const candidates = matchSkills('일관성 체크', rules, projectState());
+  it('"검증해줘" -> 09-review', () => {
+    const candidates = matchSkills('검증해줘', rules, projectState());
     expect(candidates.length).toBeGreaterThan(0);
-    expect(candidates[0].id).toBe('19-consistency-check');
+    expect(candidates[0].id).toBe('09-review');
   });
 
-  it('"퇴고해줘" -> 17-revise', () => {
+  it('"퇴고해줘" -> 09-review', () => {
     const candidates = matchSkills('퇴고해줘', rules, projectState({ status: 'editing' }));
     expect(candidates.length).toBeGreaterThan(0);
-    expect(candidates[0].id).toBe('17-revise');
+    expect(candidates[0].id).toBe('09-review');
   });
 
-  it('"평가해봐" -> 18-evaluate', () => {
+  it('"평가해봐" -> 09-review', () => {
     const candidates = matchSkills('평가해봐', rules, projectState());
     expect(candidates.length).toBeGreaterThan(0);
-    expect(candidates[0].id).toBe('18-evaluate');
+    expect(candidates[0].id).toBe('09-review');
   });
 
   it('"브레인스토밍하자" -> 00-brainstorm', () => {
@@ -276,16 +276,16 @@ describe('matchSkills - auto-execute (score >= 0.8)', () => {
 // ── excludeKeywords 검증 ──────────────────────────────────────────
 
 describe('matchSkills - excludeKeywords', () => {
-  it('"전체 집필"이 14-write로 매칭되지 않음 (16-write-all로 가야 함)', () => {
+  it('"전체 집필"이 06-write로 매칭되지 않음 (08-write-all로 가야 함)', () => {
     const candidates = matchSkills('전체 집필해', rules, projectState());
-    const writeMatch = candidates.find(c => c.id === '14-write');
+    const writeMatch = candidates.find(c => c.id === '06-write');
     expect(writeMatch).toBeUndefined();
-    expect(candidates[0].id).toBe('16-write-all');
+    expect(candidates[0].id).toBe('08-write-all');
   });
 
-  it('"2패스 집필"이 14-write로 매칭되지 않음', () => {
+  it('"2패스 집필"이 06-write로 매칭되지 않음', () => {
     const candidates = matchSkills('2패스 집필', rules, projectState());
-    const writeMatch = candidates.find(c => c.id === '14-write');
+    const writeMatch = candidates.find(c => c.id === '06-write');
     expect(writeMatch).toBeUndefined();
   });
 
@@ -295,9 +295,9 @@ describe('matchSkills - excludeKeywords', () => {
     expect(result).toBeNull();
   });
 
-  it('"심층 평가"가 18-evaluate로 매칭되지 않음', () => {
-    const skill = rules.skills.find(s => s.id === '18-evaluate')!;
-    const result = matchSingleSkill('심층 평가', skill);
+  it('"설계 리뷰"가 09-review로 매칭되지 않음 (04-design-review로 가야 함)', () => {
+    const skill = rules.skills.find(s => s.id === '09-review')!;
+    const result = matchSingleSkill('설계 리뷰', skill);
     expect(result).toBeNull();
   });
 
@@ -332,9 +332,9 @@ describe('OMC conflict resolution', () => {
 // ── 프로젝트 상태 필터링 ──────────────────────────────────────────
 
 describe('matchSkills - project state filtering', () => {
-  it('프로젝트 없을 때 "집필해줘" -> 14-write 미포함', () => {
+  it('프로젝트 없을 때 "집필해줘" -> 06-write 미포함', () => {
     const candidates = matchSkills('집필해줘', rules, noProject());
-    const writeMatch = candidates.find(c => c.id === '14-write');
+    const writeMatch = candidates.find(c => c.id === '06-write');
     expect(writeMatch).toBeUndefined();
   });
 
@@ -350,16 +350,16 @@ describe('matchSkills - project state filtering', () => {
     expect(candidates[0].id).toBe('00-brainstorm');
   });
 
-  it('planning 상태에서 "집필해줘" -> 14-write', () => {
+  it('planning 상태에서 "집필해줘" -> 06-write', () => {
     const candidates = matchSkills('집필해줘', rules, projectState({ status: 'planning' }));
     expect(candidates.length).toBeGreaterThan(0);
-    expect(candidates[0].id).toBe('14-write');
+    expect(candidates[0].id).toBe('06-write');
   });
 
-  it('complete 상태에서 "세계관 설계" -> 05-design-world 미포함', () => {
-    const candidates = matchSkills('세계관 설계', rules, projectState({ status: 'complete' }));
-    const worldMatch = candidates.find(c => c.id === '05-design-world');
-    expect(worldMatch).toBeUndefined();
+  it('complete 상태에서 "설계" -> 04-design 미포함', () => {
+    const candidates = matchSkills('설계', rules, projectState({ status: 'complete' }));
+    const designMatch = candidates.find(c => c.id === '04-design');
+    expect(designMatch).toBeUndefined();
   });
 });
 
@@ -367,21 +367,21 @@ describe('matchSkills - project state filtering', () => {
 
 describe('argument extraction', () => {
   it('"15화 집필해줘" -> chapter=15', () => {
-    const skill = rules.skills.find(s => s.id === '14-write')!;
+    const skill = rules.skills.find(s => s.id === '06-write')!;
     const result = matchSingleSkill('15화 집필해줘', skill);
     expect(result).not.toBeNull();
     expect(result!.args).toEqual({ type: 'chapter', value: '15' });
   });
 
   it('"2막 집필" -> act=2', () => {
-    const skill = rules.skills.find(s => s.id === '15-write-act')!;
+    const skill = rules.skills.find(s => s.id === '07-write-act')!;
     const result = matchSingleSkill('2막 집필', skill);
     expect(result).not.toBeNull();
     expect(result!.args).toEqual({ type: 'act', value: '2' });
   });
 
   it('인자 없는 "집필해줘" -> args null', () => {
-    const skill = rules.skills.find(s => s.id === '14-write')!;
+    const skill = rules.skills.find(s => s.id === '06-write')!;
     const result = matchSingleSkill('집필해줘', skill);
     expect(result).not.toBeNull();
     expect(result!.args).toBeNull();
@@ -415,7 +415,7 @@ describe('edge cases', () => {
   });
 
   it('한국어 어미 변형 매칭 시 variant bonus', () => {
-    const skill = rules.skills.find(s => s.id === '14-write')!;
+    const skill = rules.skills.find(s => s.id === '06-write')!;
     const baseResult = matchSingleSkill('집필 시작', skill);
     const variantResult = matchSingleSkill('집필해줘', skill);
     expect(baseResult).not.toBeNull();
