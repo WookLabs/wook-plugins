@@ -98,10 +98,10 @@ function getActChapters(projectPath, actNum) {
   const structure = readIfExists(path.join(projectPath, 'plot/structure.json'));
   if (!structure) throw new Error('plot/structure.json not found');
   const data = JSON.parse(structure);
-  const act = data.acts?.find(a => a.act_number === actNum || a.number === actNum);
+  const act = data.acts?.find(a => a.act === actNum || a.act_number === actNum || a.number === actNum);
   if (!act) throw new Error(`Act ${actNum} not found in structure.json`);
-  const start = act.start_chapter || act.chapters?.[0] || 1;
-  const end = act.end_chapter || act.chapters?.[act.chapters.length - 1] || start;
+  const start = act.start_chapter || act.start || act.chapters?.[0] || 1;
+  const end = act.end_chapter || act.end || act.chapters?.[act.chapters.length - 1] || start;
   return Array.from({ length: end - start + 1 }, (_, i) => start + i);
 }
 
