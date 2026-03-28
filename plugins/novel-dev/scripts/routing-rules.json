@@ -153,11 +153,23 @@
     {
       "id": "09-review",
       "name": "review",
-      "keywords": ["리뷰", "퇴고", "평가", "검증", "수정", "review", "revise", "evaluate"],
-      "keywordVariants": ["리뷰해", "퇴고해", "평가해", "검증해", "수정해", "리뷰해줘"],
+      "keywords": ["리뷰", "평가", "검증", "review", "evaluate"],
+      "keywordVariants": ["리뷰해", "평가해", "검증해", "리뷰해줘", "평가해줘"],
       "argPattern": "^(\\d+)(?:[-~](\\d+))?",
       "argType": "chapterRange",
       "excludeKeywords": ["설계", "design", "파이프라인"],
+      "requiredState": ["writing", "editing"],
+      "requireNovelContext": false,
+      "priority": 9
+    },
+    {
+      "id": "09-revise",
+      "name": "revise",
+      "keywords": ["퇴고", "수정", "다듬", "revise", "edit"],
+      "keywordVariants": ["퇴고해", "퇴고해줘", "수정해", "수정해줘", "다듬어", "다듬어줘"],
+      "argPattern": "^(\\d+)(?:[-~](\\d+))?",
+      "argType": "chapterRange",
+      "excludeKeywords": ["파이프라인", "pipeline", "설계"],
       "requiredState": ["writing", "editing"],
       "requireNovelContext": false,
       "priority": 9

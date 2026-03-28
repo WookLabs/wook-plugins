@@ -183,8 +183,8 @@ describe('routing-rules.json structure', () => {
     expect(rules.omcConflictKeywords).toContain('team');
   });
 
-  it('should have 15 core skills', () => {
-    expect(rules.skills.length).toBe(15);
+  it('should have 16 core skills', () => {
+    expect(rules.skills.length).toBe(16);
   });
 
   it('should have projectRequiredExceptions', () => {
@@ -241,10 +241,10 @@ describe('matchSkills - auto-execute (score >= 0.8)', () => {
     expect(candidates[0].id).toBe('09-review');
   });
 
-  it('"퇴고해줘" -> 09-review', () => {
+  it('"퇴고해줘" -> 09-revise', () => {
     const candidates = matchSkills('퇴고해줘', rules, projectState({ status: 'editing' }));
     expect(candidates.length).toBeGreaterThan(0);
-    expect(candidates[0].id).toBe('09-review');
+    expect(candidates[0].id).toBe('09-revise');
   });
 
   it('"평가해봐" -> 09-review', () => {
