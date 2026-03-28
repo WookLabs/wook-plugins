@@ -38,6 +38,14 @@
       },
       "keywords": ["development", "lsp", "verilog", "systemverilog"],
       "category": "development"
+    },
+    {
+      "name": "rtl-planning",
+      "source": "./plugins/rtl-planning",
+      "description": "RTL 프로젝트용 .planning/ 기반 상태 관리",
+      "version": "1.0.0",
+      "category": "development",
+      "keywords": ["rtl", "verilog", "planning", "state-management"]
     }
   ]
 }

@@ -1,0 +1,6 @@
+{
+  "name": "rtl-planning",
+  "version": "1.0.0",
+  "description": "RTL 프로젝트용 .planning/ 기반 상태 관리 스킬. 코드베이스 분석, 모듈별 구현 플랜, 진행 추적.",
+  "skills": "./skills/"
+}
