@@ -166,7 +166,7 @@ function buildActReviewPrompt(projectPath, chapters) {
 
 function checkPrerequisites() {
   try {
-    execFileSync('codex', ['--version'], { stdio: 'pipe' });
+    execFileSync('codex', ['--version'], { stdio: 'pipe', shell: true });
   } catch {
     error('codex CLI를 찾을 수 없습니다.');
     error('OpenAI Codex CLI를 설치하세요: npm install -g @openai/codex');
@@ -196,7 +196,8 @@ function runCodex(systemPrompt, userPrompt, model) {
       encoding: 'utf-8',
       maxBuffer: 1024 * 1024 * 10,
       timeout: 300000,
-      env: { ...process.env }
+      env: { ...process.env },
+      shell: true
     });
   } finally {
     try { fs.unlinkSync(sysFile); } catch { /* ignore */ }
