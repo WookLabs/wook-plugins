@@ -16,7 +16,7 @@
  *   --chapters RANGE   회차 범위 (plot 모드, 예: 1-5 또는 3)
  *   --act N            막 번호 (act 모드)
  *   --project PATH     소설 프로젝트 경로 (필수)
- *   --model MODEL      GPT 모델 (기본: gpt-5.4-xhigh)
+ *   --model MODEL      GPT 모델 (기본: gpt-5.4)
  *   --dry-run          프롬프트 생성만, Codex 호출 안 함
  *   --help, -h         도움말
  */
@@ -47,7 +47,7 @@ function parseArgs(argv) {
     chapters: null,
     act: null,
     project: null,
-    model: 'gpt-5.4-xhigh',
+    model: 'gpt-5.4',
     dryRun: false
   };
 
@@ -121,7 +121,8 @@ function buildPlotReviewPrompt(projectPath, chapters) {
 
   let user = `# 리뷰 대상 플롯\n\n`;
   for (const ch of chapters) {
-    const plot = readIfExists(path.join(projectPath, `chapters/chapter_${pad(ch)}.json`));
+    const plot = readIfExists(path.join(projectPath, `chapters/ch${pad(ch)}.json`))
+      || readIfExists(path.join(projectPath, `chapters/chapter_${pad(ch)}.json`));
     if (plot) user += `## Chapter ${ch}\n\`\`\`json\n${plot}\n\`\`\`\n\n`;
   }
 
@@ -152,9 +153,9 @@ function buildActReviewPrompt(projectPath, chapters) {
 
   let user = `# 리뷰 대상 원고\n\n`;
   for (const ch of chapters) {
-    const manuscript = readIfExists(path.join(projectPath, `chapters/chapter_${pad(ch)}.md`));
+    const manuscript = readIfExists(path.join(projectPath, `chapters/ch${pad(ch)}.md`))
+      || readIfExists(path.join(projectPath, `chapters/chapter_${pad(ch)}.md`));
     if (manuscript) {
-      // 토큰 절약을 위해 원고를 요약하지 않고 전문 전달
       user += `## Chapter ${ch}\n${manuscript}\n\n---\n\n`;
     }
   }
@@ -178,30 +179,32 @@ function runCodex(systemPrompt, userPrompt, model) {
   const tmpDir = path.join(process.env.TEMP || '/tmp', 'codex-reviewer');
   fs.mkdirSync(tmpDir, { recursive: true });
 
-  const sysFile = path.join(tmpDir, 'system.md');
-  const userFile = path.join(tmpDir, 'user.md');
-  fs.writeFileSync(sysFile, systemPrompt, 'utf-8');
-  fs.writeFileSync(userFile, userPrompt, 'utf-8');
+  const promptFile = path.join(tmpDir, 'prompt.md');
+  const outputFile = path.join(tmpDir, 'output.md');
+  const combinedPrompt = `# System Instructions\n\n${systemPrompt}\n\n# Task\n\n${userPrompt}`;
+  fs.writeFileSync(promptFile, combinedPrompt, 'utf-8');
 
   try {
-    const args = [
-      '--model', model,
-      '--system-prompt-file', sysFile,
-      '--prompt-file', userFile,
-      '--no-interactive'
-    ];
+    // codex exec 모드: 파일에서 읽어 stdin으로 파이프 (Windows ENAMETOOLONG 우회)
+    const promptPath = promptFile.replace(/\\/g, '/');
+    const outputPath = outputFile.replace(/\\/g, '/');
+    const cmd = `cat "${promptPath}" | codex exec --model ${model} -s read-only -o "${outputPath}" -`;
     log(`Codex CLI 실행: model=${model}`);
 
-    return execFileSync('codex', args, {
+    execFileSync('bash', ['-c', cmd], {
       encoding: 'utf-8',
       maxBuffer: 1024 * 1024 * 10,
-      timeout: 300000,
-      env: { ...process.env },
-      shell: true
+      timeout: 600000, // 10분 (대량 원고 리뷰)
+      env: { ...process.env }
     });
+
+    if (fs.existsSync(outputFile)) {
+      return fs.readFileSync(outputFile, 'utf-8');
+    }
+    return '';
   } finally {
-    try { fs.unlinkSync(sysFile); } catch { /* ignore */ }
-    try { fs.unlinkSync(userFile); } catch { /* ignore */ }
+    try { fs.unlinkSync(promptFile); } catch { /* ignore */ }
+    try { fs.unlinkSync(outputFile); } catch { /* ignore */ }
     try { fs.rmdirSync(tmpDir); } catch { /* ignore */ }
   }
 }

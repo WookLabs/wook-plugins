@@ -8,13 +8,13 @@
  *
  * Usage:
  *   node scripts/codex-writer.mjs --chapter 1 --project ./novels/my-novel
- *   node scripts/codex-writer.mjs --chapter 5 --project ./novels/my-novel --model gpt-5.4-xhigh
+ *   node scripts/codex-writer.mjs --chapter 5 --project ./novels/my-novel --model gpt-5.4
  *   node scripts/codex-writer.mjs --chapter 1 --project ./novels/my-novel --dry-run
  *
  * Options:
  *   --chapter N        회차 번호 (필수)
  *   --project PATH     소설 프로젝트 경로 (필수)
- *   --model MODEL      GPT 모델 (기본: gpt-5.4-xhigh)
+ *   --model MODEL      GPT 모델 (기본: gpt-5.4)
  *   --dry-run          프롬프트 생성만, Codex 호출 안 함
  *   --help, -h         도움말
  *
@@ -47,7 +47,7 @@ function parseArgs(argv) {
   const result = {
     chapter: null,
     project: null,
-    model: 'gpt-5.4-xhigh',
+    model: 'gpt-5.4',
     dryRun: false
   };
 
@@ -80,7 +80,7 @@ ${colors.yellow}Usage:${colors.reset}
 ${colors.yellow}Options:${colors.reset}
   --chapter N        회차 번호 (필수)
   --project PATH     소설 프로젝트 경로 (필수)
-  --model MODEL      GPT 모델 (기본: gpt-5.4-xhigh)
+  --model MODEL      GPT 모델 (기본: gpt-5.4)
   --dry-run          프롬프트 생성만, Codex 호출 안 함
   --help, -h         도움말
 
@@ -212,37 +212,33 @@ function runCodex(systemPrompt, userPrompt, model) {
   const tmpDir = path.join(process.env.TEMP || '/tmp', 'codex-writer');
   fs.mkdirSync(tmpDir, { recursive: true });
 
-  const sysFile = path.join(tmpDir, 'system.md');
-  const userFile = path.join(tmpDir, 'user.md');
-  fs.writeFileSync(sysFile, systemPrompt, 'utf-8');
-  fs.writeFileSync(userFile, userPrompt, 'utf-8');
+  const promptFile = path.join(tmpDir, 'prompt.md');
+  const outputFile = path.join(tmpDir, 'output.md');
+  const combinedPrompt = `# System Instructions\n\n${systemPrompt}\n\n# Task\n\n${userPrompt}`;
+  fs.writeFileSync(promptFile, combinedPrompt, 'utf-8');
 
   try {
-    // Codex CLI 호출 — execFileSync로 안전한 인자 전달
-    // 정확한 CLI 인터페이스는 구현 시 codex --help로 확인 후 조정
-    const args = [
-      '--model', model,
-      '--system-prompt-file', sysFile,
-      '--prompt-file', userFile,
-      '--no-interactive'
-    ];
+    // codex exec 모드: 파일에서 읽어 stdin으로 파이프 (Windows ENAMETOOLONG 우회)
+    const promptPath = promptFile.replace(/\\/g, '/');
+    const outputPath = outputFile.replace(/\\/g, '/');
+    const cmd = `cat "${promptPath}" | codex exec --model ${model} -o "${outputPath}" -`;
     log(`Codex CLI 실행: model=${model}`);
 
-    const result = execFileSync('codex', args, {
+    execFileSync('bash', ['-c', cmd], {
       encoding: 'utf-8',
       maxBuffer: 1024 * 1024 * 10, // 10MB
-      timeout: 300000, // 5분
-      env: { ...process.env },
-      shell: true
+      timeout: 600000, // 10분
+      env: { ...process.env }
     });
 
-    return result;
+    if (fs.existsSync(outputFile)) {
+      return fs.readFileSync(outputFile, 'utf-8');
+    }
+    return '';
   } finally {
-    // 임시 파일 정리
-    try { fs.unlinkSync(sysFile); } catch { /* ignore */ }
-    try { fs.unlinkSync(userFile); } catch { /* ignore */ }
+    try { fs.unlinkSync(promptFile); } catch { /* ignore */ }
+    try { fs.unlinkSync(outputFile); } catch { /* ignore */ }
     try { fs.rmdirSync(tmpDir); } catch { /* ignore */ }
-  }
 }
 
 // ─── Main ────────────────────────────────────────────────────────────────────
