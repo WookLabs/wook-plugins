@@ -8,6 +8,8 @@
 import { promises as fs } from 'fs';
 import { existsSync } from 'fs';
 import path from 'path';
+import { createLogger } from '../utils/logger.js';
+const logger = createLogger('style-library');
 import type {
   StyleLibrary,
   StyleExemplar,
@@ -61,16 +63,21 @@ export async function loadLibrary(projectDir: string): Promise<StyleLibrary> {
 
   try {
     const content = await fs.readFile(filePath, 'utf-8');
-    const library = JSON.parse(content) as StyleLibrary;
+    let library: StyleLibrary;
+    try {
+      library = JSON.parse(content) as StyleLibrary;
+    } catch {
+      logger.warn('스타일 라이브러리 JSON 파싱 실패, 빈 라이브러리로 초기화');
+      return createEmptyLibrary();
+    }
 
-    // Ensure required fields exist for backward compatibility
     if (!library.metadata) {
       library.metadata = createEmptyLibrary().metadata;
     }
 
     return library;
   } catch (error) {
-    console.error(`Error loading style library: ${error}`);
+    logger.error('스타일 라이브러리 로드 실패', error);
     return createEmptyLibrary();
   }
 }

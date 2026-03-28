@@ -1,5 +1,7 @@
 import { promises as fs } from 'fs';
 import { existsSync } from 'fs';
+import { createLogger } from '../utils/logger.js';
+const logger = createLogger('state-backup');
 
 /**
  * Executes an operation with automatic backup and restore on failure
@@ -27,7 +29,7 @@ export async function withStateBackup<T>(
     // 3. Restore from backup on failure
     if (existsSync(backupPath)) {
       await fs.copyFile(backupPath, stateFilePath);
-      console.warn('State restored from backup due to error.');
+      logger.warn('에러로 인해 백업에서 상태 복원됨', stateFilePath);
     }
     throw error;
   }

@@ -18,6 +18,8 @@ import { existsSync } from 'fs';
 import path from 'path';
 import type { QualitySnapshot, TrendData } from './types.js';
 import { withStateBackup } from '../state/backup.js';
+import { createLogger } from '../utils/logger.js';
+const logger = createLogger('quality-tracker');
 
 // ============================================================================
 // Constants
@@ -67,7 +69,13 @@ export async function loadTrendData(
   }
 
   const content = await fs.readFile(filePath, 'utf-8');
-  const parsed = JSON.parse(content) as TrendData;
+  let parsed: TrendData;
+  try {
+    parsed = JSON.parse(content) as TrendData;
+  } catch {
+    logger.warn('quality-trend.json 파싱 실패, 빈 데이터로 초기화');
+    return createEmptyTrendData(projectId);
+  }
 
   // Basic structure validation
   if (!parsed.projectId || !Array.isArray(parsed.snapshots) || !parsed.metadata) {

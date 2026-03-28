@@ -27,6 +27,8 @@ import {
   FinalStageEvaluator,
 } from './stage-evaluators.js';
 import type { SurgeonCallback } from '../pipeline/prose-surgeon.js';
+import { createLogger } from '../utils/logger.js';
+const logger = createLogger('revision-stages');
 
 // ============================================================================
 // Revision Stage Configuration
@@ -142,7 +144,7 @@ export async function runMultiStageRevision(
           directivesProcessed++;
         }
       } catch (error) {
-        // Continue with next directive on error
+        logger.warn('디렉티브 처리 실패, 다음으로 진행', error);
       }
 
       iterations++;

@@ -1,5 +1,7 @@
 import { promises as fs, constants } from 'fs';
 import { open } from 'fs/promises';
+import { createLogger } from '../utils/logger.js';
+const logger = createLogger('state-lock');
 
 const LOCK_TIMEOUT_MS = 30000; // 30 seconds
 
@@ -33,15 +35,15 @@ export async function acquireLock(stateFilePath: string): Promise<() => Promise<
       return async () => {
         try {
           await fs.unlink(lockPath);
-        } catch {
-          // Ignore errors during unlock (file may already be deleted)
+        } catch (unlockErr) {
+          logger.debug('잠금 해제 실패 (무시)', unlockErr);
         }
       };
     } catch (err: unknown) {
       const error = err as NodeJS.ErrnoException;
 
       if (error.code !== 'EEXIST') {
-        // Unexpected error (not "file exists")
+        logger.error('잠금 획득 중 예기치 않은 에러', error);
         throw error;
       }
 

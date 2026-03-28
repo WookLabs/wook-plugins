@@ -22,6 +22,10 @@ import {
 
 import { estimateTokens, estimateTokensByPath, detectContentType } from './estimator.js';
 import { getPriority, isRequired, sortByPriority } from './priorities.js';
+import { safeParsePassthrough, ChapterPlotGuard, ForeshadowingGuard, StructureGuard } from '../validation/guards.js';
+import { createLogger } from '../utils/logger.js';
+
+const logger = createLogger('context-loader');
 
 // ============================================================================
 // File Loading
@@ -41,6 +45,7 @@ async function loadFile(filePath: string): Promise<string | null> {
     if ((error as NodeJS.ErrnoException).code === 'ENOENT') {
       return null;
     }
+    logger.error('파일 로드 실패', filePath, error);
     throw error;
   }
 }
@@ -195,41 +200,44 @@ async function collectCharacterCandidates(
     // Load manifest to get character list
     const manifestContent = await loadFile(actualManifestPath);
     if (manifestContent) {
+      let manifest: Record<string, unknown>;
       try {
-        const manifest = JSON.parse(manifestContent);
-        const characters = manifest.characters || manifest;
-
-        // Get appearing characters from current chapter plot
-        const appearingIds = await getAppearingCharacters(chapterNumber, projectPath);
-
-        for (const char of Array.isArray(characters) ? characters : Object.values(characters)) {
-          const charId = (char as { id?: string }).id || 'unknown';
-          const charPath = path.join(charactersDir, `${charId}.json`);
-
-          const appearsInCurrentChapter = appearingIds.includes(charId);
-          const metadata: ItemMetadata = {
-            currentChapter: chapterNumber,
-            appearsInCurrentChapter,
-          };
-
-          // Skip non-appearing characters unless config says otherwise
-          if (!config.includeAllCharacters && !appearsInCurrentChapter) {
-            continue;
-          }
-
-          if (await fileExists(charPath)) {
-            candidates.push({
-              id: `character-${charId}`,
-              type: 'character',
-              path: charPath,
-              estimatedTokens: estimateTokensByPath(charPath),
-              priority: getPriority('character', metadata),
-              required: isRequired('character', metadata),
-            });
-          }
-        }
+        manifest = JSON.parse(manifestContent) as Record<string, unknown>;
       } catch {
-        // Manifest parsing failed, skip
+        logger.warn('캐릭터 매니페스트 파싱 실패', actualManifestPath!);
+        return;
+      }
+
+      const characters = manifest.characters || manifest;
+
+      // Get appearing characters from current chapter plot
+      const appearingIds = await getAppearingCharacters(chapterNumber, projectPath);
+
+      for (const char of Array.isArray(characters) ? characters : Object.values(characters)) {
+        const charId = (char as { id?: string }).id || 'unknown';
+        const charPath = path.join(charactersDir, `${charId}.json`);
+
+        const appearsInCurrentChapter = appearingIds.includes(charId);
+        const metadata: ItemMetadata = {
+          currentChapter: chapterNumber,
+          appearsInCurrentChapter,
+        };
+
+        // Skip non-appearing characters unless config says otherwise
+        if (!config.includeAllCharacters && !appearsInCurrentChapter) {
+          continue;
+        }
+
+        if (await fileExists(charPath)) {
+          candidates.push({
+            id: `character-${charId}`,
+            type: 'character',
+            path: charPath,
+            estimatedTokens: estimateTokensByPath(charPath),
+            priority: getPriority('character', metadata),
+            required: isRequired('character', metadata),
+          });
+        }
       }
     }
   }
@@ -248,14 +256,12 @@ async function getAppearingCharacters(
     `chapter_${String(chapterNumber).padStart(3, '0')}.json`
   );
 
-  try {
-    const content = await loadFile(chapterPlotPath);
-    if (content) {
-      const plot = JSON.parse(content);
-      return plot.meta?.characters || plot.characters || [];
-    }
-  } catch {
-    // Failed to parse, return empty
+  const content = await loadFile(chapterPlotPath);
+  if (content) {
+    const plot = safeParsePassthrough(content, ChapterPlotGuard, `chapter plot ${chapterNumber}`) as Record<string, unknown> | null;
+    if (!plot) return [];
+    const meta = plot.meta as Record<string, unknown> | undefined;
+    return (meta?.characters as string[]) || (plot.characters as string[]) || [];
   }
 
   return [];
@@ -305,14 +311,12 @@ async function getUsedLocations(
     `chapter_${String(chapterNumber).padStart(3, '0')}.json`
   );
 
-  try {
-    const content = await loadFile(chapterPlotPath);
-    if (content) {
-      const plot = JSON.parse(content);
-      return plot.meta?.locations || plot.locations || [];
-    }
-  } catch {
-    // Failed to parse, return empty
+  const content = await loadFile(chapterPlotPath);
+  if (content) {
+    const plot = safeParsePassthrough(content, ChapterPlotGuard, `chapter locations ${chapterNumber}`) as Record<string, unknown> | null;
+    if (!plot) return [];
+    const meta = plot.meta as Record<string, unknown> | undefined;
+    return (meta?.locations as string[]) || (plot.locations as string[]) || [];
   }
 
   return [];
@@ -336,64 +340,8 @@ async function collectForeshadowingCandidates(
   if (await fileExists(foreshadowingPath)) {
     const content = await loadFile(foreshadowingPath);
     if (content) {
-      try {
-        const foreshadowing = JSON.parse(content);
-        const items = foreshadowing.items || foreshadowing;
-        const itemsArray = Array.isArray(items) ? items : Object.values(items);
-
-        // Filter relevant foreshadowing items for this chapter
-        const relevantItems = itemsArray.filter((item) => {
-          const fore = item as {
-            id?: string;
-            plant_chapter?: number;
-            payoff_chapter?: number;
-            status?: string;
-          };
-
-          // Skip paid off items unless config says otherwise
-          if (!config.includeAllForeshadowing && fore.status === 'paid_off') {
-            return false;
-          }
-
-          // Include if planted before/at current chapter and not yet paid off
-          const planted = (fore.plant_chapter ?? 0) <= chapterNumber;
-          const notPaidOff = !fore.payoff_chapter || fore.payoff_chapter >= chapterNumber;
-
-          return planted && notPaidOff;
-        });
-
-        if (relevantItems.length > 0) {
-          // Calculate priority based on highest-priority item (closest payoff)
-          let maxPriority = 0;
-          let hasRequired = false;
-
-          for (const item of relevantItems) {
-            const fore = item as { payoff_chapter?: number };
-            const metadata: ItemMetadata = {
-              currentChapter: chapterNumber,
-              payoffChapter: fore.payoff_chapter,
-            };
-            const itemPriority = getPriority('foreshadowing', metadata);
-            const itemRequired = isRequired('foreshadowing', metadata);
-
-            if (itemPriority > maxPriority) maxPriority = itemPriority;
-            if (itemRequired) hasRequired = true;
-          }
-
-          // Add as SINGLE consolidated item with filtered content
-          candidates.push({
-            id: 'foreshadowing-relevant',
-            type: 'foreshadowing',
-            path: foreshadowingPath,
-            // Store filtered content directly to avoid re-loading full file
-            content: JSON.stringify(relevantItems, null, 2),
-            estimatedTokens: estimateTokens(JSON.stringify(relevantItems), 'json'),
-            priority: maxPriority,
-            required: hasRequired,
-          });
-        }
-      } catch {
-        // Parsing failed, add whole file
+      const foreshadowing = safeParsePassthrough(content, ForeshadowingGuard, 'foreshadowing');
+      if (!foreshadowing) {
         candidates.push({
           id: 'foreshadowing-all',
           type: 'foreshadowing',
@@ -401,6 +349,62 @@ async function collectForeshadowingCandidates(
           estimatedTokens: estimateTokensByPath(foreshadowingPath),
           priority: getPriority('foreshadowing', { currentChapter: chapterNumber }),
           required: false,
+        });
+        return;
+      }
+
+      const items = foreshadowing.items || foreshadowing;
+      const itemsArray = Array.isArray(items) ? items : Object.values(items);
+
+      // Filter relevant foreshadowing items for this chapter
+      const relevantItems = itemsArray.filter((item) => {
+        const fore = item as {
+          id?: string;
+          plant_chapter?: number;
+          payoff_chapter?: number;
+          status?: string;
+        };
+
+        // Skip paid off items unless config says otherwise
+        if (!config.includeAllForeshadowing && fore.status === 'paid_off') {
+          return false;
+        }
+
+        // Include if planted before/at current chapter and not yet paid off
+        const planted = (fore.plant_chapter ?? 0) <= chapterNumber;
+        const notPaidOff = !fore.payoff_chapter || fore.payoff_chapter >= chapterNumber;
+
+        return planted && notPaidOff;
+      });
+
+      if (relevantItems.length > 0) {
+        // Calculate priority based on highest-priority item (closest payoff)
+        let maxPriority = 0;
+        let hasRequired = false;
+
+        for (const item of relevantItems) {
+          const fore = item as { payoff_chapter?: number };
+          const metadata: ItemMetadata = {
+            currentChapter: chapterNumber,
+            payoffChapter: fore.payoff_chapter,
+          };
+          const itemPriority = getPriority('foreshadowing', metadata);
+          const itemRequired = isRequired('foreshadowing', metadata);
+
+          if (itemPriority > maxPriority) maxPriority = itemPriority;
+          if (itemRequired) hasRequired = true;
+        }
+
+        // Add as SINGLE consolidated item with filtered content
+        candidates.push({
+          id: 'foreshadowing-relevant',
+          type: 'foreshadowing',
+          path: foreshadowingPath,
+          // Store filtered content directly to avoid re-loading full file
+          content: JSON.stringify(relevantItems, null, 2),
+          estimatedTokens: estimateTokens(JSON.stringify(relevantItems), 'json'),
+          priority: maxPriority,
+          required: hasRequired,
         });
       }
     }
@@ -417,22 +421,22 @@ async function getCurrentActNumber(
   projectPath: string,
   chaptersPerAct: number
 ): Promise<number> {
-  try {
-    const structurePath = path.join(projectPath, 'plot', 'structure.json');
-    const content = await fs.readFile(structurePath, 'utf-8');
-    const structure = JSON.parse(content);
+  const structurePath = path.join(projectPath, 'plot', 'structure.json');
+  const content = await loadFile(structurePath);
+  if (content) {
+    const structure = safeParsePassthrough(content, StructureGuard, 'plot structure');
+    if (!structure) return Math.ceil(chapterNumber / chaptersPerAct);
     if (structure.acts && Array.isArray(structure.acts)) {
       for (let i = 0; i < structure.acts.length; i++) {
-        const act = structure.acts[i];
-        const start = act.chapters?.start ?? act.start_chapter ?? (i * chaptersPerAct + 1);
-        const end = act.chapters?.end ?? act.end_chapter ?? ((i + 1) * chaptersPerAct);
+        const act = structure.acts[i] as Record<string, unknown>;
+        const chapters = act.chapters as Record<string, number> | undefined;
+        const start = chapters?.start ?? (act.start_chapter as number | undefined) ?? (i * chaptersPerAct + 1);
+        const end = chapters?.end ?? (act.end_chapter as number | undefined) ?? ((i + 1) * chaptersPerAct);
         if (chapterNumber >= start && chapterNumber <= end) {
           return i + 1;
         }
       }
     }
-  } catch {
-    // structure.json not found or invalid — fall through to default
   }
   return Math.ceil(chapterNumber / chaptersPerAct);
 }

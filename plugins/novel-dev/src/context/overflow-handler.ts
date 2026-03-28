@@ -18,6 +18,10 @@ import {
 export type { _ContextItem as ContextItem, _ContextType as ContextType };
 import { estimateTokens, detectContentType } from './estimator.js';
 import { PRIORITY_THRESHOLDS, getDroppableItems } from './priorities.js';
+import { safeParsePassthrough, CharacterGuard } from '../validation/guards.js';
+import { createLogger } from '../utils/logger.js';
+
+const logger = createLogger('overflow-handler');
 
 // ============================================================================
 // Types
@@ -305,58 +309,61 @@ function compressCharacter(
   maxLength: number,
   stripDetails: boolean
 ): string {
-  try {
-    const char = JSON.parse(content);
+  const char = safeParsePassthrough(content, CharacterGuard, 'compressCharacter');
+  if (!char) {
+    logger.warn('캐릭터 압축 실패: 검증 미통과, 원본 잘라서 반환');
+    return content.substring(0, maxLength - 3) + '...';
+  }
 
-    // Create compressed version with essentials only
-    const compressed: Record<string, unknown> = {
-      id: char.id,
-      name: char.name,
-      role: char.role,
+  const compressed: Record<string, unknown> = {
+    id: char.id,
+    name: char.name,
+    role: char.role,
+  };
+
+  const basic = char.basic as Record<string, unknown> | undefined;
+  if (basic && typeof basic === 'object') {
+    compressed.basic = {
+      age: basic.age ?? 'unknown',
+      gender: basic.gender ?? 'unknown',
     };
 
-    // Keep basic info
-    if (char.basic) {
-      compressed.basic = {
-        age: char.basic.age,
-        gender: char.basic.gender,
-      };
-
-      if (char.basic.appearance && !stripDetails) {
+    if (!stripDetails) {
+      const appearance = basic.appearance as Record<string, unknown> | undefined;
+      if (appearance && typeof appearance === 'object') {
+        const features = Array.isArray(appearance.features)
+          ? appearance.features.slice(0, 2)
+          : [];
         compressed.basic = {
-          ...compressed.basic as object,
-          appearance: char.basic.appearance.features?.slice(0, 2),
+          ...(compressed.basic as object),
+          appearance: { features },
         };
       }
     }
-
-    // Keep inner motivation (important for consistency)
-    if (char.inner) {
-      compressed.inner = {
-        want: char.inner.want,
-        need: char.inner.need,
-        fatal_flaw: char.inner.fatal_flaw,
-      };
-    }
-
-    const result = JSON.stringify(compressed, null, 2);
-
-    // If still too long, strip more
-    if (result.length > maxLength) {
-      const minimal = {
-        id: char.id,
-        name: char.name,
-        role: char.role,
-        summary: `${char.basic?.age || '?'}세 ${char.basic?.gender || '?'}, ${char.inner?.fatal_flaw || ''}`,
-      };
-      return JSON.stringify(minimal, null, 2);
-    }
-
-    return result;
-  } catch {
-    // Not JSON, truncate as text
-    return content.substring(0, maxLength - 3) + '...';
   }
+
+  const inner = char.inner as Record<string, unknown> | undefined;
+  if (inner && typeof inner === 'object') {
+    compressed.inner = {
+      want: inner.want ?? '',
+      need: inner.need ?? '',
+      fatal_flaw: inner.fatal_flaw ?? '',
+    };
+  }
+
+  const result = JSON.stringify(compressed, null, 2);
+
+  if (result.length > maxLength) {
+    const minimal = {
+      id: char.id,
+      name: char.name,
+      role: char.role,
+      summary: `${(basic?.age as string | number) ?? '?'}세 ${(basic?.gender as string) ?? '?'}, ${(inner?.fatal_flaw as string) ?? ''}`,
+    };
+    return JSON.stringify(minimal, null, 2);
+  }
+
+  return result;
 }
 
 // ============================================================================

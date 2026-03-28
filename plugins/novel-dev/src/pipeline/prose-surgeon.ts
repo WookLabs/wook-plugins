@@ -12,6 +12,8 @@
  */
 
 import type { DirectiveType, SurgicalDirective } from './types.js';
+import { createLogger } from '../utils/logger.js';
+const logger = createLogger('prose-surgeon');
 
 // ============================================================================
 // Model Routing Configuration
@@ -530,6 +532,7 @@ export async function executeDirective(
     };
   } catch (error) {
     const errorMessage = error instanceof Error ? error.message : String(error);
+    logger.error('수술 실행 실패', directive.id, errorMessage);
     return {
       record: {
         directiveId: directive.id,
