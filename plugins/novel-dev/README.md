@@ -103,7 +103,8 @@ Claude Code 재시작 후 자동으로 새로 로드됩니다.
 ┌─────────────────────────────────────────────────────────────┐
 │                    🔍 검증 단계 (Review)                      │
 ├─────────────────────────────────────────────────────────────┤
-│  09. /review [N]       원고 퇴고·품질 평가·일관성 검사        │
+│  05b. /plot-review     플롯 품질 검증 (4에이전트 병렬)        │
+│  07b. /act-review [N]  막 단위 리뷰 + 선택적 심층            │
 │  10. /check            전체 설정 일관성 검사                  │
 └─────────────────────────────────────────────────────────────┘
 ```
@@ -135,29 +136,16 @@ Claude Code 재시작 후 자동으로 새로 로드됩니다.
 ### 검증/퇴고 단계 (3개)
 | 커맨드 | 설명 | 비고 |
 |--------|------|------|
-| `/review [N]` | 원고 퇴고·품질 평가·일관성 검사 통합 | |
+| `/plot-review [N-M]` | 플롯 품질 검증 (plot-review-team 4에이전트) | |
+| `/act-review [N]` | 막 단위 리뷰 + 선택적 심층 (deep-review-team 6에이전트) | |
 | `/resume` | 중단된 세션 이어쓰기 | |
 | `/write-act-2pass` | 막 단위 2-Pass 일괄 집필 | |
 
-### 분석/최적화 (3개)
+### 품질/도구 (2개)
 | 커맨드 | 설명 | 비고 |
 |--------|------|------|
-| `/analyze-engagement` | 회차별 몰입도/이탈 위험/유지율/감정 곡선 분석 | retention + emotion-arc 통합 |
-| `/multi-draft` | 동일 장면 다중 접근법 비교 | |
-| `/evaluate --deep` | LongStoryEval 8축 심층 평가 | deep-evaluate 통합 |
-
-### 품질/검증 (4개)
-| 커맨드 | 설명 | 비고 |
-|--------|------|------|
-| `/adversarial-review` | 적대적 관점 챕터 검증 | |
-| `/review` | 설계 결과물 다각도 검토 | |
+| `/act-review [N]` | 심층 리뷰 (몰입도·적대적 검증 포함) | deep-review-team 6에이전트 |
 | `/style-library` | Few-shot 스타일 예시 라이브러리 | |
-| `/swarm` | 여러 에이전트 병렬 작업 | |
-
-### 자동화/팀 (1개)
-| 커맨드 | 설명 | 비고 |
-|--------|------|------|
-| `/team-nov` | 에이전트 팀 관리/실행 | |
 
 ### 유틸리티 (4개)
 | 커맨드 | 설명 | 비고 |
@@ -306,7 +294,8 @@ novels/{novel_id}/
 
 ### 스킬 정리 (48→38)
 - `/deep-evaluate` → `/evaluate --deep`으로 통합 (8축 루브릭은 references/로 이동)
-- `/check-retention`, `/emotion-arc` → `/analyze-engagement`에 흡수
+- `/check-retention`, `/emotion-arc` → `/act-review`에 흡수 (deep-review-team의 engagement-optimizer)
+- `/analyze-engagement`, `/adversarial-review`, `/multi-draft`, `/team-nov`, `/swarm` → 삭제 (팀 기반 스킬에 흡수)
 - `/ai-slop-detector`, `/validate-genre` → `/evaluate`에 통합
 - `/timeline` → `/design-timeline --view`로 통합
 - `/analyze` (범용 라우터), `/21-wisdom`, `/cancel-novel-autopilot` 제거

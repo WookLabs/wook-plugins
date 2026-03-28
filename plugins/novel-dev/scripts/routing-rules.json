@@ -97,10 +97,22 @@
       "keywordVariants": ["플롯 생성", "줄거리 만들", "플롯 짜", "줄거리 짜"],
       "argPattern": "([0-9]+)\\s*(?:화|회|장|ch(?:apter)?)",
       "argType": "chapter",
-      "excludeKeywords": ["아키텍트"],
+      "excludeKeywords": ["아키텍트", "리뷰", "검증", "review"],
       "requiredState": ["planning", "writing"],
       "requireNovelContext": false,
       "priority": 8
+    },
+    {
+      "id": "05-plot-review",
+      "name": "plot-review",
+      "keywords": ["플롯 리뷰", "플롯 검증", "plot review", "플롯 검토"],
+      "keywordVariants": ["플롯 리뷰해", "플롯 검증해", "플롯 검토해"],
+      "argPattern": "^(\\d+)(?:[-~](\\d+))?",
+      "argType": "chapterRange",
+      "excludeKeywords": ["설계", "design"],
+      "requiredState": ["planning", "writing"],
+      "requireNovelContext": false,
+      "priority": 9
     },
     {
       "id": "06-write",
@@ -121,10 +133,22 @@
       "keywordVariants": ["막 집필해", "막 전체 써", "막 작성"],
       "argPattern": "([0-9]+)\\s*(?:막|act)",
       "argType": "act",
-      "excludeKeywords": ["2pass", "2패스", "투패스"],
+      "excludeKeywords": ["2pass", "2패스", "투패스", "리뷰", "평가", "review"],
       "requiredState": ["writing"],
       "requireNovelContext": false,
       "priority": 11
+    },
+    {
+      "id": "07-act-review",
+      "name": "act-review",
+      "keywords": ["막 리뷰", "막 평가", "act review", "막 검토"],
+      "keywordVariants": ["막 리뷰해", "막 평가해", "막 검토해"],
+      "argPattern": "([0-9]+)\\s*(?:막|act)",
+      "argType": "act",
+      "excludeKeywords": ["설계", "design", "집필", "써"],
+      "requiredState": ["writing", "editing"],
+      "requireNovelContext": false,
+      "priority": 9
     },
     {
       "id": "08-write-all",
@@ -149,18 +173,6 @@
       "requiredState": ["writing"],
       "requireNovelContext": false,
       "priority": 11
-    },
-    {
-      "id": "09-review",
-      "name": "review",
-      "keywords": ["리뷰", "평가", "검증", "review", "evaluate"],
-      "keywordVariants": ["리뷰해", "평가해", "검증해", "리뷰해줘", "평가해줘"],
-      "argPattern": "^(\\d+)(?:[-~](\\d+))?",
-      "argType": "chapterRange",
-      "excludeKeywords": ["설계", "design", "파이프라인"],
-      "requiredState": ["writing", "editing"],
-      "requireNovelContext": false,
-      "priority": 9
     },
     {
       "id": "09-revise",

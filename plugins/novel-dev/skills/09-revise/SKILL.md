@@ -8,7 +8,7 @@ user-invocable: true
 
 $ARGUMENTS
 
-집필 팀(narrator + character agents)이 /review 피드백을 기반으로 collaborative 모드로 원고를 퇴고합니다.
+집필 팀(narrator + character agents)이 /act-review 또는 /plot-review 피드백을 기반으로 collaborative 모드로 원고를 퇴고합니다.
 
 ## Quick Start
 
@@ -21,7 +21,7 @@ $ARGUMENTS
 ## Prerequisites
 
 - `chapters/chapter_{N}.md` 존재 (집필 완료)
-- `/review` 결과가 있으면 피드백을 자동 로드 (없어도 실행 가능)
+- `/act-review` 또는 `/plot-review` 결과가 있으면 피드백을 자동 로드 (없어도 실행 가능)
 
 ## 실행
 

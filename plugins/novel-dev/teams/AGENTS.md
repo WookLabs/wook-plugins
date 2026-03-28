@@ -7,9 +7,9 @@
 
 에이전트 팀 프리셋 정의를 관리하는 디렉토리. 각 `.team.json` 파일은 `schemas/team.schema.json`을 준수하며, 역할 기반 에이전트 조직 + 워크플로우 + 품질 게이트를 정의합니다.
 
-`/novel-dev:team-nov run <name>` 명령으로 실행하면 `team-orchestrator` 에이전트가 팀 정의를 로드하여 자동으로 에이전트를 조직화하고 워크플로우를 실행합니다.
+각 스킬(`/design`, `/write`, `/plot-review`, `/act-review` 등)이 해당 팀을 자동으로 호출합니다. `team-orchestrator` 에이전트가 팀 정의를 로드하여 자동으로 에이전트를 조직화하고 워크플로우를 실행합니다.
 
-## Preset Teams (11개)
+## Preset Teams (12개)
 
 | File | Name | Category | Agents | Workflow | 용도 |
 |------|------|----------|--------|----------|------|
@@ -24,6 +24,7 @@
 | `revision-team.team.json` | 퇴고 팀 | revision | critic, editor, proofreader, consistency-verifier | pipeline | 피드백 기반 퇴고 |
 | `writing-team-collab.team.json` | 캐릭터 협업 집필 팀 | writing | narrator, characters/*, proofreader, summarizer | collaborative (hybrid) | 캐릭터 에이전트 co-write |
 | `writing-team-collab-2pass.team.json` | 캐릭터 협업 2-Pass 집필 팀 | writing | narrator, characters/*, proofreader, summarizer | collaborative (hybrid) | 캐릭터 co-write + Grok 리라이트 |
+| `writing-team-codex-2pass.team.json` | Codex 2-Pass 집필 팀 | writing | GPT-5.4(codex-writer), proofreader, summarizer | hybrid | Codex CLI + Grok 리라이트 (비용 절감) |
 
 ## Workflow Types
 
@@ -47,7 +48,7 @@
 
 ## 사용자 정의 팀
 
-`/novel-dev:team-nov create <name>` 명령으로 커스텀 팀을 만들 수 있습니다. `templates/team.template.json`을 기반으로 대화형 위자드가 팀 정의를 생성합니다.
+`templates/team.template.json`을 기반으로 커스텀 팀을 만들 수 있습니다.
 
 커스텀 팀 파일도 이 디렉토리에 저장됩니다.
 
@@ -72,12 +73,12 @@ Task({
 1. `teams/{name}.team.json` 파일 생성 (team.schema.json 준수)
 2. agents, workflow, coordination, quality_gates 정의
 3. 이 AGENTS.md 문서 업데이트
-4. `skills/team-nov/SKILL.md`의 의존 에이전트 표 업데이트
+4. 관련 스킬의 팀 참조 업데이트
 
 ## Dependencies
 
 - `schemas/team.schema.json` — 팀 정의 스키마
 - `schemas/team-state.schema.json` — 팀 실행 상태 스키마
 - `agents/team-orchestrator.md` — 범용 오케스트레이터
-- `skills/team-nov/SKILL.md` — `/novel-dev:team-nov` 스킬 정의
+- `skills/*/SKILL.md` — 각 스킬에서 팀 호출
 - `templates/team.template.json` — 커스텀 팀 템플릿

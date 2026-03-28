@@ -93,7 +93,8 @@ Commands are organized by workflow phase:
 2. **Design**: `/design_*` - Worldbuilding, characters, plot arcs
 3. **Plot Generation**: `/gen_plot` - Episode-level plot creation
 4. **Writing**: `/write`, `/write_act`, `/write_all` - Prose creation
-5. **Revision**: `/review` - Quality assurance (퇴고·평가·일관성 검사 통합)
+5. **Review**: `/plot-review`, `/act-review` - 플롯/막 단위 품질 검증
+6. **Revision**: `/revise` - 피드백 기반 퇴고
 6. **Completion**: `/timeline`, `/stats`, `/export` - Finalization
 
 ### Ralph Loop
@@ -198,10 +199,10 @@ Automated chapter verification agent that validates quality before completion cl
 1. Read `chapters/chapter_NNN.md` and `reviews/chapter_NNN_review.json`
 2. Call editor agent with context
 3. Update chapter file
-4. Run `/review` to verify improvement
+4. Run `/act-review` to verify improvement
 
 **Checking consistency:**
-1. `/review` to find violations
+1. `/act-review` to find violations
 2. Review flagged issues
 3. Either revise chapters or update canonical data (world/characters)
 

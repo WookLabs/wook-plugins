@@ -61,7 +61,7 @@
 
 ### 설계 검토
 ```bash
-/review            # 설계 결과물 검토 (APPROVED/REVISE/REJECT)
+/design-review     # 설계 결과물 검토 (APPROVED/REVISE/REJECT)
 /analyze           # 문제점 분석
 ```
 
@@ -74,7 +74,7 @@
 
 ### 검토/수정 단계
 ```bash
-/review 1          # 1화 퇴고·품질 평가·일관성 검사
+/act-review 1      # 1막 리뷰 + 선택적 심층 평가
 /check             # 전체 일관성 검사
 ```
 
@@ -82,7 +82,7 @@
 ```bash
 /status            # 진행 상태
 /stats             # 통계
-/analyze-engagement # 몰입도 분석
+/plot-review 1-5   # 플롯 품질 검증
 ```
 
 ## 참조 파일 경로
@@ -108,9 +108,9 @@
 | plot-architect | 플롯 설계 | /plot, /main-arc |
 | lore-keeper | 설정 관리 | /world, /character |
 | novelist | 본문 집필 | /write |
-| editor | 퇴고 | /review |
-| critic | 품질 평가 | /review |
-| beta-reader | 몰입도 분석 | /review, /analyze-engagement |
+| editor | 퇴고 | /revise |
+| critic | 품질 평가 | /act-review, /plot-review |
+| beta-reader | 몰입도 분석 | /act-review |
 
 ## 주의사항
 

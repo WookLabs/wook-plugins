@@ -45,10 +45,10 @@ $ARGUMENTS
 4. **막 완료 후 검증** (`--team` 여부에 따라 분기)
 
    **`--team` 없음** (기존 동작):
-   - `/review` (막 전체) — editor/critic/consistency 검증 수행
+   - `/act-review` (막 전체) — 6에이전트 병렬 평가
 
    **`--team` 있음** (revision-team 대체):
-   - 기존 `/review` 대신 revision-team이 실행됩니다.
+   - 기존 `/act-review` 대신 revision-team이 실행됩니다.
    - 해당 막의 각 챕터에 대해 순차적으로 `revision-team-gate` 호출:
      ```
      for chapter in act_chapters:

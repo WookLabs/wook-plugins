@@ -1,0 +1,74 @@
+{
+  "prose_rules": {
+    "anti_patterns": [
+      {
+        "id": "consecutive-short-sentences",
+        "description": "20자 이하 단문이 3문장 이상 연속되면 리듬이 단조로워짐",
+        "detection_hint": "20자 이하 문장 3개 이상 연속 시 경고",
+        "severity": "warning"
+      },
+      {
+        "id": "same-ending-repetition",
+        "description": "동일 어미(-였다, -었다, -했다)가 3회 이상 연속",
+        "detection_hint": "문장 끝 2음절이 동일한 경우 3연속 시 경고",
+        "severity": "warning"
+      },
+      {
+        "id": "list-monologue",
+        "description": "내적 독백이 번호/순서형 리스트로 나열됨 (하나, 둘, 셋 / 첫째, 둘째)",
+        "detection_hint": "하나/둘/셋, 첫째/둘째, 1./2./3. 패턴 감지",
+        "severity": "error"
+      },
+      {
+        "id": "direct-emotion-telling",
+        "description": "감정을 직접 서술 (슬펐다, 화가 났다, 기뻤다) — 신체 반응으로 대체해야 함",
+        "detection_hint": "감정 형용사 + 었다/았다 패턴",
+        "severity": "warning"
+      },
+      {
+        "id": "excessive-explanation",
+        "description": "독자가 유추할 수 있는 것까지 풀어서 설명 (왜냐하면~, ~때문이다, ~라는 뜻이다)",
+        "detection_hint": "왜냐하면, ~때문이다, ~라는 뜻 패턴",
+        "severity": "warning"
+      },
+      {
+        "id": "connector-overuse",
+        "description": "접속사/전환어 과다 사용 (한편, 그런데, 그러나, 결국, 그래서)",
+        "detection_hint": "500자 내 접속사 3회 이상",
+        "severity": "warning"
+      }
+    ],
+    "positive_patterns": [
+      {
+        "id": "complex-sentence-variation",
+        "description": "복문(종속절, 삽입절 포함)을 적극 활용하여 호흡감 있는 문장 구성",
+        "example_hint": "단문: '비가 왔다. 길이 젖었다.' → 복문: '비가 내린 뒤 젖은 아스팔트 위로 네온 불빛이 길게 번졌다.'",
+        "target_ratio": 0.3
+      },
+      {
+        "id": "sentence-length-rhythm",
+        "description": "단문(~15자)-중문(15~40자)-장문(40자+) 순환으로 리듬 변주",
+        "example_hint": "짧은 충격 → 중간 설명 → 긴 감각 묘사 → 짧은 반전",
+        "target_ratio": 0
+      },
+      {
+        "id": "sensory-emotion-transfer",
+        "description": "감정을 감각 묘사로 전달 (show don't tell)",
+        "example_hint": "'슬펐다' → '목구멍 안쪽이 뜨거워졌다. 삼키려 해도 삼켜지지 않는 덩어리가 올라왔다.'",
+        "target_ratio": 0
+      },
+      {
+        "id": "free-indirect-discourse",
+        "description": "내적 독백을 자유간접화법으로 표현 (리스트가 아닌 의식의 흐름)",
+        "example_hint": "'첫째, 여기는 이세계다. 둘째, 마법이 있다.' → '이세계. 마법. 포로. 단어들이 머릿속에서 뒤섞였지만, 어느 하나 현실로 다가오지 않았다.'",
+        "target_ratio": 0
+      },
+      {
+        "id": "parenthetical-insertion",
+        "description": "삽입구와 부연절로 문장에 깊이와 호흡 부여",
+        "example_hint": "'도현은 벽을 탔다.' → '도현은—화학 화상 흔적이 남은 길고 마른 손가락으로—벽돌 틈을 잡으며 벽을 탔다.'",
+        "target_ratio": 0
+      }
+    ]
+  }
+}

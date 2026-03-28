@@ -14,9 +14,10 @@ Claude가 집필하고 Grok이 성인 장면을 리라이트합니다.
 ## Quick Start
 
 ```bash
-/write-act-2pass 1     # 1막 전체를 캐릭터 협업 + 2-Pass로 집필 (기본값)
-/write-act-2pass 2     # 2막 전체를 캐릭터 협업 + 2-Pass로 집필
-/write-act-2pass 1 --solo  # 1막 전체를 novelist 단독 + 2-Pass로 집필
+/write-act-2pass 1          # 1막 전체를 캐릭터 협업 + 2-Pass로 집필 (기본값)
+/write-act-2pass 2          # 2막 전체를 캐릭터 협업 + 2-Pass로 집필
+/write-act-2pass 1 --solo   # 1막 전체를 novelist 단독 + 2-Pass로 집필
+/write-act-2pass 1 --codex  # 1막 전체를 Codex(GPT-5.4) + Grok 2-Pass로 집필
 ```
 
 ## Prerequisites
@@ -24,6 +25,7 @@ Claude가 집필하고 Grok이 성인 장면을 리라이트합니다.
 `~/.env` 파일에 API 키 설정:
 ```
 XAI_API_KEY=xai-xxxxxxxxxxxx
+# --codex 사용 시: Codex CLI가 자체 인증 처리 (별도 키 불필요)
 ```
 
 ## 실행 단계
@@ -31,6 +33,20 @@ XAI_API_KEY=xai-xxxxxxxxxxxx
 1. **막 정보 로드**
    - `plot/structure.json`에서 해당 막의 회차 범위 확인
    - 예: Act 1 = 1-15화
+
+1-B. **Codex 집필 (--codex)**
+
+   `$ARGUMENTS`에 `--codex`가 있으면 각 회차를 Codex(GPT-5.4) + Grok으로 집필합니다:
+   ```
+   for chapter in act_chapters:
+       # writing-team-codex-2pass 사용
+       Task(subagent_type="novel-dev:team-orchestrator", model="sonnet", prompt="
+       팀 실행: writing-team-codex-2pass
+       대상: Chapter {chapter}
+       프로젝트: {projectPath}
+       ")
+   ```
+   이 경우 `1-A 기본 집필` 단계를 건너뜁니다.
 
 1-A. **기본 집필: 캐릭터 협업 + 2-Pass**
 
@@ -65,7 +81,7 @@ XAI_API_KEY=xai-xxxxxxxxxxxx
    - 서사 구조, 캐릭터 일관성, 플롯 정합성 평가
 
 4. **막 완료 후 자동 트리거**
-   - `/review` — 연결성 검토, 퇴고, 평가 (통합)
+   - `/act-review` — 막 단위 리뷰 + 선택적 심층 평가
 
 ## /write-act과의 차이
 

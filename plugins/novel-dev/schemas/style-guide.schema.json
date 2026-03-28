@@ -154,6 +154,42 @@
       "enum": ["strict", "balanced", "flexible"],
       "description": "How strictly to apply show-don't-tell principle"
     },
+    "prose_rules": {
+      "type": "object",
+      "description": "산문 품질 규칙 — AI 문체 방지 및 유려한 문장 작성 가이드",
+      "properties": {
+        "anti_patterns": {
+          "type": "array",
+          "description": "금지 패턴 목록",
+          "items": {
+            "type": "object",
+            "required": ["id", "description"],
+            "properties": {
+              "id": { "type": "string", "description": "패턴 ID (예: consecutive-short-sentences)" },
+              "description": { "type": "string", "description": "패턴 설명" },
+              "detection_hint": { "type": "string", "description": "감지 기준 (예: 20자 이하 문장 3연속)" },
+              "severity": { "type": "string", "enum": ["error", "warning"], "default": "warning" }
+            }
+          },
+          "maxItems": 20
+        },
+        "positive_patterns": {
+          "type": "array",
+          "description": "권장 패턴 목록",
+          "items": {
+            "type": "object",
+            "required": ["id", "description"],
+            "properties": {
+              "id": { "type": "string", "description": "패턴 ID (예: complex-sentence-variation)" },
+              "description": { "type": "string", "description": "패턴 설명" },
+              "example_hint": { "type": "string", "description": "적용 예시 힌트" },
+              "target_ratio": { "type": "number", "minimum": 0, "maximum": 1, "description": "목표 비율 (0~1)" }
+            }
+          },
+          "maxItems": 20
+        }
+      }
+    },
     "special_instructions": {
       "type": "string",
       "description": "Additional style instructions or preferences",

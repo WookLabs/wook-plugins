@@ -183,8 +183,8 @@ describe('routing-rules.json structure', () => {
     expect(rules.omcConflictKeywords).toContain('team');
   });
 
-  it('should have 16 core skills', () => {
-    expect(rules.skills.length).toBe(16);
+  it('should have 17 core skills', () => {
+    expect(rules.skills.length).toBe(17);
   });
 
   it('should have projectRequiredExceptions', () => {
@@ -235,10 +235,17 @@ describe('matchSkills - auto-execute (score >= 0.8)', () => {
     expect(candidates[0].id).toBe('04-design');
   });
 
-  it('"검증해줘" -> 09-review', () => {
-    const candidates = matchSkills('검증해줘', rules, projectState());
+  it('"플롯 리뷰해" -> 05-plot-review', () => {
+    const candidates = matchSkills('플롯 리뷰해', rules, projectState());
     expect(candidates.length).toBeGreaterThan(0);
-    expect(candidates[0].id).toBe('09-review');
+    expect(candidates[0].id).toBe('05-plot-review');
+  });
+
+  it('"2막 리뷰해" -> 07-act-review, act=2', () => {
+    const candidates = matchSkills('2막 리뷰해', rules, projectState());
+    expect(candidates.length).toBeGreaterThan(0);
+    expect(candidates[0].id).toBe('07-act-review');
+    expect(candidates[0].args).toEqual({ type: 'act', value: '2' });
   });
 
   it('"퇴고해줘" -> 09-revise', () => {
@@ -247,10 +254,17 @@ describe('matchSkills - auto-execute (score >= 0.8)', () => {
     expect(candidates[0].id).toBe('09-revise');
   });
 
-  it('"평가해봐" -> 09-review', () => {
-    const candidates = matchSkills('평가해봐', rules, projectState());
+  it('"플롯 검증해" -> 05-plot-review', () => {
+    const candidates = matchSkills('플롯 검증해', rules, projectState());
     expect(candidates.length).toBeGreaterThan(0);
-    expect(candidates[0].id).toBe('09-review');
+    expect(candidates[0].id).toBe('05-plot-review');
+  });
+
+  it('"1막 평가해" -> 07-act-review, act=1', () => {
+    const candidates = matchSkills('1막 평가해', rules, projectState());
+    expect(candidates.length).toBeGreaterThan(0);
+    expect(candidates[0].id).toBe('07-act-review');
+    expect(candidates[0].args).toEqual({ type: 'act', value: '1' });
   });
 
   it('"브레인스토밍하자" -> 00-brainstorm', () => {
@@ -295,9 +309,22 @@ describe('matchSkills - excludeKeywords', () => {
     expect(result).toBeNull();
   });
 
-  it('"설계 리뷰"가 09-review로 매칭되지 않음 (04-design-review로 가야 함)', () => {
-    const skill = rules.skills.find(s => s.id === '09-review')!;
+  it('"설계 리뷰"가 plot-review로 매칭되지 않음 (04-design-review로 가야 함)', () => {
+    const skill = rules.skills.find(s => s.id === '05-plot-review')!;
     const result = matchSingleSkill('설계 리뷰', skill);
+    expect(result).toBeNull();
+  });
+
+  it('"플롯 생성"이 05-gen-plot에 매칭되고 05-plot-review에는 매칭되지 않음', () => {
+    const genPlot = rules.skills.find(s => s.id === '05-gen-plot')!;
+    const plotReview = rules.skills.find(s => s.id === '05-plot-review')!;
+    expect(matchSingleSkill('플롯 생성', genPlot)).not.toBeNull();
+    expect(matchSingleSkill('플롯 생성', plotReview)).toBeNull();
+  });
+
+  it('"막 집필해"가 07-act-review에 매칭되지 않음 (07-write-act로 가야 함)', () => {
+    const skill = rules.skills.find(s => s.id === '07-act-review')!;
+    const result = matchSingleSkill('막 집필해', skill);
     expect(result).toBeNull();
   });
 

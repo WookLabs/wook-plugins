@@ -230,7 +230,7 @@ Deep feelings:
 After evaluation reveals issues:
 
 ```
-/review 5
+/act-review 5
 ```
 
 Output shows:
@@ -371,7 +371,7 @@ Ralph Loop: Writing all chapters (1-50)
 
 ```
 /write 5
-/review 5
+/act-review 5
 ```
 
 Standard workflow:
@@ -397,7 +397,7 @@ No revision needed!
 
 ```
 /write 10
-/review 8-10
+/act-review 8-10
 ```
 
 Verify recent chapters:
@@ -445,9 +445,9 @@ For long sessions, batch with reviews:
 
 ```
 /write 1-5      # First batch
-/review 1-5     # Check quality
+/act-review 1-5     # Check quality
 /write 6-10     # Second batch
-/review 6-10    # Check quality
+/act-review 6-10    # Check quality
 ```
 
 Prevents compounding errors.

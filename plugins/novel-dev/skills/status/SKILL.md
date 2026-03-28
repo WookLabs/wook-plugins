@@ -80,7 +80,8 @@ user-invocable: true
   [~] write-all      전체 집필 (Ralph Loop 활성)
 
   -- Phase 5: 퇴고/검증 ---------------------------------------
-  [ ] review         퇴고/평가/일관성 검사 (/review 통합)
+  [ ] plot-review    플롯 품질 검증
+  [ ] act-review     막 단위 리뷰 + 심층 평가
 
   -- Phase 6: 완료 --------------------------------------------
   [ ] export         내보내기

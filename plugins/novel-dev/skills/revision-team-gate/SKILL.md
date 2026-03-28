@@ -76,7 +76,7 @@ Chapter {N} (chapters/chapter_{pad(N, 3)}.md)
   ```
   [WARN] revision-team 검증 미통과 (critic: {score} < 85, consistency: {score} < 85)
   원고는 그대로 저장되었습니다. 수동 퇴고를 권장합니다:
-    /novel-dev:team-nov run revision-team {N}
+    /revise {N}
   상세: reviews/team/revision-team_ch{N}_{timestamp}.json
   ```
 

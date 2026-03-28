@@ -383,7 +383,21 @@ for (const step of workflow.steps) {
     updateTeamState(step.name, 'completed');
   }
 
-  // ── Case B: Orchestrator Action — adult-rewriter ────────────────
+  // ── Case B-1: Orchestrator Action — codex-writer ─────────────────
+  else if (step.type === 'orchestrator_action' && step.action === 'codex-writer') {
+    // Codex CLI(GPT-5.4)로 챕터 집필
+    log(`Step '${step.name}': Codex CLI로 Chapter ${chapterNum} 집필 시작`);
+    const result = Bash(
+      `node scripts/codex-writer.mjs --chapter ${chapterNum} --project "${projectPath}"`
+    );
+    if (result.exitCode !== 0) {
+      throw new Error(`codex-writer failed: ${result.stderr}\nClaude로 재시도하려면 --codex 없이 다시 실행하세요.`);
+    }
+    log(`Step '${step.name}': Codex 집필 완료`);
+    updateTeamState(step.name, 'completed');
+  }
+
+  // ── Case B-2: Orchestrator Action — adult-rewriter ────────────────
   else if (step.type === 'orchestrator_action' && step.action === 'adult-rewriter') {
     const chapterPath = `chapters/chapter_${pad(chapterNum)}.md`;
     const chapterContent = Read(chapterPath);

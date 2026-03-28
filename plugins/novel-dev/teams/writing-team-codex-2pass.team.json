@@ -1,0 +1,73 @@
+{
+  "$schema": "../schemas/team.schema.json",
+  "schema_version": "1.0",
+  "name": "writing-team-codex-2pass",
+  "display_name": "Codex(GPT-5.4) 2-Pass 집필 팀",
+  "description": "Codex CLI(GPT-5.4)로 챕터 집필 후, Grok adult-rewriter로 성인 장면을 2차 리라이트하는 팀. 비용 절감 목적.",
+  "category": "writing",
+  "agents": [
+    {
+      "agent": "proofreader",
+      "role": "support",
+      "responsibility": "최종 맞춤법/문법 교정",
+      "model": "haiku"
+    },
+    {
+      "agent": "summarizer",
+      "role": "support",
+      "responsibility": "완성된 챕터 요약 생성 (후속 챕터 컨텍스트용)",
+      "model": "haiku"
+    }
+  ],
+  "workflow": {
+    "type": "collaborative",
+    "steps": [
+      {
+        "name": "codex-write",
+        "agents": [],
+        "execution": "sequential",
+        "output": "챕터 초고 (chapters/chapter_XXX.md)",
+        "type": "orchestrator_action",
+        "action": "codex-writer",
+        "_comment": "team-orchestrator가 codex-writer.mjs를 Bash로 실행. Codex CLI → GPT-5.4 집필."
+      },
+      {
+        "name": "adult-rewrite",
+        "agents": [],
+        "execution": "sequential",
+        "depends_on": ["codex-write"],
+        "output": "성인 장면 리라이트된 챕터",
+        "type": "orchestrator_action",
+        "action": "adult-rewriter",
+        "skip_if": "no_adult_markers",
+        "_comment": "team-orchestrator가 ADULT 마커 감지 후 adult-rewriter.mjs 실행."
+      },
+      {
+        "name": "proofread",
+        "agents": ["proofreader"],
+        "execution": "sequential",
+        "depends_on": ["adult-rewrite"],
+        "output": "교정된 챕터"
+      },
+      {
+        "name": "summarize",
+        "agents": ["summarizer"],
+        "execution": "sequential",
+        "depends_on": ["proofread"],
+        "output": "챕터 요약 (context/summaries/chapter_XXX_summary.md)"
+      }
+    ]
+  },
+  "coordination": {
+    "mode": "orchestrated",
+    "lead": "proofreader",
+    "communication": "task-based"
+  },
+  "quality_gates": {
+    "enabled": false
+  },
+  "cost_estimate": {
+    "tokens_per_agent": 20000,
+    "warning_message": "Codex 2-Pass 집필 팀은 GPT-5.4(codex-writer) + Grok(adult-rewriter) + Claude haiku(proofreader/summarizer)를 사용합니다. Claude 비용은 haiku만으로 최소화됩니다."
+  }
+}

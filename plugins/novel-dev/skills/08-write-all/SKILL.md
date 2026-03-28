@@ -150,7 +150,7 @@ for act in acts:
         # Diagnostic 기반 수정 루프
         for retry in range(3):
             diagnostic = generate_diagnostic(results)
-            /review {chapter} with diagnostic
+            /act-review {chapter} with diagnostic
             results = parallel_validate(...)
 
             if all_passed(results):
@@ -166,12 +166,12 @@ for act in acts:
 
     # 막 단위 검증 (--team 여부에 따라 분기)
     if --team:
-        # revision-team이 기존 /review를 대체
+        # revision-team이 기존 /act-review를 대체
         for chapter in act.chapters:
             revision-team-gate {chapter}
             # 실패 시: 경고 표시, 원고 보존, 집필 계속
     else:
-        /review (막 전체)
+        /act-review (막 전체)
 
     # 막 완료
     <promise>ACT_{act}_DONE</promise>
@@ -334,7 +334,7 @@ for each chapter:
 
   if verification.verdict == "FAIL":
     diagnostic = generate_diagnostic(verification.high_confidence_issues)
-    /review {N} with diagnostic
+    /act-review {N} with diagnostic
     verification = /verify-chapter {N}  # retry
 
     if still failing after 3 retries:

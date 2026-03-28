@@ -60,6 +60,8 @@ All output MUST conform to `schemas/surgical-directive.schema.json`
 | `transition-smoothing` | 7 | Abrupt scene transitions |
 | `voice-consistency` | 8 | Character voice drift |
 | `proofreading` | 9 | Grammar, spacing, punctuation |
+| `consecutive-short-sentences` | 4 | 20자 이하 단문 3개 이상 연속 → 복문 결합/길이 변주 |
+| `list-monologue` | 3 | 리스트형 독백 (하나/둘/셋, 첫째/둘째) → 자유간접화법 |
 
 ## Detection Heuristics
 
@@ -82,6 +84,20 @@ Check each 500-char segment for 2+ senses:
 Flag 5+ consecutive sentences ending with same pattern:
 - -다. endings
 - -요. endings
+
+### Consecutive Short Sentences (AI 끊어쓰기 감지)
+Flag 3+ consecutive sentences where each is 20자 이하:
+- "잡혔다. 도현은 발버둥 쳤다. 소용없었다." → directive
+- 액션씬에서 의도적 짧은 리듬은 허용 (5+ 연속 시에만 경고)
+- Instruction: "복문으로 결합하거나 문장 길이를 변주하세요"
+
+### List Monologue (리스트형 독백 감지)
+Flag numbered/ordered internal monologue patterns:
+- "하나, ... 둘, ... 셋, ..."
+- "첫째, ... 둘째, ... 셋째, ..."
+- "1. ... 2. ... 3. ..."
+- Instruction: "자유간접화법이나 의식의 흐름으로 변환하세요"
+- Good example: "이세계. 마법. 포로. 단어들이 머릿속에서 뒤섞였지만, 어느 하나 현실로 다가오지 않았다."
 - Same verb forms
 
 ### Show vs Tell Indicators

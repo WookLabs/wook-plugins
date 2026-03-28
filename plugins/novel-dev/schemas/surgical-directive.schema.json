@@ -23,7 +23,9 @@
         "cliche-replacement",
         "transition-smoothing",
         "voice-consistency",
-        "proofreading"
+        "proofreading",
+        "consecutive-short-sentences",
+        "list-monologue"
       ]
     },
     "priority": {
