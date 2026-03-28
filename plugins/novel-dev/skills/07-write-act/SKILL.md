@@ -14,24 +14,26 @@ $ARGUMENTS
    - `plot/structure.json`에서 해당 막의 회차 범위 확인
    - 예: Act 1 = 1-15화
 
-1-A. **--team collab 분기 확인**
+1-A. **기본 집필: 캐릭터 협업 팀**
 
-   `$ARGUMENTS`에 `--team collab`이 있으면 각 회차를 collab 팀으로 집필합니다:
+   기본적으로 각 회차를 collab 팀으로 집필합니다:
    ```
    for chapter in act_chapters:
-       # writing-team-collab 사용
+       # writing-team-collab 사용 (기본값)
        Task(subagent_type="novel-dev:team-orchestrator", model="sonnet", prompt="
        팀 실행: writing-team-collab
        대상: Chapter {chapter}
        프로젝트: {projectPath}
        ")
    ```
-   이 경우 `2. 순차 집필` 단계를 건너뜁니다.
+   이 경우 `2. 순차 집필 (--solo)` 단계를 건너뜁니다.
 
-2. **순차 집필**
+2. **순차 집필 (--solo)**
+
+   `$ARGUMENTS`에 `--solo`가 있으면 각 회차를 novelist 단독으로 집필합니다:
    ```
    for chapter in act_chapters:
-       /write {chapter}  # Claude novelist
+       /write {chapter} --solo  # Claude novelist 단독
    ```
 
    > **성인소설**: `/write-act-2pass`를 사용하세요. Pass 1(Claude)이 ADULT 마커와 함께 집필하고, Pass 2(`adult-rewriter.mjs`)가 Grok API로 마커 구간을 대체합니다.
@@ -60,7 +62,8 @@ $ARGUMENTS
 
 ## Quick Reference
 ```bash
-/write-act 1          # 1막 집필 (기존 검증)
+/write-act 1          # 1막 집필 (캐릭터 협업, 기본값)
+/write-act 1 --solo   # 1막 집필 (novelist 단독)
 /write-act 1 --team   # 1막 집필 + revision-team 최종 검증
 ```
 

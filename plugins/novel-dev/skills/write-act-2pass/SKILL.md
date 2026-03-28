@@ -14,9 +14,9 @@ Claude가 집필하고 Grok이 성인 장면을 리라이트합니다.
 ## Quick Start
 
 ```bash
-/write-act-2pass 1     # 1막 전체를 2-Pass로 집필
-/write-act-2pass 2     # 2막 전체를 2-Pass로 집필
-/write-act-2pass 1 --team  # 1막 전체를 캐릭터 협업 + 2-Pass로 집필
+/write-act-2pass 1     # 1막 전체를 캐릭터 협업 + 2-Pass로 집필 (기본값)
+/write-act-2pass 2     # 2막 전체를 캐릭터 협업 + 2-Pass로 집필
+/write-act-2pass 1 --solo  # 1막 전체를 novelist 단독 + 2-Pass로 집필
 ```
 
 ## Prerequisites
@@ -32,24 +32,26 @@ XAI_API_KEY=xai-xxxxxxxxxxxx
    - `plot/structure.json`에서 해당 막의 회차 범위 확인
    - 예: Act 1 = 1-15화
 
-1-A. **--team 분기 확인**
+1-A. **기본 집필: 캐릭터 협업 + 2-Pass**
 
-   `$ARGUMENTS`에 `--team`이 있으면 각 회차를 collab 2-pass 팀으로 집필합니다:
+   기본적으로 각 회차를 collab 2-pass 팀으로 집필합니다:
    ```
    for chapter in act_chapters:
-       # writing-team-collab-2pass 사용
+       # writing-team-collab-2pass 사용 (기본값)
        Task(subagent_type="novel-dev:team-orchestrator", model="sonnet", prompt="
        팀 실행: writing-team-collab-2pass
        대상: Chapter {chapter}
        프로젝트: {projectPath}
        ")
    ```
-   이 경우 `2. 순차 집필 (2-Pass)` 단계를 건너뜁니다.
+   이 경우 `2. 순차 집필 (--solo, 2-Pass)` 단계를 건너뜁니다.
 
-2. **순차 집필 (2-Pass)**
+2. **순차 집필 (--solo, 2-Pass)**
+
+   `$ARGUMENTS`에 `--solo`가 있으면 각 회차를 novelist 단독 + 2-Pass로 집필합니다:
    ```
    for chapter in act_chapters:
-       /write-2pass {chapter}
+       /write-2pass {chapter} --solo
    ```
 
    각 회차별:

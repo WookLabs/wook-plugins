@@ -12,13 +12,13 @@ user-invocable: true
 
 ## Quick Start
 ```bash
-/write-all          # 1화부터 끝까지 자동 집필
+/write-all          # 1화부터 끝까지 자동 집필 (캐릭터 협업)
 /write-all --resume # 중단된 지점부터 재개
 /write-all --restart # 처음부터 다시 시작
+/write-all --solo          # 전체 집필 (novelist 단독)
 /write-all --team          # 전체 집필 + 막 완료마다 revision-team 검증
 /write-all --resume --team # 재개 + revision-team 검증
-/write-all --team collab          # 전체 집필 + 캐릭터 협업
-/write-all --team collab --team   # 전체 집필 + 캐릭터 협업 + revision-team 검증
+/write-all --solo --team   # novelist 단독 집필 + revision-team 검증
 ```
 
 ## Writer Mode
@@ -115,18 +115,18 @@ AskUserQuestion으로 사용자 확인:
 | 막 완료 | `<promise>ACT_{N}_DONE</promise>` |
 | 전체 완료 | `<promise>NOVEL_DONE</promise>` |
 
-### --team collab 분기
+### 집필 엔진 분기
 
-`--team collab`이 활성화되면 각 회차 집필 시 `writing-team-collab`을 사용합니다:
+기본적으로 각 회차 집필 시 `writing-team-collab`을 사용합니다. `--solo` 플래그로 novelist 단독 집필로 전환할 수 있습니다:
 
 ```python
 for act in acts:
     for chapter in act.chapters:
-        if --team collab:
-            # 캐릭터 협업 팀으로 집필
-            team-orchestrator run writing-team-collab {chapter}
+        if --solo:
+            /write {chapter} --solo  # novelist 단독 집필
         else:
-            /write {chapter}  # 기존 novelist 단독
+            # 캐릭터 협업 팀으로 집필 (기본값)
+            team-orchestrator run writing-team-collab {chapter}
 ```
 
 ## 실행 흐름 (v2)
@@ -134,7 +134,7 @@ for act in acts:
 ```
 for act in acts:
     for chapter in act.chapters:
-        /write {chapter}             # Claude novelist
+        /write {chapter}             # 캐릭터 협업 (기본값), --solo 시 novelist 단독
 
         # 사후 처리
         generate_summary(chapter)

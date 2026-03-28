@@ -10,11 +10,11 @@ user-invocable: true
 
 ## Quick Start
 ```bash
-/write           # 다음 챕터 작성
-/write 5         # 5화 작성
+/write           # 다음 챕터 작성 (캐릭터 협업)
+/write 5         # 5화 작성 (캐릭터 협업)
 /write 5-10      # 5~10화 연속 작성
+/write 5 --solo  # 5화 작성 (novelist 단독)
 /write 5 --team  # 5화 작성 + revision-team 최종 검증
-/write 5 --team collab  # 5화 작성 + 캐릭터 협업 집필
 ```
 
 ## Writer Mode
@@ -38,9 +38,9 @@ user-invocable: true
 2. `meta/project.json` 읽어 `writer_mode` 확인
 3. `chapters/chapter_XXX.json` (플롯 파일) 존재 확인
 
-### Phase 2 분기: --team collab
+### Phase 2: 캐릭터 협업 집필 (기본값)
 
-`$ARGUMENTS`에 `--team collab`이 있으면 기존 novelist 단독 집필 대신 캐릭터 협업 팀을 사용합니다.
+기본적으로 캐릭터 협업 팀을 사용하여 집필합니다.
 
 **호출:**
 ```spec
@@ -57,12 +57,13 @@ Task(subagent_type="novel-dev:team-orchestrator", model="sonnet", prompt="
 - proofreader → summarizer 순차 실행
 - 이후 Phase 3 사후 처리는 기존과 동일
 
-> `--team collab` 없이 `--team`만 사용하면 기존 revision-team 검증 (Phase 4).
-> `--team collab --team`은 collab 집필 + revision-team 검증 모두 활성화.
+> `--solo` 플래그를 사용하면 novelist 단독 집필로 전환됩니다.
+> `--team`은 revision-team 검증 (Phase 4)을 활성화합니다.
+> `--solo --team`은 novelist 단독 집필 + revision-team 검증 모두 활성화.
 
-### Phase 2: Claude 집필
+### Phase 2 분기: --solo (novelist 단독)
 
-기존 방식대로 novelist 에이전트 호출:
+`$ARGUMENTS`에 `--solo`가 있으면 캐릭터 협업 팀 대신 novelist 에이전트를 직접 호출합니다:
 
 ```spec
 Task(subagent_type="novel-dev:novelist", model="opus", prompt="

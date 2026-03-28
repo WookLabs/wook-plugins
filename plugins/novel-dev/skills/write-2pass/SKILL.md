@@ -13,9 +13,9 @@ Claude가 전체 챕터를 집필(Pass 1)하고, Grok이 성인 장면만 리미
 ## Quick Start
 
 ```bash
-/write-2pass 5        # 5화를 2-Pass로 집필
-/write-2pass 1        # 1화를 2-Pass로 집필
-/write-2pass 5 --team  # 5화를 캐릭터 협업 + 2-Pass로 집필
+/write-2pass 5        # 5화를 캐릭터 협업 + 2-Pass로 집필 (기본값)
+/write-2pass 1        # 1화를 캐릭터 협업 + 2-Pass로 집필
+/write-2pass 5 --solo  # 5화를 novelist 단독 + 2-Pass로 집필
 ```
 
 ## Prerequisites
@@ -27,9 +27,9 @@ XAI_API_KEY=xai-xxxxxxxxxxxx
 
 ## 실행 단계
 
-### --team 분기: 캐릭터 협업 + 2-Pass
+### 기본 집필: 캐릭터 협업 + 2-Pass
 
-`$ARGUMENTS`에 `--team`이 있으면 Pass 1을 캐릭터 협업 팀으로 대체합니다.
+기본적으로 Pass 1을 캐릭터 협업 팀으로 실행합니다.
 
 **호출:**
 ```spec
@@ -45,9 +45,9 @@ Task(subagent_type="novel-dev:team-orchestrator", model="sonnet", prompt="
 - team-orchestrator가 ADULT 마커 감지 → `adult-rewriter.mjs` 실행 (Pass 2)
 - proofreader → summarizer 순차 실행
 
-> `--team` 없으면 기존 novelist 단독 Pass 1 + Pass 2 그대로.
+> `--solo` 플래그를 사용하면 novelist 단독 Pass 1 + Pass 2로 실행됩니다.
 
-### Pass 1: Claude 집필
+### Pass 1: Claude 집필 (--solo)
 
 1. **컨텍스트 로드**
    - `chapters/chapter_XXX.json` (플롯)
