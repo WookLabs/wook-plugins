@@ -14,7 +14,7 @@
 | File | Name | Category | Agents | Workflow | 용도 |
 |------|------|----------|--------|----------|------|
 | `planning-team.team.json` | 설계 팀 | planning | plot-architect, lore-keeper, style-curator | collaborative | 소설 기획/설계 |
-| `design-execution-team.team.json` | 설계 실행 팀 | planning | style-curator, lore-keeper, character-designer, plot-architect, arc-designer | pipeline | 전체 설계 파이프라인 (5명) |
+| `design-execution-team.team.json` | 설계 실행 팀 | planning | style-curator, lore-keeper, character-designer, plot-architect, arc-designer | collaborative | 5명 실시간 소통 설계 |
 | `writing-team.team.json` | 집필 팀 | writing | novelist, proofreader, summarizer | sequential | 회차 집필 |
 | `writing-team-2pass.team.json` | 2-Pass 집필 팀 | writing | novelist, quality-oracle, prose-surgeon, proofreader | pipeline | 정밀 집필 |
 | `verification-team.team.json` | 검증 팀 | verification | critic, beta-reader, genre-validator | parallel | 품질 검증 |
@@ -31,8 +31,8 @@
 |------|------|---------|
 | `parallel` | 모든 에이전트 동시 실행 + 결과 집계 | verification-team, deep-review-team, design-review-team, plot-review-team |
 | `sequential` | 순차 체인 (이전 출력 → 다음 입력) | writing-team |
-| `pipeline` | 단계별 순차 + 품질 게이트 + 재시도 | writing-team-2pass, revision-team, design-execution-team |
-| `collaborative` | 자율 협업 (lead가 SendMessage로 조율) | planning-team, writing-team-collab, writing-team-collab-2pass |
+| `pipeline` | 단계별 순차 + 품질 게이트 + 재시도 | writing-team-2pass, revision-team |
+| `collaborative` | 자율 협업 (lead가 SendMessage로 조율) | planning-team, writing-team-collab, writing-team-collab-2pass, design-execution-team |
 
 ## Quality Gates
 

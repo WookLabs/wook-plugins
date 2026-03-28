@@ -8,7 +8,7 @@ user-invocable: true
 
 $ARGUMENTS
 
-03-init 완료 후, 문체부터 훅까지 전체 설계를 팀으로 실행합니다.
+03-init 완료 후, 5명의 설계 팀이 collaborative 모드로 실시간 소통하며 전체 설계를 수행합니다.
 
 ## Quick Start
 
@@ -30,28 +30,36 @@ team-orchestrator에 design-execution-team 실행을 위임합니다:
 Task(subagent_type="novel-dev:team-orchestrator", model="sonnet", prompt="
 팀 실행: design-execution-team
 프로젝트: {projectPath}
+모드: collaborative
 ")
 ```
 
-## 팀 구성 (5명)
+## 팀 구성 (5명, collaborative)
 
-| 에이전트 | 모델 | 단계 | 산출물 |
+| 에이전트 | 모델 | 역할 | 산출물 |
 |---------|------|------|--------|
-| style-curator | sonnet | Step 1 | style-guide.json |
-| lore-keeper | sonnet | Step 1, 3 | world.json, relationships.json |
-| character-designer | opus | Step 2 | characters/*.json, agents/characters/*.md |
-| plot-architect | opus | Step 3, 4 | timeline.json, main-arc.json |
-| arc-designer | sonnet | Step 5-7 | sub-arcs/*.json, foreshadowing.json, hooks.json |
+| **plot-architect** (lead) | opus | 전체 조율 + 타임라인 + 메인 아크 | timeline.json, main-arc.json |
+| style-curator | sonnet | 문체 설계 + 문체 일관성 자문 | style-guide.json |
+| lore-keeper | sonnet | 세계관 + 관계도 + 정합성 검증 | world.json, relationships.json |
+| character-designer | opus | 캐릭터 프로필 + 에이전트 생성 | characters/*.json, agents/characters/*.md |
+| arc-designer | sonnet | 서브아크 + 복선 + 훅 | sub-arcs/*.json, foreshadowing.json, hooks.json |
 
-## 파이프라인
+## Collaborative 진행 방식
 
-1. 문체 + 세계관 (병렬)
-2. 캐릭터 설계 + 에이전트 생성
-3. 관계도 + 타임라인 (병렬)
-4. 메인 아크
-5. 서브 아크
-6. 복선
-7. 훅
+plot-architect(lead)가 TeamCreate로 팀을 구성하고 SendMessage로 조율합니다.
+
+**Phase 1: 기반 구축**
+- style-curator + lore-keeper가 동시 진행
+- 상호 참조: 문체가 세계관 분위기에 맞는지 실시간 조율
+
+**Phase 2: 캐릭터**
+- character-designer 주도, lore-keeper가 세계관 정합성 검증
+- character-designer가 캐릭터 에이전트 파일도 자동 생성
+
+**Phase 3: 구조**
+- plot-architect + arc-designer 주도
+- character-designer가 캐릭터 동기/결함 기반 플롯 자문
+- 서브아크 → 복선 → 훅 순으로 진행하되, 필요시 역순 피드백
 
 ## 완료 후
 

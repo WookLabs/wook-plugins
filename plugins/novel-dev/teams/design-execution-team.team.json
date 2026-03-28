@@ -3,104 +3,74 @@
   "schema_version": "1.0",
   "name": "design-execution-team",
   "display_name": "설계 실행 팀",
-  "description": "5명 에이전트가 문체→세계관→캐릭터→관계→타임라인→아크→복선→훅까지 전체 설계를 파이프라인으로 실행하는 팀. 03-init 완료 필수.",
+  "description": "5명 에이전트가 collaborative 모드로 실시간 소통하며 소설 전체 설계를 수행하는 팀. plot-architect가 lead로 조율. 03-init 완료 필수.",
   "category": "planning",
   "agents": [
     {
       "agent": "style-curator",
-      "role": "support",
-      "responsibility": "문체 및 서술 스타일 설계 (style-guide.json 생성)",
+      "role": "worker",
+      "responsibility": "문체 및 서술 스타일 설계 (style-guide.json 생성). 세계관/캐릭터 설계 시 문체 일관성 자문.",
       "model": "sonnet"
     },
     {
       "agent": "lore-keeper",
       "role": "worker",
-      "responsibility": "세계관 구축 (world.json, locations.json, terms.json) + 캐릭터 관계 네트워크 설계 (relationships.json)",
+      "responsibility": "세계관 구축 (world.json, locations.json, terms.json) + 캐릭터 관계 네트워크 설계 (relationships.json). 캐릭터/플롯 설계 시 세계관 정합성 검증.",
       "model": "sonnet"
     },
     {
       "agent": "character-designer",
       "role": "worker",
-      "responsibility": "캐릭터 프로필 설계 (characters/*.json, index.json) + collaborative용 에이전트 파일 생성 (agents/characters/*.md)",
+      "responsibility": "캐릭터 프로필 설계 (characters/*.json, index.json) + collaborative용 에이전트 파일 생성 (agents/characters/*.md). 플롯 설계 시 캐릭터 동기/결함 자문.",
       "model": "opus"
     },
     {
       "agent": "plot-architect",
       "role": "lead",
-      "responsibility": "타임라인 설계 (timeline.json) + 메인 아크 설계 (main-arc.json)",
+      "responsibility": "전체 설계 조율 + 타임라인 설계 (timeline.json) + 메인 아크 설계 (main-arc.json). 팀원에게 작업 지시 및 진행 관리.",
       "model": "opus"
     },
     {
       "agent": "arc-designer",
       "role": "worker",
-      "responsibility": "서브아크 (sub-arcs/*.json), 복선 (foreshadowing.json), 훅 (hooks.json) 설계",
+      "responsibility": "서브아크 (sub-arcs/*.json), 복선 (foreshadowing.json), 훅 (hooks.json) 설계. 메인 아크/캐릭터 아크와 정합성 조율.",
       "model": "sonnet"
     }
   ],
   "workflow": {
-    "type": "pipeline",
-    "steps": [
+    "type": "collaborative",
+    "phases": [
       {
-        "name": "style-and-world",
-        "agents": ["style-curator", "lore-keeper"],
-        "execution": "parallel",
-        "output": "style-guide.json + world.json + locations.json + terms.json"
+        "name": "foundation",
+        "description": "문체 + 세계관 기반 구축. style-curator와 lore-keeper가 동시 진행하며 상호 참조.",
+        "primary_agents": ["style-curator", "lore-keeper"],
+        "outputs": ["meta/style-guide.json", "world/world.json", "world/locations.json", "world/terms.json"]
       },
       {
-        "name": "character-design",
-        "agents": ["character-designer"],
-        "execution": "sequential",
-        "depends_on": ["style-and-world"],
-        "output": "characters/*.json + index.json + agents/characters/*.md"
+        "name": "characters",
+        "description": "캐릭터 프로필 + 관계 설계. character-designer가 주도, lore-keeper가 세계관 정합성 검증.",
+        "primary_agents": ["character-designer", "lore-keeper"],
+        "outputs": ["characters/*.json", "characters/index.json", "characters/relationships.json", "agents/characters/*.md"]
       },
       {
-        "name": "relationship-and-timeline",
-        "agents": ["lore-keeper", "plot-architect"],
-        "execution": "parallel",
-        "depends_on": ["character-design"],
-        "output": "relationships.json + timeline.json"
-      },
-      {
-        "name": "main-arc",
-        "agents": ["plot-architect"],
-        "execution": "sequential",
-        "depends_on": ["relationship-and-timeline"],
-        "output": "main-arc.json"
-      },
-      {
-        "name": "sub-arcs",
-        "agents": ["arc-designer"],
-        "execution": "sequential",
-        "depends_on": ["main-arc"],
-        "output": "sub-arcs/*.json"
-      },
-      {
-        "name": "foreshadow",
-        "agents": ["arc-designer"],
-        "execution": "sequential",
-        "depends_on": ["sub-arcs"],
-        "output": "foreshadowing.json"
-      },
-      {
-        "name": "hooks",
-        "agents": ["arc-designer"],
-        "execution": "sequential",
-        "depends_on": ["foreshadow"],
-        "output": "hooks.json"
+        "name": "structure",
+        "description": "타임라인 + 메인/서브 아크 + 복선 + 훅. plot-architect와 arc-designer가 주도, character-designer가 캐릭터 동기 자문.",
+        "primary_agents": ["plot-architect", "arc-designer", "character-designer"],
+        "outputs": ["plot/timeline.json", "plot/main-arc.json", "plot/sub-arcs/*.json", "plot/foreshadowing.json", "plot/hooks.json"]
       }
-    ],
-    "max_iterations": 1
+    ]
   },
   "coordination": {
-    "mode": "orchestrated",
+    "mode": "collaborative",
     "lead": "plot-architect",
-    "communication": "task-based"
+    "communication": "message-based",
+    "lead_protocol": "plot-architect가 TeamCreate로 팀 생성 후 SendMessage로 각 phase를 조율. 자연스러운 의존성은 lead가 메시지로 관리."
   },
   "quality_gates": {
     "enabled": false
   },
   "cost_estimate": {
     "tokens_per_agent": 60000,
-    "warning_message": "설계 실행 팀은 5개 에이전트 (character-designer, plot-architect = opus / style-curator, lore-keeper, arc-designer = sonnet) 파이프라인을 사용합니다. 약 300K 토큰이 소요될 수 있습니다."
+    "warning_message": "설계 팀은 5명이 collaborative로 소통합니다 (character-designer, plot-architect = opus / style-curator, lore-keeper, arc-designer = sonnet). 약 300K 토큰이 소요될 수 있습니다."
   }
 }
