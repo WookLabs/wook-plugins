@@ -100,8 +100,18 @@ function getActChapters(projectPath, actNum) {
   const data = JSON.parse(structure);
   const act = data.acts?.find(a => a.act === actNum || a.act_number === actNum || a.number === actNum);
   if (!act) throw new Error(`Act ${actNum} not found in structure.json`);
-  const start = act.start_chapter || act.start || act.chapters?.[0] || 1;
-  const end = act.end_chapter || act.end || act.chapters?.[act.chapters.length - 1] || start;
+
+  let start, end;
+  if (Array.isArray(act.chapters)) {
+    start = act.chapters[0];
+    end = act.chapters[act.chapters.length - 1];
+  } else if (act.chapters && typeof act.chapters === 'object') {
+    start = act.chapters.start || act.chapters.start_chapter;
+    end = act.chapters.end || act.chapters.end_chapter;
+  }
+  if (!start) start = act.start_chapter || act.start || 1;
+  if (!end) end = act.end_chapter || act.end || start;
+
   return Array.from({ length: end - start + 1 }, (_, i) => start + i);
 }
 
@@ -188,7 +198,7 @@ function runCodex(systemPrompt, userPrompt, model) {
     // codex exec 모드: 파일에서 읽어 stdin으로 파이프 (Windows ENAMETOOLONG 우회)
     const promptPath = promptFile.replace(/\\/g, '/');
     const outputPath = outputFile.replace(/\\/g, '/');
-    const cmd = `cat "${promptPath}" | codex exec --model ${model} -s read-only -o "${outputPath}" -`;
+    const cmd = `cat "${promptPath}" | codex exec --model "${model}" -s read-only -o "${outputPath}" -`;
     log(`Codex CLI 실행: model=${model}`);
 
     execFileSync('bash', ['-c', cmd], {
@@ -246,6 +256,11 @@ async function main() {
 
   checkPrerequisites();
   const result = runCodex(system, user, args.model);
+
+  if (!result || result.trim().length === 0) {
+    error('Codex CLI가 빈 결과를 반환했습니다.');
+    process.exit(1);
+  }
 
   // 결과 저장
   const timestamp = new Date().toISOString().replace(/[:.]/g, '-').slice(0, 19);

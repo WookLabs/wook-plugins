@@ -141,7 +141,7 @@ function loadContext(projectPath, chapterNum) {
     }
   }
 
-  return { chapterPlot, styleGuide, project, summaries, characters, plotData };
+  return { chapterPlot, styleGuide, project, summaries, characters, plotData, chapterNum, projectPath };
 }
 
 // ─── System Prompt Assembly ──────────────────────────────────────────────────
@@ -208,9 +208,9 @@ function buildUserPrompt(ctx, mode, feedbackContent) {
 }
 
 function buildRevisePrompt(ctx, feedbackContent) {
-  const pad3 = padChapter(ctx.plotData?.meta?.chapter || 0);
-  const manuscript = readIfExists(path.join(ctx._projectPath, `chapters/ch${pad3}.md`))
-    || readIfExists(path.join(ctx._projectPath, `chapters/chapter_${pad3}.md`));
+  const pad3 = padChapter(ctx.chapterNum);
+  const manuscript = readIfExists(path.join(ctx.projectPath, `chapters/ch${pad3}.md`))
+    || readIfExists(path.join(ctx.projectPath, `chapters/chapter_${pad3}.md`));
 
   let prompt = `# 퇴고 대상\n\n`;
   prompt += `## 원고\n${manuscript || '(원고 없음)'}\n\n`;
@@ -256,7 +256,7 @@ function runCodex(systemPrompt, userPrompt, model) {
     // codex exec 모드: 파일에서 읽어 stdin으로 파이프 (Windows ENAMETOOLONG 우회)
     const promptPath = promptFile.replace(/\\/g, '/');
     const outputPath = outputFile.replace(/\\/g, '/');
-    const cmd = `cat "${promptPath}" | codex exec --model ${model} -o "${outputPath}" -`;
+    const cmd = `cat "${promptPath}" | codex exec --model "${model}" -o "${outputPath}" -`;
     log(`Codex CLI 실행: model=${model}`);
 
     execFileSync('bash', ['-c', cmd], {
@@ -290,7 +290,6 @@ async function main() {
 
   // 컨텍스트 로드
   const ctx = loadContext(args.project, args.chapter);
-  ctx._projectPath = args.project; // revise 모드에서 원고 로드용
   log(`플롯 로드 완료. 등장인물: ${ctx.characters.map(c => c.id).join(', ') || 'none'}`);
 
   // 피드백 로드 (revise 모드)
@@ -320,6 +319,11 @@ async function main() {
 
   // Codex CLI 실행
   const result = runCodex(systemPrompt, userPrompt, args.model);
+
+  if (!result || result.trim().length === 0) {
+    error('Codex CLI가 빈 결과를 반환했습니다. 파일을 변경하지 않습니다.');
+    process.exit(1);
+  }
 
   // 결과 저장
   const pad = padChapter(args.chapter);
