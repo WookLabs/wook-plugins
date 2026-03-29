@@ -15,8 +15,8 @@
  *   --input FILE       입력 챕터 파일 (필수)
  *   --project PATH     소설 프로젝트 경로 (필수, adult_writing 스타일 로드용)
  *   --output FILE      출력 파일 (선택, 없으면 stdout)
- *   --model MODEL      Grok 모델 (기본: grok-4-1-fast-reasoning)
- *   --max-tokens N     최대 토큰 (기본: 30000)
+ *   --model MODEL      Grok 모델 (기본: grok-4-1-fast)
+ *   --max-tokens N     최대 토큰 (기본: 131072, grok-4-1-fast max)
  *   --temperature N    Temperature (기본: 0.85)
  *   --dry-run          마커 감지만, API 호출 안 함
  *   --max-retries N    JSON 파싱 실패 시 재시도 횟수 (기본: 2)
@@ -48,8 +48,8 @@ function parseArgs(argv) {
     input: null,
     project: null,
     output: null,
-    model: 'grok-4-1-fast-reasoning',
-    maxTokens: 30000,
+    model: 'grok-4-1-fast',
+    maxTokens: 131072,
     temperature: 0.85,
     dryRun: false,
     maxRetries: 2
@@ -93,7 +93,7 @@ ${colors.yellow}옵션:${colors.reset}
   --input FILE       입력 챕터 파일 (필수)
   --project PATH     소설 프로젝트 경로 (필수)
   --output FILE      출력 파일 (선택, 없으면 stdout)
-  --model MODEL      Grok 모델 (기본: grok-4-1-fast-reasoning)
+  --model MODEL      Grok 모델 (기본: grok-4-1-fast)
   --max-tokens N     최대 토큰 (기본: 30000)
   --temperature N    Temperature (기본: 0.85)
   --dry-run          마커 감지만, API 호출 안 함
@@ -302,12 +302,66 @@ function buildSystemPrompt(styleGuide, adultWriting) {
     lines.push('');
   }
 
+  // 산문 리듬 규칙
+  lines.push('## 산문 리듬 규칙 (필수)');
+  lines.push('');
+  lines.push('### 금지 패턴');
+  lines.push('- 20자 이하 단문 3개 이상 연속 금지 (예: "잡혔다. 떨렸다. 아팠다.")');
+  lines.push('- 동일 어미(-었다/-았다/-했다) 3회 연속 금지');
+  lines.push('- 리스트형 나열 금지 (하나, 둘, 셋 / 첫째, 둘째)');
+  lines.push('- 과잉 설명 금지 (왜냐하면, ~때문이다)');
+  lines.push('');
+  lines.push('### 권장 패턴');
+  lines.push('- 복문(종속절, 삽입절)으로 호흡감 있는 문장 — 단문만 나열하지 말 것');
+  lines.push('- 단문-중문-장문 순환으로 리듬 변주');
+  lines.push('- 삽입구(—)와 부연절로 깊이 부여');
+  lines.push('');
+  lines.push('### 필터 워드 금지 (대화 밖)');
+  lines.push('- 느꼈다/느껴졌다 → 신체 반응으로 대체');
+  lines.push('- 보였다/보이는 → 직접 묘사');
+  lines.push('- 생각했다 → 자유간접화법 또는 행동');
+  lines.push('- 것 같았다 → 직접 비유 또는 확정 서술');
+  lines.push('');
+
+  // 문체 연속성
+  lines.push('## 문체 연속성 (핵심)');
+  lines.push('');
+  lines.push('ADULT 마커 바로 앞 3문장의 문체, 리듬, 어휘 수준을 분석하고 그것을 그대로 이어가세요.');
+  lines.push('마커 구간만 갑자기 기계적 나열로 변하면 안 됩니다.');
+  lines.push('');
+  lines.push('BAD (문체 단절):');
+  lines.push('> ...릴리스의 입꼬리가 올라갔다. ← 마커 밖 (문학적)');
+  lines.push('> 자지가 보지에 삽입됨. 피스톤질 시작. 찰싹 소리. ← 마커 안 (기계적 나열)');
+  lines.push('');
+  lines.push('GOOD (문체 연속):');
+  lines.push('> ...릴리스의 입꼬리가 올라갔다. ← 마커 밖');
+  lines.push('> 릴리스가 도현의 손목을 움켜쥐었다. 차가운 손가락이 맥박 위를 꾹 눌렀고, 그 접촉이 포션에 의해 증폭되어 불꽃처럼 척추를 타고 올라갔다. ← 마커 안 (동일한 문학적 톤)');
+  lines.push('');
+
+  // prose_rules (프로젝트별)
+  if (styleGuide?.prose_rules) {
+    lines.push('## 프로젝트 산문 규칙');
+    if (styleGuide.prose_rules.anti_patterns) {
+      lines.push('### 추가 금지 패턴');
+      for (const p of styleGuide.prose_rules.anti_patterns) {
+        lines.push(`- ${p.id}: ${p.description}`);
+      }
+    }
+    if (styleGuide.prose_rules.positive_patterns) {
+      lines.push('### 추가 권장 패턴');
+      for (const p of styleGuide.prose_rules.positive_patterns) {
+        lines.push(`- ${p.id}: ${p.description}`);
+      }
+    }
+    lines.push('');
+  }
+
   // 작업 지시
   lines.push('## 작업 지시');
   lines.push('- 입력으로 소설 챕터 전체가 주어집니다.');
   lines.push('- <!-- ADULT_N_START --> 와 <!-- ADULT_N_END --> 사이의 장면만 성인소설 수준으로 리라이트하세요.');
   lines.push('- 마커 밖의 텍스트는 절대 수정하지 마세요.');
-  lines.push('- 주변 문장의 톤과 문체를 유지하세요.');
+  lines.push('- 위의 산문 리듬 규칙과 문체 연속성을 반드시 지키세요.');
   lines.push('- 리라이트 시 원본의 서사 흐름과 감정선을 보존하되, 성인 묘사를 강화하세요.');
   lines.push('- 결과를 반드시 아래 JSON 형식으로만 출력하세요. JSON 외의 텍스트는 포함하지 마세요.');
   lines.push('');
