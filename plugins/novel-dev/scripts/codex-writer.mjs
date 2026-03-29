@@ -274,6 +274,7 @@ function runCodex(systemPrompt, userPrompt, model) {
     try { fs.unlinkSync(promptFile); } catch { /* ignore */ }
     try { fs.unlinkSync(outputFile); } catch { /* ignore */ }
     try { fs.rmdirSync(tmpDir); } catch { /* ignore */ }
+  }
 }
 
 // ─── Main ────────────────────────────────────────────────────────────────────

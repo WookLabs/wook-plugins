@@ -221,6 +221,54 @@
       "requiredState": ["writing", "editing", "planning"],
       "requireNovelContext": false,
       "priority": 6
+    },
+    {
+      "id": "02-blueprint-review",
+      "name": "blueprint-review",
+      "keywords": ["기획서 리뷰", "블루프린트 검토", "blueprint review", "기획 검토"],
+      "keywordVariants": ["기획서 검토해", "블루프린트 리뷰해"],
+      "argPattern": null,
+      "argType": null,
+      "excludeKeywords": ["생성", "만들"],
+      "requiredState": ["planning"],
+      "requireNovelContext": true,
+      "priority": 8
+    },
+    {
+      "id": "write-act-2pass",
+      "name": "write-act-2pass",
+      "keywords": ["2패스", "투패스", "2pass", "성인", "codex 집필"],
+      "keywordVariants": ["막 2패스", "막 투패스", "2패스로 써", "codex 2패스"],
+      "argPattern": "^(\\d+)",
+      "argType": "actNumber",
+      "excludeKeywords": ["단건", "한화", "한 화"],
+      "requiredState": ["writing"],
+      "requireNovelContext": true,
+      "priority": 7
+    },
+    {
+      "id": "stats",
+      "name": "stats",
+      "keywords": ["통계", "현황", "진행", "stats", "progress"],
+      "keywordVariants": ["통계 보여줘", "현황 알려줘", "진행률"],
+      "argPattern": null,
+      "argType": null,
+      "excludeKeywords": [],
+      "requiredState": [],
+      "requireNovelContext": true,
+      "priority": 5
+    },
+    {
+      "id": "style-library",
+      "name": "style-library",
+      "keywords": ["스타일 라이브러리", "예시 문장", "style library", "exemplar"],
+      "keywordVariants": ["스타일 관리", "예시 문장 관리", "예시 추가"],
+      "argPattern": null,
+      "argType": null,
+      "excludeKeywords": [],
+      "requiredState": [],
+      "requireNovelContext": true,
+      "priority": 5
     }
   ]
 }

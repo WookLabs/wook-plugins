@@ -183,8 +183,8 @@ describe('routing-rules.json structure', () => {
     expect(rules.omcConflictKeywords).toContain('team');
   });
 
-  it('should have 17 core skills', () => {
-    expect(rules.skills.length).toBe(17);
+  it('should have 21 core skills', () => {
+    expect(rules.skills.length).toBe(21);
   });
 
   it('should have projectRequiredExceptions', () => {
