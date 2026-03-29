@@ -13,7 +13,15 @@ $ARGUMENTS
 ## Quick Start
 
 ```bash
-/design-review   # 전체 설계 산출물 검토
+/design-review          # 전체 설계 산출물 검토 (Claude 팀, 기본)
+/design-review --codex  # 설계 검토 (Codex/GPT-5.4, 비용 절감)
+```
+
+## --codex: Codex CLI(GPT-5.4) 설계 리뷰
+
+`$ARGUMENTS`에 `--codex`가 있으면 4에이전트 관점을 GPT-5.4 단일 호출로 통합 수행합니다:
+```spec
+Bash("node scripts/codex-reviewer.mjs --mode design-review --project {projectPath}")
 ```
 
 ## 실행

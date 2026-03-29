@@ -15,6 +15,14 @@ user-invocable: true
 /write 5-10      # 5~10화 연속 작성
 /write 5 --solo  # 5화 작성 (novelist 단독)
 /write 5 --team  # 5화 작성 + revision-team 최종 검증
+/write 5 --codex # 5화 작성 (Codex/GPT-5.4, 비용 절감)
+```
+
+## --codex: Codex CLI(GPT-5.4) 집필
+
+`$ARGUMENTS`에 `--codex`가 있으면 Codex CLI로 단건 챕터를 집필합니다:
+```spec
+Bash("node scripts/codex-writer.mjs --chapter {N} --project {projectPath} --mode write")
 ```
 
 ## Writer Mode

@@ -14,6 +14,13 @@ allowed-tools:
 
 BLUEPRINT.md를 다각도로 검토하고 개선점을 제안합니다.
 
+## --codex: Codex CLI(GPT-5.4) 기획서 리뷰
+
+`$ARGUMENTS`에 `--codex`가 있으면 기획서 리뷰를 GPT-5.4로 수행합니다:
+```spec
+Bash("node scripts/codex-reviewer.mjs --mode blueprint-review --project {projectPath}")
+```
+
 ## 워크플로우
 
 ### Phase 1: 블루프린트 로드

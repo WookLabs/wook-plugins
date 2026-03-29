@@ -13,6 +13,13 @@ allowed-tools:
 
 소설 아이디어를 체계적인 BLUEPRINT.md 작품 기획서로 변환합니다.
 
+## --codex: Codex CLI(GPT-5.4) 기획서 생성
+
+`$ARGUMENTS`에 `--codex`가 있으면 기획서를 GPT-5.4로 생성합니다:
+```spec
+Bash("node scripts/codex-writer.mjs --project {projectPath} --mode blueprint")
+```
+
 ## 워크플로우
 
 ### Phase 1: 아이디어 수집

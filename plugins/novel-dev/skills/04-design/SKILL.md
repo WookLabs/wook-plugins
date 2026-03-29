@@ -13,9 +13,18 @@ $ARGUMENTS
 ## Quick Start
 
 ```bash
-/design          # 전체 설계 실행
+/design          # 전체 설계 실행 (Claude 팀, 기본)
+/design --codex  # 전체 설계 (Codex/GPT-5.4, 비용 절감)
 /design-review   # 설계 산출물 검토 및 수정
 ```
+
+## --codex: Codex CLI(GPT-5.4) 설계
+
+`$ARGUMENTS`에 `--codex`가 있으면 5에이전트 관점을 GPT-5.4 단일 호출로 통합 수행합니다:
+```spec
+Bash("node scripts/codex-writer.mjs --project {projectPath} --mode design")
+```
+결과 JSON을 `meta/design-codex-output.json`에 저장 후, 각 파일로 분배합니다.
 
 ## Prerequisites
 

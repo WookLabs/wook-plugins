@@ -8,6 +8,14 @@ user-invocable: true
 
 $ARGUMENTS
 
+## --codex: Codex CLI(GPT-5.4) 집필
+
+`$ARGUMENTS`에 `--codex`가 있으면 각 회차를 Codex CLI로 집필합니다:
+```spec
+for chapter in act_chapters:
+    Bash("node scripts/codex-writer.mjs --chapter {chapter} --project {projectPath} --mode write")
+```
+
 ## 실행 단계
 
 1. **막 정보 로드**

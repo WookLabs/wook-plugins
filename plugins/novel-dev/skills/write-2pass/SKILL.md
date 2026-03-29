@@ -16,6 +16,15 @@ Claude가 전체 챕터를 집필(Pass 1)하고, Grok이 성인 장면만 리미
 /write-2pass 5        # 5화를 캐릭터 협업 + 2-Pass로 집필 (기본값)
 /write-2pass 1        # 1화를 캐릭터 협업 + 2-Pass로 집필
 /write-2pass 5 --solo  # 5화를 novelist 단독 + 2-Pass로 집필
+/write-2pass 5 --codex # 5화를 Codex(GPT-5.4) + Grok 2-Pass로 집필
+```
+
+## --codex: Codex CLI(GPT-5.4) 2-Pass 집필
+
+`$ARGUMENTS`에 `--codex`가 있으면 Pass 1을 Codex CLI로 수행합니다:
+```spec
+Bash("node scripts/codex-writer.mjs --chapter {N} --project {projectPath} --mode write")
+# 이후 adult-rewriter.mjs로 Pass 2 (Grok 리라이트)
 ```
 
 ## Prerequisites

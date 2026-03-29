@@ -19,7 +19,17 @@ user-invocable: true
 /write-all --team          # 전체 집필 + 막 완료마다 revision-team 검증
 /write-all --resume --team # 재개 + revision-team 검증
 /write-all --solo --team   # novelist 단독 집필 + revision-team 검증
+/write-all --codex         # 전체 집필 (Codex/GPT-5.4, 비용 절감)
+/write-all --codex --team  # Codex 집필 + revision-team 검증
 ```
+
+## --codex: Codex CLI(GPT-5.4) 집필
+
+`$ARGUMENTS`에 `--codex`가 있으면 Ralph Loop 내에서 각 회차를 Codex CLI로 집필합니다:
+```spec
+Bash("node scripts/codex-writer.mjs --chapter {N} --project {projectPath} --mode write")
+```
+이후 adult-rewriter, proofreader, summarizer는 기존 Claude 파이프라인 그대로 실행.
 
 ## Writer Mode
 

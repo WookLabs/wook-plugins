@@ -16,6 +16,14 @@ Before execution, verify these files exist:
 
 If any file is missing, report error and suggest `/init` or `/design` commands.
 
+## --codex: Codex CLI(GPT-5.4) 플롯 생성
+
+`$ARGUMENTS`에 `--codex`가 있으면 각 회차 플롯을 Codex CLI로 생성합니다:
+```spec
+for chapter in 1..total_chapters:
+    Bash("node scripts/codex-writer.mjs --chapter {chapter} --project {projectPath} --mode gen-plot")
+```
+
 ## 실행 단계
 
 1. **데이터 로드**

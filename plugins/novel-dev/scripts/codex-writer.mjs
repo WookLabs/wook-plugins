@@ -230,6 +230,90 @@ function buildRevisePrompt(ctx, feedbackContent) {
   return prompt;
 }
 
+// ─── Design/Gen-Plot/Blueprint Prompts ───────────────────────────────────────
+
+function buildDesignPrompt(projectPath) {
+  const blueprint = readIfExists(path.join(projectPath, 'BLUEPRINT.md'));
+  if (!blueprint) throw new Error('BLUEPRINT.md not found in project');
+  const project = readIfExists(path.join(projectPath, 'meta/project.json'));
+  const structure = readIfExists(path.join(projectPath, 'plot/structure.json'));
+
+  let system = `# 역할: 소설 설계 AI (5관점 통합)\n\n`;
+  system += `당신은 5명의 설계 에이전트 관점을 모두 갖춘 통합 설계자입니다.\n`;
+  system += `1. style-curator (문체, 톤, POV, 금기어)\n`;
+  system += `2. lore-keeper (세계관, 마법 체계, 지리, 용어)\n`;
+  system += `3. character-designer (캐릭터 프로필, 관계, 성장 아크)\n`;
+  system += `4. plot-architect (3막 구조, 타임라인, 메인 아크)\n`;
+  system += `5. arc-designer (서브 아크, 복선, 훅)\n\n`;
+  system += `## 출력 형식\n`;
+  system += `JSON 객체 하나를 출력하세요. 구조:\n`;
+  system += `{\n  "style_guide": { ... },\n  "world": { ... },\n  "characters": [ ... ],\n`;
+  system += `  "relationships": [ ... ],\n  "timeline": [ ... ],\n  "main_arc": { ... },\n`;
+  system += `  "sub_arcs": [ ... ],\n  "foreshadowing": [ ... ],\n  "hooks": [ ... ]\n}\n`;
+
+  let user = `# 설계 대상\n\n## 기획서\n${blueprint}\n\n`;
+  if (project) user += `## 프로젝트 메타\n\`\`\`json\n${project}\n\`\`\`\n\n`;
+  if (structure) user += `## 구조\n\`\`\`json\n${structure}\n\`\`\`\n\n`;
+  user += `위 기획서를 바탕으로 완전한 설계 JSON을 생성하세요.\n`;
+
+  return { system, user };
+}
+
+function buildGenPlotPrompt(projectPath, chapterNum, prevSummaries) {
+  const mainArc = readIfExists(path.join(projectPath, 'plot/main-arc.json'));
+  const subArcs = readIfExists(path.join(projectPath, 'plot/sub-arcs.json'));
+  const foreshadowing = readIfExists(path.join(projectPath, 'plot/foreshadowing.json'));
+  const hooks = readIfExists(path.join(projectPath, 'plot/hooks.json'));
+  const timeline = readIfExists(path.join(projectPath, 'plot/timeline.json'));
+  const structure = readIfExists(path.join(projectPath, 'plot/structure.json'));
+  const styleGuide = readIfExists(path.join(projectPath, 'meta/style-guide.json'));
+  const charIndex = readIfExists(path.join(projectPath, 'characters/index.json'));
+
+  let system = `# 역할: 소설 플롯 설계 AI\n\n`;
+  system += `회차별 상세 플롯 JSON을 생성합니다.\n`;
+  system += `각 회차에 포함할 내용: 제목, 목표 분량, 현재 플롯(1500자+), 다음화 예고(500자),\n`;
+  system += `POV 캐릭터, 등장인물, 장소, 복선 plant/payoff, 훅, 감정 목표, 2-4개 씬.\n\n`;
+  system += `## 출력 형식\n`;
+  system += `chapter_${padChapter(chapterNum)}.json 형식의 JSON 하나를 출력하세요.\n`;
+
+  let user = `# 플롯 생성 대상: Chapter ${chapterNum}\n\n`;
+  if (structure) user += `## 구조\n\`\`\`json\n${structure}\n\`\`\`\n\n`;
+  if (mainArc) user += `## 메인 아크\n\`\`\`json\n${mainArc}\n\`\`\`\n\n`;
+  if (subArcs) user += `## 서브 아크\n\`\`\`json\n${subArcs}\n\`\`\`\n\n`;
+  if (foreshadowing) user += `## 복선\n\`\`\`json\n${foreshadowing}\n\`\`\`\n\n`;
+  if (hooks) user += `## 훅\n\`\`\`json\n${hooks}\n\`\`\`\n\n`;
+  if (timeline) user += `## 타임라인\n\`\`\`json\n${timeline}\n\`\`\`\n\n`;
+  if (styleGuide) user += `## 스타일 가이드\n\`\`\`json\n${styleGuide}\n\`\`\`\n\n`;
+  if (charIndex) user += `## 캐릭터\n\`\`\`json\n${charIndex}\n\`\`\`\n\n`;
+  if (prevSummaries && prevSummaries.length > 0) {
+    user += `## 이전 회차 요약\n\n`;
+    prevSummaries.forEach((s, i) => { user += `### 이전 ${prevSummaries.length - i}화 전\n${s}\n\n`; });
+  }
+  user += `Chapter ${chapterNum}의 상세 플롯 JSON을 생성하세요.\n`;
+
+  return { system, user };
+}
+
+function buildBlueprintPrompt(projectPath) {
+  // brainstorm 결과 또는 사용자 아이디어를 입력으로 BLUEPRINT.md 생성
+  const idea = readIfExists(path.join(projectPath, 'meta/idea.md'))
+    || readIfExists(path.join(projectPath, 'meta/brainstorm.md'));
+  const project = readIfExists(path.join(projectPath, 'meta/project.json'));
+
+  let system = `# 역할: 소설 기획서 작성 AI\n\n`;
+  system += `소설 아이디어를 받아 완전한 기획서(BLUEPRINT.md)를 생성합니다.\n`;
+  system += `포함 항목: 로그라인, 시놉시스(500자+), 3막 구조 아웃라인,\n`;
+  system += `주요 캐릭터 소개, 장르/톤, 타겟 독자, 차별화 포인트.\n\n`;
+  system += `출력: 마크다운 형식의 BLUEPRINT.md 전문.\n`;
+
+  let user = `# 기획서 작성 대상\n\n`;
+  if (idea) user += `## 아이디어\n${idea}\n\n`;
+  if (project) user += `## 프로젝트 메타\n\`\`\`json\n${project}\n\`\`\`\n\n`;
+  user += `위 내용을 바탕으로 완전한 BLUEPRINT.md를 생성하세요.\n`;
+
+  return { system, user };
+}
+
 // ─── Codex CLI Execution ─────────────────────────────────────────────────────
 
 function checkPrerequisites() {
@@ -282,27 +366,54 @@ function runCodex(systemPrompt, userPrompt, model) {
 async function main() {
   const args = parseArgs(process.argv.slice(2));
 
-  if (!args.chapter) { error('--chapter N 필수'); process.exit(1); }
   if (!args.project) { error('--project PATH 필수'); process.exit(1); }
 
-  const modeLabel = args.mode === 'revise' ? '퇴고' : '집필';
-  log(`Chapter ${args.chapter} ${modeLabel} 시작 (model: ${args.model}, mode: ${args.mode})`);
+  const CHAPTER_MODES = ['write', 'revise'];
+  const PROJECT_MODES = ['design', 'gen-plot', 'blueprint'];
 
-  // 컨텍스트 로드
-  const ctx = loadContext(args.project, args.chapter);
-  log(`플롯 로드 완료. 등장인물: ${ctx.characters.map(c => c.id).join(', ') || 'none'}`);
-
-  // 피드백 로드 (revise 모드)
-  let feedbackContent = null;
-  if (args.mode === 'revise' && args.feedback) {
-    feedbackContent = readIfExists(args.feedback);
-    if (feedbackContent) log(`피드백 로드 완료: ${args.feedback}`);
-    else warn(`피드백 파일을 찾을 수 없습니다: ${args.feedback}`);
+  if (CHAPTER_MODES.includes(args.mode) && !args.chapter) {
+    error(`--chapter N 필수 (mode: ${args.mode})`); process.exit(1);
   }
 
-  // 프롬프트 조립
-  const systemPrompt = buildSystemPrompt(ctx);
-  const userPrompt = buildUserPrompt(ctx, args.mode, feedbackContent);
+  const modeLabels = { write: '집필', revise: '퇴고', design: '설계', 'gen-plot': '플롯 생성', blueprint: '기획서 생성' };
+  log(`${modeLabels[args.mode] || args.mode} 시작 (model: ${args.model}, mode: ${args.mode})`);
+
+  let systemPrompt, userPrompt;
+
+  if (PROJECT_MODES.includes(args.mode)) {
+    // design, gen-plot, blueprint: 프로젝트 레벨 모드
+    if (args.mode === 'design') {
+      const { system, user } = buildDesignPrompt(args.project);
+      systemPrompt = system; userPrompt = user;
+    } else if (args.mode === 'gen-plot') {
+      if (!args.chapter) { error('--chapter N 필수 (gen-plot)'); process.exit(1); }
+      const summaries = [];
+      for (let i = Math.max(1, args.chapter - 3); i < args.chapter; i++) {
+        const s = readIfExists(path.join(args.project, `context/summaries/chapter_${padChapter(i)}_summary.md`));
+        if (s) summaries.push(s);
+      }
+      const { system, user } = buildGenPlotPrompt(args.project, args.chapter, summaries);
+      systemPrompt = system; userPrompt = user;
+    } else if (args.mode === 'blueprint') {
+      const { system, user } = buildBlueprintPrompt(args.project);
+      systemPrompt = system; userPrompt = user;
+    }
+  } else {
+    // write, revise: 챕터 레벨 모드
+    const ctx = loadContext(args.project, args.chapter);
+    log(`플롯 로드 완료. 등장인물: ${ctx.characters.map(c => c.id).join(', ') || 'none'}`);
+
+    let feedbackContent = null;
+    if (args.mode === 'revise' && args.feedback) {
+      feedbackContent = readIfExists(args.feedback);
+      if (feedbackContent) log(`피드백 로드 완료: ${args.feedback}`);
+      else warn(`피드백 파일을 찾을 수 없습니다: ${args.feedback}`);
+    }
+
+    systemPrompt = buildSystemPrompt(ctx);
+    userPrompt = buildUserPrompt(ctx, args.mode, feedbackContent);
+  }
+
   log(`시스템 프롬프트: ${systemPrompt.length}자, 유저 프롬프트: ${userPrompt.length}자`);
 
   if (args.dryRun) {
@@ -325,12 +436,24 @@ async function main() {
     process.exit(1);
   }
 
-  // 결과 저장
-  const pad = padChapter(args.chapter);
-  // ch${pad}.md 우선, 없으면 chapter_${pad}.md (프로젝트 파일명 호환)
-  const chPath = path.join(args.project, `chapters/ch${pad}.md`);
-  const chapterPath = path.join(args.project, `chapters/chapter_${pad}.md`);
-  const outputPath = fs.existsSync(chPath) ? chPath : (fs.existsSync(chapterPath) ? chapterPath : chPath);
+  // 결과 저장 (모드별 출력 경로)
+  let outputPath;
+  if (args.mode === 'design') {
+    outputPath = path.join(args.project, 'meta/design-codex-output.json');
+  } else if (args.mode === 'gen-plot') {
+    const pad = padChapter(args.chapter);
+    const chJson = path.join(args.project, `chapters/ch${pad}.json`);
+    const chapterJson = path.join(args.project, `chapters/chapter_${pad}.json`);
+    outputPath = fs.existsSync(chJson) ? chJson : (fs.existsSync(chapterJson) ? chapterJson : chJson);
+  } else if (args.mode === 'blueprint') {
+    outputPath = path.join(args.project, 'BLUEPRINT.md');
+  } else {
+    // write, revise
+    const pad = padChapter(args.chapter);
+    const chPath = path.join(args.project, `chapters/ch${pad}.md`);
+    const chapterPath = path.join(args.project, `chapters/chapter_${pad}.md`);
+    outputPath = fs.existsSync(chPath) ? chPath : (fs.existsSync(chapterPath) ? chapterPath : chPath);
+  }
 
   // 백업
   if (fs.existsSync(outputPath)) {
@@ -342,12 +465,14 @@ async function main() {
   fs.writeFileSync(outputPath, result, 'utf-8');
   log(`${colors.green}완료!${colors.reset} ${outputPath} (${result.length}자)`);
 
-  // ADULT 마커 감지 보고
-  const adultCount = (result.match(/<!-- ADULT_\d+_START -->/g) || []).length;
-  if (adultCount > 0) {
-    log(`ADULT 마커 ${adultCount}개 감지 → Pass 2(Grok)에서 리라이트됩니다.`);
-  } else {
-    log('ADULT 마커 없음 → Pass 2 건너뜁니다.');
+  // ADULT 마커 감지 보고 (write/revise 모드만)
+  if (['write', 'revise'].includes(args.mode)) {
+    const adultCount = (result.match(/<!-- ADULT_\d+_START -->/g) || []).length;
+    if (adultCount > 0) {
+      log(`ADULT 마커 ${adultCount}개 감지 → Pass 2(Grok)에서 리라이트됩니다.`);
+    } else {
+      log('ADULT 마커 없음 → Pass 2 건너뜁니다.');
+    }
   }
 }
 

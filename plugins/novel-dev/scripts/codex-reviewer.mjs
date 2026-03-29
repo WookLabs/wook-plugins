@@ -173,6 +173,48 @@ function buildActReviewPrompt(projectPath, chapters) {
   return { system, user };
 }
 
+function buildDesignReviewPrompt(projectPath) {
+  let system = `# 역할: 소설 설계 리뷰어 (4관점 통합)\n\n`;
+  system += `1. **structure-analyst** (3막 구조, 아크 밸런스, 페이싱)\n`;
+  system += `2. **consistency-verifier** (세계관-캐릭터-아크 간 정합성)\n`;
+  system += `3. **genre-validator** (장르 적합성, 상업성, 타겟 독자 매칭)\n`;
+  system += `4. **character-analyst** (캐릭터 깊이, 관계 역학, 성장 아크)\n\n`;
+  system += `각 관점별 점수(0-100)와 구체적 피드백을 JSON으로 출력하세요.\n`;
+
+  let user = `# 리뷰 대상 설계\n\n`;
+  const files = [
+    ['meta/style-guide.json', '스타일 가이드'],
+    ['world/world.json', '세계관'],
+    ['characters/index.json', '캐릭터 목록'],
+    ['characters/relationships.json', '캐릭터 관계'],
+    ['plot/main-arc.json', '메인 아크'],
+    ['plot/timeline.json', '타임라인'],
+    ['plot/foreshadowing.json', '복선'],
+    ['plot/hooks.json', '훅']
+  ];
+  for (const [file, label] of files) {
+    const content = readIfExists(path.join(projectPath, file));
+    if (content) user += `## ${label}\n\`\`\`json\n${content}\n\`\`\`\n\n`;
+  }
+
+  return { system, user };
+}
+
+function buildBlueprintReviewPrompt(projectPath) {
+  const blueprint = readIfExists(path.join(projectPath, 'BLUEPRINT.md'));
+  if (!blueprint) throw new Error('BLUEPRINT.md not found');
+
+  let system = `# 역할: 소설 기획서 리뷰어 (3관점 통합)\n\n`;
+  system += `1. **structure-analyst** (3막 구조 완성도, 갈등 구조, 클라이맥스)\n`;
+  system += `2. **commercial-analyst** (상업성, 타겟 독자, 시장 적합성)\n`;
+  system += `3. **genre-validator** (장르 비트 충족, 클리셰 vs 신선함)\n\n`;
+  system += `각 관점별 점수(0-100)와 구체적 피드백을 JSON으로 출력하세요.\n`;
+
+  let user = `# 리뷰 대상 기획서\n\n${blueprint}\n`;
+
+  return { system, user };
+}
+
 // ─── Codex CLI Execution ─────────────────────────────────────────────────────
 
 function checkPrerequisites() {
@@ -224,27 +266,31 @@ function runCodex(systemPrompt, userPrompt, model) {
 async function main() {
   const args = parseArgs(process.argv.slice(2));
 
-  if (!args.mode) { error('--mode plot|act 필수'); process.exit(1); }
+  if (!args.mode) { error('--mode plot|act|design-review|blueprint-review 필수'); process.exit(1); }
   if (!args.project) { error('--project PATH 필수'); process.exit(1); }
 
-  let chapters;
+  let system, user;
+
   if (args.mode === 'plot') {
     if (!args.chapters) { error('--chapters RANGE 필수 (예: 1-5)'); process.exit(1); }
-    chapters = parseChapterRange(args.chapters);
+    const chapters = parseChapterRange(args.chapters);
     log(`Plot review: chapters ${chapters.join(', ')}`);
+    ({ system, user } = buildPlotReviewPrompt(args.project, chapters));
   } else if (args.mode === 'act') {
     if (!args.act) { error('--act N 필수'); process.exit(1); }
-    chapters = getActChapters(args.project, args.act);
+    const chapters = getActChapters(args.project, args.act);
     log(`Act ${args.act} review: chapters ${chapters.join(', ')}`);
+    ({ system, user } = buildActReviewPrompt(args.project, chapters));
+  } else if (args.mode === 'design-review') {
+    log('Design review 시작');
+    ({ system, user } = buildDesignReviewPrompt(args.project));
+  } else if (args.mode === 'blueprint-review') {
+    log('Blueprint review 시작');
+    ({ system, user } = buildBlueprintReviewPrompt(args.project));
   } else {
-    error(`알 수 없는 모드: ${args.mode}. plot 또는 act를 사용하세요.`);
+    error(`알 수 없는 모드: ${args.mode}. plot|act|design-review|blueprint-review 를 사용하세요.`);
     process.exit(1);
   }
-
-  // 프롬프트 조립
-  const { system, user } = args.mode === 'plot'
-    ? buildPlotReviewPrompt(args.project, chapters)
-    : buildActReviewPrompt(args.project, chapters);
 
   log(`시스템 프롬프트: ${system.length}자, 유저 프롬프트: ${user.length}자`);
 
@@ -267,9 +313,18 @@ async function main() {
   const reviewDir = path.join(args.project, 'reviews');
   fs.mkdirSync(reviewDir, { recursive: true });
 
-  const filename = args.mode === 'plot'
-    ? `plot-review_ch${chapters[0]}-${chapters[chapters.length - 1]}_${timestamp}.json`
-    : `act-review_act${args.act}_${timestamp}.json`;
+  let filename;
+  if (args.mode === 'plot') {
+    filename = `plot-review_${timestamp}.json`;
+  } else if (args.mode === 'act') {
+    filename = `act-review_act${args.act}_${timestamp}.json`;
+  } else if (args.mode === 'design-review') {
+    filename = `design-review_${timestamp}.json`;
+  } else if (args.mode === 'blueprint-review') {
+    filename = `blueprint-review_${timestamp}.json`;
+  } else {
+    filename = `review_${args.mode}_${timestamp}.json`;
+  }
 
   const outputPath = path.join(reviewDir, filename);
   fs.writeFileSync(outputPath, result, 'utf-8');
