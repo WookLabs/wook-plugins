@@ -48,26 +48,22 @@
       {
         "id": "sentence-length-rhythm",
         "description": "단문(~15자)-중문(15~40자)-장문(40자+) 순환으로 리듬 변주",
-        "example_hint": "짧은 충격 → 중간 설명 → 긴 감각 묘사 → 짧은 반전",
-        "target_ratio": 0
+        "example_hint": "짧은 충격 → 중간 설명 → 긴 감각 묘사 → 짧은 반전"
       },
       {
         "id": "sensory-emotion-transfer",
         "description": "감정을 감각 묘사로 전달 (show don't tell)",
-        "example_hint": "'슬펐다' → '목구멍 안쪽이 뜨거워졌다. 삼키려 해도 삼켜지지 않는 덩어리가 올라왔다.'",
-        "target_ratio": 0
+        "example_hint": "'슬펐다' → '목구멍 안쪽이 뜨거워졌다. 삼키려 해도 삼켜지지 않는 덩어리가 올라왔다.'"
       },
       {
         "id": "free-indirect-discourse",
         "description": "내적 독백을 자유간접화법으로 표현 (리스트가 아닌 의식의 흐름)",
-        "example_hint": "'첫째, 여기는 이세계다. 둘째, 마법이 있다.' → '이세계. 마법. 포로. 단어들이 머릿속에서 뒤섞였지만, 어느 하나 현실로 다가오지 않았다.'",
-        "target_ratio": 0
+        "example_hint": "'첫째, 여기는 이세계다. 둘째, 마법이 있다.' → '이세계. 마법. 포로. 단어들이 머릿속에서 뒤섞였지만, 어느 하나 현실로 다가오지 않았다.'"
       },
       {
         "id": "parenthetical-insertion",
         "description": "삽입구와 부연절로 문장에 깊이와 호흡 부여",
-        "example_hint": "'도현은 벽을 탔다.' → '도현은—화학 화상 흔적이 남은 길고 마른 손가락으로—벽돌 틈을 잡으며 벽을 탔다.'",
-        "target_ratio": 0
+        "example_hint": "'도현은 벽을 탔다.' → '도현은—화학 화상 흔적이 남은 길고 마른 손가락으로—벽돌 틈을 잡으며 벽을 탔다.'"
       }
     ]
   }
