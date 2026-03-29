@@ -323,7 +323,10 @@ async function main() {
 
   // 결과 저장
   const pad = padChapter(args.chapter);
-  const outputPath = path.join(args.project, `chapters/chapter_${pad}.md`);
+  // ch${pad}.md 우선, 없으면 chapter_${pad}.md (프로젝트 파일명 호환)
+  const chPath = path.join(args.project, `chapters/ch${pad}.md`);
+  const chapterPath = path.join(args.project, `chapters/chapter_${pad}.md`);
+  const outputPath = fs.existsSync(chPath) ? chPath : (fs.existsSync(chapterPath) ? chapterPath : chPath);
 
   // 백업
   if (fs.existsSync(outputPath)) {
