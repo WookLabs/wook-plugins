@@ -13,9 +13,11 @@ $ARGUMENTS
 ## Quick Start
 
 ```bash
-/revise 5        # 5화 퇴고
-/revise 1-10     # 1~10화 순차 퇴고
-/revise 5 --solo # 5화 editor 단독 퇴고
+/revise 5             # 5화 퇴고 (Claude 팀, 기본)
+/revise 1-10          # 1~10화 순차 퇴고
+/revise 5 --solo      # 5화 editor 단독 퇴고
+/revise 5 --codex     # 5화 퇴고 (Codex/GPT-5.4, 비용 절감)
+/revise 1-10 --codex  # 1~10화 순차 Codex 퇴고
 ```
 
 ## Prerequisites
@@ -24,6 +26,21 @@ $ARGUMENTS
 - `/act-review` 또는 `/plot-review` 결과가 있으면 피드백을 자동 로드 (없어도 실행 가능)
 
 ## 실행
+
+### --codex: Codex CLI(GPT-5.4) 퇴고
+
+`$ARGUMENTS`에 `--codex`가 있으면 퇴고를 Codex CLI(GPT-5.4)로 수행합니다:
+
+```spec
+# 1. review 피드백 로드 (있으면)
+feedback = Read("reviews/verification_ch{N}_*.json") or null
+
+# 2. Codex CLI로 퇴고
+Bash("node scripts/codex-writer.mjs --chapter {chapterNumber} --project {projectPath} --mode revise --feedback {feedbackPath}")
+```
+
+피드백을 프롬프트에 포함하여 GPT-5.4가 원고를 수정합니다.
+캐릭터 보이스 프로필도 프롬프트에 포함되어 일관성 유지.
 
 ### 기본 (집필 팀 collaborative 퇴고)
 

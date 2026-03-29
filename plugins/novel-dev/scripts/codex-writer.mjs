@@ -48,6 +48,8 @@ function parseArgs(argv) {
     chapter: null,
     project: null,
     model: 'gpt-5.4',
+    mode: 'write',
+    feedback: null,
     dryRun: false
   };
 
@@ -59,6 +61,10 @@ function parseArgs(argv) {
       result.project = argv[++i];
     } else if (arg === '--model' && argv[i + 1]) {
       result.model = argv[++i];
+    } else if (arg === '--mode' && argv[i + 1]) {
+      result.mode = argv[++i];
+    } else if (arg === '--feedback' && argv[i + 1]) {
+      result.feedback = argv[++i];
     } else if (arg === '--dry-run') {
       result.dryRun = true;
     } else if (arg === '--help' || arg === '-h') {
@@ -81,6 +87,8 @@ ${colors.yellow}Options:${colors.reset}
   --chapter N        회차 번호 (필수)
   --project PATH     소설 프로젝트 경로 (필수)
   --model MODEL      GPT 모델 (기본: gpt-5.4)
+  --mode MODE        write(초고, 기본) | revise(퇴고)
+  --feedback PATH    퇴고 시 리뷰 피드백 JSON 경로
   --dry-run          프롬프트 생성만, Codex 호출 안 함
   --help, -h         도움말
 
@@ -178,7 +186,11 @@ function buildSystemPrompt(ctx) {
   return prompt;
 }
 
-function buildUserPrompt(ctx) {
+function buildUserPrompt(ctx, mode, feedbackContent) {
+  if (mode === 'revise') {
+    return buildRevisePrompt(ctx, feedbackContent);
+  }
+
   let prompt = `# 집필 대상\n\n`;
   prompt += `## 플롯\n\`\`\`json\n${ctx.chapterPlot}\n\`\`\`\n\n`;
 
@@ -191,6 +203,29 @@ function buildUserPrompt(ctx) {
 
   prompt += `위 플롯에 따라 완전한 챕터를 집필하세요. 목표 분량: 5000~8000자.\n`;
   prompt += `출력은 마크다운 형식으로, 본문만 출력하세요 (메타 코멘트 없음).\n`;
+
+  return prompt;
+}
+
+function buildRevisePrompt(ctx, feedbackContent) {
+  const pad3 = padChapter(ctx.plotData?.meta?.chapter || 0);
+  const manuscript = readIfExists(path.join(ctx._projectPath, `chapters/ch${pad3}.md`))
+    || readIfExists(path.join(ctx._projectPath, `chapters/chapter_${pad3}.md`));
+
+  let prompt = `# 퇴고 대상\n\n`;
+  prompt += `## 원고\n${manuscript || '(원고 없음)'}\n\n`;
+  prompt += `## 플롯\n\`\`\`json\n${ctx.chapterPlot}\n\`\`\`\n\n`;
+
+  if (feedbackContent) {
+    prompt += `## 리뷰 피드백\n\`\`\`json\n${feedbackContent}\n\`\`\`\n\n`;
+  }
+
+  prompt += `위 피드백을 반영하여 원고를 퇴고하세요.\n`;
+  prompt += `- 피드백에서 지적한 문제를 우선 수정\n`;
+  prompt += `- 캐릭터 보이스 일관성 유지\n`;
+  prompt += `- 기존 분량 유지 (±10%)\n`;
+  prompt += `- ADULT 마커가 있으면 그대로 유지\n`;
+  prompt += `출력은 마크다운 형식으로, 수정된 본문 전체를 출력하세요.\n`;
 
   return prompt;
 }
@@ -249,15 +284,25 @@ async function main() {
   if (!args.chapter) { error('--chapter N 필수'); process.exit(1); }
   if (!args.project) { error('--project PATH 필수'); process.exit(1); }
 
-  log(`Chapter ${args.chapter} 집필 시작 (model: ${args.model})`);
+  const modeLabel = args.mode === 'revise' ? '퇴고' : '집필';
+  log(`Chapter ${args.chapter} ${modeLabel} 시작 (model: ${args.model}, mode: ${args.mode})`);
 
   // 컨텍스트 로드
   const ctx = loadContext(args.project, args.chapter);
+  ctx._projectPath = args.project; // revise 모드에서 원고 로드용
   log(`플롯 로드 완료. 등장인물: ${ctx.characters.map(c => c.id).join(', ') || 'none'}`);
+
+  // 피드백 로드 (revise 모드)
+  let feedbackContent = null;
+  if (args.mode === 'revise' && args.feedback) {
+    feedbackContent = readIfExists(args.feedback);
+    if (feedbackContent) log(`피드백 로드 완료: ${args.feedback}`);
+    else warn(`피드백 파일을 찾을 수 없습니다: ${args.feedback}`);
+  }
 
   // 프롬프트 조립
   const systemPrompt = buildSystemPrompt(ctx);
-  const userPrompt = buildUserPrompt(ctx);
+  const userPrompt = buildUserPrompt(ctx, args.mode, feedbackContent);
   log(`시스템 프롬프트: ${systemPrompt.length}자, 유저 프롬프트: ${userPrompt.length}자`);
 
   if (args.dryRun) {
