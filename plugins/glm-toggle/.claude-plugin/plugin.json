@@ -1,0 +1,6 @@
+{
+  "name": "glm-toggle",
+  "version": "1.0.0",
+  "description": "Z.AI GLM 모드 토글. /glm-on으로 현재 프로젝트를 GLM-5.1로 전환, /glm-off로 Anthropic API로 복귀.",
+  "commands": "./commands/"
+}

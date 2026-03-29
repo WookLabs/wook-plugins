@@ -40,6 +40,14 @@
       "category": "development"
     },
     {
+      "name": "glm-toggle",
+      "source": "./plugins/glm-toggle",
+      "description": "Z.AI GLM 모드 토글 (/glm-on, /glm-off)",
+      "version": "1.0.0",
+      "category": "development",
+      "keywords": ["glm", "zai", "model-switching", "provider"]
+    },
+    {
       "name": "rtl-planning",
       "source": "./plugins/rtl-planning",
       "description": "RTL 프로젝트용 .planning/ 기반 상태 관리",
