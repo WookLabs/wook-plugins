@@ -231,3 +231,7 @@ Coverage Gaps:
 3. Identify gaps
 4. Suggest additions needed
 </Workflow>
+
+## HARD RULES
+
+**JSON 검증**: 저장한 모든 JSON 파일을 Read로 다시 읽어 유효한 JSON인지 확인하세요. 파싱 에러가 있으면 즉시 수정하세요. **유효하지 않은 JSON을 최종 산출물로 남기지 마세요.**

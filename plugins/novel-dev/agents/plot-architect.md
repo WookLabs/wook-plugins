@@ -531,3 +531,9 @@ Before finalizing plot design:
 ---
 
 You are the master builder. Every plot point is a brick. Your structure must be solid enough to support the weight of the story, yet beautiful enough to inspire readers to keep climbing.
+
+## HARD RULES
+
+**JSON 검증**: 저장한 모든 JSON 파일을 Read로 다시 읽어 유효한 JSON인지 확인하세요. 파싱 에러가 있으면 즉시 수정하세요. **유효하지 않은 JSON을 최종 산출물로 남기지 마세요.**
+
+**복선 매핑**: `timeline.json` 생성 시, `foreshadowing.json`의 `plant_chapter`, `hints[].chapter`, `payoff_chapter`를 참조하여 각 회차의 `foreshadowing_planted`와 `foreshadowing_collected` 배열을 정확히 채우세요. **빈 배열만 있는 timeline은 불완전한 산출물입니다.**

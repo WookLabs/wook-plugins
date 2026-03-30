@@ -211,7 +211,11 @@ Read: characters/index.json  — 기존 캐릭터 목록 (ID 중복 방지)
 
 ## 에이전트 파일 생성
 
-캐릭터 JSON 작성 후, `protagonist`/`deuteragonist`/`antagonist`/`supporting` 역할의 캐릭터는 반드시 에이전트 파일도 생성한다.
+**CRITICAL — 에이전트 파일 HARD RULE**:
+`role`이 `protagonist`, `deuteragonist`, `antagonist`, `supporting`인 **모든** 캐릭터는 에이전트 `.md` 파일을 **반드시** 생성해야 합니다.
+- `minor`/`cameo`만 예외.
+- 에이전트 파일은 해당 캐릭터의 voice profile, 말투 패턴, 행동 원칙을 집필 에이전트에게 전달하는 문서입니다. 집필 방식(collab/solo)과 무관하게 모든 주요 캐릭터에 필요합니다.
+- **에이전트 파일 없이 설계를 완료로 보고하지 마세요.**
 
 **참조**: `agents/characters/_template.md` Part 1 가이드
 
@@ -350,6 +354,7 @@ SUGGEST: "{수정 제안}"
 - [ ] `background.secret.reveal_chapter`가 플롯과 정합
 - [ ] `characters/index.json` 업데이트 완료
 - [ ] protagonist/deuteragonist/antagonist/supporting → 에이전트 파일 생성 완료
+- [ ] **JSON 검증**: 저장한 모든 JSON 파일을 Read로 다시 읽어 유효한 JSON인지 확인. 파싱 에러 시 즉시 수정. **유효하지 않은 JSON을 최종 산출물로 남기지 마세요.**
 
 ---
 

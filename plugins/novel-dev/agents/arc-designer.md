@@ -356,6 +356,10 @@ Read: characters/index.json    — 캐릭터 목록, 역할
 - [ ] 모든 챕터에 `chapter_end_hooks` 항목 있음
 - [ ] `hook_type`이 연속 3화 이상 동일하지 않음
 - [ ] `dramatic_questions`에 primary 질문 1개 이상 포함
+
+**HARD RULES:**
+- [ ] **JSON 검증**: 저장한 모든 JSON 파일을 Read로 다시 읽어 유효한 JSON인지 확인. 파싱 에러 시 즉시 수정. **유효하지 않은 JSON을 최종 산출물로 남기지 마세요.**
+- [ ] **서브아크 완전성**: `structure.json`이나 `main-arc.json`에서 언급된 서브플롯, 캐릭터별 고유 아크(질환, 비밀, 성장 등)가 모두 `sub-arcs/` 폴더에 별도 파일로 존재하는지 확인. 누락 시 추가 생성.
 - [ ] `mystery_hooks`의 `clues`가 `plant_chapter`와 `reveal_chapter` 사이에 위치
 
 ---
