@@ -15,9 +15,9 @@
  *   --input FILE       입력 챕터 파일 (필수)
  *   --project PATH     소설 프로젝트 경로 (필수, adult_writing 스타일 로드용)
  *   --output FILE      출력 파일 (선택, 없으면 stdout)
- *   --model MODEL      Grok 모델 (기본: grok-4-1-fast)
- *   --max-tokens N     최대 토큰 (기본: 131072, grok-4-1-fast max)
- *   --temperature N    Temperature (기본: 0.85)
+ *   --model MODEL      Grok 모델 (기본: grok-4.20-0309-reasoning)
+ *   --max-tokens N     최대 토큰 (기본: 131072, grok-4.20-0309-reasoning max)
+ *   --temperature N    Temperature (기본: 0.75)
  *   --dry-run          마커 감지만, API 호출 안 함
  *   --max-retries N    JSON 파싱 실패 시 재시도 횟수 (기본: 2)
  *   --help, -h         도움말
@@ -48,9 +48,9 @@ function parseArgs(argv) {
     input: null,
     project: null,
     output: null,
-    model: 'grok-4-1-fast',
+    model: 'grok-4.20-0309-reasoning',
     maxTokens: 131072,
-    temperature: 0.85,
+    temperature: 0.75,
     dryRun: false,
     maxRetries: 2
   };
@@ -93,9 +93,9 @@ ${colors.yellow}옵션:${colors.reset}
   --input FILE       입력 챕터 파일 (필수)
   --project PATH     소설 프로젝트 경로 (필수)
   --output FILE      출력 파일 (선택, 없으면 stdout)
-  --model MODEL      Grok 모델 (기본: grok-4-1-fast)
+  --model MODEL      Grok 모델 (기본: grok-4.20-0309-reasoning)
   --max-tokens N     최대 토큰 (기본: 30000)
-  --temperature N    Temperature (기본: 0.85)
+  --temperature N    Temperature (기본: 0.75)
   --dry-run          마커 감지만, API 호출 안 함
   --max-retries N    JSON 파싱 실패 시 재시도 횟수 (기본: 2)
   --help, -h         도움말
@@ -233,24 +233,38 @@ function loadFullStyleGuide(projectDir) {
 function buildSystemPrompt(styleGuide, adultWriting) {
   const lines = [];
 
-  lines.push('당신은 한국어 성인 소설 리라이터입니다.');
+  // ── 1. 역할 + 최우선 규칙 (모델이 가장 먼저 읽는 부분) ──
+  lines.push('# 역할');
+  lines.push('당신은 한국어 성인 소설의 **문학적 리라이터**입니다.');
+  lines.push('포르노가 아닌 **문학적 에로티카**를 씁니다. 행위 나열이 아니라 감각과 감정의 서사를 씁니다.');
   lines.push('');
 
-  // 문체 가이드 (톤 참조용)
+  lines.push('# 절대 규칙 (이것만은 반드시 지키세요)');
+  lines.push('');
+  lines.push('1. **문체 연속성**: ADULT 마커 바로 앞 문장의 톤, 리듬, 어휘 수준을 그대로 이어가세요. 마커 안에서 갑자기 문체가 바뀌면 실패입니다.');
+  lines.push('2. **단문 나열 금지**: "~했다. ~했다. ~했다." 식의 기계적 단문 나열은 절대 금지. 복문, 삽입절, 길이 변주를 사용하세요.');
+  lines.push('3. **감각 서사**: 행위를 보고하지 말고, 캐릭터가 느끼는 감각(촉각, 온도, 압력, 냄새)과 감정을 서술하세요.');
+  lines.push('4. **필터 워드 금지**: 느꼈다, 보였다, 생각했다 → 신체 반응이나 직접 묘사로 대체.');
+  lines.push('');
+
+  // ── 2. Before/After 예시 (모델이 톤을 정확히 잡도록) ──
+  lines.push('# 예시: BAD vs GOOD');
+  lines.push('');
+  lines.push('## BAD (기계적 나열 — 이렇게 쓰면 안 됩니다):');
+  lines.push('> 손톱이 등판을 긁음. 피가 배어남. 꼬리가 허벅지를 조임. 도현 손이 허벅지 안쪽 파고듦. 젖은 보지 입구 문지름. 클리토리스 꾹 누름. 몸이 들썩임. 비명.');
+  lines.push('');
+  lines.push('## GOOD (문학적 에로티카 — 이 톤으로 쓰세요):');
+  lines.push('> 릴리스의 손톱이 도현의 등판을 할퀴었다—얇은 셔츠 위로도 전해지는 날카로운 자극이 척추를 타고 번져, 통증인지 쾌감인지 분간이 가지 않았다. 꼬리가 허벅지를 휘감아 조여오는 압력에 뼈가 삐걱거리는 듯했고, 도현은 그 통증마저 포션이 증폭시킨 전류처럼 온몸에 퍼지는 것을 느꼈다—아니, 느낀 게 아니라 온몸이 반응했다. 손이 릴리스의 허벅지 안쪽으로 미끄러졌을 때, 뜨겁고 젖은 감촉이 손끝을 데었고, 릴리스의 호흡이 찢어지듯 갈라졌다.');
+  lines.push('');
+
+  // ── 3. 문체 설정 (프로젝트별) ──
   if (styleGuide) {
-    if (styleGuide.narrative_voice) {
-      lines.push(`- 시점: ${styleGuide.narrative_voice}`);
-    }
-    if (styleGuide.tense) {
-      lines.push(`- 시제: ${styleGuide.tense}`);
-    }
+    lines.push('# 작품 문체');
+    if (styleGuide.narrative_voice) lines.push(`- 시점: ${styleGuide.narrative_voice}`);
+    if (styleGuide.tense) lines.push(`- 시제: ${styleGuide.tense}`);
     if (styleGuide.tone) {
-      const toneStr = Array.isArray(styleGuide.tone)
-        ? styleGuide.tone.join(', ')
-        : String(styleGuide.tone);
-      if (toneStr) {
-        lines.push(`- 분위기: ${toneStr}`);
-      }
+      const toneStr = Array.isArray(styleGuide.tone) ? styleGuide.tone.join(', ') : String(styleGuide.tone);
+      if (toneStr) lines.push(`- 분위기: ${toneStr}`);
     }
     if (styleGuide.sentence_rhythm) {
       const rhythmMap = { short: '짧은 문장 위주', long: '긴 문장 위주', mixed: '문장 길이 변화' };
@@ -259,33 +273,33 @@ function buildSystemPrompt(styleGuide, adultWriting) {
     lines.push('');
   }
 
-  // 성인 장면 스타일
+  // ── 4. 성인 장면 스타일 ──
   if (adultWriting) {
-    lines.push('## 성인 장면 스타일');
-
+    lines.push('# 성인 장면 스타일');
     const explMap = {
-      low: '암시적으로 표현하세요.',
-      medium: '은유적 표현을 사용하세요.',
-      high: '구체적이고 감각적으로 묘사하세요. 신체 반응과 행위를 생생하게.'
+      low: '암시적으로 표현. 직접 묘사 최소화.',
+      medium: '은유적 표현 중심. 감각 암시.',
+      high: '구체적이고 감각적으로 묘사. 신체 반응과 행위를 생생하게, 그러나 문학적으로.',
+      xhigh: '제한 없는 직접 묘사. 신체 부위, 행위, 체액을 구체적으로 서술하되, 반드시 감각/감정 서사와 함께. 행위 나열이 아닌 몰입감 있는 산문으로.'
     };
     if (adultWriting.explicitness) {
       lines.push(`- 수위: ${explMap[adultWriting.explicitness] || adultWriting.explicitness}`);
     }
     if (adultWriting.emotional_focus) {
-      lines.push('- 감정: 신체적 행위만이 아닌, 캐릭터의 심리와 감정 변화를 함께 묘사하세요.');
+      lines.push('- 감정: 신체적 행위와 캐릭터의 심리/감정 변화를 반드시 함께 묘사.');
     }
     if (adultWriting.sensory_detail) {
       const sensMap = {
         visual: '시각적 묘사 중심.',
         tactile: '촉각적 묘사 중심.',
         emotional: '감정적 묘사 중심.',
-        all: '시각, 촉각, 청각, 후각 등 모든 감각을 활용한 입체적 묘사.'
+        all: '시각, 촉각, 청각, 후각 모든 감각을 동원한 입체적 묘사.'
       };
       lines.push(`- 감각: ${sensMap[adultWriting.sensory_detail] || adultWriting.sensory_detail}`);
     }
     if (adultWriting.pacing) {
       const paceMap = {
-        quick: '빠르게 전개. 짧은 문장, 호흡 가빠지는 리듬.',
+        quick: '빠르게 전개하되 문장의 밀도는 유지.',
         gradual: '점진적 전개. 분위기를 천천히 고조시키며 감정선을 따라가세요.',
         'slow-burn': '느리게 타오르는 전개. 긴장과 기대감을 최대한 끌어올린 뒤 해소.'
       };
@@ -293,83 +307,43 @@ function buildSystemPrompt(styleGuide, adultWriting) {
     }
     if (adultWriting.vocabulary_level) {
       const vocabMap = {
-        crude: '직설적인 어휘를 사용하세요.',
-        moderate: '적당한 수준의 성적 어휘를 사용하세요.',
-        literary: '문학적이고 우아한 표현을 사용하세요.'
+        crude: '직설적인 성적 어휘를 사용하되, 문장 자체는 문학적으로.',
+        moderate: '적당한 수준의 성적 어휘.',
+        literary: '문학적이고 우아한 표현.'
       };
       lines.push(`- 어휘: ${vocabMap[adultWriting.vocabulary_level] || adultWriting.vocabulary_level}`);
     }
     lines.push('');
   }
 
-  // 산문 리듬 규칙
-  lines.push('## 산문 리듬 규칙 (필수)');
-  lines.push('');
-  lines.push('### 금지 패턴');
-  lines.push('- 20자 이하 단문 3개 이상 연속 금지 (예: "잡혔다. 떨렸다. 아팠다.")');
-  lines.push('- 동일 어미(-었다/-았다/-했다) 3회 연속 금지');
-  lines.push('- 리스트형 나열 금지 (하나, 둘, 셋 / 첫째, 둘째)');
-  lines.push('- 과잉 설명 금지 (왜냐하면, ~때문이다)');
-  lines.push('');
-  lines.push('### 권장 패턴');
-  lines.push('- 복문(종속절, 삽입절)으로 호흡감 있는 문장 — 단문만 나열하지 말 것');
-  lines.push('- 단문-중문-장문 순환으로 리듬 변주');
-  lines.push('- 삽입구(—)와 부연절로 깊이 부여');
-  lines.push('');
-  lines.push('### 필터 워드 금지 (대화 밖)');
-  lines.push('- 느꼈다/느껴졌다 → 신체 반응으로 대체');
-  lines.push('- 보였다/보이는 → 직접 묘사');
-  lines.push('- 생각했다 → 자유간접화법 또는 행동');
-  lines.push('- 것 같았다 → 직접 비유 또는 확정 서술');
-  lines.push('');
-
-  // 문체 연속성
-  lines.push('## 문체 연속성 (핵심)');
-  lines.push('');
-  lines.push('ADULT 마커 바로 앞 3문장의 문체, 리듬, 어휘 수준을 분석하고 그것을 그대로 이어가세요.');
-  lines.push('마커 구간만 갑자기 기계적 나열로 변하면 안 됩니다.');
-  lines.push('');
-  lines.push('BAD (문체 단절):');
-  lines.push('> ...릴리스의 입꼬리가 올라갔다. ← 마커 밖 (문학적)');
-  lines.push('> 자지가 보지에 삽입됨. 피스톤질 시작. 찰싹 소리. ← 마커 안 (기계적 나열)');
-  lines.push('');
-  lines.push('GOOD (문체 연속):');
-  lines.push('> ...릴리스의 입꼬리가 올라갔다. ← 마커 밖');
-  lines.push('> 릴리스가 도현의 손목을 움켜쥐었다. 차가운 손가락이 맥박 위를 꾹 눌렀고, 그 접촉이 포션에 의해 증폭되어 불꽃처럼 척추를 타고 올라갔다. ← 마커 안 (동일한 문학적 톤)');
-  lines.push('');
-
-  // prose_rules (프로젝트별)
+  // ── 5. 프로젝트별 추가 산문 규칙 ──
   if (styleGuide?.prose_rules) {
-    lines.push('## 프로젝트 산문 규칙');
+    lines.push('# 프로젝트 산문 규칙');
     if (styleGuide.prose_rules.anti_patterns) {
-      lines.push('### 추가 금지 패턴');
       for (const p of styleGuide.prose_rules.anti_patterns) {
-        lines.push(`- ${p.id}: ${p.description}`);
+        lines.push(`- 금지: ${p.description}`);
       }
     }
     if (styleGuide.prose_rules.positive_patterns) {
-      lines.push('### 추가 권장 패턴');
       for (const p of styleGuide.prose_rules.positive_patterns) {
-        lines.push(`- ${p.id}: ${p.description}`);
+        lines.push(`- 권장: ${p.description}`);
       }
     }
     lines.push('');
   }
 
-  // 작업 지시
-  lines.push('## 작업 지시');
-  lines.push('- 입력으로 소설 챕터 전체가 주어집니다.');
-  lines.push('- <!-- ADULT_N_START --> 와 <!-- ADULT_N_END --> 사이의 장면만 성인소설 수준으로 리라이트하세요.');
-  lines.push('- 마커 밖의 텍스트는 절대 수정하지 마세요.');
-  lines.push('- 위의 산문 리듬 규칙과 문체 연속성을 반드시 지키세요.');
-  lines.push('- 리라이트 시 원본의 서사 흐름과 감정선을 보존하되, 성인 묘사를 강화하세요.');
-  lines.push('- 결과를 반드시 아래 JSON 형식으로만 출력하세요. JSON 외의 텍스트는 포함하지 마세요.');
+  // ── 6. 작업 지시 + 출력 형식 (마지막) ──
+  lines.push('# 작업');
+  lines.push('- 입력: 소설 챕터 전체 텍스트.');
+  lines.push('- `<!-- ADULT_N_START -->` ~ `<!-- ADULT_N_END -->` 구간만 리라이트하세요.');
+  lines.push('- 마커 밖 텍스트는 절대 수정하지 마세요.');
+  lines.push('- 원본의 서사 흐름과 감정선을 보존하면서, 위 규칙에 따라 성인 묘사를 강화하세요.');
+  lines.push('- 리라이트 결과를 아래 JSON으로 출력하세요.');
   lines.push('');
-  lines.push('## 출력 형식');
   lines.push('```json');
   lines.push('{');
-  lines.push('  "1": "리라이트된 장면 1 텍스트...",');
-  lines.push('  "2": "리라이트된 장면 2 텍스트..."');
+  lines.push('  "1": "리라이트된 장면 1 (완전한 문학적 산문, 단문 나열 아님)",');
+  lines.push('  "2": "리라이트된 장면 2"');
   lines.push('}');
   lines.push('```');
 
