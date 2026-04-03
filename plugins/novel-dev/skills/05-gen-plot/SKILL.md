@@ -4,7 +4,19 @@ description: "Use this skill when generating per-chapter plot files from complet
 user-invocable: true
 ---
 
-[NOVEL-SISYPHUS: 회차 플롯 생성]
+# /gen-plot - 회차별 플롯 생성 (팀 기반)
+
+$ARGUMENTS
+
+설계 완료 후, 4명의 플롯 팀이 collaborative 모드로 회차별 상세 플롯을 생성합니다.
+plot-architect가 초안을 만들고, arc-designer/lore-keeper/character-designer가 검증합니다.
+
+## Quick Start
+
+```bash
+/gen-plot          # 전체 회차 플롯 생성 (팀 기반, 기본)
+/gen-plot --codex  # 전체 회차 플롯 생성 (Codex/GPT-5.4, 비용 절감)
+```
 
 ## Prerequisites
 
@@ -12,6 +24,8 @@ Before execution, verify these files exist:
 - `meta/project.json` - Project metadata
 - `meta/style-guide.json` - Style guide
 - `plot/structure.json` - Plot structure (at least skeleton)
+- `plot/main-arc.json` - Main arc
+- `plot/foreshadowing.json` - Foreshadowing elements
 - `characters/` - At least one character file
 
 If any file is missing, report error and suggest `/init` or `/design` commands.
@@ -24,58 +38,102 @@ for chapter in 1..total_chapters:
     Bash("node scripts/codex-writer.mjs --chapter {chapter} --project {projectPath} --mode gen-plot")
 ```
 
-## 실행 단계
+## 실행
 
-1. **데이터 로드**
-   - `meta/project.json` (목표 화수)
-   - `plot/structure.json` (막 구분)
-   - `plot/main-arc.json`
-   - `plot/sub-arcs/*.json`
-   - `plot/foreshadowing.json`
-   - `plot/hooks.json`
-   - `characters/*.json`
-   - `meta/style-guide.json`
+### Phase 0: 플롯 전략 수립 (자동)
 
-2. **plot-architect 에이전트 호출** (회차별 반복)
-   ```
-   Task(subagent_type="novel-dev:plot-architect", prompt="
-   프로젝트: {project.json}
-   플롯 구조: {structure.json}
-   메인 아크: {main-arc.json}
-   서브 아크: {sub-arcs}
-   복선: {foreshadowing.json}
-   떡밥: {hooks.json}
-   기존 회차 플롯: {chapters/chapter_*.json} (있는 경우)
+팀 실행 전에 plot-architect가 설계 산출물을 분석하여 전체 회차 배분 전략을 수립합니다:
 
-   회차 {N}의 상세 플롯을 생성해주세요:
+```spec
+Task(subagent_type="novel-dev:plot-architect", model="opus", prompt="
+프로젝트: {projectPath}
 
-   포함 내용:
-   1. 회차 제목
-   2. 이전 회차 요약 (N>1일 경우, 이전 chapter_*.json의 current_plot 참조)
-      - N=1: 빈 문자열
-      - N=2: chapter_001.json의 current_plot 요약
-      - N>=3: 직전 3개 회차의 current_plot 통합 요약
-   3. 현재 회차 줄거리 (1500자)
-   4. 다음 회차 줄거리 (500자, 마지막 회차면 빈 문자열)
-   5. POV 캐릭터
-   6. 등장 인물
-   7. 등장 장소
-   8. 작품 내 시간대
-   9. 심을 복선 ID
-   10. 회수할 복선 ID
-   11. 떡밥 훅
-   12. 캐릭터 발전 포인트
-   13. 독자 감정 목표
-   14. 씬 분해 (2-4개 씬)
-   15. 문체 가이드 (톤, 페이싱)
-   ")
+플롯 전략을 수립하세요:
+1. 다음 파일들을 읽고 분석:
+   - plot/structure.json (막 구분, 총 회차)
+   - plot/main-arc.json (메인 아크)
+   - plot/sub-arcs/*.json (서브 아크)
+   - plot/foreshadowing.json (복선)
+   - plot/hooks.json (훅)
+   - plot/timeline.json (타임라인)
+   - characters/*.json (캐릭터)
 
-   ⚠️ 참고: 회차별로 순차 생성하며, 각 회차 생성 후 저장하여
-   다음 회차 생성 시 이전 회차 요약으로 활용
-   ```
+2. templates/plot-strategy.template.json 구조를 참고하여
+   meta/plot-strategy.json 생성
 
-3. **파일 생성**
-   - `chapters/chapter_001.json` ~ `chapter_{N}.json`
+포함할 내용:
+- 아크별 회차 할당 (어느 아크가 어느 회차에서 진행되는지)
+- 복선 plant/payoff 타이밍표 (foreshadowing.json 기반)
+- 전체 긴장 곡선 설계 (key peaks 명시)
+- 회차별 페이싱 가이드
+- POV 로테이션 전략
+- 서브플롯-메인플롯 교차 지점
+- 회차별 간략 가이드 (아크 비트, 복선, 훅, 감정 목표)
+
+이 전략 문서는 이후 팀이 회차별 플롯을 생성할 때 참조합니다.
+구체적이고 실행 가능한 내용을 작성하세요.
+")
+```
+
+### Phase 1: 팀 기반 회차별 플롯 생성
+
+team-orchestrator에 plot-generation-team 실행을 위임합니다:
+
+```spec
+Task(subagent_type="novel-dev:team-orchestrator", model="sonnet", prompt="
+팀 실행: plot-generation-team
+프로젝트: {projectPath}
+모드: collaborative
+
+⚠️ Phase 0 전략 참조: meta/plot-strategy.json에 플롯 전략이 있습니다.
+plot-architect는 각 회차 초안 작성 시 이 전략의 per_chapter_guide를 따르세요.
+검증 에이전트(arc-designer, lore-keeper, character-designer)도 전략 문서를 참조하여 검증하세요.
+
+회차별 순차 생성:
+- 각 회차 완성 후 저장하여 다음 회차 생성 시 이전 요약으로 활용
+- 1회차당 1라운드: plot-architect 초안 → 3명 검증 → plot-architect 반영
+")
+```
+
+## 팀 구성 (4명, collaborative)
+
+| 에이전트 | 모델 | 역할 | 책임 |
+|---------|------|------|------|
+| **plot-architect** (lead) | opus | 초안 생성 + 피드백 반영 | 회차별 chapter_N.json 작성 |
+| arc-designer | sonnet | 아크/복선 검증 | 아크 진행률, 복선 타이밍, 훅 배치 확인 |
+| lore-keeper | sonnet | 세계관 검증 | 타임라인 정합성, 장소/설정 일관성 확인 |
+| character-designer | sonnet | 캐릭터 검증 | 캐릭터 동선, 성장 아크, 행동 동기 확인 |
+
+## Collaborative 진행 방식
+
+plot-architect(lead)가 TeamCreate로 팀을 구성하고 SendMessage로 조율합니다.
+
+**각 회차마다:**
+1. plot-architect가 초안 작성 (plot-strategy.json의 해당 회차 가이드 참조)
+2. arc-designer에게 SendMessage → 아크/복선 피드백
+3. lore-keeper에게 SendMessage → 세계관 정합성 피드백
+4. character-designer에게 SendMessage → 캐릭터 동선 피드백
+5. plot-architect가 피드백 반영 → chapter_N.json 저장
+6. 다음 회차로 진행
+
+## 회차별 포함 내용
+
+1. 회차 제목, 목표 분량
+2. 이전 회차 요약 (N=1: 빈 문자열, N>=2: 직전 3개 요약)
+3. 현재 회차 줄거리 (1500자+)
+4. 다음 회차 줄거리 (500자, 마지막 회차면 빈 문자열)
+5. POV 캐릭터, 등장 인물, 등장 장소
+6. 작품 내 시간대
+7. 복선 plant/payoff ID
+8. 떡밥 훅
+9. 캐릭터 발전 포인트
+10. 독자 감정 목표
+11. 씬 분해 (2-4개 씬)
+12. 문체 가이드 (톤, 페이싱)
+
+## 파일 생성
+
+- `chapters/chapter_001.json` ~ `chapter_{N}.json`
 
 ## 출력 예시
 
@@ -96,8 +154,8 @@ for chapter in 1..total_chapters:
 
   "context": {
     "previous_summary": "",
-    "current_plot": "마케팅팀 김유나 대리는 야근 후 회식 자리에서 그룹 후계자 이준혁을 우연히 만난다. 회사에서의 이미지와 달리 편안하게 대화하는 두 사람. 유나는 준혁이 왜 이런 자리에 있는지 의아해한다. 회식이 끝나고 함께 나오는 두 사람. 준혁이 갑자기 유나에게 '저와 연애하실 생각 없으십니까?'라고 제안한다. 당황하는 유나. 준혁은 '물론 계약으로요'라고 덧붙인다.",
-    "next_plot": "유나는 황당한 제안을 거절하지만, 준혁은 조건을 제시한다. 3개월간 연인 행세, 대가로 승진 지원과 보너스. 유나의 승진 욕구와 자존심 사이의 갈등. 결국 계약서를 검토하기로 한다."
+    "current_plot": "마케팅팀 김유나 대리는 야근 후 회식 자리에서...",
+    "next_plot": "유나는 황당한 제안을 거절하지만..."
   },
 
   "narrative_elements": {
@@ -117,22 +175,6 @@ for chapter in 1..total_chapters:
       "location": "loc_002",
       "conflict": "야근 스트레스, 승진 압박",
       "beat": "유나가 야근 후 지친 모습, 동료와 회식 가기로"
-    },
-    {
-      "scene_number": 2,
-      "purpose": "준혁 첫 등장, 두 사람 만남",
-      "characters": ["char_001", "char_002"],
-      "location": "loc_003",
-      "conflict": "신분 차이, 어색함",
-      "beat": "우연한 만남, 의외로 편안한 대화"
-    },
-    {
-      "scene_number": 3,
-      "purpose": "충격적 제안",
-      "characters": ["char_001", "char_002"],
-      "location": "loc_003",
-      "conflict": "당혹감, 궁금증",
-      "beat": "계약 연애 제안, 클리프행어"
     }
   ],
 
@@ -142,4 +184,10 @@ for chapter in 1..total_chapters:
     "focus": "캐릭터 소개, 훅 설정"
   }
 }
+```
+
+## 완료 후
+
+```
+[OK] 전체 회차 플롯 생성 완료. /plot-review로 검토하거나, /write로 집필을 시작하세요.
 ```

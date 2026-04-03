@@ -9,7 +9,7 @@
 
 각 스킬(`/design`, `/write`, `/plot-review`, `/act-review` 등)이 해당 팀을 자동으로 호출합니다. `team-orchestrator` 에이전트가 팀 정의를 로드하여 자동으로 에이전트를 조직화하고 워크플로우를 실행합니다.
 
-## Preset Teams (12개)
+## Preset Teams (13개)
 
 | File | Name | Category | Agents | Workflow | 용도 |
 |------|------|----------|--------|----------|------|
@@ -25,6 +25,7 @@
 | `writing-team-collab.team.json` | 캐릭터 협업 집필 팀 | writing | narrator, characters/*, proofreader, summarizer | collaborative (hybrid) | 캐릭터 에이전트 co-write |
 | `writing-team-collab-2pass.team.json` | 캐릭터 협업 2-Pass 집필 팀 | writing | narrator, characters/*, proofreader, summarizer | collaborative (hybrid) | 캐릭터 co-write + Grok 리라이트 |
 | `writing-team-codex-2pass.team.json` | Codex 2-Pass 집필 팀 | writing | GPT-5.4(codex-writer), proofreader, summarizer | hybrid | Codex CLI + Grok 리라이트 (비용 절감) |
+| `plot-generation-team.team.json` | 플롯 생성 팀 | planning | plot-architect, arc-designer, lore-keeper, character-designer | collaborative | 회차별 플롯 팀 기반 생성+검증 |
 
 ## Workflow Types
 

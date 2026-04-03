@@ -33,6 +33,36 @@ Bash("node scripts/codex-writer.mjs --project {projectPath} --mode design")
 
 ## 실행
 
+### Phase 0: 설계 전략 수립 (자동)
+
+팀 실행 전에 plot-architect가 blueprint를 분석하여 설계 전략을 수립합니다:
+
+```spec
+Task(subagent_type="novel-dev:plot-architect", model="opus", prompt="
+프로젝트: {projectPath}
+
+설계 전략을 수립하세요:
+1. BLUEPRINT.md를 읽고 분석
+2. meta/project.json, plot/structure.json 참조
+3. templates/design-strategy.template.json 구조를 참고하여
+   meta/design-strategy.json 생성
+
+포함할 내용:
+- 핵심 톤/분위기 방향
+- 세계관 설계 우선순위
+- 캐릭터 설계 방침
+- 아크 구조 전략
+- 각 에이전트(style-curator, lore-keeper, character-designer, arc-designer)에 대한 구체적 지시사항
+- 장르별 필수 비트 및 회피 패턴
+- 프로젝트 제약 사항
+
+이 전략 문서는 이후 Phase 1~3에서 모든 에이전트가 참조합니다.
+구체적이고 실행 가능한 지시사항을 작성하세요.
+")
+```
+
+### Phase 1~3: 팀 실행
+
 team-orchestrator에 design-execution-team 실행을 위임합니다:
 
 ```spec
@@ -40,6 +70,10 @@ Task(subagent_type="novel-dev:team-orchestrator", model="sonnet", prompt="
 팀 실행: design-execution-team
 프로젝트: {projectPath}
 모드: collaborative
+
+⚠️ Phase 0 전략 참조: meta/design-strategy.json에 설계 전략이 있습니다.
+모든 에이전트는 작업 시작 전에 이 파일을 읽고, agent_directives 섹션의
+자기 에이전트 지시사항을 따르세요.
 ")
 ```
 

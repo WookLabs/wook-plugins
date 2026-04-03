@@ -1,0 +1,26 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "https://novel-dev.org/schemas/design-strategy.schema.json",
+  "title": "DesignStrategy",
+  "description": "Phase 0 설계 전략 문서. plot-architect가 blueprint를 분석하여 생성.",
+  "type": "object",
+  "properties": {
+    "core_direction": {
+      "type": "object",
+      "description": "핵심 방향성 (톤, 세계관, 캐릭터, 아크)"
+    },
+    "agent_directives": {
+      "type": "object",
+      "description": "각 에이전트별 구체적 지시사항"
+    },
+    "constraints": {
+      "type": "array",
+      "items": { "type": "string" },
+      "description": "프로젝트 제약 사항"
+    },
+    "genre_specific": {
+      "type": "object",
+      "description": "장르별 비트 및 회피 패턴"
+    }
+  }
+}

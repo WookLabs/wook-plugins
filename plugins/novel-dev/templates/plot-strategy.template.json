@@ -1,0 +1,38 @@
+{
+  "$comment": "Phase 0에서 plot-architect가 design 산출물을 분석하여 생성하는 플롯 전략 문서. 회차 배분, 복선 타이밍, 긴장 곡선을 사전에 설계.",
+  "chapter_allocation": {
+    "total_chapters": 0,
+    "act_breakdown": [
+      { "act": 1, "chapters": "1-N", "focus": "설정, 캐릭터 소개, Inciting Incident", "pacing": "medium→fast" },
+      { "act": 2, "chapters": "N-M", "focus": "갈등 심화, 관계 발전, Midpoint", "pacing": "varied" },
+      { "act": 3, "chapters": "M-end", "focus": "클라이맥스, 해소, 에필로그", "pacing": "fast→slow" }
+    ]
+  },
+  "foreshadowing_schedule": [
+    { "id": "fore_XXX", "plant_chapter": 0, "hints": [0, 0, 0], "payoff_chapter": 0, "importance": "A" }
+  ],
+  "tension_curve": {
+    "description": "전체 긴장 곡선 설계",
+    "key_peaks": [
+      { "chapter": 0, "event": "이벤트 설명", "tension_level": 10 }
+    ]
+  },
+  "pov_rotation": {
+    "strategy": "POV 로테이션 전략 (예: '주인공 고정' 또는 '히로인별 전환')",
+    "exceptions": []
+  },
+  "subplot_integration": [
+    { "subplot": "서브플롯명", "chapters": "X-Y", "intersection_with_main": [0, 0] }
+  ],
+  "per_chapter_guide": [
+    {
+      "chapter": 1,
+      "arc_beats": "이 회차에서 진행할 아크 비트",
+      "foreshadowing_plant": [],
+      "foreshadowing_collect": [],
+      "hooks": "회차 끝 훅 유형",
+      "pacing": "fast",
+      "emotional_target": "독자 감정 목표"
+    }
+  ]
+}

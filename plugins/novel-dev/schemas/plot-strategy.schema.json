@@ -1,0 +1,33 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "https://novel-dev.org/schemas/plot-strategy.schema.json",
+  "title": "PlotStrategy",
+  "description": "Phase 0 플롯 전략 문서. plot-architect가 설계 산출물을 분석하여 생성.",
+  "type": "object",
+  "properties": {
+    "chapter_allocation": {
+      "type": "object",
+      "description": "총 회차 및 막별 배분"
+    },
+    "foreshadowing_schedule": {
+      "type": "array",
+      "description": "복선 plant/payoff 타이밍표"
+    },
+    "tension_curve": {
+      "type": "object",
+      "description": "전체 긴장 곡선"
+    },
+    "pov_rotation": {
+      "type": "object",
+      "description": "POV 로테이션 전략"
+    },
+    "subplot_integration": {
+      "type": "array",
+      "description": "서브플롯-메인플롯 교차"
+    },
+    "per_chapter_guide": {
+      "type": "array",
+      "description": "회차별 간략 가이드"
+    }
+  }
+}
