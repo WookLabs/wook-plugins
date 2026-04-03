@@ -537,3 +537,27 @@ You are the master builder. Every plot point is a brick. Your structure must be 
 **JSON 검증**: 저장한 모든 JSON 파일을 Read로 다시 읽어 유효한 JSON인지 확인하세요. 파싱 에러가 있으면 즉시 수정하세요. **유효하지 않은 JSON을 최종 산출물로 남기지 마세요.**
 
 **복선 매핑**: `timeline.json` 생성 시, `foreshadowing.json`의 `plant_chapter`, `hints[].chapter`, `payoff_chapter`를 참조하여 각 회차의 `foreshadowing_planted`와 `foreshadowing_collected` 배열을 정확히 채우세요. **빈 배열만 있는 timeline은 불완전한 산출물입니다.**
+
+## 깊이 기준 (DEPTH RULES)
+
+| 항목 | 최소 기준 |
+|------|----------|
+| 씬 beat | 50자 이상 + 구체적 행동 또는 대사 훅 1개 이상 |
+| current_plot | 800자 이상 |
+| character_development | 구체적 변화 사건 명시 (추상적 "성장한다" 금지) |
+| emotional_goal | 독자 감정 전환 경로 명시 (예: "혼란→공포→냉정") |
+| chapter_hook | 다음 회차로 이어지는 구체적 미해결 질문/장면 |
+
+**BAD** (기준 미달):
+```json
+"beat": "우연한 만남, 의외로 편안한 대화"
+```
+
+**GOOD** (기준 충족):
+```json
+"beat": "유나가 회식 2차 바에서 준혁을 발견한다. 회사에서의 차가운 이미지와 달리 맥주잔을 돌리며 혼자 앉아있다. 유나가 먼저 말을 건다—'대표님이 이런 데 오시네요?' 준혁이 처음으로 웃는 표정을 보이고, 유나는 '이 사람 웃을 줄도 아네'라고 생각한다. 둘의 거리가 한 뼘으로 좁혀진다."
+```
+
+## 자가 정제
+
+플롯 파일 저장 후, 모든 beat을 다시 읽고 자문하세요: **"이 beat만 보고 집필 에이전트가 씬을 쓸 수 있는가?"** 불가능하면 구체적 행동/대사/감정 전환을 보강하세요. **기준 미충족 상태에서 완료를 보고하지 마세요.**

@@ -235,3 +235,27 @@ Coverage Gaps:
 ## HARD RULES
 
 **JSON 검증**: 저장한 모든 JSON 파일을 Read로 다시 읽어 유효한 JSON인지 확인하세요. 파싱 에러가 있으면 즉시 수정하세요. **유효하지 않은 JSON을 최종 산출물로 남기지 마세요.**
+
+## 깊이 기준 (DEPTH RULES)
+
+| 항목 | 최소 기준 |
+|------|----------|
+| language_features | 태그 2개 이상 필수 (예: sensory-rich, varied-rhythm) |
+| quality_notes (good) | 구체적 기법 3개 이상 명시 |
+| quality_notes (anti) | 구체적 결함 3개 이상 명시 |
+| exemplar 길이 | 500~1500자 (이미 명시됨) |
+| anti_exemplar_pair | good↔anti 쌍 연결 필수 |
+
+**BAD** quality_notes:
+```
+"좋은 문장이다. 감정이 잘 드러난다."
+```
+
+**GOOD** quality_notes:
+```
+"감정을 직접 서술하지 않고 신체 반응(떨리는 손, 출렁이는 물)으로 전달. 문장 길이 변화(단문→장문→단문)로 리듬 조절. 식은 커피, 종소리 등 구체적 소품으로 이별의 여운 강조."
+```
+
+## 자가 정제
+
+exemplar 저장 후, 모든 quality_notes를 다시 읽고 자문하세요: **"이 설명만 보고 작가가 기법을 모방할 수 있는가?"** 불가능하면 구체적 기법명과 해당 문장을 보강하세요.
