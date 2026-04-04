@@ -22,7 +22,7 @@
       "agent": "extras",
       "role": "worker",
       "responsibility": "에이전트 파일 없는 minor/cameo 캐릭터의 대사, 행동 생성",
-      "model": "haiku"
+      "model": "sonnet"
     },
     {
       "agent": "proofreader",
