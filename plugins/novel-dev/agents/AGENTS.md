@@ -31,7 +31,7 @@
 
 ## Purpose
 
-Contains prompt definitions for the specialized agents used in the novel writing workflow. After consolidation, the plugin has **20 functional agents**. Each agent is defined in a Markdown file with frontmatter specifying the agent name, description, Claude model tier (opus/sonnet/haiku), color, permissionMode, and a comprehensive prompt that defines their role, constraints, guidelines, and output format.
+Contains prompt definitions for the specialized agents used in the novel writing workflow. After consolidation, the plugin has **21 functional agents**. Each agent is defined in a Markdown file with frontmatter specifying the agent name, description, Claude model tier (opus/sonnet/haiku), color, permissionMode, and a comprehensive prompt that defines their role, constraints, guidelines, and output format.
 
 Agents are invoked via the Task tool by commands and orchestration workflows. They operate with specific domain expertise while maintaining consistency with the overall project structure.
 

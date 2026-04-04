@@ -189,7 +189,8 @@ OOC_CHECK에서 `verdict: FLAG`를 받은 경우:
 
 | 상황 | 처리 방법 |
 |------|-----------|
-| 캐릭터 에이전트가 응답하지 않음 | 해당 캐릭터 프로필(`characters/*.json`)로 직접 응답 생성 후 계속 진행 |
+| 주요 캐릭터 에이전트가 응답하지 않음 | 해당 캐릭터 프로필(`characters/*.json`)로 직접 응답 생성 후 계속 진행 |
+| 에이전트 파일 없는 minor/cameo 캐릭터 등장 | `extras` 에이전트에게 SCENE_BRIEF를 전송하여 대사/행동 수신 |
 | `CHARACTER_RESPONSE` 형식 불일치 | 필드를 최선 해석해 처리, 경고 메모를 씬 하단 주석으로 추가 |
 | `chapter_{N}.json` 씬 목록 없음 | 작업 중단 후 플롯 파일 누락 오류 보고 |
 | `OOC_CHECK` 미응답 (--ooc-check) | PASS로 간주하고 씬 확정 진행 |
