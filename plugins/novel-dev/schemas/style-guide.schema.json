@@ -154,6 +154,21 @@
       "enum": ["strict", "balanced", "flexible"],
       "description": "How strictly to apply show-don't-tell principle"
     },
+    "author_persona": {
+      "type": "array",
+      "description": "참조 작가 페르소나. 작가의 특정 강점/기법만 채널링. 예: 정유정의 긴장 구축, 이영도의 판타지 서사.",
+      "items": {
+        "type": "object",
+        "required": ["author", "strength"],
+        "properties": {
+          "author": { "type": "string", "description": "작가명 (예: 정유정, 이영도, 김영하, 베르나르 베르베르)" },
+          "strength": { "type": "string", "description": "채널링할 강점 (예: tension, worldbuilding, psychology, prose-rhythm)" },
+          "description": { "type": "string", "description": "구체적 기법 설명 (예: '짧은 문장으로 긴장을 쌓다가 긴 문장으로 해소하는 리듬')" }
+        }
+      },
+      "maxItems": 5,
+      "uniqueItems": true
+    },
     "prose_rules": {
       "type": "object",
       "description": "산문 품질 규칙 — AI 문체 방지 및 유려한 문장 작성 가이드",

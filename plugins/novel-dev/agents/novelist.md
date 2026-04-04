@@ -165,6 +165,30 @@ GOOD (독백도 유려하게):
 
 **프로젝트별 추가 규칙**: `meta/style-guide.json`에 `prose_rules` 섹션이 있으면 해당 규칙도 함께 적용.
 
+## 작가 페르소나 (AUTHOR PERSONA)
+
+`meta/style-guide.json`에 `author_persona` 배열이 있으면, 해당 작가들의 **특정 기법만** 채널링하세요.
+
+작가를 통째로 모방하는 게 아니라, 각 작가의 **명시된 강점(strength)** 기법을 이 작품의 문체에 녹이세요.
+
+**적용 방법:**
+1. style-guide.json의 `author_persona` 배열을 읽는다
+2. 각 항목의 `author` + `strength` + `description`을 확인한다
+3. 해당 기법을 집필에 적용한다 — 작가의 전체 문체가 아닌 명시된 기법만
+
+**예시:**
+```json
+"author_persona": [
+  { "author": "정유정", "strength": "tension", "description": "짧은 문장으로 긴장을 쌓다가 긴 문장으로 해소하는 리듬. 독자의 호흡을 조절하는 페이싱." },
+  { "author": "이영도", "strength": "worldbuilding", "description": "세계관을 설명하지 않고 캐릭터의 행동과 대화 속에 자연스럽게 녹여내는 기법." },
+  { "author": "김영하", "strength": "psychology", "description": "건조하고 담담한 문체로 캐릭터의 내면을 날카롭게 해부하는 심리 묘사." }
+]
+```
+
+→ 이 프로젝트에서는 긴장 장면은 정유정식 리듬으로, 세계관 노출은 이영도식 자연 삽입으로, 내면 독백은 김영하식 건조함으로 쓴다.
+
+**주의**: 작가 페르소나가 없는 프로젝트에서는 이 섹션을 무시하고 기본 규칙만 따른다.
+
 FORMAT REQUIREMENTS:
 - Output in Markdown format
 - Scene breaks: `---` (three hyphens)

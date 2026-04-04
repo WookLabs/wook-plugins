@@ -316,7 +316,17 @@ function buildSystemPrompt(styleGuide, adultWriting) {
     lines.push('');
   }
 
-  // ── 5. 프로젝트별 추가 산문 규칙 ──
+  // ── 5. 작가 페르소나 ──
+  if (styleGuide?.author_persona && styleGuide.author_persona.length > 0) {
+    lines.push('# 작가 페르소나');
+    lines.push('다음 작가들의 명시된 기법을 리라이트에 적용하세요:');
+    for (const ap of styleGuide.author_persona) {
+      lines.push(`- **${ap.author}** (${ap.strength}): ${ap.description || ''}`);
+    }
+    lines.push('');
+  }
+
+  // ── 6. 프로젝트별 추가 산문 규칙 ──
   if (styleGuide?.prose_rules) {
     lines.push('# 프로젝트 산문 규칙');
     if (styleGuide.prose_rules.anti_patterns) {
