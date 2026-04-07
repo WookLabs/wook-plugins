@@ -1,0 +1,54 @@
+{
+  "$schema": "../schemas/provider-routing.schema.json",
+  "version": "1.0.0",
+  "providers": {
+    "claude": {
+      "label": "Claude (Anthropic)",
+      "tiers": ["opus", "sonnet", "haiku"]
+    },
+    "codex": {
+      "label": "Codex (GPT-5.4)",
+      "model": "gpt-5.4",
+      "scripts": {
+        "writer": "codex-writer.mjs",
+        "reviewer": "codex-reviewer.mjs"
+      }
+    },
+    "grok": {
+      "label": "Grok (xAI)",
+      "model": "grok-4.20-0309-reasoning",
+      "script": "adult-rewriter.mjs"
+    }
+  },
+  "defaults": {
+    "blueprint": "codex",
+    "blueprint-review": "codex",
+    "design": "codex",
+    "design-review": "codex",
+    "gen-plot": "codex",
+    "plot-review": "codex",
+    "act-review": "codex",
+    "write": "claude",
+    "write-act": "claude",
+    "write-all": "claude",
+    "revise": "claude",
+    "write-2pass": "claude",
+    "write-3pass": "claude",
+    "write-act-2pass": "claude",
+    "write-act-3pass": "claude",
+    "adult-rewrite": "grok",
+    "full-polish": "grok"
+  },
+  "cli_overrides": {
+    "--codex": "codex",
+    "--claude": "claude",
+    "--grok": "grok"
+  },
+  "cost_weights": {
+    "claude:opus": 1.0,
+    "claude:sonnet": 0.2,
+    "claude:haiku": 0.05,
+    "codex:gpt-5.4": 0.15,
+    "grok:grok-4.20-0309-reasoning": 0.3
+  }
+}

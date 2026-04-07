@@ -11,11 +11,17 @@ $ARGUMENTS
 설계 완료 후, 4명의 플롯 팀이 collaborative 모드로 회차별 상세 플롯을 생성합니다.
 plot-architect가 초안을 만들고, arc-designer/lore-keeper/character-designer가 검증합니다.
 
+## Provider 선택
+
+기본: **Codex** (구조화 JSON 출력, 비용 효율)
+- `--claude`: Claude 4-agent 팀으로 강제
+- 프로젝트 override: `meta/project.json`의 `provider_routing.gen-plot`
+
 ## Quick Start
 
 ```bash
-/gen-plot          # 전체 회차 플롯 생성 (팀 기반, 기본)
-/gen-plot --codex  # 전체 회차 플롯 생성 (Codex/GPT-5.4, 비용 절감)
+/gen-plot           # Codex로 플롯 생성 (기본)
+/gen-plot --claude  # Claude 팀으로 플롯 생성 (품질 우선)
 ```
 
 ## Prerequisites

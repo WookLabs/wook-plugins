@@ -1,0 +1,42 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "Provider Routing Configuration",
+  "description": "태스크별 기본 AI provider를 정의하는 설정",
+  "type": "object",
+  "required": ["version", "defaults"],
+  "properties": {
+    "$schema": { "type": "string" },
+    "version": { "type": "string", "pattern": "^\\d+\\.\\d+\\.\\d+$" },
+    "providers": {
+      "type": "object",
+      "additionalProperties": {
+        "type": "object",
+        "properties": {
+          "label": { "type": "string" },
+          "model": { "type": "string" },
+          "tiers": { "type": "array", "items": { "type": "string" } },
+          "script": { "type": "string" },
+          "scripts": { "type": "object" }
+        }
+      }
+    },
+    "defaults": {
+      "type": "object",
+      "description": "태스크 유형 → provider 매핑",
+      "additionalProperties": {
+        "type": "string",
+        "enum": ["claude", "codex", "grok"]
+      }
+    },
+    "cli_overrides": {
+      "type": "object",
+      "description": "CLI 플래그 → provider 매핑",
+      "additionalProperties": { "type": "string" }
+    },
+    "cost_weights": {
+      "type": "object",
+      "description": "provider:model → 상대 비용 가중치",
+      "additionalProperties": { "type": "number" }
+    }
+  }
+}

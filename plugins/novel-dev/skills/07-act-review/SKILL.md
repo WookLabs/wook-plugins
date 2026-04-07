@@ -10,12 +10,18 @@ $ARGUMENTS
 
 완성된 막의 원고를 deep-review-team (6에이전트 병렬)이 거시적으로 평가하고, 문제 회차만 선택적으로 심층 리뷰합니다.
 
+## Provider 선택
+
+기본: **Codex** (6-agent 리뷰 비용 절감)
+- `--claude`: Claude 6-agent 팀으로 강제
+- 프로젝트 override: `meta/project.json`의 `provider_routing.act-review`
+
 ## Quick Start
 
 ```bash
-/act-review 1          # 1막 리뷰 (Claude 팀, 기본)
-/act-review 2          # 2막 리뷰
-/act-review 1 --codex  # 1막 리뷰 (Codex/GPT-5.4, 비용 절감)
+/act-review 1           # Codex로 1막 리뷰 (기본)
+/act-review 2           # 2막 리뷰
+/act-review 1 --claude  # Claude 팀으로 1막 리뷰 (품질 우선)
 ```
 
 ## Prerequisites

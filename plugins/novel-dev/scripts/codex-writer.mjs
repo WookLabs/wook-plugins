@@ -314,6 +314,42 @@ function buildBlueprintPrompt(projectPath) {
   return { system, user };
 }
 
+function buildPolishPrompt(projectPath, chapterNum) {
+  const pad3 = padChapter(chapterNum);
+  const manuscript = readIfExists(path.join(projectPath, `chapters/ch${pad3}.md`))
+    || readIfExists(path.join(projectPath, `chapters/chapter_${pad3}.md`));
+  if (!manuscript) throw new Error(`Chapter ${chapterNum} manuscript not found`);
+
+  const styleGuide = readIfExists(path.join(projectPath, 'meta/style-guide.json'));
+
+  let system = `# 역할: 한국어 소설의 문학적 폴리셔\n\n`;
+  system += `기능적 서술을 몰입적 산문으로 향상시킵니다.\n`;
+  system += `플롯, 대화, 사건은 유지하고 서술/묘사/전환만 문학적으로 업그레이드합니다.\n\n`;
+
+  system += `# 절대 규칙\n\n`;
+  system += `1. 대화("큰따옴표" 안)는 한 글자도 수정하지 마세요.\n`;
+  system += `2. 플롯, 사건, 캐릭터 행동, 시간 순서를 변경하지 마세요.\n`;
+  system += `3. 문체 연속성: 원본의 시점, 시제, 톤을 유지하세요.\n`;
+  system += `4. 단문 나열 금지: "~했다. ~했다." → 복문으로 전환.\n`;
+  system += `5. 필터 워드 제거: 느꼈다, 보였다, 생각했다 → 신체 반응/직접 묘사.\n`;
+  system += `6. 건조한 전환 제거: "그날 저녁.", "밤이 됐다." → 감각 앵커.\n\n`;
+
+  system += `# BAD vs GOOD\n\n`;
+  system += `BAD: 손끝에서 감각이 왔다. 반응이 잡혔다. 그날 저녁.\n`;
+  system += `GOOD: 손끝이 유리 표면을 따라 미끄러지는 순간, 내부에서 흰빛 진동이 올라왔다. 창 밖의 빛이 주홍에서 남색으로 바뀌었을 때.\n\n`;
+
+  if (styleGuide) {
+    system += `# 스타일 가이드\n\`\`\`json\n${styleGuide}\n\`\`\`\n\n`;
+  }
+
+  system += `출력: 폴리시된 챕터 전체 (마크다운). ADULT 마커가 있으면 그대로 보존.\n`;
+
+  let user = `# 폴리시 대상: Chapter ${chapterNum}\n\n${manuscript}\n\n`;
+  user += `위 원고의 서술/묘사/전환을 문학적으로 향상시키세요. 대화는 보존.\n`;
+
+  return { system, user };
+}
+
 // ─── Codex CLI Execution ─────────────────────────────────────────────────────
 
 function checkPrerequisites() {
@@ -368,19 +404,23 @@ async function main() {
 
   if (!args.project) { error('--project PATH 필수'); process.exit(1); }
 
-  const CHAPTER_MODES = ['write', 'revise'];
+  const CHAPTER_MODES = ['write', 'revise', 'polish'];
   const PROJECT_MODES = ['design', 'gen-plot', 'blueprint'];
 
   if (CHAPTER_MODES.includes(args.mode) && !args.chapter) {
     error(`--chapter N 필수 (mode: ${args.mode})`); process.exit(1);
   }
 
-  const modeLabels = { write: '집필', revise: '퇴고', design: '설계', 'gen-plot': '플롯 생성', blueprint: '기획서 생성' };
+  const modeLabels = { write: '집필', revise: '퇴고', design: '설계', 'gen-plot': '플롯 생성', blueprint: '기획서 생성', polish: '산문 폴리시' };
   log(`${modeLabels[args.mode] || args.mode} 시작 (model: ${args.model}, mode: ${args.mode})`);
 
   let systemPrompt, userPrompt;
 
-  if (PROJECT_MODES.includes(args.mode)) {
+  if (args.mode === 'polish') {
+    // polish: 기존 챕터 산문 폴리시 (대화 유지, 서술만 향상)
+    const { system, user } = buildPolishPrompt(args.project, args.chapter);
+    systemPrompt = system; userPrompt = user;
+  } else if (PROJECT_MODES.includes(args.mode)) {
     // design, gen-plot, blueprint: 프로젝트 레벨 모드
     if (args.mode === 'design') {
       const { system, user } = buildDesignPrompt(args.project);

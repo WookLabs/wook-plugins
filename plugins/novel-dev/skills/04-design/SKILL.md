@@ -10,12 +10,19 @@ $ARGUMENTS
 
 03-init 완료 후, 5명의 설계 팀이 collaborative 모드로 실시간 소통하며 전체 설계를 수행합니다.
 
+## Provider 선택
+
+기본: **Codex** (구조화 JSON 출력에 최적, 비용 효율)
+- `--claude`: Claude 팀으로 강제 (품질 우선)
+- `--codex`: Codex 명시적 선택
+- 프로젝트 override: `meta/project.json`의 `provider_routing.design`
+
 ## Quick Start
 
 ```bash
-/design          # 전체 설계 실행 (Claude 팀, 기본)
-/design --codex  # 전체 설계 (Codex/GPT-5.4, 비용 절감)
-/design-review   # 설계 산출물 검토 및 수정
+/design            # Codex로 설계 (기본)
+/design --claude   # Claude 5-agent 팀으로 설계 (품질 우선)
+/design-review     # 설계 산출물 검토 및 수정
 ```
 
 ## --codex: Codex CLI(GPT-5.4) 설계

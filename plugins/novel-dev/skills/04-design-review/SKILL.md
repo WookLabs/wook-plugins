@@ -10,11 +10,17 @@ $ARGUMENTS
 
 설계 완료 후, 4명의 전문가가 다각도로 검토합니다.
 
+## Provider 선택
+
+기본: **Codex** (리뷰 태스크, 비용 효율)
+- `--claude`: Claude 팀으로 강제
+- 프로젝트 override: `meta/project.json`의 `provider_routing.design-review`
+
 ## Quick Start
 
 ```bash
-/design-review          # 전체 설계 산출물 검토 (Claude 팀, 기본)
-/design-review --codex  # 설계 검토 (Codex/GPT-5.4, 비용 절감)
+/design-review           # Codex로 검토 (기본)
+/design-review --claude  # Claude 4-agent 팀 검토 (품질 우선)
 ```
 
 ## --codex: Codex CLI(GPT-5.4) 설계 리뷰

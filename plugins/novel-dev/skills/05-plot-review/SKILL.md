@@ -10,13 +10,18 @@ $ARGUMENTS
 
 생성된 회차별 플롯 파일을 plot-review-team (4에이전트 병렬)이 다각도로 검증합니다.
 
+## Provider 선택
+
+기본: **Codex** (리뷰 태스크, 비용 효율)
+- `--claude`: Claude 4-agent 팀으로 강제
+- 프로젝트 override: `meta/project.json`의 `provider_routing.plot-review`
+
 ## Quick Start
 
 ```bash
-/plot-review 1-5          # 1~5화 플롯 리뷰 (Claude 팀, 기본)
-/plot-review 3            # 3화 플롯 단건 리뷰
-/plot-review              # 전체 플롯 리뷰
-/plot-review 1-5 --codex  # 1~5화 플롯 리뷰 (Codex/GPT-5.4, 비용 절감)
+/plot-review 1-5           # Codex로 1~5화 플롯 리뷰 (기본)
+/plot-review 3             # 3화 플롯 단건 리뷰
+/plot-review 1-5 --claude  # Claude 팀으로 플롯 리뷰 (품질 우선)
 ```
 
 ## Prerequisites

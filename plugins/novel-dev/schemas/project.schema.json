@@ -162,6 +162,17 @@
           "description": "최대 출력 토큰"
         }
       }
+    },
+    "provider_routing": {
+      "type": "object",
+      "description": "프로젝트별 provider override. config/provider-routing.json의 defaults를 덮어씁니다.",
+      "additionalProperties": {
+        "type": "string",
+        "enum": ["claude", "codex", "grok"]
+      },
+      "examples": [
+        { "design": "claude", "write": "codex", "gen-plot": "codex" }
+      ]
     }
   }
 }
