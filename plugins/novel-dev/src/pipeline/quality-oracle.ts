@@ -101,6 +101,85 @@ export const SENTENCE_ENDING_PATTERNS = [
 ];
 
 // ============================================================================
+// Dry Transition / Functional Narration Patterns
+// ============================================================================
+
+/**
+ * Dry transition patterns - mechanical scene transitions
+ */
+export const DRY_TRANSITION_PATTERNS = [
+  /그날\s*(저녁|아침|밤|오후|새벽)/,
+  /밤이\s*(됐다|되었다|왔다)/,
+  /다음\s*날\./,
+  /얼마\s*후\./,
+  /시간이\s*지났다\./,
+  /그때\s*(였다|이었다)\./,
+];
+
+/**
+ * Functional narration patterns - report-style description
+ */
+export const FUNCTIONAL_NARRATION_PATTERNS = [
+  /감각이\s*(왔다|있었다|전해졌다)/,
+  /반응이\s*(왔다|잡혔다|있었다|나타났다)/,
+  /변화가\s*(있었다|일어났다|생겼다)/,
+  /느낌이\s*(왔다|있었다|들었다)/,
+  /기운이\s*(느껴졌다|전해졌다)/,
+];
+
+interface PatternMatch {
+  matched: string;
+  position: number;
+}
+
+/**
+ * Detect dry transition patterns in content (outside dialogue)
+ */
+export function detectDryTransitions(content: string): PatternMatch[] {
+  const results: PatternMatch[] = [];
+  const lines = content.split('\n');
+  let pos = 0;
+
+  for (const line of lines) {
+    // Skip dialogue lines
+    if (!line.trim().startsWith('"') && !line.trim().startsWith('\u201C')) {
+      for (const pattern of DRY_TRANSITION_PATTERNS) {
+        const match = line.match(pattern);
+        if (match) {
+          results.push({ matched: match[0], position: pos + (match.index ?? 0) });
+        }
+      }
+    }
+    pos += line.length + 1;
+  }
+
+  return results;
+}
+
+/**
+ * Detect functional narration patterns in content (outside dialogue)
+ */
+export function detectFunctionalNarration(content: string): PatternMatch[] {
+  const results: PatternMatch[] = [];
+  const lines = content.split('\n');
+  let pos = 0;
+
+  for (const line of lines) {
+    if (!line.trim().startsWith('"') && !line.trim().startsWith('\u201C')) {
+      for (const pattern of FUNCTIONAL_NARRATION_PATTERNS) {
+        const match = line.match(pattern);
+        if (match) {
+          results.push({ matched: match[0], position: pos + (match.index ?? 0) });
+        }
+      }
+    }
+    pos += line.length + 1;
+  }
+
+  return results;
+}
+
+// ============================================================================
 // Directive ID Generation
 // ============================================================================
 
@@ -626,6 +705,52 @@ export function analyzeChapter(
       currentText.slice(0, 500),
       `문장 종결 패턴을 다양화하세요. 의문문, 감탄문, 다양한 종결어미를 사용하세요.`,
       3
+    ));
+  }
+
+  // 3b. Dry transition detection
+  const dryTransitions = detectDryTransitions(content);
+  for (const dt of dryTransitions.slice(0, 2)) {
+    if (directives.length >= MAX_DIRECTIVES_PER_PASS) break;
+
+    const paraIdx = findParagraphForPosition(paragraphs, dt.position);
+    const para = paragraphs[paraIdx];
+
+    directives.push(createDirective(
+      'transition-smoothing',
+      3,
+      {
+        sceneNumber: Math.min(Math.ceil((paraIdx + 1) / Math.max(1, paragraphs.length / sceneCount)), sceneCount),
+        paragraphStart: paraIdx,
+        paragraphEnd: paraIdx,
+      },
+      `건조한 전환 "${dt.matched}" 감지`,
+      para?.text || '',
+      `"${dt.matched}"를 감각 앵커를 사용한 전환으로 교체하세요. 예: 빛의 변화, 소리의 부재, 온도 변화 등.`,
+      2
+    ));
+  }
+
+  // 3c. Functional narration detection
+  const functionalNarrations = detectFunctionalNarration(content);
+  for (const fn of functionalNarrations.slice(0, 2)) {
+    if (directives.length >= MAX_DIRECTIVES_PER_PASS) break;
+
+    const paraIdx = findParagraphForPosition(paragraphs, fn.position);
+    const para = paragraphs[paraIdx];
+
+    directives.push(createDirective(
+      'show-not-tell',
+      3,
+      {
+        sceneNumber: Math.min(Math.ceil((paraIdx + 1) / Math.max(1, paragraphs.length / sceneCount)), sceneCount),
+        paragraphStart: paraIdx,
+        paragraphEnd: paraIdx,
+      },
+      `기능적 서술 "${fn.matched}" 감지`,
+      para?.text || '',
+      `"${fn.matched}"를 구체적인 감각 묘사로 교체하세요. 신체를 통해 전달되는 경험으로 쓰세요.`,
+      1
     ));
   }
 

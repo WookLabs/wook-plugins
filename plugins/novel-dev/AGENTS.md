@@ -4,7 +4,7 @@
 
 ## Purpose
 
-Novel-Sisyphus is a Claude Code plugin for AI-powered Korean novel writing. It provides a multi-agent orchestration system specifically designed for creative writing workflows, featuring 17 specialized agents and 38 skills that support the complete novel creation lifecycle from initial concept to final export.
+Novel-Sisyphus is a Claude Code plugin for AI-powered Korean novel writing. It provides a multi-agent orchestration system specifically designed for creative writing workflows, featuring 22 specialized agents and 27 skills that support the complete novel creation lifecycle from initial concept to final export.
 
 This plugin adapts the oh-my-claude-sisyphus orchestration framework for creative writing, implementing:
 - Agent-based workflow with specialized roles (novelist, editor, critic, lore-keeper, plot-architect, proofreader, summarizer, beta-reader, genre-validator, chapter-verifier, consistency-verifier, engagement-optimizer, character-voice-analyzer, quality-oracle, prose-surgeon, style-curator, team-orchestrator)

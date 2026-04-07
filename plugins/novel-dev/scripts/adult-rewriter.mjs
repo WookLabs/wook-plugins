@@ -1,20 +1,28 @@
 #!/usr/bin/env node
 /**
- * Adult Rewriter — Grok API로 ADULT 마커 구간만 성인소설 수준으로 리라이트
+ * Chapter Polisher — Grok API로 챕터 산문 품질을 향상
  *
- * 2-Pass 파이프라인의 Pass 2 담당:
- *   Pass 1: Claude가 전체 챕터 집필 + ADULT 마커 삽입
- *   Pass 2: 이 스크립트가 마커 구간을 Grok으로 리라이트
+ * 3가지 모드:
+ *   --mode adult      (기본) ADULT 마커 구간만 성인소설 수준으로 리라이트
+ *   --mode full       챕터 전체 서술/묘사/전환을 문학적으로 폴리시 (대화 유지)
+ *   --mode selective  ADULT + POLISH 마커 모두 리라이트
+ *
+ * 파이프라인:
+ *   2-Pass: Claude Draft → [adult] → Final
+ *   3-Pass: Claude Draft → [full] → [adult] → Final
+ *   2.5-Pass: Claude Draft → [selective] → Final
  *
  * Usage:
  *   node scripts/adult-rewriter.mjs --input chapter.md --project ./novels/my-novel
- *   node scripts/adult-rewriter.mjs --input chapter.md --project ./novels/my-novel --output chapter.md
+ *   node scripts/adult-rewriter.mjs --input chapter.md --project ./novels/my-novel --mode full
+ *   node scripts/adult-rewriter.mjs --input chapter.md --project ./novels/my-novel --mode selective
  *   node scripts/adult-rewriter.mjs --input chapter.md --project ./novels/my-novel --dry-run
  *
  * Options:
  *   --input FILE       입력 챕터 파일 (필수)
  *   --project PATH     소설 프로젝트 경로 (필수, adult_writing 스타일 로드용)
  *   --output FILE      출력 파일 (선택, 없으면 stdout)
+ *   --mode MODE        adult | full | selective (기본: adult)
  *   --model MODEL      Grok 모델 (기본: grok-4.20-0309-reasoning)
  *   --max-tokens N     최대 토큰 (기본: 131072, grok-4.20-0309-reasoning max)
  *   --temperature N    Temperature (기본: 0.75)
@@ -48,6 +56,7 @@ function parseArgs(argv) {
     input: null,
     project: null,
     output: null,
+    mode: 'adult',
     model: 'grok-4.20-0309-reasoning',
     maxTokens: 131072,
     temperature: 0.75,
@@ -63,6 +72,8 @@ function parseArgs(argv) {
       result.project = argv[++i];
     } else if (arg === '--output' && argv[i + 1]) {
       result.output = argv[++i];
+    } else if (arg === '--mode' && argv[i + 1]) {
+      result.mode = argv[++i];
     } else if (arg === '--model' && argv[i + 1]) {
       result.model = argv[++i];
     } else if (arg === '--max-tokens' && argv[i + 1]) {
@@ -79,22 +90,32 @@ function parseArgs(argv) {
     }
   }
 
+  if (!['adult', 'full', 'selective'].includes(result.mode)) {
+    console.error(`${colors.red}[ERROR]${colors.reset} --mode는 adult, full, selective 중 하나여야 합니다.`);
+    process.exit(1);
+  }
+
   return result;
 }
 
 function printHelp() {
   console.log(`
-${colors.blue}Adult Rewriter${colors.reset} — Grok API로 ADULT 마커 구간을 성인소설 수준으로 리라이트
+${colors.blue}Chapter Polisher${colors.reset} — Grok API로 챕터 산문 품질을 향상
 
 ${colors.yellow}사용법:${colors.reset}
-  node scripts/adult-rewriter.mjs --input <FILE> --project <PATH>
+  node scripts/adult-rewriter.mjs --input <FILE> --project <PATH> [--mode <MODE>]
+
+${colors.yellow}모드:${colors.reset}
+  --mode adult       (기본) ADULT 마커 구간만 리라이트
+  --mode full        챕터 전체 서술/묘사/전환을 폴리시 (대화 유지)
+  --mode selective   ADULT + POLISH 마커 모두 리라이트
 
 ${colors.yellow}옵션:${colors.reset}
   --input FILE       입력 챕터 파일 (필수)
   --project PATH     소설 프로젝트 경로 (필수)
   --output FILE      출력 파일 (선택, 없으면 stdout)
   --model MODEL      Grok 모델 (기본: grok-4.20-0309-reasoning)
-  --max-tokens N     최대 토큰 (기본: 30000)
+  --max-tokens N     최대 토큰 (기본: 131072)
   --temperature N    Temperature (기본: 0.75)
   --dry-run          마커 감지만, API 호출 안 함
   --max-retries N    JSON 파싱 실패 시 재시도 횟수 (기본: 2)
@@ -105,13 +126,13 @@ ${colors.yellow}환경 설정:${colors.reset}
   XAI_API_KEY=xai-xxxxxxxxxxxx
 
 ${colors.yellow}마커 형식:${colors.reset}
-  <!-- ADULT_1_START -->
-  성인 장면 텍스트...
-  <!-- ADULT_1_END -->
+  <!-- ADULT_1_START --> ... <!-- ADULT_1_END -->
+  <!-- POLISH_1_START --> ... <!-- POLISH_1_END -->
 
 ${colors.yellow}예시:${colors.reset}
-  node scripts/adult-rewriter.mjs --input chapters/chapter_001.md --project ./novels/my-novel --dry-run
-  node scripts/adult-rewriter.mjs --input chapters/chapter_001.md --project ./novels/my-novel --output chapters/chapter_001.md
+  node scripts/adult-rewriter.mjs --input ch.md --project ./novels/my-novel --dry-run
+  node scripts/adult-rewriter.mjs --input ch.md --project ./novels/my-novel --mode full --output ch.md
+  node scripts/adult-rewriter.mjs --input ch.md --project ./novels/my-novel --mode selective --output ch.md
 `);
 }
 
@@ -163,23 +184,47 @@ function getApiKey() {
 
 /**
  * ADULT 마커를 파싱하여 구간 목록을 반환
- * @returns {{ id: string, content: string, startIdx: number, endIdx: number }[]}
+ * @param {string} text - 챕터 텍스트
+ * @param {string} mode - adult | full | selective
+ * @returns {{ id: string, content: string, startIdx: number, endIdx: number, type: string }[]}
  */
-function parseMarkers(text) {
+function parseMarkers(text, mode = 'adult') {
   const markers = [];
-  const regex = /<!-- ADULT_(\d+)_START -->[\r\n]*([\s\S]*?)<!-- ADULT_\1_END -->/g;
 
-  let match;
-  while ((match = regex.exec(text)) !== null) {
-    markers.push({
-      id: match[1],
-      content: match[2].trim(),
-      fullMatch: match[0],
-      startIdx: match.index,
-      endIdx: match.index + match[0].length
-    });
+  // ADULT 마커 (adult, selective 모드)
+  if (mode === 'adult' || mode === 'selective') {
+    const adultRegex = /<!-- ADULT_(\d+)_START -->[\r\n]*([\s\S]*?)<!-- ADULT_\1_END -->/g;
+    let match;
+    while ((match = adultRegex.exec(text)) !== null) {
+      markers.push({
+        id: `adult_${match[1]}`,
+        content: match[2].trim(),
+        fullMatch: match[0],
+        startIdx: match.index,
+        endIdx: match.index + match[0].length,
+        type: 'adult'
+      });
+    }
   }
 
+  // POLISH 마커 (selective 모드에서만)
+  if (mode === 'selective') {
+    const polishRegex = /<!-- POLISH_(\d+)_START -->[\r\n]*([\s\S]*?)<!-- POLISH_\1_END -->/g;
+    let match;
+    while ((match = polishRegex.exec(text)) !== null) {
+      markers.push({
+        id: `polish_${match[1]}`,
+        content: match[2].trim(),
+        fullMatch: match[0],
+        startIdx: match.index,
+        endIdx: match.index + match[0].length,
+        type: 'polish'
+      });
+    }
+  }
+
+  // startIdx 순으로 정렬
+  markers.sort((a, b) => a.startIdx - b.startIdx);
   return markers;
 }
 
@@ -360,6 +405,86 @@ function buildSystemPrompt(styleGuide, adultWriting) {
   return lines.join('\n');
 }
 
+// ─── Full Polish System Prompt ───────────────────────────────────────────────
+
+function buildFullPolishPrompt(styleGuide) {
+  const lines = [];
+
+  lines.push('# 역할');
+  lines.push('당신은 한국어 소설의 **문학적 폴리셔**입니다.');
+  lines.push('기능적 서술을 몰입적 산문으로 향상시킵니다. 플롯, 대화, 사건은 유지하고 **서술/묘사/전환만** 문학적으로 업그레이드합니다.');
+  lines.push('');
+
+  lines.push('# 절대 규칙');
+  lines.push('');
+  lines.push('1. **대화 보존**: "큰따옴표" 안의 대화는 한 글자도 수정하지 마세요.');
+  lines.push('2. **플롯 보존**: 사건, 캐릭터 행동, 시간 순서를 변경하지 마세요.');
+  lines.push('3. **문체 연속성**: 원본의 시점(1인칭/3인칭), 시제, 톤을 유지하세요.');
+  lines.push('4. **단문 나열 금지**: "~했다. ~했다. ~했다." 식의 기계적 단문 나열을 복문으로 전환하세요.');
+  lines.push('5. **필터 워드 제거**: 느꼈다, 보였다, 생각했다 → 신체 반응이나 직접 묘사로 대체.');
+  lines.push('6. **건조한 전환 제거**: "그날 저녁.", "밤이 됐다." → 감각 앵커로 전환.');
+  lines.push('');
+
+  lines.push('# 예시: BAD vs GOOD');
+  lines.push('');
+  lines.push('## BAD (기능적 서술):');
+  lines.push('> 손끝에서 감각이 왔다. 투명 마력 결정체였다. 다음 병. 분홍빛 약초 추출물. 반응이 잡혔다. 용기 안에서 빛이 났다. 냄새가 났다. 달콤하고 따뜻한 것. 그날 저녁. 릴리스는 도현을 정보부에 등록시켰다.');
+  lines.push('');
+  lines.push('## GOOD (몰입적 산문):');
+  lines.push('> 손끝이 첫 번째 병의 유리 표면을 따라 미끄러지는 순간, 내부에서 규칙적인 흰빛 진동이 올라왔다—차가운 전류처럼 손목까지 번지는 것이, 이 결정체가 살아 있다는 증거였다. 촉매를 떨어뜨리자 두 액체가 소용돌이치더니 경계면이 사라지며 따뜻한 주홍빛으로 변했고, 코끝에 꽃과 전기를 섞어놓은 듯한 낯선 향이 닿았다. 창 밖의 빛이 주홍에서 남색으로 바뀌었을 때, 릴리스가 서류 뭉치를 들고 나타났다.');
+  lines.push('');
+
+  // 문체 설정
+  if (styleGuide) {
+    lines.push('# 작품 문체');
+    if (styleGuide.narrative_voice) lines.push(`- 시점: ${styleGuide.narrative_voice}`);
+    if (styleGuide.tense) lines.push(`- 시제: ${styleGuide.tense}`);
+    if (styleGuide.tone) {
+      const toneStr = Array.isArray(styleGuide.tone) ? styleGuide.tone.join(', ') : String(styleGuide.tone);
+      if (toneStr) lines.push(`- 분위기: ${toneStr}`);
+    }
+    lines.push('');
+  }
+
+  // 작가 페르소나
+  if (styleGuide?.author_persona && styleGuide.author_persona.length > 0) {
+    lines.push('# 작가 페르소나');
+    for (const ap of styleGuide.author_persona) {
+      lines.push(`- **${ap.author}** (${ap.strength}): ${ap.description || ''}`);
+    }
+    lines.push('');
+  }
+
+  // 프로젝트별 산문 규칙
+  if (styleGuide?.prose_rules) {
+    lines.push('# 프로젝트 산문 규칙');
+    if (styleGuide.prose_rules.anti_patterns) {
+      for (const p of styleGuide.prose_rules.anti_patterns) {
+        lines.push(`- 금지: ${p.description}`);
+      }
+    }
+    if (styleGuide.prose_rules.positive_patterns) {
+      for (const p of styleGuide.prose_rules.positive_patterns) {
+        lines.push(`- 권장: ${p.description}`);
+      }
+    }
+    lines.push('');
+  }
+
+  lines.push('# 작업');
+  lines.push('- 입력: 소설 챕터 전체 텍스트.');
+  lines.push('- "큰따옴표" 안의 대화는 절대 수정하지 마세요.');
+  lines.push('- 서술, 묘사, 전환, 내면 독백만 문학적으로 향상시키세요.');
+  lines.push('- 원본의 서사 흐름, 캐릭터 행동, 사건 순서를 보존하세요.');
+  lines.push('- 결과를 아래 JSON으로 출력하세요.');
+  lines.push('');
+  lines.push('```json');
+  lines.push('{ "polished": "폴리시된 챕터 전체 텍스트 (마크다운 형식 유지)" }');
+  lines.push('```');
+
+  return lines.join('\n');
+}
+
 // ─── Grok API Call ───────────────────────────────────────────────────────────
 
 async function callGrokAPI(apiKey, systemPrompt, userPrompt, model, maxTokens, temperature) {
@@ -446,45 +571,11 @@ async function main() {
   // 챕터 읽기
   const originalText = fs.readFileSync(inputPath, 'utf-8');
 
-  // 마커 파싱
-  const markers = parseMarkers(originalText);
+  console.error(`${colors.blue}[Chapter Polisher]${colors.reset} 모드: ${args.mode}`);
 
-  if (markers.length === 0) {
-    console.error(`${colors.yellow}[INFO]${colors.reset} ADULT 마커가 없습니다. 리라이트 대상 없음.`);
-
-    // stdout JSON 출력
-    console.log(JSON.stringify({
-      success: true,
-      markersFound: 0,
-      message: '리라이트 대상 없음'
-    }, null, 2));
-    return;
-  }
-
-  console.error(`${colors.blue}[Adult Rewriter]${colors.reset} ADULT 마커 ${markers.length}개 감지:`);
-  for (const m of markers) {
-    console.error(`  마커 #${m.id}: ${m.content.length}자 (원본)`);
-  }
-
-  // dry-run 모드
-  if (args.dryRun) {
-    console.error(`${colors.yellow}[DRY-RUN]${colors.reset} API 호출 없이 마커 감지만 수행.`);
-    console.log(JSON.stringify({
-      success: true,
-      dryRun: true,
-      markersFound: markers.length,
-      markers: markers.map(m => ({
-        id: m.id,
-        contentLength: m.content.length,
-        preview: m.content.slice(0, 100) + (m.content.length > 100 ? '...' : '')
-      }))
-    }, null, 2));
-    return;
-  }
-
-  // API 키 확인
-  const apiKey = getApiKey();
-  if (!apiKey) {
+  // API 키 확인 (dry-run 전에 체크하지 않음)
+  const apiKey = args.dryRun ? null : getApiKey();
+  if (!args.dryRun && !apiKey) {
     console.error(`${colors.red}[ERROR] XAI_API_KEY를 찾을 수 없습니다.${colors.reset}
 
 ~/.env 파일에 추가하세요:
@@ -499,12 +590,119 @@ API 키는 https://console.x.ai 에서 발급받을 수 있습니다.
   const styleGuide = loadFullStyleGuide(projectDir);
   const adultWriting = loadAdultWritingStyle(projectDir);
 
-  if (!adultWriting) {
+  // ─── Full 모드: 챕터 전체 폴리시 ────────────────────────────────────────
+  if (args.mode === 'full') {
+    if (args.dryRun) {
+      console.error(`${colors.yellow}[DRY-RUN]${colors.reset} full 모드 — 챕터 전체 폴리시 대상.`);
+      console.log(JSON.stringify({
+        success: true, dryRun: true, mode: 'full',
+        chapterLength: originalText.length
+      }, null, 2));
+      return;
+    }
+
+    const systemPrompt = buildFullPolishPrompt(styleGuide);
+    const backupPath = inputPath + '.bak';
+    fs.writeFileSync(backupPath, originalText, 'utf-8');
+    console.error(`${colors.dim}[BACKUP]${colors.reset} ${backupPath}`);
+
+    let polished = null;
+
+    for (let attempt = 1; attempt <= args.maxRetries + 1; attempt++) {
+      console.error(`${colors.blue}[Grok API]${colors.reset} full polish 호출 중... (시도 ${attempt}/${args.maxRetries + 1})`);
+      console.error(`  모델: ${args.model}`);
+
+      try {
+        const apiResult = await callGrokAPI(apiKey, systemPrompt, originalText, args.model, args.maxTokens, args.temperature);
+        const content = apiResult.choices?.[0]?.message?.content || '';
+        const usage = apiResult.usage || {};
+        console.error(`${colors.green}[API 응답]${colors.reset} ${usage.completion_tokens || 'N/A'} tokens`);
+
+        const parsed = parseGrokResponse(content);
+        polished = parsed.polished;
+
+        if (!polished || polished.length < originalText.length * 0.5) {
+          throw new Error(`폴리시 결과가 너무 짧음: ${polished?.length || 0}자 (원본 ${originalText.length}자)`);
+        }
+
+        break;
+      } catch (err) {
+        console.error(`${colors.red}[시도 ${attempt} 실패]${colors.reset} ${err.message}`);
+        if (attempt > args.maxRetries) {
+          console.error(`${colors.red}[ERROR]${colors.reset} 모든 재시도 실패. 원본을 유지합니다.`);
+          fs.unlinkSync(backupPath);
+          console.log(JSON.stringify({ success: false, mode: 'full', error: err.message }, null, 2));
+          process.exit(1);
+        }
+      }
+    }
+
+    // 출력
+    if (args.output) {
+      const outputPath = path.resolve(args.output);
+      fs.mkdirSync(path.dirname(outputPath), { recursive: true });
+      fs.writeFileSync(outputPath, polished, 'utf-8');
+      console.error(`${colors.green}[SUCCESS]${colors.reset} full polish 저장됨: ${outputPath}`);
+    } else {
+      process.stdout.write(polished);
+    }
+
+    fs.unlinkSync(backupPath);
+    console.error(`${colors.dim}[CLEANUP]${colors.reset} 백업 삭제됨`);
+    console.error(`${colors.blue}[결과]${colors.reset} ${originalText.length}자 → ${polished.length}자`);
+
+    if (args.output) {
+      console.log(JSON.stringify({
+        success: true, mode: 'full',
+        originalLength: originalText.length,
+        polishedLength: polished.length
+      }, null, 2));
+    }
+    return;
+  }
+
+  // ─── Adult / Selective 모드: 마커 기반 리라이트 ──────────────────────────
+  const markers = parseMarkers(originalText, args.mode);
+
+  if (markers.length === 0) {
+    const markerTypes = args.mode === 'selective' ? 'ADULT/POLISH' : 'ADULT';
+    console.error(`${colors.yellow}[INFO]${colors.reset} ${markerTypes} 마커가 없습니다. 리라이트 대상 없음.`);
+    console.log(JSON.stringify({
+      success: true, mode: args.mode,
+      markersFound: 0,
+      message: '리라이트 대상 없음'
+    }, null, 2));
+    return;
+  }
+
+  console.error(`${colors.blue}[Chapter Polisher]${colors.reset} 마커 ${markers.length}개 감지:`);
+  for (const m of markers) {
+    console.error(`  ${m.type} #${m.id}: ${m.content.length}자 (원본)`);
+  }
+
+  // dry-run 모드
+  if (args.dryRun) {
+    console.error(`${colors.yellow}[DRY-RUN]${colors.reset} API 호출 없이 마커 감지만 수행.`);
+    console.log(JSON.stringify({
+      success: true, dryRun: true, mode: args.mode,
+      markersFound: markers.length,
+      markers: markers.map(m => ({
+        id: m.id, type: m.type,
+        contentLength: m.content.length,
+        preview: m.content.slice(0, 100) + (m.content.length > 100 ? '...' : '')
+      }))
+    }, null, 2));
+    return;
+  }
+
+  if (!adultWriting && markers.some(m => m.type === 'adult')) {
     console.error(`${colors.yellow}[WARNING]${colors.reset} adult_writing 스타일이 없습니다. 기본값으로 진행합니다.`);
   }
 
-  // 시스템 프롬프트 빌드
-  const systemPrompt = buildSystemPrompt(styleGuide, adultWriting);
+  // 시스템 프롬프트 빌드 — selective 모드에서는 adult + polish 모두 처리하는 프롬프트
+  const systemPrompt = args.mode === 'selective'
+    ? buildSystemPrompt(styleGuide, adultWriting) + '\n\n# 추가: POLISH 마커\n`<!-- POLISH_N_START -->` ~ `<!-- POLISH_N_END -->` 구간은 성인 묘사가 아닌 **일반 서술 폴리시**입니다.\n대화 유지 + 서술/묘사/전환만 문학적으로 향상시키세요.\nJSON 키 형식: `"polish_N"` (adult는 `"adult_N"`).'
+    : buildSystemPrompt(styleGuide, adultWriting);
 
   // 백업 생성
   const backupPath = inputPath + '.bak';
@@ -549,12 +747,11 @@ API 키는 https://console.x.ai 에서 발급받을 수 있습니다.
       console.error(`${colors.red}[시도 ${attempt} 실패]${colors.reset} ${err.message}`);
 
       if (attempt > args.maxRetries) {
-        // 모든 재시도 실패 → 백업에서 복구
         console.error(`${colors.red}[ERROR]${colors.reset} 모든 재시도 실패. 원본을 유지합니다.`);
         fs.unlinkSync(backupPath);
 
         console.log(JSON.stringify({
-          success: false,
+          success: false, mode: args.mode,
           markersFound: markers.length,
           error: err.message
         }, null, 2));
@@ -591,15 +788,16 @@ API 키는 https://console.x.ai 에서 발급받을 수 있습니다.
   const rewrittenIds = Object.keys(rewrites);
   console.error('');
   console.error(`${colors.blue}[결과]${colors.reset}`);
+  console.error(`  모드: ${args.mode}`);
   console.error(`  마커 감지: ${markers.length}개`);
   console.error(`  리라이트: ${rewrittenIds.length}개`);
 
   for (const m of markers) {
     const rewrite = rewrites[m.id];
     if (rewrite) {
-      console.error(`  마커 #${m.id}: ${m.content.length}자 → ${rewrite.length}자`);
+      console.error(`  ${m.type} #${m.id}: ${m.content.length}자 → ${rewrite.length}자`);
     } else {
-      console.error(`  마커 #${m.id}: 원본 유지 (리라이트 없음)`);
+      console.error(`  ${m.type} #${m.id}: 원본 유지 (리라이트 없음)`);
     }
   }
 
@@ -607,10 +805,12 @@ API 키는 https://console.x.ai 에서 발급받을 수 있습니다.
   if (args.output) {
     console.log(JSON.stringify({
       success: true,
+      mode: args.mode,
       markersFound: markers.length,
       rewritten: rewrittenIds.length,
       details: markers.map(m => ({
         id: m.id,
+        type: m.type,
         originalLength: m.content.length,
         rewrittenLength: rewrites[m.id]?.length || 0
       }))

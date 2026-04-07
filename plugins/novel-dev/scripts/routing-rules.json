@@ -269,6 +269,30 @@
       "requiredState": [],
       "requireNovelContext": true,
       "priority": 5
+    },
+    {
+      "id": "write-3pass",
+      "name": "write-3pass",
+      "keywords": ["3패스", "쓰리패스", "3pass", "3-pass", "풀폴리시"],
+      "keywordVariants": ["3패스로 써", "쓰리패스 집필", "3패스 집필"],
+      "argPattern": "([0-9]+)\\s*(?:화|회|장|ch(?:apter)?)",
+      "argType": "chapter",
+      "excludeKeywords": ["막"],
+      "requiredState": ["writing"],
+      "requireNovelContext": false,
+      "priority": 11
+    },
+    {
+      "id": "write-act-3pass",
+      "name": "write-act-3pass",
+      "keywords": ["3패스", "쓰리패스", "3pass", "3-pass"],
+      "keywordVariants": ["막 3패스", "막 쓰리패스", "3패스로 막"],
+      "argPattern": "^(\\d+)",
+      "argType": "actNumber",
+      "excludeKeywords": ["단건", "한화", "한 화"],
+      "requiredState": ["writing"],
+      "requireNovelContext": true,
+      "priority": 7
     }
   ]
 }

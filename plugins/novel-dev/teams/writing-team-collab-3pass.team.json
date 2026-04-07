@@ -1,0 +1,98 @@
+{
+  "$schema": "../schemas/team.schema.json",
+  "schema_version": "1.0",
+  "name": "writing-team-collab-3pass",
+  "display_name": "캐릭터 협업 3-Pass 집필 팀",
+  "description": "캐릭터 협업 집필(Pass 1) → Grok 전체 폴리시(Pass 2) → Grok 성인 리라이트(Pass 3)",
+  "category": "writing",
+  "agents": [
+    {
+      "agent": "narrator",
+      "role": "lead",
+      "responsibility": "장면 브리핑, 캐릭터 출력 통합, 산문 직조, ADULT 마커 삽입, 최종 확정",
+      "model": "opus"
+    },
+    {
+      "agent": "characters/*",
+      "role": "worker",
+      "responsibility": "대사, 내면 묘사, 감정 반응, OOC 검토",
+      "resolve": "from_scene_cast"
+    },
+    {
+      "agent": "extras",
+      "role": "worker",
+      "responsibility": "에이전트 파일 없는 minor/cameo 캐릭터의 대사, 행동 생성",
+      "model": "sonnet"
+    },
+    {
+      "agent": "proofreader",
+      "role": "support",
+      "responsibility": "최종 맞춤법/문법 교정",
+      "model": "haiku"
+    },
+    {
+      "agent": "summarizer",
+      "role": "support",
+      "responsibility": "완성된 챕터 요약 생성",
+      "model": "haiku"
+    }
+  ],
+  "workflow": {
+    "type": "collaborative",
+    "steps": [
+      {
+        "name": "collab-write",
+        "agents": ["narrator", "characters/*"],
+        "execution": "parallel",
+        "output": "챕터 초고 (chapters/chapter_XXX.md)"
+      },
+      {
+        "name": "full-polish",
+        "agents": [],
+        "execution": "sequential",
+        "depends_on": ["collab-write"],
+        "output": "서술 폴리시된 챕터 (ADULT 마커 보존)",
+        "type": "orchestrator_action",
+        "action": "chapter-polisher-full",
+        "_comment": "adult-rewriter.mjs --mode full 실행. 대화 유지, 서술/묘사/전환만 폴리시."
+      },
+      {
+        "name": "adult-rewrite",
+        "agents": [],
+        "execution": "sequential",
+        "depends_on": ["full-polish"],
+        "output": "성인 장면 리라이트된 챕터",
+        "type": "orchestrator_action",
+        "action": "adult-rewriter",
+        "skip_if": "no_adult_markers",
+        "_comment": "adult-rewriter.mjs --mode adult 실행. ADULT 마커 구간만 최대 수위 리라이트."
+      },
+      {
+        "name": "proofread",
+        "agents": ["proofreader"],
+        "execution": "sequential",
+        "depends_on": ["adult-rewrite"],
+        "output": "교정된 챕터"
+      },
+      {
+        "name": "summarize",
+        "agents": ["summarizer"],
+        "execution": "sequential",
+        "depends_on": ["proofread"],
+        "output": "챕터 요약"
+      }
+    ]
+  },
+  "coordination": {
+    "mode": "orchestrated",
+    "lead": "narrator",
+    "communication": "message-based"
+  },
+  "quality_gates": {
+    "enabled": false
+  },
+  "cost_estimate": {
+    "tokens_per_agent": 30000,
+    "warning_message": "3-Pass 팀은 Grok API를 2회 호출합니다(전체 폴리시 + 성인 리라이트). 약 120K 토큰 이상 소요."
+  }
+}
