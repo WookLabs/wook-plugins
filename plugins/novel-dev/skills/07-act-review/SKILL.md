@@ -12,16 +12,16 @@ $ARGUMENTS
 
 ## Provider 선택
 
-기본: **Codex** (6-agent 리뷰 비용 절감)
-- `--claude`: Claude 6-agent 팀으로 강제
+기본: **Claude** (6-agent 리뷰 비용 절감)
+- `--codex`: Codex로 전환 (비용 절감)
 - 프로젝트 override: `meta/project.json`의 `provider_routing.act-review`
 
 ## Quick Start
 
 ```bash
-/act-review 1           # Codex로 1막 리뷰 (기본)
+/act-review 1           # Claude로 실행 (기본)
 /act-review 2           # 2막 리뷰
-/act-review 1 --claude  # Claude 팀으로 1막 리뷰 (품질 우선)
+/act-review 1 --claude  # Codex로 실행 (--codex)
 ```
 
 ## Prerequisites

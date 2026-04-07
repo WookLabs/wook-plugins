@@ -15,8 +15,8 @@ allowed-tools:
 
 ## Provider 선택
 
-기본: **Codex** (구조화 문서, 비용 효율)
-- `--claude`: Claude로 강제
+기본: **Claude** (구조화 문서, 비용 효율)
+- `--codex`: Codex로 전환 (비용 절감)
 - 프로젝트 override: `meta/project.json`의 `provider_routing.blueprint`
 
 Codex 실행:

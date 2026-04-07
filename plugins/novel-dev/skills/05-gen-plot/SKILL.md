@@ -13,15 +13,15 @@ plot-architect가 초안을 만들고, arc-designer/lore-keeper/character-design
 
 ## Provider 선택
 
-기본: **Codex** (구조화 JSON 출력, 비용 효율)
-- `--claude`: Claude 4-agent 팀으로 강제
+기본: **Claude** (구조화 JSON 출력, 비용 효율)
+- `--codex`: Codex로 전환 (비용 절감)
 - 프로젝트 override: `meta/project.json`의 `provider_routing.gen-plot`
 
 ## Quick Start
 
 ```bash
-/gen-plot           # Codex로 플롯 생성 (기본)
-/gen-plot --claude  # Claude 팀으로 플롯 생성 (품질 우선)
+/gen-plot           # Claude로 실행 (기본)
+/gen-plot --claude  # Codex로 실행 (--codex)
 ```
 
 ## Prerequisites

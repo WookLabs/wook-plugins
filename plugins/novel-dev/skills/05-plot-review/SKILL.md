@@ -12,16 +12,16 @@ $ARGUMENTS
 
 ## Provider 선택
 
-기본: **Codex** (리뷰 태스크, 비용 효율)
-- `--claude`: Claude 4-agent 팀으로 강제
+기본: **Claude** (리뷰 태스크, 비용 효율)
+- `--codex`: Codex로 전환 (비용 절감)
 - 프로젝트 override: `meta/project.json`의 `provider_routing.plot-review`
 
 ## Quick Start
 
 ```bash
-/plot-review 1-5           # Codex로 1~5화 플롯 리뷰 (기본)
+/plot-review 1-5           # Claude로 실행 (기본)
 /plot-review 3             # 3화 플롯 단건 리뷰
-/plot-review 1-5 --claude  # Claude 팀으로 플롯 리뷰 (품질 우선)
+/plot-review 1-5 --claude  # Codex로 실행 (--codex)
 ```
 
 ## Prerequisites

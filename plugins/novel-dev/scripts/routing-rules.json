@@ -33,7 +33,7 @@
     {
       "id": "01-blueprint-gen",
       "name": "blueprint-gen",
-      "defaultProvider": "codex",
+      "defaultProvider": "claude",
       "keywords": ["블루프린트", "기획서", "설계도", "blueprint"],
       "keywordVariants": ["블루프린트 생성", "기획서 작성", "기획서 만들"],
       "argPattern": null,
@@ -70,7 +70,7 @@
     {
       "id": "04-design",
       "name": "design",
-      "defaultProvider": "codex",
+      "defaultProvider": "claude",
       "keywords": ["설계", "디자인", "design", "전체 설계", "세계관", "캐릭터", "아크"],
       "keywordVariants": ["설계해", "설계하자", "디자인해", "설계 시작"],
       "argPattern": null,
@@ -83,7 +83,7 @@
     {
       "id": "04-design-review",
       "name": "design-review",
-      "defaultProvider": "codex",
+      "defaultProvider": "claude",
       "keywords": ["설계 리뷰", "설계 검토", "design review", "설계 확인"],
       "keywordVariants": ["설계 리뷰해", "설계 검토해", "설계 확인해"],
       "argPattern": null,
@@ -96,7 +96,7 @@
     {
       "id": "05-gen-plot",
       "name": "gen-plot",
-      "defaultProvider": "codex",
+      "defaultProvider": "claude",
       "keywords": ["플롯", "줄거리", "plot", "generate plot", "스토리 라인"],
       "keywordVariants": ["플롯 생성", "줄거리 만들", "플롯 짜", "줄거리 짜"],
       "argPattern": "([0-9]+)\\s*(?:화|회|장|ch(?:apter)?)",
@@ -109,7 +109,7 @@
     {
       "id": "05-plot-review",
       "name": "plot-review",
-      "defaultProvider": "codex",
+      "defaultProvider": "claude",
       "keywords": ["플롯 리뷰", "플롯 검증", "plot review", "플롯 검토"],
       "keywordVariants": ["플롯 리뷰해", "플롯 검증해", "플롯 검토해"],
       "argPattern": "^(\\d+)(?:[-~](\\d+))?",
@@ -146,7 +146,7 @@
     {
       "id": "07-act-review",
       "name": "act-review",
-      "defaultProvider": "codex",
+      "defaultProvider": "claude",
       "keywords": ["막 리뷰", "막 평가", "act review", "막 검토"],
       "keywordVariants": ["막 리뷰해", "막 평가해", "막 검토해"],
       "argPattern": "([0-9]+)\\s*(?:막|act)",
@@ -231,7 +231,7 @@
     {
       "id": "02-blueprint-review",
       "name": "blueprint-review",
-      "defaultProvider": "codex",
+      "defaultProvider": "claude",
       "keywords": ["기획서 리뷰", "블루프린트 검토", "blueprint review", "기획 검토"],
       "keywordVariants": ["기획서 검토해", "블루프린트 리뷰해"],
       "argPattern": null,
@@ -300,6 +300,32 @@
       "requiredState": ["writing"],
       "requireNovelContext": true,
       "priority": 7
+    },
+    {
+      "id": "write-parallel",
+      "name": "write-parallel",
+      "defaultProvider": "claude",
+      "keywords": ["병렬", "parallel", "협업 집필", "듀얼", "dual"],
+      "keywordVariants": ["병렬로 써", "병렬 집필", "협업으로 써", "듀얼 집필"],
+      "argPattern": "([0-9]+)\\s*(?:화|회|장|ch(?:apter)?)",
+      "argType": "chapter",
+      "excludeKeywords": ["막"],
+      "requiredState": ["writing"],
+      "requireNovelContext": false,
+      "priority": 12
+    },
+    {
+      "id": "write-act-parallel",
+      "name": "write-act-parallel",
+      "defaultProvider": "claude",
+      "keywords": ["병렬", "parallel", "협업"],
+      "keywordVariants": ["막 병렬", "막 협업", "병렬로 막"],
+      "argPattern": "^(\\d+)",
+      "argType": "actNumber",
+      "excludeKeywords": ["단건", "한화"],
+      "requiredState": ["writing"],
+      "requireNovelContext": true,
+      "priority": 8
     }
   ]
 }

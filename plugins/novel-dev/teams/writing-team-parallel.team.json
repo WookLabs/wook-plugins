@@ -1,0 +1,114 @@
+{
+  "$schema": "../schemas/team.schema.json",
+  "schema_version": "1.0",
+  "name": "writing-team-parallel",
+  "display_name": "Claude-Codex 병렬 협업 팀",
+  "description": "Claude 캐릭터 협업팀과 Codex CLI가 동일 챕터를 병렬 생성 → chapter-merger가 최선 선택/병합",
+  "category": "writing",
+  "agents": [
+    {
+      "agent": "narrator",
+      "role": "lead",
+      "responsibility": "Claude 브랜치: 장면 브리핑, 캐릭터 협업, 산문 직조",
+      "model": "opus"
+    },
+    {
+      "agent": "characters/*",
+      "role": "worker",
+      "responsibility": "Claude 브랜치: 대사, 내면 묘사, 감정 반응",
+      "resolve": "from_scene_cast"
+    },
+    {
+      "agent": "extras",
+      "role": "worker",
+      "responsibility": "Claude 브랜치: minor/cameo 캐릭터",
+      "model": "sonnet"
+    },
+    {
+      "agent": "chapter-merger",
+      "role": "lead",
+      "responsibility": "두 버전 비교 분석 + 최선 선택/병합",
+      "model": "opus"
+    },
+    {
+      "agent": "proofreader",
+      "role": "support",
+      "responsibility": "최종 맞춤법/문법 교정",
+      "model": "haiku"
+    },
+    {
+      "agent": "summarizer",
+      "role": "support",
+      "responsibility": "완성된 챕터 요약 생성",
+      "model": "haiku"
+    }
+  ],
+  "workflow": {
+    "type": "collaborative",
+    "steps": [
+      {
+        "name": "parallel-write",
+        "execution": "parallel",
+        "output": "Claude 버전 + Codex 버전",
+        "branches": [
+          {
+            "name": "claude-branch",
+            "agents": ["narrator", "characters/*", "extras"],
+            "type": "collaborative",
+            "output_suffix": "_claude"
+          },
+          {
+            "name": "codex-branch",
+            "type": "orchestrator_action",
+            "action": "codex-writer",
+            "output_suffix": "_codex",
+            "_comment": "codex-writer.mjs --chapter {N} --project {projectPath} --mode write"
+          }
+        ]
+      },
+      {
+        "name": "merge",
+        "agents": ["chapter-merger"],
+        "execution": "sequential",
+        "depends_on": ["parallel-write"],
+        "output": "병합된 최종 챕터"
+      },
+      {
+        "name": "adult-rewrite",
+        "agents": [],
+        "execution": "sequential",
+        "depends_on": ["merge"],
+        "output": "성인 장면 리라이트",
+        "type": "orchestrator_action",
+        "action": "adult-rewriter",
+        "skip_if": "no_adult_markers"
+      },
+      {
+        "name": "proofread",
+        "agents": ["proofreader"],
+        "execution": "sequential",
+        "depends_on": ["adult-rewrite"],
+        "output": "교정된 챕터"
+      },
+      {
+        "name": "summarize",
+        "agents": ["summarizer"],
+        "execution": "sequential",
+        "depends_on": ["proofread"],
+        "output": "챕터 요약"
+      }
+    ]
+  },
+  "coordination": {
+    "mode": "orchestrated",
+    "lead": "narrator",
+    "communication": "message-based"
+  },
+  "quality_gates": {
+    "enabled": false
+  },
+  "cost_estimate": {
+    "tokens_per_agent": 30000,
+    "warning_message": "병렬 팀은 Claude 팀 + Codex CLI를 동시에 호출합니다. 단독 집필 대비 약 2배 비용."
+  }
+}

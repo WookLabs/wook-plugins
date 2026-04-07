@@ -117,6 +117,40 @@ export const DRY_TRANSITION_PATTERNS = [
 ];
 
 /**
+ * Meta-narrative patterns - characters referencing chapter/episode numbers
+ */
+export const META_NARRATIVE_PATTERNS = [
+  /(\d+)화\s*때/,
+  /지난\s*화에서/,
+  /(\d+)화\s*전에/,
+  /이전\s*챕터/,
+  /(\d+)장\s*에서/,
+  /지난\s*번\s*에피소드/,
+];
+
+/**
+ * Detect meta-narrative patterns (characters aware of story structure)
+ */
+export function detectMetaNarrative(content: string): PatternMatch[] {
+  const results: PatternMatch[] = [];
+  const lines = content.split('\n');
+  let pos = 0;
+
+  for (const line of lines) {
+    // Check both dialogue and narration - meta references are bad everywhere
+    for (const pattern of META_NARRATIVE_PATTERNS) {
+      const match = line.match(pattern);
+      if (match) {
+        results.push({ matched: match[0], position: pos + (match.index ?? 0) });
+      }
+    }
+    pos += line.length + 1;
+  }
+
+  return results;
+}
+
+/**
  * Functional narration patterns - report-style description
  */
 export const FUNCTIONAL_NARRATION_PATTERNS = [
@@ -750,6 +784,29 @@ export function analyzeChapter(
       `기능적 서술 "${fn.matched}" 감지`,
       para?.text || '',
       `"${fn.matched}"를 구체적인 감각 묘사로 교체하세요. 신체를 통해 전달되는 경험으로 쓰세요.`,
+      1
+    ));
+  }
+
+  // 3d. Meta-narrative detection
+  const metaNarratives = detectMetaNarrative(content);
+  for (const mn of metaNarratives.slice(0, 2)) {
+    if (directives.length >= MAX_DIRECTIVES_PER_PASS) break;
+
+    const paraIdx = findParagraphForPosition(paragraphs, mn.position);
+    const para = paragraphs[paraIdx];
+
+    directives.push(createDirective(
+      'show-not-tell',
+      1, // Highest priority - immersion breaking
+      {
+        sceneNumber: Math.min(Math.ceil((paraIdx + 1) / Math.max(1, paragraphs.length / sceneCount)), sceneCount),
+        paragraphStart: paraIdx,
+        paragraphEnd: paraIdx,
+      },
+      `메타 내러티브 "${mn.matched}" 감지 — 캐릭터가 화수를 인식`,
+      para?.text || '',
+      `"${mn.matched}"를 작중 시간 기준으로 교체하세요 (예: "사흘 전", "어제"). 화수/챕터 번호 참조 금지.`,
       1
     ));
   }

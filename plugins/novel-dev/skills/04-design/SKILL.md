@@ -12,15 +12,15 @@ $ARGUMENTS
 
 ## Provider 선택
 
-기본: **Codex** (구조화 JSON 출력에 최적, 비용 효율)
-- `--claude`: Claude 팀으로 강제 (품질 우선)
+기본: **Claude** (구조화 JSON 출력에 최적, 비용 효율)
+- `--codex`: Codex로 전환 (비용 절감) (품질 우선)
 - `--codex`: Codex 명시적 선택
 - 프로젝트 override: `meta/project.json`의 `provider_routing.design`
 
 ## Quick Start
 
 ```bash
-/design            # Codex로 설계 (기본)
+/design            # Claude로 실행 (기본)
 /design --claude   # Claude 5-agent 팀으로 설계 (품질 우선)
 /design-review     # 설계 산출물 검토 및 수정
 ```

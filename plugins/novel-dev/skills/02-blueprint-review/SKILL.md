@@ -16,8 +16,8 @@ BLUEPRINT.md를 다각도로 검토하고 개선점을 제안합니다.
 
 ## Provider 선택
 
-기본: **Codex** (리뷰 태스크, 비용 효율)
-- `--claude`: Claude로 강제
+기본: **Claude** (리뷰 태스크, 비용 효율)
+- `--codex`: Codex로 전환 (비용 절감)
 - 프로젝트 override: `meta/project.json`의 `provider_routing.blueprint-review`
 
 Codex 실행:
