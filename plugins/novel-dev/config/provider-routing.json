@@ -36,6 +36,8 @@
     "write-3pass": "claude",
     "write-act-2pass": "claude",
     "write-act-3pass": "claude",
+    "write-parallel": "claude",
+    "write-act-parallel": "claude",
     "adult-rewrite": "grok",
     "full-polish": "grok"
   },

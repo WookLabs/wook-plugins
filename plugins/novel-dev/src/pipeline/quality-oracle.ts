@@ -79,7 +79,7 @@ export const MAX_DIRECTIVES_PER_PASS = 5;
 /**
  * Minimum senses required per 500 characters
  */
-export const MIN_SENSES_PER_500_CHARS = 2;
+export const MIN_SENSES_PER_500_CHARS = 3;
 
 /**
  * Maximum consecutive same sentence endings before flagging
