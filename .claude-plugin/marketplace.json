@@ -7,17 +7,6 @@
   "description": "WookLabs의 Claude Code 플러그인 컬렉션",
   "plugins": [
     {
-      "name": "novel-dev",
-      "source": "./plugins/novel-dev",
-      "description": "AI 소설 창작을 위한 멀티에이전트 오케스트레이션 플러그인",
-      "version": "6.1.0",
-      "author": {
-        "name": "WookLabs"
-      },
-      "keywords": ["novel", "writing", "creative", "ai-writing", "storytelling", "multi-agent", "team"],
-      "category": "productivity"
-    },
-    {
       "name": "rtl-forge",
       "source": "./plugins/rtl-forge",
       "description": "RTL design assistant — formatting, analysis, and modification workflow for Verilog/SystemVerilog",
