@@ -31,8 +31,8 @@
     {
       "name": "glm-toggle",
       "source": "./plugins/glm-toggle",
-      "description": "Z.AI GLM 모드 토글 (/glm-on, /glm-off)",
-      "version": "1.0.0",
+      "description": "Z.AI GLM 모드 토글 (/glm-on, /glm-off) — 최신 모델 자동 조회",
+      "version": "1.1.0",
       "category": "development",
       "keywords": ["glm", "zai", "model-switching", "provider"]
     },
